@@ -1,5 +1,5 @@
-# luck-maker-server
-LuckMaker Server
+# luck-kids-server
+LuckKids Server
 
 # Enviroment
 Spring boot 3.0.11  
