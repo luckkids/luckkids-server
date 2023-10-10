@@ -1,27 +1,50 @@
 spring:
+  profiles:
+    default: local
+
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${dbUrl}
-    username: ${dbUsername}
-    password: ${dbPassword}
+    url: jdbc:h2:mem:~/luckKids;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+    jpa:
+      hibernate:
+        ddl-auto: none
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
   jpa:
-    open-in-view: false
-    show-sql: true
-    datasource: mysql
-    database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
       ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        default_batch_fetch_size: 100
-        jdbc:
-          exception-handling: ignore
-  mvc:
-    pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
-      
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
+    defer-datasource-initialization: true
+
+  h2:
+    console:
+      enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
