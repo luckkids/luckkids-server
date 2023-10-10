@@ -1,4 +1,4 @@
-package com.luckkids.global.config;
+package com.luckkids.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
