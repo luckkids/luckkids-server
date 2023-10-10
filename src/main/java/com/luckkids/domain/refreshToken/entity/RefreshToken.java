@@ -35,4 +35,8 @@ public class RefreshToken {
 	 * 리플래시토큰
 	 */
 	private String refreshToken;
+	/**
+	 * 다바이스ID
+	 */
+	private String deviceId;
 }
