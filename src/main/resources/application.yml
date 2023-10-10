@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${dbUrl}
+    username: ${dbUsername}
+    password: ${dbPassword}
+  jpa:
+    open-in-view: false
+    show-sql: true
+    datasource: mysql
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        jdbc:
+          exception-handling: ignore
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+      
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
