@@ -24,3 +24,6 @@ password: Navskd1048!
 EndPoint: 218.155.95.66:3306/luckkids  
 ID: root  
 password: Navskd1048!
+
+# logging
+path: /var/log/project/luckkids
