@@ -65,20 +65,20 @@ public class User extends BaseEntity{
 	 * 사용자가 등록한 친구목록
 	 */
 	@OneToMany(mappedBy = "userId1")
-    private List<Friend> friend1;
+    private List<Friend> friend1 = new ArrayList<>();;
 	/**
 	 * 사용자를 등록한 친구목록
 	 */
     @OneToMany(mappedBy = "userId2")
-    private List<Friend> friend2;
+    private List<Friend> friend2 = new ArrayList<>();;
     /**
 	 * 사용자 알림이력
 	 */
     @OneToMany(mappedBy = "user")
-    private List<AlertHistory> alertHistorys;
+    private List<AlertHistory> alertHistorys = new ArrayList<>();;
     /**
 	 * 사용자 푸시토큰
 	 */
     @OneToMany(mappedBy = "user")
-    private List<Push> pushTokens;
+    private List<Push> pushTokens = new ArrayList<>();;
 }
