@@ -9,4 +9,4 @@ COPY . /home/project/luck-kids-server
 RUN ./gradlew clean
 RUN ./gradlew bootJar
 
-ENTRYPOINT java -Duser.timezone=GMT+09:00 -jar /home/project/luck-kids-server/build/libs/luck-kids-server-0.0.1-SNAPSHOT.war
+ENTRYPOINT java -Duser.timezone=GMT+09:00 -jar /home/project/luck-kids-server/build/libs/luck-kids-server-0.0.1-SNAPSHOT.jar
