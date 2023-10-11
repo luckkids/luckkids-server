@@ -1,14 +1,14 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.0.11'
-	id 'io.spring.dependency-management' version '1.1.3'
+    id 'java'
+    id 'org.springframework.boot' version '3.0.11'
+    id 'io.spring.dependency-management' version '1.1.3'
 }
 
 group = 'com.luckkids'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 configurations {
@@ -16,45 +16,50 @@ configurations {
         extendsFrom annotationProcessor
     }
     all {
-       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-   	}
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	//lombok
-	compileOnly 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok'
-    
+
     //jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    
+
     // QueryDSL Implementation
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-    
+
+    // h2
+    runtimeOnly 'com.h2database:h2'
+
     //mysql
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'   
-    
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
-    
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    
+
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 /**
