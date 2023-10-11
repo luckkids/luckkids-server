@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -24,19 +23,20 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
-    /** 이거는 사실 response에서 사용될 것 같을 때 사용하는거라 사용 안된다면 안 써두 돼요 ! **/
-//     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//     private List<Mission> missions = new ArrayList<>();
-//
-//     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//     private List<MissionComplete> missionCompletes = new ArrayList<>();
-//
-//     @OneToMany(mappedBy = "requesterId", cascade = CascadeType.ALL)
-//     private List<Friend> friends = new ArrayList<>();
-//
-//     @OneToMany(mappedBy = "user")
-//     private List<AlertHistory> alertHistories = new ArrayList<>();
-//
-//     @OneToMany(mappedBy = "user")
-//     private List<Push> pushes = new ArrayList<>();
+    /**
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     private List<Mission> missions = new ArrayList<>();
+
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     private List<MissionComplete> missionCompletes = new ArrayList<>();
+
+     @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
+     private List<Friend> friends = new ArrayList<>();
+
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     private List<AlertHistory> alertHistories = new ArrayList<>();
+
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     private List<Push> pushes = new ArrayList<>();
+     **/
 }
