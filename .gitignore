@@ -40,4 +40,4 @@ out/
 src/main/generated/
 
 ### yml ###
-*/application-real-db.yml
+**/application-real-db.yml
