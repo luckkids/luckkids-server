@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum MissionStatus {
 
     SUCCEED("성공"),
-    FAILED("실패");
+    FAILED("실패"),
+    AWAITING("대기");
 
     private final String text;
 }
