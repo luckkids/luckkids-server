@@ -21,4 +21,14 @@ public class RefreshToken {
     private String refreshToken;
 
     private String deviceId;
+
+    public RefreshToken(User user, String refreshToken, String deviceId){
+        this.user = user;
+        this.refreshToken = refreshToken;
+        this.deviceId = deviceId;
+    }
+
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }
