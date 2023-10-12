@@ -1,4 +1,4 @@
-package com.luckkids.api;
+package com.luckkids.api.exception;
 
 import lombok.Getter;
 
