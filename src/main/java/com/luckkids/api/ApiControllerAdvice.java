@@ -1,5 +1,6 @@
 package com.luckkids.api;
 
+import com.luckkids.api.exception.JwtGlobalException;
 import com.luckkids.api.exception.LuckKidsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -39,9 +40,22 @@ public class ApiControllerAdvice {
     */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(LuckKidsException.class)
-    public ApiResponse<Object> LuckKidsException(LuckKidsException e){
+    public ApiResponse<Object> luckKidsException(LuckKidsException e){
         return ApiResponse.of(
                 HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getMessage(),
+                null
+        );
+    }
+
+    /*
+     * JWT 인증시 발생하는 Exception
+     */
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(JwtGlobalException.class)
+    public ApiResponse<Object> jwtGlobalException(JwtGlobalException e){
+        return ApiResponse.of(
+                HttpStatus.UNAUTHORIZED,
                 e.getMessage(),
                 null
         );
