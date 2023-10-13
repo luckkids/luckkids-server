@@ -73,8 +73,16 @@ tasks.named('test') {
 
 asciidoctor {
     configurations 'asciidoctorExt'
+
+    //index파일만
+    sources{
+        include("**/index.adoc")
+    }
+
     baseDirFollowsSourceFile()
+
     inputs.dir snippetsDir
+
     dependsOn test
 }
 
