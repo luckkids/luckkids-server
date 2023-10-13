@@ -23,7 +23,7 @@ public class JoinController {
         joinService.checkEmail(joinCheckEmailRequest.toServiceRequest());
     }
 
-    @PostMapping("sendEmail")
+    @PostMapping("/sendMail")
     public ApiResponse<JoinSendMailResponse> sendEmail(@RequestBody JoinSendMailRequest joinSendMailRequest){
         return ApiResponse.ok(joinService.sendMail(joinSendMailRequest.toServiceRequest()).toControllerResponse());
     }

@@ -32,7 +32,7 @@ public class JoinService {
 
     public JoinSendMailServiceResponse sendMail(JoinSendMailServiceRequest joinSendMailServiceRequest) {
         String email = joinSendMailServiceRequest.getEmail();
-        String authNum = createCode();
+        String authNum = generateCode();
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         try {
@@ -50,20 +50,16 @@ public class JoinService {
         }
     }
 
-    // 인증번호 및 임시 비밀번호 생성 메서드
-    public String createCode() {
+    public String generateCode() {
+        StringBuilder resultNum = new StringBuilder();
+        String ranNum = "";
+
         Random random = new Random();
-        StringBuffer key = new StringBuffer();
 
-        for (int i = 0; i < 8; i++) {
-            int index = random.nextInt(4);
-
-            switch (index) {
-                case 0: key.append((char) ((int) random.nextInt(26) + 97)); break;
-                case 1: key.append((char) ((int) random.nextInt(26) + 65)); break;
-                default: key.append(random.nextInt(9));
-            }
+        for (int i=0; i<6; i++) {
+            ranNum =  Integer.toString(random.nextInt(9));
+            resultNum.append(ranNum);
         }
-        return key.toString();
+        return resultNum.toString();
     }
 }
