@@ -1,5 +1,7 @@
 package com.luckkids.domain.user;
 
+import com.luckkids.api.exception.ErrorCode;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,4 +41,19 @@ public class User extends BaseEntity {
      @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
      private List<Push> pushes = new ArrayList<>();
      **/
+
+    public void checkSnsType(){
+        if(snsType.getText().equals(SnsType.NORMAL.getText())){
+            throw new LuckKidsException(ErrorCode.USER_NORMAL);
+        }
+        else if(snsType.getText().equals(SnsType.KAKAO.getText())){
+            throw new LuckKidsException(ErrorCode.USER_KAKAO);
+        }
+        else if(snsType.getText().equals(SnsType.GOOGLE.getText())){
+            throw new LuckKidsException(ErrorCode.USER_GOOGLE);
+        }
+        else if(snsType.getText().equals(SnsType.APPLE.getText())){
+            throw new LuckKidsException(ErrorCode.USER_APPLE);
+        }
+    }
 }
