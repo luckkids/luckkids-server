@@ -3,8 +3,8 @@ package com.luckkids.join.docs;
 import com.luckkids.AbstractRestDocsTests;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.service.join.JoinService;
+import com.luckkids.api.service.join.dto.JoinSendMailResponse;
 import com.luckkids.api.service.join.dto.JoinSendMailServiceRequest;
-import com.luckkids.api.service.join.dto.JoinSendMailServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,7 +34,7 @@ public class JoinControllerDocTest extends AbstractRestDocsTests {
                 .build();
 
         given(joinService.sendMail(any(JoinSendMailServiceRequest.class)))
-                .willReturn(JoinSendMailServiceResponse.builder()
+                .willReturn(JoinSendMailResponse.builder()
                         .code("001")
                         .build()
                 );

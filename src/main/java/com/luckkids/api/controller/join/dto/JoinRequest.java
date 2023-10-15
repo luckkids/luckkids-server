@@ -1,9 +1,11 @@
 package com.luckkids.api.controller.join.dto;
 
 import com.luckkids.api.service.join.dto.JoinServiceRequest;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class JoinRequest {
 
     private String email;

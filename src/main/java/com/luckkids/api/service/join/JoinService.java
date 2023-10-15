@@ -7,6 +7,7 @@ import com.luckkids.api.service.join.dto.*;
 import com.luckkids.domain.user.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +20,12 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class JoinService {
 
     private final UserRepository userRepository;
     private final JavaMailSender javaMailSender;
+
     public void checkEmail(JoinCheckEmailServiceRequest joinCheckEmailServiceRequest){
         String email = joinCheckEmailServiceRequest.getEmail();
         User user =  userRepository.findByEmail(email);
@@ -31,7 +34,7 @@ public class JoinService {
         }
     }
 
-    public JoinSendMailServiceResponse sendMail(JoinSendMailServiceRequest joinSendMailServiceRequest) {
+    public JoinSendMailResponse sendMail(JoinSendMailServiceRequest joinSendMailServiceRequest) {
         String email = joinSendMailServiceRequest.getEmail();
         String authNum = generateCode();
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -43,7 +46,7 @@ public class JoinService {
             mimeMessageHelper.setText("테스트"); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
-            return JoinSendMailServiceResponse.builder()
+            return JoinSendMailResponse.builder()
                     .code(authNum)
                     .build();
         } catch (MessagingException e) {
@@ -51,10 +54,10 @@ public class JoinService {
         }
     }
 
-    public JoinServiceResponse joinUser(JoinServiceRequest joinServiceRequest){
+    public JoinResponse joinUser(JoinServiceRequest joinServiceRequest){
         User user = joinServiceRequest.createUser();
         User savedUser = userRepository.save(user);
-        return JoinServiceResponse.of(savedUser);
+        return JoinResponse.of(savedUser);
     }
 
     public String generateCode() {
