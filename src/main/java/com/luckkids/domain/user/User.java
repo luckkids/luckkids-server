@@ -4,12 +4,16 @@ import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User extends BaseEntity {
 
     @Id
@@ -19,6 +23,8 @@ public class User extends BaseEntity {
     private String email;
 
     private String password;
+
+    private String nickName;
 
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
