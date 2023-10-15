@@ -54,3 +54,16 @@ spring:
   sql:
     init:
       mode: never
+
+  mail:
+    # Google smtp server 사용
+    host: smtp.gmail.com
+    port: 587
+    username: nav104888@gmail.com
+    password: kzmearkdbqtjjbxt
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true

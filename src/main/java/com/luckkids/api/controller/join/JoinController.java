@@ -3,6 +3,8 @@ package com.luckkids.api.controller.join;
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.join.dto.*;
 import com.luckkids.api.service.join.JoinService;
+import com.luckkids.api.service.join.dto.JoinResponse;
+import com.luckkids.api.service.join.dto.JoinSendMailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,11 +25,11 @@ public class JoinController {
 
     @PostMapping("/sendMail")
     public ApiResponse<JoinSendMailResponse> sendEmail(@RequestBody JoinSendMailRequest joinSendMailRequest){
-        return ApiResponse.ok(joinService.sendMail(joinSendMailRequest.toServiceRequest()).toControllerResponse());
+        return ApiResponse.ok(joinService.sendMail(joinSendMailRequest.toServiceRequest()));
     }
 
     @PostMapping("/user")
     public ApiResponse<JoinResponse> joinUser(@RequestBody JoinRequest joinRequest){
-        return ApiResponse.ok(joinService.joinUser(joinRequest.toServiceRequest()).toControllerResponse());
+        return ApiResponse.ok(joinService.joinUser(joinRequest.toServiceRequest()));
     }
 }

@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.join.dto;
+package com.luckkids.api.service.join.dto;
 
 import lombok.Builder;
 import lombok.Getter;
