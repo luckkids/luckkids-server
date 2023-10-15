@@ -3,17 +3,18 @@ package com.luckkids.api.service.join;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.repository.join.UserRepository;
-import com.luckkids.api.service.join.dto.JoinCheckEmailServiceRequest;
-import com.luckkids.api.service.join.dto.JoinSendMailServiceRequest;
-import com.luckkids.api.service.join.dto.JoinSendMailServiceResponse;
+import com.luckkids.api.service.join.dto.*;
 import com.luckkids.domain.user.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.Random;
 
 @Service
@@ -48,6 +49,12 @@ public class JoinService {
         } catch (MessagingException e) {
             throw new LuckKidsException(ErrorCode.MAIL_FAIL);
         }
+    }
+
+    public JoinServiceResponse joinUser(JoinServiceRequest joinServiceRequest){
+        User user = joinServiceRequest.createUser();
+        User savedUser = userRepository.save(user);
+        return JoinServiceResponse.of(savedUser);
     }
 
     public String generateCode() {
