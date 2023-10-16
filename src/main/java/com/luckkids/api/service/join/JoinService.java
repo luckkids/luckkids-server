@@ -9,13 +9,10 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.Random;
 
 @Service
@@ -42,8 +39,8 @@ public class JoinService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(email); // 메일 수신자
-            mimeMessageHelper.setSubject("테스트"); // 메일 제목
-            mimeMessageHelper.setText("테스트"); // 메일 본문 내용, HTML 여부
+            mimeMessageHelper.setSubject("Luck-Maker 회원가입 인증번호"); // 메일 제목
+            mimeMessageHelper.setText("인증번호: "+authNum); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
             return JoinSendMailResponse.builder()
@@ -55,9 +52,14 @@ public class JoinService {
     }
 
     public JoinResponse joinUser(JoinServiceRequest joinServiceRequest){
-        User user = joinServiceRequest.createUser();
-        User savedUser = userRepository.save(user);
-        return JoinResponse.of(savedUser);
+        try {
+            User user = joinServiceRequest.createUser();
+            User savedUser = userRepository.save(user);
+
+            return JoinResponse.of(savedUser);
+        }catch (Exception e){
+            throw new LuckKidsException(ErrorCode.USER_NORMAL);
+        }
     }
 
     public String generateCode() {
