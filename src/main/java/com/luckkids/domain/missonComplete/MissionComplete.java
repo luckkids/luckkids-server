@@ -2,7 +2,6 @@ package com.luckkids.domain.missonComplete;
 
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.misson.MissionStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
