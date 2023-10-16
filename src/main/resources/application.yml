@@ -1,7 +1,6 @@
 spring:
   profiles:
     default: local
-    include: real-db
 
 ---
 spring:
