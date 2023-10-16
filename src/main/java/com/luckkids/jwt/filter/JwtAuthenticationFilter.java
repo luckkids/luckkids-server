@@ -36,6 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            else{
+                throw new JwtTokenException(ErrorCode.JWT_UNKNOWN);
+            }
         } catch (ExpiredJwtException e) {
             throw new JwtTokenException(ErrorCode.JWT_EXPIRED, e);
         } catch (JwtException | IllegalArgumentException e) {
