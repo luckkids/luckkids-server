@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 
-public class LuckKidsException extends RuntimeException{
+public class LuckKidsException extends RuntimeException {
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public LuckKidsException(ErrorCode errorCode, Exception e) {
         super(errorCode.getMessage(), e);

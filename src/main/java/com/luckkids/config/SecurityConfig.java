@@ -1,5 +1,6 @@
 package com.luckkids.config;
 
+import com.luckkids.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,13 +25,15 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    new AntPathRequestMatcher("/**"),
+                    new AntPathRequestMatcher("/**"), // 나중에 지워야 함 !!
+                    new AntPathRequestMatcher("/"),
                     new AntPathRequestMatcher("/css/**"),
                     new AntPathRequestMatcher("/images/**"),
                     new AntPathRequestMatcher("/js/**"),
                     new AntPathRequestMatcher("/h2-console/**"),
                     new AntPathRequestMatcher("/health-check")
                 ).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                 .anyRequest().authenticated())
 
             .logout((logout) -> logout
