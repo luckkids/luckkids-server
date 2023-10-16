@@ -13,7 +13,7 @@ public enum ErrorCode {
 
     MAIL_FAIL("이메일 발송에 실패했습니다.");
 
-    private String message;
+    private final String message;
 
     private ErrorCode(String message) {
         this.message = message;
