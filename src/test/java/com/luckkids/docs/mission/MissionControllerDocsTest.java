@@ -90,7 +90,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("미션 내용"),
                     fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)
                         .description("알림 여부"),
-                    fieldWithPath("data.alertTime").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data.alertTime").type(JsonFieldType.STRING)
                         .description("알림 시간")
                 )
             ));
