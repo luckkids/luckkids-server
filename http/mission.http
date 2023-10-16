@@ -1,0 +1,10 @@
+### 신규 미션 등록
+POST localhost:8080/api/v1/missions/new
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "missionDescription": "운동하기",
+  "alertStatus": "CHECKED",
+  "alertTime": "18:30"
+}
