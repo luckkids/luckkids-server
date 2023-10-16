@@ -1,4 +1,4 @@
-package com.luckkids.domain.misson;
+package com.luckkids.domain.missonComplete;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
