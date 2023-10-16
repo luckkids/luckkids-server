@@ -1,6 +1,6 @@
 package com.luckkids.domain.user;
 
-import com.luckkids.domain.BaseEntity;
+import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User extends BaseEntity {
+@Table(name = "users")
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String email;
 
@@ -23,6 +24,9 @@ public class User extends BaseEntity {
     private SnsType snsType;
 
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     /**
      * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
