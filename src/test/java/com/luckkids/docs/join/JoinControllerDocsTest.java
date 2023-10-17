@@ -13,6 +13,7 @@ import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.api.service.join.response.JoinSendMailResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -151,6 +152,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                 .password("1234")
                 .phoneNumber("01012341234")
                 .snsType(SnsType.NORMAL)
+                .role(Role.USER)
                 .build()
             );
 
@@ -183,7 +185,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.id").type(JsonFieldType.STRING)
+                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("id"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일"),
@@ -192,7 +194,9 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.phoneNumber").type(JsonFieldType.STRING)
                         .description("핸드폰번호"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
-                        .description("로그인타입")
+                        .description("로그인타입"),
+                    fieldWithPath("data.role").type(JsonFieldType.STRING)
+                        .description("권한타입")
                 )
             ));
     }
