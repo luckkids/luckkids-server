@@ -2,6 +2,7 @@ package com.luckkids.api.controller.join;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.join.request.*;
+import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
@@ -17,17 +18,18 @@ import org.springframework.web.bind.annotation.*;
 public class JoinController {
 
     private final JoinService joinService;
+    private final JoinReadService joinReadService;
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/checkEmail")
     public ApiResponse<JoinCheckEmailResponse> checkEmail(@Valid  @RequestBody JoinCheckEmailRequest joinCheckEmailRequest){
-        return ApiResponse.ok(joinService.checkEmail(joinCheckEmailRequest.toServiceRequest()));
+        return ApiResponse.ok(joinReadService.checkEmail(joinCheckEmailRequest.toServiceRequest()));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/sendMail")
     public ApiResponse<JoinSendMailResponse> sendEmail(@Valid @RequestBody JoinSendMailRequest joinSendMailRequest){
-        return ApiResponse.ok(joinService.sendMail(joinSendMailRequest.toServiceRequest()));
+        return ApiResponse.ok(joinReadService.sendMail(joinSendMailRequest.toServiceRequest()));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

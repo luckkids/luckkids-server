@@ -22,6 +22,9 @@ public class JoinServiceTest extends IntegrationTestSupport {
     JoinService joinService;
 
     @Autowired
+    JoinReadService joinReadService;
+
+    @Autowired
     UserRepository userRepository;
 
     @AfterEach
@@ -35,7 +38,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
-        JoinSendMailResponse joinSendMailResponse = joinService.sendMail(joinSendMailServiceRequest);
+        JoinSendMailResponse joinSendMailResponse = joinReadService.sendMail(joinSendMailServiceRequest);
 
         assertThat(joinSendMailResponse.getAuthNum().length()).isEqualTo(6);
     }
@@ -46,7 +49,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
-        JoinCheckEmailResponse response = joinService.checkEmail(joinCheckEmailServiceRequest);
+        JoinCheckEmailResponse response = joinReadService.checkEmail(joinCheckEmailServiceRequest);
 
         assertThat(response.getEmail()).isEqualTo(joinCheckEmailServiceRequest.getEmail());
     }

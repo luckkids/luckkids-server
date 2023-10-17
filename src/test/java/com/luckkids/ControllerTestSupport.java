@@ -3,6 +3,7 @@ package com.luckkids;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.mission.MissionController;
+import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.mission.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected JoinService joinService;
+
+    @MockBean
+    protected JoinReadService joinReadService;
 
 }
 
