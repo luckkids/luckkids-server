@@ -1,4 +1,4 @@
-package com.luckkids.api.service.join.dto;
+package com.luckkids.api.service.join.request;
 
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -11,14 +11,12 @@ public class JoinServiceRequest {
 
     private String email;
     private String password;
-    private String nickname;
     private String phoneNumber;
 
     public User createUser(){
         return User.builder()
                 .email(email)
                 .password(encryptPassword())
-                .nickName(nickname)
                 .phoneNumber(phoneNumber)
                 .snsType(SnsType.NORMAL)
                 .build();

@@ -1,4 +1,4 @@
-package com.luckkids.api.service.join.dto;
+package com.luckkids.api.service.join.response;
 
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -12,14 +12,12 @@ import lombok.Getter;
 public class JoinResponse {
     private String email;
     private String password;
-    private String nickname;
     private String phoneNumber;
     private SnsType snsType;
 
     public JoinResponse(User user){
         email = user.getEmail();
         password = user.getPassword();
-        nickname = user.getNickName();
         phoneNumber = user.getPhoneNumber();
         snsType = user.getSnsType();
     }
