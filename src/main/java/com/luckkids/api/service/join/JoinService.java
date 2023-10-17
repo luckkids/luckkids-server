@@ -19,7 +19,7 @@ public class JoinService {
 
     public JoinResponse joinUser(JoinServiceRequest joinServiceRequest){
         try {
-            User user = joinServiceRequest.createUser();
+            User user = joinServiceRequest.toEntity();
             User savedUser = userRepository.save(user);
 
             return JoinResponse.of(savedUser);

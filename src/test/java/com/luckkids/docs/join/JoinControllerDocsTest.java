@@ -146,6 +146,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
 
         given(joinService.joinUser(any(JoinServiceRequest.class)))
             .willReturn(JoinResponse.builder()
+                .id(1)
                 .email("tkdrl8908@naver.com")
                 .password("1234")
                 .phoneNumber("01012341234")
@@ -182,8 +183,10 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
+                    fieldWithPath("data.id").type(JsonFieldType.STRING)
+                        .description("id"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
-                        .description("인증코드"),
+                        .description("이메일"),
                     fieldWithPath("data.password").type(JsonFieldType.STRING)
                         .description("패스워드"),
                     fieldWithPath("data.phoneNumber").type(JsonFieldType.STRING)
