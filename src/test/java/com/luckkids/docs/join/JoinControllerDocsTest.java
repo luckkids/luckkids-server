@@ -4,6 +4,7 @@ import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.join.request.JoinCheckEmailRequest;
 import com.luckkids.api.controller.join.request.JoinRequest;
 import com.luckkids.api.controller.join.request.JoinSendMailRequest;
+import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.request.JoinSendMailServiceRequest;
@@ -33,10 +34,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class JoinControllerDocsTest extends RestDocsSupport {
 
     private final JoinService joinService =  mock(JoinService.class);
+    private final JoinReadService joinReadService = mock(JoinReadService.class);
 
     @Override
     protected Object initController() {
-        return new JoinController(joinService);
+        return new JoinController(joinService, joinReadService);
     }
 
     @DisplayName("이메일 중복체크 API")
@@ -48,7 +50,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
-        given(joinService.checkEmail(any(JoinCheckEmailServiceRequest.class)))
+        given(joinReadService.checkEmail(any(JoinCheckEmailServiceRequest.class)))
             .willReturn(JoinCheckEmailResponse.builder()
                 .email("tkdrl8908@naver.com")
                 .build()
@@ -94,7 +96,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
-        given(joinService.sendMail(any(JoinSendMailServiceRequest.class)))
+        given(joinReadService.sendMail(any(JoinSendMailServiceRequest.class)))
             .willReturn(JoinSendMailResponse.builder()
                 .authNum("232422")
                 .build()
