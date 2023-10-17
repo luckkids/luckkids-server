@@ -11,6 +11,11 @@ endif::[]
 
 [[Mission-API]]
 == Mission API
-
 include::api/mission/mission.adoc[]
+
+[[Join-API]]
+== Join API
+include::api/join/checkEmail.adoc[]
+include::api/join/sendMail.adoc[]
+include::api/join/joinUser.adoc[]
 
