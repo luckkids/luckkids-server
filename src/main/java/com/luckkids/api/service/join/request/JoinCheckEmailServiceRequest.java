@@ -1,11 +1,11 @@
-package com.luckkids.api.service.join.dto;
+package com.luckkids.api.service.join.request;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class JoinSendMailServiceRequest {
+public class JoinCheckEmailServiceRequest {
 
     private String email;
 }
