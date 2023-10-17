@@ -2,9 +2,14 @@ package com.luckkids.api.service.join;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.repository.join.UserRepository;
-import com.luckkids.api.service.join.dto.*;
+import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
+import com.luckkids.api.service.join.request.JoinSendMailServiceRequest;
+import com.luckkids.api.service.join.request.JoinServiceRequest;
+import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
+import com.luckkids.api.service.join.response.JoinResponse;
+import com.luckkids.api.service.join.response.JoinSendMailResponse;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -23,12 +28,13 @@ public class JoinService {
     private final UserRepository userRepository;
     private final JavaMailSender javaMailSender;
 
-    public void checkEmail(JoinCheckEmailServiceRequest joinCheckEmailServiceRequest){
+    public JoinCheckEmailResponse checkEmail(JoinCheckEmailServiceRequest joinCheckEmailServiceRequest){
         String email = joinCheckEmailServiceRequest.getEmail();
         User user =  userRepository.findByEmail(email);
         if(user!=null){
             user.checkSnsType();
         }
+        return JoinCheckEmailResponse.of(email);
     }
 
     public JoinSendMailResponse sendMail(JoinSendMailServiceRequest joinSendMailServiceRequest) {
@@ -43,9 +49,7 @@ public class JoinService {
             mimeMessageHelper.setText("인증번호: "+authNum); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
-            return JoinSendMailResponse.builder()
-                    .code(authNum)
-                    .build();
+            return JoinSendMailResponse.of(authNum);
         } catch (MessagingException e) {
             throw new LuckKidsException(ErrorCode.MAIL_FAIL);
         }
