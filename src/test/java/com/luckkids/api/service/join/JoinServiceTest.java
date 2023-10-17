@@ -7,6 +7,7 @@ import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.api.service.join.response.JoinSendMailResponse;
+import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -69,12 +70,14 @@ public class JoinServiceTest extends IntegrationTestSupport {
                 "email",
                 "password",
                 "phoneNumber",
-                "snsType")
+                "snsType",
+                "role")
             .contains(
                 joinServiceRequest.getEmail(),
                 joinServiceRequest.getPassword(),
                 joinServiceRequest.getPhoneNumber(),
-                SnsType.NORMAL
+                SnsType.NORMAL,
+                Role.USER
             );
     }
 }
