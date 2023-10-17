@@ -2,10 +2,9 @@ package com.luckkids.domain.user;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,6 @@ public class User extends BaseTimeEntity {
     private String email;
 
     private String password;
-
-    private String nickName;
 
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
