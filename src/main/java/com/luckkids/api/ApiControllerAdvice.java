@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
+    /**
+     * validation Exception
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public ApiResponse<Object> bindException(BindException e) {
@@ -22,29 +25,29 @@ public class ApiControllerAdvice {
         );
     }
 
-    /*
-    * 예상치 못한 서버로직에러 발생시 처리
-    */
+    /**
+     * 예상치 못한 서버로직에러 발생시 처리
+     */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ApiResponse<Object> exception(Exception e){
+    public ApiResponse<Object> exception(Exception e) {
         return ApiResponse.of(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "서버 로직 에러",
-                null
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "서버 로직 에러",
+            null
         );
     }
 
-    /*
-    * 임의로 발생시킨 CustomException처리
-    */
+    /**
+     * 임의로 발생시킨 CustomException처리
+     */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(LuckKidsException.class)
-    public ApiResponse<Object> LuckKidsException(LuckKidsException e){
+    public ApiResponse<Object> LuckKidsException(LuckKidsException e) {
         return ApiResponse.of(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                e.getMessage(),
-                null
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            e.getMessage(),
+            null
         );
     }
 

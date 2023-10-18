@@ -28,14 +28,21 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    //lombok
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // lombok
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //jpa
+    // jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // QueryDSL Implementation
@@ -47,70 +54,26 @@ dependencies {
     // h2
     runtimeOnly 'com.h2database:h2'
 
-    //mysql
+    // mysql
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
 
+    // etc
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
-
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // RestDocs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 }
 
-//snippets 파일 저장될 경로지정
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
 tasks.named('test') {
     useJUnitPlatform()
-    outputs.dir snippetsDir //출력할 디렉토리 설정
-}
-
-asciidoctor {
-    configurations 'asciidoctorExt'
-
-    //index파일만
-    sources{
-        include("**/index.adoc")
-    }
-
-    baseDirFollowsSourceFile()
-
-    inputs.dir snippetsDir
-
-    dependsOn test
-}
-
-// 중복 혹은 기존파일들이 남아있을 수 있기 때문에 삭제
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-//from에 있는 파일들을 into로 복사
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
-
-build {
-    dependsOn copyDocument
-}
-
-bootJar {
-    dependsOn copyDocument
-    from("${asciidoctor.outputDir}"){
-        into 'static/docs'
-    }
 }
 
 /**
@@ -128,4 +91,30 @@ tasks.withType(JavaCompile) {
 
 clean.doLast {
     file(querydslDir).deleteDir()
+}
+
+ext { // 전역 변수
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+
+    sources { // 특정 파일만 html로 만든다.
+        include("**/index.adoc")
+    }
+    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
