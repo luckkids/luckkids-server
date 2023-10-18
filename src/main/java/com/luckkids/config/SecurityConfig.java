@@ -40,7 +40,7 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/h2-console/**"),
                         new AntPathRequestMatcher("/health-check")
                 ).permitAll()
-                .anyRequest().hasAnyAuthority("ROLE_USER")
+                .anyRequest().hasAnyAuthority(Role.USER.getText(), Role.ADMIN.getText())
             )
 
             .logout((logout) -> logout

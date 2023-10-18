@@ -1,5 +1,6 @@
 package com.luckkids.jwt;
 
+import com.luckkids.domain.user.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -67,9 +68,6 @@ public class JwtTokenProvider {
     
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-    	/*
-    	 * UserDetails 가져오는 비지니스 로직 추가되야함
-    	 * */
-        return new UsernamePasswordAuthenticationToken(this.getUserPk(token), "",  Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        return new UsernamePasswordAuthenticationToken(this.getUserPk(token), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
     }
 }
