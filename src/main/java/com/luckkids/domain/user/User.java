@@ -2,10 +2,11 @@ package com.luckkids.domain.user;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.domain.BaseEntity;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.security.dto.JwtToken;
+import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
@@ -16,11 +17,12 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User extends BaseEntity {
+@Table(name = "users")
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String email;
 
@@ -31,10 +33,19 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
-    private String Profile;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
+
+    @Builder
+    private User(String email, String password, SnsType snsType, String phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.snsType = snsType;
+        this.phoneNumber = phoneNumber;
+    }
 
     public void checkSnsType(){
         if(snsType.getText().equals(SnsType.APPLE.getText())){
@@ -60,13 +71,13 @@ public class User extends BaseEntity {
     /*
     * List<RefreshToken>에 요청값으로 받은 deviceId와 일치하는 기존 RefreshToken이 있는지 조회 후 수정 혹은 등록한다.
     * */
-    public void checkRefreshToken(JwtToken jwtToken, String deviceId){
+    public void checkRefreshToken(JwtToken jwtToken, String deviceId) {
         Hibernate.initialize(refreshTokens);
         // deviceId와 일치하는 RefreshToken 찾기
         RefreshToken existToken = refreshTokens.stream()
-                .filter(refreshToken -> deviceId.equals(refreshToken.getDeviceId()))
-                .findFirst()
-                .orElse(null);
+            .filter(refreshToken -> deviceId.equals(refreshToken.getDeviceId()))
+            .findFirst()
+            .orElse(null);
 
         if (existToken != null) {
             // deviceId와 일치하는 RefreshToken이 이미 존재하는 경우, 해당 토큰 업데이트
@@ -78,4 +89,17 @@ public class User extends BaseEntity {
             refreshTokens.add(newToken);
         }
     }
+    /**
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<Mission> missions = new ArrayList<>();
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<MissionComplete> missionCompletes = new ArrayList<>();
+     * @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
+     * private List<Friend> friends = new ArrayList<>();
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<AlertHistory> alertHistories = new ArrayList<>();
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<Push> pushes = new ArrayList<>();
+     **/
+
 }
