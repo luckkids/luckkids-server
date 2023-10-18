@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /*
  * Token인증이 필요한 API 메소드 호출이전 Header에 저장되어있는 토큰을 가져와 유효여부를 체크한다.
@@ -23,6 +24,19 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final String[] excludePath = {
+        "/api/v1/jwt/token",    //토큰발급 테스트 API
+        "/api/v1/jwt/refresh",  //access-token 갱신테스트 API
+        "/api/v1/auth/login",   //로그인 예정
+        "/api/v1/join/user"     //회원가입 예정
+    };
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
