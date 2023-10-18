@@ -3,6 +3,7 @@ package com.luckkids.config;
 import com.luckkids.jwt.JwtTokenProvider;
 import com.luckkids.jwt.filter.JwtAuthenticationFilter;
 import com.luckkids.jwt.filter.JwtExceptionHandlerFilter;
+import com.luckkids.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
