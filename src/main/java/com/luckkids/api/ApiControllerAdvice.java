@@ -1,6 +1,7 @@
 package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.jwt.exception.JwtTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +48,19 @@ public class ApiControllerAdvice {
             HttpStatus.INTERNAL_SERVER_ERROR,
             e.getMessage(),
             null
+        );
+    }
+
+    /*
+     * 임의로 발생시킨 CustomException처리
+     */
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(JwtTokenException.class)
+    public ApiResponse<Object> JwtTokenException(JwtTokenException e){
+        return ApiResponse.of(
+                HttpStatus.UNAUTHORIZED,
+                e.getMessage(),
+                null
         );
     }
 }
