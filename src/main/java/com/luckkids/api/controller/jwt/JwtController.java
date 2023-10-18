@@ -1,6 +1,5 @@
 package com.luckkids.api.controller.jwt;
 
-import com.luckkids.config.login.LoginUser;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +28,6 @@ public class JwtController {
     @PostMapping("/refresh")
     public JwtToken refreshToken(String refreshToken) {
         return jwtTokenGenerator.generateAccessToken(refreshToken);
-    }
-
-    /*
-     * token 유효 테스트
-     * */
-    @PostMapping("/test")
-    public String test(@LoginUser String email) {
-        return email;
     }
 
 }
