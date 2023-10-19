@@ -3,13 +3,13 @@ package com.luckkids.api.controller.join;
 import com.luckkids.ControllerTestSupport;
 import com.luckkids.api.controller.join.request.JoinCheckEmailRequest;
 import com.luckkids.api.controller.join.request.JoinRequest;
-import com.luckkids.api.controller.join.request.JoinSendMailRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,7 +19,7 @@ class JoinControllerTest extends ControllerTestSupport {
 
     @DisplayName("이메일 중복확인 테스트")
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser("USER")
     void checkEmail() throws Exception {
         // given
         JoinCheckEmailRequest request = JoinCheckEmailRequest.builder()
@@ -28,7 +28,7 @@ class JoinControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/join/checkEmail")
+                get("/api/v1/join/checkEmail")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
@@ -41,18 +41,18 @@ class JoinControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("이메일 전송 테스트")
+    @DisplayName("이메일이 존재할시 이메일 중복확인 테스트")
     @Test
-    @WithMockUser(roles = "USER")
-    void sendMail() throws Exception {
+    @WithMockUser("USER")
+    void checkEmailWithUser() throws Exception {
         // given
-        JoinSendMailRequest request = JoinSendMailRequest.builder()
+        JoinCheckEmailRequest request = JoinCheckEmailRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/join/sendMail")
+                get("/api/v1/join/checkEmail")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
@@ -67,7 +67,7 @@ class JoinControllerTest extends ControllerTestSupport {
 
     @DisplayName("회원가입 테스트")
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser("USER")
     void joinUser() throws Exception {
         // given
         JoinRequest request = JoinRequest.builder()
