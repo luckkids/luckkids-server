@@ -20,7 +20,7 @@ public class JoinCheckEmailRequest {
     }
 
     @Builder
-    public JoinCheckEmailRequest(String email) {
+    private JoinCheckEmailRequest(String email) {
         this.email = email;
     }
 }

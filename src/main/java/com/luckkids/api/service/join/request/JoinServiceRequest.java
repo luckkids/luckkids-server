@@ -16,7 +16,7 @@ public class JoinServiceRequest {
     private String phoneNumber;
 
     @Builder
-    public JoinServiceRequest(String email, String password, String phoneNumber) {
+    private JoinServiceRequest(String email, String password, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;

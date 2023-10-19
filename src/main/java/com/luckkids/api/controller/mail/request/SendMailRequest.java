@@ -1,6 +1,6 @@
-package com.luckkids.api.controller.join.request;
+package com.luckkids.api.controller.mail.request;
 
-import com.luckkids.api.service.join.request.JoinSendMailServiceRequest;
+import com.luckkids.api.service.mail.request.SendMailServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,19 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JoinSendMailRequest {
+public class SendMailRequest {
 
     @NotBlank(message = "이메일은 필수입니다.")
     private String email;
 
-    public JoinSendMailServiceRequest toServiceRequest(){
-        return JoinSendMailServiceRequest.builder()
+    public SendMailServiceRequest toServiceRequest(){
+        return SendMailServiceRequest.builder()
                 .email(email)
                 .build();
     }
 
     @Builder
-    public JoinSendMailRequest(String email) {
+    public SendMailRequest(String email) {
         this.email = email;
     }
 }
