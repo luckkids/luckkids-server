@@ -1,9 +1,9 @@
 package com.luckkids.config;
 
+import com.luckkids.domain.user.Role;
 import com.luckkids.jwt.JwtTokenProvider;
 import com.luckkids.jwt.filter.JwtAuthenticationFilter;
 import com.luckkids.jwt.filter.JwtExceptionHandlerFilter;
-import com.luckkids.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,20 +31,20 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        new AntPathRequestMatcher("/api/v1/jwt/**"),
-                        new AntPathRequestMatcher("/api/v1/auth/**"),
-                        new AntPathRequestMatcher("/api/v1/join/**"),
-                        new AntPathRequestMatcher("/css/**"),
-                        new AntPathRequestMatcher("/images/**"),
-                        new AntPathRequestMatcher("/js/**"),
-                        new AntPathRequestMatcher("/h2-console/**"),
-                        new AntPathRequestMatcher("/health-check")
+                    new AntPathRequestMatcher("/api/v1/jwt/**"),
+                    new AntPathRequestMatcher("/api/v1/auth/**"),
+                    new AntPathRequestMatcher("/api/v1/join/**"),
+                    new AntPathRequestMatcher("/css/**"),
+                    new AntPathRequestMatcher("/images/**"),
+                    new AntPathRequestMatcher("/js/**"),
+                    new AntPathRequestMatcher("/h2-console/**"),
+                    new AntPathRequestMatcher("/health-check")
                 ).permitAll()
-                .anyRequest().hasAnyAuthority(Role.USER.getText(), Role.ADMIN.getText())
+                .anyRequest().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
             )
 
             .logout((logout) -> logout
-                    .logoutSuccessUrl("/"))
+                .logoutSuccessUrl("/"))
 
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthenticationFilter.class); //JwtAuthenticationFilter에서 뱉은 에러를 처리하기 위한 Filter

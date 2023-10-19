@@ -1,6 +1,7 @@
 package com.luckkids.api.service.mission;
 
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
+import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -27,4 +28,21 @@ public class MissionService {
 
         return MissionResponse.of(savedMission);
     }
+
+    public MissionResponse updateMission(int missionId, MissionUpdateServiceRequest request) {
+        Mission mission = findByOne(missionId);
+        Mission updatedMission = mission.update(
+            request.getMissionDescription(),
+            request.getAlertStatus(),
+            request.getAlertTime()
+        );
+
+        return MissionResponse.of(updatedMission);
+    }
+
+    private Mission findByOne(int id) {
+        return missionRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 미션은 없습니다. id = " + id));
+    }
+
 }
