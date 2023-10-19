@@ -4,8 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class JoinCheckEmailServiceRequest {
 
     private String email;
+
+    @Builder
+    private JoinCheckEmailServiceRequest(String email) {
+        this.email = email;
+    }
 }

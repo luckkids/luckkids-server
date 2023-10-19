@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class JoinCheckEmailResponse {
     private String email;
 
@@ -12,5 +11,10 @@ public class JoinCheckEmailResponse {
         return JoinCheckEmailResponse.builder()
             .email(email)
             .build();
+    }
+
+    @Builder
+    private JoinCheckEmailResponse(String email) {
+        this.email = email;
     }
 }

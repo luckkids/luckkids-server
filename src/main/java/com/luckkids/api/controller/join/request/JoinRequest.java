@@ -18,7 +18,7 @@ public class JoinRequest {
     private String phoneNumber;
 
     @Builder
-    public JoinRequest(String email, String password, String phoneNumber) {
+    private JoinRequest(String email, String password, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
