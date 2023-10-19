@@ -1,8 +1,10 @@
 package com.luckkids.api.exception;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum ErrorCode {
 
     USER_UNKNOWN( "해당 사용자가 존재하지 않습니다"),
@@ -18,7 +20,4 @@ public enum ErrorCode {
 
     private final String message;
 
-    private ErrorCode(String message) {
-        this.message = message;
-    }
 }
