@@ -1,7 +1,5 @@
 package com.luckkids.domain.user;
 
-import com.luckkids.api.exception.ErrorCode;
-import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -47,15 +45,7 @@ public class User extends BaseTimeEntity {
      **/
 
     public void checkSnsType() {
-        if (snsType.getText().equals(SnsType.NORMAL.getText())) {
-            throw new LuckKidsException(ErrorCode.USER_NORMAL);
-        } else if (snsType.getText().equals(SnsType.KAKAO.getText())) {
-            throw new LuckKidsException(ErrorCode.USER_KAKAO);
-        } else if (snsType.getText().equals(SnsType.GOOGLE.getText())) {
-            throw new LuckKidsException(ErrorCode.USER_GOOGLE);
-        } else if (snsType.getText().equals(SnsType.APPLE.getText())) {
-            throw new LuckKidsException(ErrorCode.USER_APPLE);
-        }
+        snsType.checkSnsType();
     }
     @Builder
     private User(String email, String password, SnsType snsType, String phoneNumber) {

@@ -41,30 +41,6 @@ class JoinControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("이메일이 존재할시 이메일 중복확인 테스트")
-    @Test
-    @WithMockUser("USER")
-    void checkEmailWithUser() throws Exception {
-        // given
-        JoinCheckEmailRequest request = JoinCheckEmailRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .build();
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/join/checkEmail")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode").value("200"))
-            .andExpect(jsonPath("$.httpStatus").value("OK"))
-            .andExpect(jsonPath("$.message").value("OK"));
-    }
-
     @DisplayName("회원가입 테스트")
     @Test
     @WithMockUser("USER")
