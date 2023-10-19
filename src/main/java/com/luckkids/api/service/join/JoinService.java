@@ -27,6 +27,4 @@ public class JoinService {
             throw new LuckKidsException(ErrorCode.USER_NORMAL);
         }
     }
-
-
 }
