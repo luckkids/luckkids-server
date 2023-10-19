@@ -22,13 +22,13 @@ public class JwtTokenGenerator {
     /*
     * accessToken 발급
     * */
-    public JwtToken generate(String email) {
+    public JwtToken generate(String id) {
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);				//AccessToken 유효기간 지정
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);				//RefreshToken 유효기간 지정
 
-        String accessToken = jwtTokenProvider.generate(email, accessTokenExpiredAt);		//AccessToken 생성
-        String refreshToken = jwtTokenProvider.generate(email, refreshTokenExpiredAt);	    //RefreshToken 생성
+        String accessToken = jwtTokenProvider.generate(id, accessTokenExpiredAt);		//AccessToken 생성
+        String refreshToken = jwtTokenProvider.generate(id, refreshTokenExpiredAt);	    //RefreshToken 생성
 
         return JwtToken.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
