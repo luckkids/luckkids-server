@@ -73,6 +73,6 @@ public class JwtTokenProvider {
     
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        return new UsernamePasswordAuthenticationToken(this.getUserPk(token), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
+        return new UsernamePasswordAuthenticationToken(Integer.parseInt(this.getUserPk(token)), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
     }
 }
