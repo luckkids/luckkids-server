@@ -37,6 +37,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private SettingStatus settingStatus;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
@@ -44,12 +47,13 @@ public class User extends BaseTimeEntity {
     private List<Push> pushes = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, SnsType snsType, String phoneNumber, Role role) {
+    public User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        this.settingStatus = settingStatus;
     }
 
     public void checkSnsType(){

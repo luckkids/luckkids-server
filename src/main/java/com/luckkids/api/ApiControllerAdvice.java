@@ -34,7 +34,7 @@ public class ApiControllerAdvice {
         return ApiResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "서버 로직 에러",
-            null
+            e
         );
     }
 
@@ -47,7 +47,7 @@ public class ApiControllerAdvice {
         return ApiResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR,
             e.getMessage(),
-            null
+            e
         );
     }
 
