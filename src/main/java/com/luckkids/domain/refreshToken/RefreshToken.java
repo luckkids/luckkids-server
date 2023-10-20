@@ -3,6 +3,7 @@ package com.luckkids.domain.refreshToken;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,10 +23,19 @@ public class RefreshToken {
 
     private String deviceId;
 
-    public RefreshToken(User user, String refreshToken, String deviceId){
+    @Builder
+    private RefreshToken(User user, String refreshToken, String deviceId){
         this.user = user;
         this.refreshToken = refreshToken;
         this.deviceId = deviceId;
+    }
+
+    public static RefreshToken of(User user, String refreshToken, String deviceId){
+        return RefreshToken.builder()
+            .user(user)
+            .refreshToken(refreshToken)
+            .deviceId(deviceId)
+            .build();
     }
 
     public void updateRefreshToken(String refreshToken){
