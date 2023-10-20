@@ -14,3 +14,7 @@ endif::[]
 
 include::api/mission/mission.adoc[]
 
+[[Login-API]]
+== Login API
+include::api/login/login.adoc[]
+

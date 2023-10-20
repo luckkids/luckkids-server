@@ -1,0 +1,12 @@
+[[user-login]]
+=== 일반 로그인
+
+==== HTTP Request
+
+include::{snippets}/user-login/http-request.adoc[]
+include::{snippets}/user-login/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-login/http-response.adoc[]
+include::{snippets}/user-login/response-fields.adoc[]
