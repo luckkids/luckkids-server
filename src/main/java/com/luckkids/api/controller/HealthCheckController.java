@@ -18,7 +18,7 @@ public class HealthCheckController {
      * token 유효 테스트
      * */
     @PostMapping("/jwt/test")
-    public String test(@LoginUser String email) {
-        return email;
+    public int test(@LoginUser int userId) {
+        return userId;
     }
 }
