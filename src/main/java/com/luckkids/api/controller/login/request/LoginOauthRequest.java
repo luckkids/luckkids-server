@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.login.dto;
+package com.luckkids.api.controller.login.request;
 
 import lombok.Getter;
 
