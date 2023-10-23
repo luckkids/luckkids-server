@@ -41,11 +41,18 @@ public class User extends BaseTimeEntity {
      * private List<Push> pushes = new ArrayList<>();
      **/
 
+
+
+    public void checkSnsType() {
+        snsType.checkSnsType();
+    }
+
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }

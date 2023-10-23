@@ -31,14 +31,15 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    new AntPathRequestMatcher("/api/v1/jwt/**"),
-                    new AntPathRequestMatcher("/api/v1/auth/**"),
-                    new AntPathRequestMatcher("/api/v1/join/**"),
-                    new AntPathRequestMatcher("/css/**"),
-                    new AntPathRequestMatcher("/images/**"),
-                    new AntPathRequestMatcher("/js/**"),
-                    new AntPathRequestMatcher("/h2-console/**"),
-                    new AntPathRequestMatcher("/health-check")
+                        new AntPathRequestMatcher("/api/v1/jwt/**"),
+                        new AntPathRequestMatcher("/api/v1/mail/**"),
+                        new AntPathRequestMatcher("/api/v1/auth/**"),
+                        new AntPathRequestMatcher("/api/v1/join/**"),
+                        new AntPathRequestMatcher("/css/**"),
+                        new AntPathRequestMatcher("/images/**"),
+                        new AntPathRequestMatcher("/js/**"),
+                        new AntPathRequestMatcher("/h2-console/**"),
+                        new AntPathRequestMatcher("/health-check")
                 ).permitAll()
                 .anyRequest().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
             )
