@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Configuration status="INFO" monitorInterval="30" >
-	
+
     <Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%p %d [%t] [%c] %-15.15M %m%n" />
 		</Console>
-		
-		<RollingRandomAccessFile name="luckkids"
-			fileName="/var/log/project/luckkids/luckkids.log"
-			filePattern="/var/log/project/luckkids/$${date:yyyyMMdd}/luckkids.%d{yyyyMMdd}-%i.log.zip"
-			immediateFlush="false" append="true">
-			<PatternLayout pattern="%p %d [%t] [%c] %M %m%n" />
-			<Policies>
-				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-			</Policies>
-		</RollingRandomAccessFile>
-		
-		<RollingRandomAccessFile name="luckkids-error"
-			fileName= "/var/log/project/luckkids/luckkids_error.log"
-			filePattern="/var/log/project/luckkids/$${date:yyyyMMdd}/luckkids_error.%d{yyyyMMdd}-%i.log.zip"
-			immediateFlush="false" append="false">
-			<PatternLayout pattern="%p %d [%t] [%c] %-15.15M %m%n" />
-			<Policies>
-				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-			</Policies>
-		</RollingRandomAccessFile>
-		
-		<Async name="Async-log">
-			<AppenderRef ref="luckkids" />
-		</Async>
-		<Async name="Async-error">
-			<AppenderRef ref="luckkids-error" />
-		</Async>
-		
+
+<!--		<RollingRandomAccessFile name="luckkids"-->
+<!--			fileName="/var/log/project/luckkids/luckkids.log"-->
+<!--			filePattern="/var/log/project/luckkids/$${date:yyyyMMdd}/luckkids.%d{yyyyMMdd}-%i.log.zip"-->
+<!--			immediateFlush="false" append="true">-->
+<!--			<PatternLayout pattern="%p %d [%t] [%c] %M %m%n" />-->
+<!--			<Policies>-->
+<!--				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>-->
+<!--			</Policies>-->
+<!--		</RollingRandomAccessFile>-->
+
+<!--		<RollingRandomAccessFile name="luckkids-error"-->
+<!--			fileName= "/var/log/project/luckkids/luckkids_error.log"-->
+<!--			filePattern="/var/log/project/luckkids/$${date:yyyyMMdd}/luckkids_error.%d{yyyyMMdd}-%i.log.zip"-->
+<!--			immediateFlush="false" append="false">-->
+<!--			<PatternLayout pattern="%p %d [%t] [%c] %-15.15M %m%n" />-->
+<!--			<Policies>-->
+<!--				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>-->
+<!--			</Policies>-->
+<!--		</RollingRandomAccessFile>-->
+
+<!--		<Async name="Async-log">-->
+<!--			<AppenderRef ref="luckkids" />-->
+<!--		</Async>-->
+<!--		<Async name="Async-error">-->
+<!--			<AppenderRef ref="luckkids-error" />-->
+<!--		</Async>-->
+
 	</Appenders>
-	
+
 	<Loggers>
 		<Root level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="Async-log" />
-			<AppenderRef ref="Async-error" level="WARN"/>
+<!--			<AppenderRef ref="Async-log" />-->
+<!--			<AppenderRef ref="Async-error" level="WARN"/>-->
 		</Root>
 		<Logger name="org.zaxxer.hikari" level="ERROR" additivity="false">
 			<AppenderRef ref="luckkids-error" />
 		</Logger>
 	</Loggers>
-	
+
 </Configuration>

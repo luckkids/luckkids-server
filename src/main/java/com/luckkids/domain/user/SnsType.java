@@ -1,7 +1,11 @@
 package com.luckkids.domain.user;
 
+import com.luckkids.api.exception.LuckKidsException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
@@ -12,4 +16,13 @@ public enum SnsType {
     APPLE("애플");
 
     private final String text;
+
+    public void checkSnsType(){
+        Optional<SnsType> snsType = Arrays.stream(values())
+            .filter(type -> type.getText().equals(text))
+            .findFirst();
+        snsType.ifPresent(type -> {
+            throw new LuckKidsException(text+"로그인으로 이미 가입된 이메일입니다.");
+        });
+    }
 }
