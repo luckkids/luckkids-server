@@ -76,17 +76,16 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
         assertThat(response)
             .extracting(
+                "id",
                 "email",
-                "password",
                 "phoneNumber",
-                "snsType",
-                "role")
+                "snsType"
+            )
             .contains(
+                1,
                 joinServiceRequest.getEmail(),
-                joinServiceRequest.getPassword(),
                 joinServiceRequest.getPhoneNumber(),
-                SnsType.NORMAL,
-                Role.USER
+                SnsType.NORMAL
             );
     }
 }
