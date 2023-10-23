@@ -18,8 +18,8 @@ public class JwtController {
      * 토큰 발급 API
      * */
     @PostMapping("/token")
-    public JwtToken getToken(String email) {
-        return jwtTokenGenerator.generate(email);
+    public JwtToken getToken(int id) {
+        return jwtTokenGenerator.generate(String.valueOf(id));
     }
 
     /*

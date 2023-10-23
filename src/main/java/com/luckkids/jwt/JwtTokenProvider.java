@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Collections;
@@ -58,7 +59,11 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String headerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(headerToken) && headerToken.startsWith("Bearer ")) {
+            return headerToken.substring(7).trim();
+        }
+        return null;
     }
 
     // 토큰에서 회원 정보 추출
@@ -68,6 +73,6 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        return new UsernamePasswordAuthenticationToken(this.getUserPk(token), "", Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
+        return new UsernamePasswordAuthenticationToken(Integer.parseInt(this.getUserPk(token)), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
     }
 }
