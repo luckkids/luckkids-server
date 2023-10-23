@@ -2,7 +2,6 @@ package com.luckkids.domain.user;
 
 import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
@@ -44,14 +41,18 @@ public class User extends BaseTimeEntity {
      * private List<Push> pushes = new ArrayList<>();
      **/
 
+
+
     public void checkSnsType() {
         snsType.checkSnsType();
     }
+
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }
