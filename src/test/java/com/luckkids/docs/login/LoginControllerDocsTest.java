@@ -6,10 +6,10 @@ import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.user.SettingStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -34,20 +34,21 @@ public class LoginControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("일반 로그인 API")
     @Test
-    @WithMockUser(roles = "USER")
     void createMission() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
             .deviceId("testdeviceId")
+            .pushKey("tessPushKey")
             .build();
 
-        given(loginService.login(any(LoginServiceRequest.class)))
+        given(loginService.normalLogin(any(LoginServiceRequest.class)))
             .willReturn(LoginResponse.builder()
                 .email("tkdrl8908@naver.com")
                 .accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzI1OTYzfQ.StpNeN7Mrcm9n3niSPU8ItRMBZqy__gS8AjRkqlIZ2dWtLaciMQF6EGPY4JaagoFkP-GfhUr8pMYfRewEZ-BYg")
                 .refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzY5MTYzfQ.DJwKVuZxw3zTK8RdnnwS45JM0V_3DJ0kpCDMaf3wnyv5GwLtwwKtVNhfeJmhcGYJZ3gvu534kAZGtAoZb_dgWw")
+                .settingStatus(SettingStatus.NO)
                 .build()
             );
 
@@ -69,7 +70,9 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("password").type(JsonFieldType.STRING)
                         .description("비밀번호"),
                     fieldWithPath("deviceId").type(JsonFieldType.STRING)
-                        .description("디바이스ID")
+                        .description("디바이스ID"),
+                    fieldWithPath("pushKey").type(JsonFieldType.STRING)
+                        .description("푸시키")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -85,7 +88,9 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
                         .description("Access-Token"),
                     fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
-                        .description("Refresh-Token")
+                        .description("Refresh-Token"),
+                    fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
+                        .description("미션 및 캐릭터 초기세팅여부")
                 )
             ));
     }

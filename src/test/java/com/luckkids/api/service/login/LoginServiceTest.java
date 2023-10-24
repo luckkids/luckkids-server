@@ -1,5 +1,6 @@
 package com.luckkids.api.service.login;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LoginServiceTest extends IntegrationTestSupport {
@@ -40,9 +42,9 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("등록된 사용자가 있을 경우 일반 로그인을 한다.")
+    @DisplayName("일반으로 등록된 사용자가 있을 경우 일반 로그인을 한다.")
     @Test
-    void normalLoginIfUserExist() {
+    void normalLoginIfUserExist() throws JsonProcessingException{
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -60,7 +62,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        LoginResponse loginResponse = loginService.login(request);
+        LoginResponse loginResponse = loginService.normalLogin(request);
 
         // then
         assertThat(loginResponse.getAccessToken()).isNotNull();
@@ -68,9 +70,35 @@ public class LoginServiceTest extends IntegrationTestSupport {
         assertThat(loginResponse.getEmail()).isEqualTo(savedUser.getEmail());
     }
 
+    @DisplayName("SNS로 등록된 사용자가 있을 경우 일반 로그인이 되지 않는다.")
+    @Test
+    void normalLoginIfSnsUserExist() throws JsonProcessingException{
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .snsType(SnsType.KAKAO)
+            .phoneNumber("01064091048")
+            .build();
+
+        User savedUser = userRepository.save(user);
+
+        LoginServiceRequest request = LoginServiceRequest.builder()
+            .email(savedUser.getEmail())
+            .password(savedUser.getPassword())
+            .deviceId("asdfasdfasdfsadfsf")
+            .build();
+
+        // when
+        // then
+        assertThrows(LuckKidsException.class, () -> {
+            loginService.normalLogin(request);
+        });
+    }
+
     @DisplayName("등록된 사용자가 없을 경우 일반 로그인을 할 시 예외를 발생시킨다.")
     @Test
-    void normalLoginIfUserNotExist() {
+    void normalLoginIfUserNotExist() throws JsonProcessingException{
         // given
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -81,13 +109,13 @@ public class LoginServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThrows(LuckKidsException.class, () -> {
-            loginService.login(request);
+            loginService.normalLogin(request);
         });
     }
 
     @DisplayName("일반 로그인시 비밀번호가 틀렸을 경우 예외를 발생시킨다.")
     @Test
-    void normalLoginIncorrectPassword() {
+    void normalLoginIncorrectPassword() throws JsonProcessingException {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -107,14 +135,14 @@ public class LoginServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThrows(LuckKidsException.class, () -> {
-            loginService.login(request);
+            loginService.normalLogin(request);
         });
     }
 
     @DisplayName("다른 디바이스로 로그인 했을 시에는 refresh-token이 각 디바이스별로 저장이 된다.")
     @Test
     @Transactional
-    void normalLoginOtherDeviceRefreshToken() {
+    void normalLoginOtherDeviceRefreshToken() throws JsonProcessingException, InterruptedException {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -137,21 +165,69 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .deviceId("testdeviceId2")
             .build();
 
-        loginService.login(request1);
-        loginService.login(request2);
+        // when
+        LoginResponse loginResponse1 = loginService.normalLogin(request1);
+        Thread.sleep(1000); //정확한 Jwt Signiture생성 원리는 모르겠지만 짧은시간 동시에 생성되면 Token값이 같아 Sleep 1초를 줬음
+        LoginResponse loginResponse2 = loginService.normalLogin(request2);
 
         User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
         List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
-        // when
         // then
-        assertThat(refreshTokens.size()).isEqualTo(2);
+        assertThat(refreshTokens).hasSize(2)
+            .extracting("refreshToken")
+            .containsExactlyInAnyOrder(
+                loginResponse1.getRefreshToken(),
+                loginResponse2.getRefreshToken()
+            );
+    }
+
+    @DisplayName("같은 디바이스로 로그인 했을 시에는 refresh-token이 기존 디바이스에 수정이 된다.")
+    @Test
+    @Transactional
+    void normalLoginSameDeviceRefreshToken() throws JsonProcessingException, InterruptedException {
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .snsType(SnsType.NORMAL)
+            .phoneNumber("01064091048")
+            .build();
+
+        userRepository.save(user);
+
+        LoginServiceRequest request1 = LoginServiceRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .deviceId("testdeviceId")
+            .build();
+
+        LoginServiceRequest request2 = LoginServiceRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .deviceId("testdeviceId")
+            .build();
+
+        // when
+        LoginResponse loginResponse1 = loginService.normalLogin(request1);
+        Thread.sleep(1000); //정확한 Jwt Signiture생성 원리는 모르겠지만 짧은시간 동시에 생성되면 Token값이 같아 Sleep 1초를 줬음
+        LoginResponse loginResponse2 = loginService.normalLogin(request2);
+
+        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
+
+        // then
+        assertThat(refreshTokens).hasSize(1)
+            .extracting("deviceId", "refreshToken")
+            .containsExactlyInAnyOrder(
+                tuple("testdeviceId", loginResponse2.getRefreshToken())
+            );
     }
 
     @DisplayName("다른 디바이스로 로그인 했을 시에는 push-token이 각 디바이스별로 저장이 된다.")
     @Test
     @Transactional
-    void normalLoginOtherDevicePushToken() {
+    void normalLoginOtherDevicePushToken() throws JsonProcessingException {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -174,14 +250,55 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .deviceId("testdeviceId2")
             .build();
 
-        loginService.login(request1);
-        loginService.login(request2);
+        // when
+        loginService.normalLogin(request1);
+        loginService.normalLogin(request2);
 
         User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
 
-        // when
         // then
         assertThat(pushes.size()).isEqualTo(2);
+    }
+
+    @DisplayName("같은 디바이스로 로그인 했을 시에는 push-token이 기존 디바이스에서 수정이 된다.")
+    @Test
+    @Transactional
+    void normalLoginSameDevicePushToken() throws JsonProcessingException {
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .snsType(SnsType.NORMAL)
+            .phoneNumber("01064091048")
+            .build();
+
+        userRepository.save(user);
+
+        LoginServiceRequest request1 = LoginServiceRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .deviceId("testdeviceId")
+            .build();
+
+        LoginServiceRequest request2 = LoginServiceRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .deviceId("testdeviceId")
+            .build();
+
+        // when
+        loginService.normalLogin(request1);
+        loginService.normalLogin(request2);
+
+        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        List<Push> pushes = savedUser.getPushes();
+
+        // then
+        assertThat(pushes).hasSize(1)
+            .extracting("deviceId")
+            .containsExactlyInAnyOrder(
+                "testdeviceId"
+            );
     }
 }
