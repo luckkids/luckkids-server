@@ -10,6 +10,7 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.user.WithMockUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 
     @DisplayName("미션 내용들을 받아 미션을 생성한다.")
     @Test
+    @WithMockUserInfo(email = "tkdrl8908@naver.com",role = "USER")
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
