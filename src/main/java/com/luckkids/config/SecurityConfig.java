@@ -32,8 +32,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         new AntPathRequestMatcher("/api/v1/jwt/**"),
+                        new AntPathRequestMatcher("/api/v1/mail/**"),
                         new AntPathRequestMatcher("/api/v1/auth/**"),
                         new AntPathRequestMatcher("/api/v1/join/**"),
+                        new AntPathRequestMatcher("/docs/**"),
                         new AntPathRequestMatcher("/css/**"),
                         new AntPathRequestMatcher("/images/**"),
                         new AntPathRequestMatcher("/js/**"),

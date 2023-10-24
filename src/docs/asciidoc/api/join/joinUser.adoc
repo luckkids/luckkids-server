@@ -1,0 +1,12 @@
+[[join-user]]
+=== 회원가입
+
+==== HTTP Request
+
+include::{snippets}/join-user/http-request.adoc[]
+include::{snippets}/join-user/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/join-user/http-response.adoc[]
+include::{snippets}/join-user/response-fields.adoc[]
