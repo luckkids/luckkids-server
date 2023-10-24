@@ -14,7 +14,7 @@ public class LoginResponse {
     private SettingStatus settingStatus;
 
     @Builder
-    public LoginResponse(String email, String accessToken, String refreshToken, SettingStatus settingStatus) {
+    private LoginResponse(String email, String accessToken, String refreshToken, SettingStatus settingStatus) {
         this.email = email;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
