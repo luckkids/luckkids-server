@@ -10,12 +10,10 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.domain.user.WithMockUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -23,6 +21,7 @@ import java.util.List;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
 class MissionServiceTest extends IntegrationTestSupport {
@@ -47,7 +46,6 @@ class MissionServiceTest extends IntegrationTestSupport {
 
     @DisplayName("미션 내용들을 받아 미션을 생성한다.")
     @Test
-    @WithMockUserInfo(email = "user@daum.net",role = "USER")
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
@@ -61,7 +59,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        MissionResponse missionResponse = missionService.createMission(request);
+        MissionResponse missionResponse = missionService.createMission(request, user.getId());
 
         // then
         assertThat(missionResponse)
@@ -75,6 +73,24 @@ class MissionServiceTest extends IntegrationTestSupport {
                 tuple("운동하기", CHECKED, LocalTime.of(0, 0)),
                 tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
             );
+    }
+
+    @DisplayName("미션 생성중 user의 id가 없는 예외가 발생한다.")
+    @Test
+    void createMissionWithException() {
+        // given
+        int userId = 1;
+
+        MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionDescription("책 읽기")
+            .alertStatus(CHECKED)
+            .alertTime(LocalTime.of(23, 30))
+            .build();
+
+        // when // then
+        assertThatThrownBy(() -> missionService.createMission(request, userId))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("해당 유저는 없습니다. id = " + userId);
     }
 
     @DisplayName("수정할 미션 내용들을 받아 미션을 수정한다.")

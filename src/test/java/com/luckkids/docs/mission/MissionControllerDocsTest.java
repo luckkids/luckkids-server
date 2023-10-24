@@ -8,7 +8,10 @@ import com.luckkids.api.service.mission.MissionService;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -18,6 +21,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -35,10 +39,11 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 
     private final MissionService missionService = mock(MissionService.class);
     private final MissionReadService missionReadService = mock(MissionReadService.class);
+    private final SecurityService securityService = mock(SecurityService.class);
 
     @Override
     protected Object initController() {
-        return new MissionController(missionService, missionReadService);
+        return new MissionController(missionService, missionReadService, securityService);
     }
 
     @DisplayName("신규 미션을 등록하는 API")
@@ -52,13 +57,12 @@ public class MissionControllerDocsTest extends RestDocsSupport {
             .alertTime(LocalTime.of(18, 30))
             .build();
 
-        given(missionService.createMission(any(MissionCreateServiceRequest.class)))
-            .willReturn(MissionResponse.builder()
-                .id(1)
-                .missionDescription("운동하기")
-                .alertStatus(CHECKED)
-                .alertTime(LocalTime.of(18, 30))
-                .build()
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo());
+
+        given(missionService.createMission(any(MissionCreateServiceRequest.class), anyInt()))
+            .willReturn(
+                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -114,12 +118,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
             .build();
 
         given(missionService.updateMission(anyInt(), any(MissionUpdateServiceRequest.class)))
-            .willReturn(MissionResponse.builder()
-                .id(1)
-                .missionDescription("운동하기")
-                .alertStatus(CHECKED)
-                .alertTime(LocalTime.of(18, 30))
-                .build()
+            .willReturn(
+                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -170,12 +170,18 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     @Test
     @WithMockUser(roles = "USER")
     void getMission() throws Exception {
-        given(missionReadService.getMission())
-            .willReturn(List.of(MissionResponse.builder()
-                .missionDescription("운동하기")
-                .alertStatus(CHECKED)
-                .alertTime(LocalTime.of(18, 00))
-                .build()));
+        // given
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo());
+
+        given(missionReadService.getMission(anyInt()))
+            .willReturn(
+                List.of(
+                    createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0)),
+                    createMissionResponse(2, "책 읽기", UNCHECKED, LocalTime.of(20, 0))
+                )
+            );
+
 
         // when // then
         mockMvc.perform(
@@ -205,5 +211,21 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("알림 시간")
                 )
             ));
+    }
+
+    private MissionResponse createMissionResponse(int id, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+        return MissionResponse.builder()
+            .id(id)
+            .missionDescription(missionDescription)
+            .alertStatus(alertStatus)
+            .alertTime(alertTime)
+            .build();
+    }
+
+    private UserInfo createUserInfo() {
+        return UserInfo.builder()
+            .userId(1)
+            .email("")
+            .build();
     }
 }

@@ -63,4 +63,17 @@ public class ApiControllerAdvice {
             null
         );
     }
+
+    /**
+     * 존재하지 않는 id Exception
+     **/
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<Object> NotFoundIdxException(IllegalArgumentException e) {
+        return ApiResponse.of(
+            HttpStatus.BAD_REQUEST,
+            e.getMessage(),
+            null
+        );
+    }
 }

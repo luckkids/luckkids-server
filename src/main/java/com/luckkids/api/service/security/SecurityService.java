@@ -1,26 +1,19 @@
 package com.luckkids.api.service.security;
 
+import com.luckkids.jwt.dto.UserInfo;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class SecurityService {
 
-    public int getCurrentUserId() {
+    public UserInfo getCurrentUserInfo() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return Optional.of(principal)
-            .filter(p -> p instanceof UserDetails)
-            .map(p -> Integer.parseInt(((UserDetails) p).getUsername()))
-            .orElseGet(() -> {
-                if (principal instanceof String) {
-                    return Integer.parseInt((String) principal);
-                } else {
-                    throw new RuntimeException("Unknown principal type: " + principal.getClass().getName());
-                }
-            });
+        if (principal instanceof UserInfo) {
+            return (UserInfo) principal;
+        }
+
+        throw new RuntimeException("Unknown principal type: " + principal.getClass().getName());
     }
 }

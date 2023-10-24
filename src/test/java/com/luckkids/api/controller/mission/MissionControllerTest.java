@@ -3,6 +3,7 @@ package com.luckkids.api.controller.mission;
 import com.luckkids.ControllerTestSupport;
 import com.luckkids.api.controller.mission.request.MissionCreateRequest;
 import com.luckkids.api.controller.mission.request.MissionUpdateRequest;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -10,6 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalTime;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -29,6 +31,9 @@ class MissionControllerTest extends ControllerTestSupport {
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
             .build();
+
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo());
 
         // when // then
         mockMvc.perform(
@@ -148,6 +153,10 @@ class MissionControllerTest extends ControllerTestSupport {
     @Test
     @WithMockUser(roles = "USER")
     void getMission() throws Exception {
+        //given
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo());
+
         // when // then
         mockMvc.perform(
                 get("/api/v1/missions")
@@ -159,5 +168,12 @@ class MissionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("OK"))
             .andExpect(jsonPath("$.message").value("OK"));
 
+    }
+
+    private UserInfo createUserInfo() {
+        return UserInfo.builder()
+            .userId(1)
+            .email("")
+            .build();
     }
 }

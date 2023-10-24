@@ -79,6 +79,6 @@ public class JwtTokenProvider {
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) throws JsonProcessingException {
         UserInfo userInfo = objectMapper.readValue(this.getUserPk(token), UserInfo.class);
-        return new UsernamePasswordAuthenticationToken(userInfo, "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
+        return new UsernamePasswordAuthenticationToken(userInfo, "", Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
     }
 }

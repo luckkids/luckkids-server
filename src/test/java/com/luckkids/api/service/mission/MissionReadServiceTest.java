@@ -12,7 +12,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -41,7 +40,6 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("로그인 된 유저(유저1)의 미션들을 가져온다.")
     @Test
-    @WithMockUser(username = "1", roles = "USER")
     void getMission1() {
         // given
         User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
@@ -53,7 +51,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         // when
-        List<MissionResponse> missions = missionReadService.getMission();
+        List<MissionResponse> missions = missionReadService.getMission(user1.getId());
 
         // then
         assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
@@ -65,7 +63,6 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("로그인 된 유저(유저2)의 미션들을 가져온다.")
     @Test
-    @WithMockUser(username = "2", roles = "USER")
     void getMission2() {
         // given
         User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
@@ -74,13 +71,10 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
         Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
 
-        List<Mission> missions1 = missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
-        System.out.println(missions1.get(0).getUser().getId());
-        System.out.println(missions1.get(1).getUser().getId());
-        System.out.println(missions1.get(2).getUser().getId());
+        missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         // when
-        List<MissionResponse> missions = missionReadService.getMission();
+        List<MissionResponse> missions = missionReadService.getMission(user2.getId());
 
         // then
         assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
