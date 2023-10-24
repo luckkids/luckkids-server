@@ -41,4 +41,9 @@ public class Push {
 	public void updatePushToken(String pushToken){
 		this.pushToken = pushToken;
 	}
+
+	public void setUser(User user){
+		this.user = user;
+		user.getPushes().add(this);
+	}
 }
