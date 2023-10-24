@@ -20,7 +20,7 @@ public class LoginRequest {
     private String pushKey;
 
     @Builder
-    public LoginRequest(String email, String password, String deviceId, String pushKey) {
+    private LoginRequest(String email, String password, String deviceId, String pushKey) {
         this.email = email;
         this.password = password;
         this.deviceId = deviceId;

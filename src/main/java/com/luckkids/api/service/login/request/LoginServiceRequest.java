@@ -11,7 +11,7 @@ public class LoginServiceRequest {
     private String pushKey;
 
     @Builder
-    public LoginServiceRequest(String email, String password, String deviceId, String pushKey) {
+    private LoginServiceRequest(String email, String password, String deviceId, String pushKey) {
         this.email = email;
         this.password = password;
         this.deviceId = deviceId;
