@@ -141,7 +141,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("다른 디바이스로 로그인 했을 시에는 refresh-token이 각 디바이스별로 저장이 된다.")
     @Test
-    @Transactional
     void normalLoginOtherDeviceRefreshToken() throws JsonProcessingException, InterruptedException {
         // given
         User user = User.builder()
