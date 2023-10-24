@@ -1,6 +1,9 @@
 package com.luckkids.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.domain.user.Role;
+import com.luckkids.jwt.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,10 +28,12 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    private final ObjectMapper objectMapper;
     private final Key key;
 
     //키 생성하여 의존성 주입
-    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -72,7 +77,8 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰에서 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        return new UsernamePasswordAuthenticationToken(Integer.parseInt(this.getUserPk(token)), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
+    public Authentication getAuthentication(String token) throws JsonProcessingException {
+        UserInfo userInfo = objectMapper.readValue(this.getUserPk(token), UserInfo.class);
+        return new UsernamePasswordAuthenticationToken(userInfo, "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
     }
 }

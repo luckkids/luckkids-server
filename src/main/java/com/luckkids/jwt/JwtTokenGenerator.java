@@ -1,8 +1,11 @@
 package com.luckkids.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.jwt.dto.JwtToken;
+import com.luckkids.jwt.dto.UserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +22,19 @@ public class JwtTokenGenerator {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final ObjectMapper objectMapper;
+
     /*
     * accessToken 발급
     * */
-    public JwtToken generate(String id) {
+    public JwtToken generate(UserInfo userInfo) throws JsonProcessingException {
+        String subject = objectMapper.writeValueAsString(userInfo);
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);				//AccessToken 유효기간 지정
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);				//RefreshToken 유효기간 지정
 
-        String accessToken = jwtTokenProvider.generate(id, accessTokenExpiredAt);		//AccessToken 생성
-        String refreshToken = jwtTokenProvider.generate(id, refreshTokenExpiredAt);	    //RefreshToken 생성
+        String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);		//AccessToken 생성
+        String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);	    //RefreshToken 생성
 
         return JwtToken.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
