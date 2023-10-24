@@ -30,7 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/jwt/refresh",  //access-token 갱신테스트 API
         "/api/v1/auth/login",   //로그인 예정
         "/api/v1/join/user",     //회원가입 예정
-        "/api/v1/mail/send"
+        "/api/v1/mail/send",
+        "/docs"                 //API문서는 예외
     };
 
     @Override
