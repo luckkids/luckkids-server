@@ -1,9 +1,12 @@
 package com.luckkids.api.controller.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
+import com.luckkids.jwt.dto.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +21,8 @@ public class JwtController {
      * 토큰 발급 API
      * */
     @PostMapping("/token")
-    public JwtToken getToken(int id) {
-        return jwtTokenGenerator.generate(String.valueOf(id));
+    public JwtToken getToken(@RequestBody UserInfo userInfo) throws JsonProcessingException {
+        return jwtTokenGenerator.generate(userInfo);
     }
 
     /*
