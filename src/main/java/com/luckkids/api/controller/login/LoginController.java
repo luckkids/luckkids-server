@@ -1,5 +1,6 @@
 package com.luckkids.api.controller.login;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.login.request.LoginOauthRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
@@ -20,8 +21,8 @@ public class LoginController {
 	private final LoginService loginService;
 
 	@PostMapping("/login")
-	public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest){
-		return ApiResponse.ok(loginService.login(loginRequest.toServiceRequest()));
+	public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws JsonProcessingException {
+		return ApiResponse.ok(loginService.normalLogin(loginRequest.toServiceRequest()));
 	}
 
 	@PostMapping("/oauth/login")
