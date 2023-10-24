@@ -47,7 +47,7 @@ public class ApiControllerAdvice {
         return ApiResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR,
             e.getMessage(),
-            e
+            null
         );
     }
 
