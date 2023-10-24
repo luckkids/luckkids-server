@@ -1,6 +1,9 @@
 package com.luckkids.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.domain.user.Role;
+import com.luckkids.jwt.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Collections;
@@ -24,10 +28,12 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    private final ObjectMapper objectMapper;
     private final Key key;
 
     //키 생성하여 의존성 주입
-    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -58,7 +64,11 @@ public class JwtTokenProvider {
     
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String headerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(headerToken) && headerToken.startsWith("Bearer ")) {
+            return headerToken.substring(7).trim();
+        }
+        return null;
     }
     
     // 토큰에서 회원 정보 추출
@@ -67,7 +77,8 @@ public class JwtTokenProvider {
     }
     
     // JWT 토큰에서 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        return new UsernamePasswordAuthenticationToken(this.getUserPk(token), "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
+    public Authentication getAuthentication(String token) throws JsonProcessingException {
+        UserInfo userInfo = objectMapper.readValue(this.getUserPk(token), UserInfo.class);
+        return new UsernamePasswordAuthenticationToken(userInfo, "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
     }
 }

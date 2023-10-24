@@ -2,6 +2,22 @@ spring:
   profiles:
     default: local
 
+  mail:
+    # Google smtp server 사용
+    host: smtp.gmail.com
+    port: 587
+    username: nav104888@gmail.com
+    password: ${mail_password}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+jwt:
+  secret-key: ${jwt_key}
+
 ---
 spring:
   config:
@@ -37,10 +53,10 @@ spring:
       on-profile: test
 
   datasource:
-    url: jdbc:h2:mem:~/luckKids;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${test_db_url}
+    username: ${real_db_id}
+    password: ${real_db_password}
 
   jpa:
     hibernate:

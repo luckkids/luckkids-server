@@ -1,5 +1,6 @@
 package com.luckkids.config.login;
 
+import com.luckkids.jwt.dto.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         //@LoginUser 어노테이션 포함인지 확인
         boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
         //String class인지 확인
-        boolean isUserClass = String.class.equals(parameter.getParameterType());
+        boolean isUserClass = UserInfo.class.equals(parameter.getParameterType());
         return isLoginUserAnnotation && isUserClass;
     }
 

@@ -56,16 +56,8 @@ public class User extends BaseTimeEntity {
         this.settingStatus = settingStatus;
     }
 
-    public void checkSnsType(){
-        if(snsType.getText().equals(SnsType.APPLE.getText())){
-            throw new LuckKidsException(ErrorCode.USER_APPLE);
-        }
-        else if(snsType.getText().equals(SnsType.KAKAO.getText())){
-            throw new LuckKidsException(ErrorCode.USER_KAKAO);
-        }
-        else if(snsType.getText().equals(SnsType.GOOGLE.getText())){
-            throw new LuckKidsException(ErrorCode.USER_GOOGLE);
-        }
+    public void checkSnsType() {
+        snsType.checkSnsType();
     }
 
     /*
@@ -140,5 +132,4 @@ public class User extends BaseTimeEntity {
      * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
      * private List<AlertHistory> alertHistories = new ArrayList<>();
      **/
-
 }
