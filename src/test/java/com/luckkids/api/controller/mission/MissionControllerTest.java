@@ -12,8 +12,7 @@ import java.time.LocalTime;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -120,7 +119,7 @@ class MissionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
-    @DisplayName("등록되어있던 미션을 수정한다.")
+    @DisplayName("등록되어있는 미션을 수정한다.")
     @Test
     @WithMockUser(roles = "USER")
     void updateMission() throws Exception {
@@ -143,5 +142,22 @@ class MissionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("200"))
             .andExpect(jsonPath("$.httpStatus").value("OK"))
             .andExpect(jsonPath("$.message").value("OK"));
+    }
+
+    @DisplayName("등록되어있는 미션을 조회한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getMission() throws Exception {
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/missions")
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+
     }
 }

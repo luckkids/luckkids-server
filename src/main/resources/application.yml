@@ -7,7 +7,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: nav104888@gmail.com
-    password: ${mail_password}
+    password: kzmearkdbqtjjbxt
     properties:
       mail:
         smtp:
@@ -16,7 +16,7 @@ spring:
           auth: true
 
 jwt:
-  secret-key: ${jwt_key}
+  secret-key: a964233191a19f309ad49de2825616e6faa2b1e147d7e4246d289a49fe9c970fcd974b2d06dfbd657e3faa03f66986c41456f6986140be7d8a547ab8298211c7
 
 ---
 spring:
@@ -30,7 +30,7 @@ spring:
     datasource: mysql
     database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true

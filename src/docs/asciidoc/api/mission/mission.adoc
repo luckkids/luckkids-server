@@ -23,3 +23,15 @@ include::{snippets}/mission-update/request-fields.adoc[]
 
 include::{snippets}/mission-update/http-response.adoc[]
 include::{snippets}/mission-update/response-fields.adoc[]
+
+[[mission-get]]
+=== 미션 조회
+
+==== HTTP Request
+
+include::{snippets}/mission-get/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/mission-get/http-response.adoc[]
+include::{snippets}/mission-get/response-fields.adoc[]

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -29,6 +30,9 @@ class MissionServiceTest extends IntegrationTestSupport {
     MissionService missionService;
 
     @Autowired
+    MissionReadService missionReadService;
+
+    @Autowired
     MissionRepository missionRepository;
 
     @Autowired
@@ -42,6 +46,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 
     @DisplayName("미션 내용들을 받아 미션을 생성한다.")
     @Test
+    @WithMockUser(username = "1", roles = "USER")
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");

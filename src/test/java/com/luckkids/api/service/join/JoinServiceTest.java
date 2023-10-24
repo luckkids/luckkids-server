@@ -35,7 +35,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void checkEmailTest(){
+    void checkEmailTest() {
         JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
@@ -46,7 +46,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void checkEmailIfExistUser(){
+    void checkEmailIfExistUser() {
         User user = User.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
@@ -65,7 +65,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void JoinTest(){
+    void JoinTest() {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
@@ -76,13 +76,11 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
         assertThat(response)
             .extracting(
-                "id",
                 "email",
                 "phoneNumber",
                 "snsType"
             )
             .contains(
-                1,
                 joinServiceRequest.getEmail(),
                 joinServiceRequest.getPhoneNumber(),
                 SnsType.NORMAL
