@@ -41,4 +41,9 @@ public class RefreshToken {
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
+
+    public void setUser(User user){
+        this.user = user;
+        user.getRefreshTokens().add(this);
+    }
 }
