@@ -139,91 +139,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         });
     }
 
-    @DisplayName("다른 디바이스로 로그인 했을 시에는 refresh-token이 각 디바이스별로 저장이 된다.")
-    @Test
-    void normalLoginOtherDeviceRefreshToken() throws JsonProcessingException, InterruptedException {
-        // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
-            .build();
-
-        userRepository.save(user);
-
-        LoginServiceRequest request1 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
-
-        LoginServiceRequest request2 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId2")
-            .build();
-
-        // when
-        LoginResponse loginResponse1 = loginService.normalLogin(request1);
-        Thread.sleep(1000); //정확한 Jwt Signiture생성 원리는 모르겠지만 짧은시간 동시에 생성되면 Token값이 같아 Sleep 1초를 줬음
-        LoginResponse loginResponse2 = loginService.normalLogin(request2);
-
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
-        List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
-
-        // then
-        assertThat(refreshTokens).hasSize(2)
-            .extracting("refreshToken")
-            .containsExactlyInAnyOrder(
-                loginResponse1.getRefreshToken(),
-                loginResponse2.getRefreshToken()
-            );
-    }
-
-    @DisplayName("같은 디바이스로 로그인 했을 시에는 refresh-token이 기존 디바이스에 수정이 된다.")
-    @Test
-    @Transactional
-    void normalLoginSameDeviceRefreshToken() throws JsonProcessingException, InterruptedException {
-        // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
-            .build();
-
-        userRepository.save(user);
-
-        LoginServiceRequest request1 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
-
-        LoginServiceRequest request2 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
-
-        // when
-        LoginResponse loginResponse1 = loginService.normalLogin(request1);
-        Thread.sleep(1000); //정확한 Jwt Signiture생성 원리는 모르겠지만 짧은시간 동시에 생성되면 Token값이 같아 Sleep 1초를 줬음
-        LoginResponse loginResponse2 = loginService.normalLogin(request2);
-
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
-        List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
-
-        // then
-        assertThat(refreshTokens).hasSize(1)
-            .extracting("deviceId", "refreshToken")
-            .containsExactlyInAnyOrder(
-                tuple("testdeviceId", loginResponse2.getRefreshToken())
-            );
-    }
-
-    @DisplayName("다른 디바이스로 로그인 했을 시에는 push-token이 각 디바이스별로 저장이 된다.")
+    @DisplayName("다른 디바이스로 로그인 했을 시에는 push-token과 refreshToken이 각 디바이스별로 저장이 된다.")
     @Test
     @Transactional
     void normalLoginOtherDevicePushToken() throws JsonProcessingException {
@@ -250,17 +166,24 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        loginService.normalLogin(request1);
-        loginService.normalLogin(request2);
+        LoginResponse loginResponse1 = loginService.normalLogin(request1);
+        LoginResponse loginResponse2 = loginService.normalLogin(request2);
 
         User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
+        List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
         // then
+        assertThat(refreshTokens).hasSize(2)
+                .extracting("refreshToken")
+                .containsExactlyInAnyOrder(
+                        loginResponse1.getRefreshToken(),
+                        loginResponse2.getRefreshToken()
+                );
         assertThat(pushes.size()).isEqualTo(2);
     }
 
-    @DisplayName("같은 디바이스로 로그인 했을 시에는 push-token이 기존 디바이스에서 수정이 된다.")
+    @DisplayName("같은 디바이스로 로그인 했을 시에는 push-token과 refreshToken이 기존 디바이스에서 수정이 된다.")
     @Test
     @Transactional
     void normalLoginSameDevicePushToken() throws JsonProcessingException {
@@ -292,8 +215,14 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
+        List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
         // then
+        assertThat(refreshTokens).hasSize(1)
+                .extracting("deviceId")
+                .containsExactlyInAnyOrder(
+                "testdeviceId"
+                );
         assertThat(pushes).hasSize(1)
             .extracting("deviceId")
             .containsExactlyInAnyOrder(
