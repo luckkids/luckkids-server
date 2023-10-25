@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LoginServiceTest extends IntegrationTestSupport {
@@ -57,7 +56,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email(savedUser.getEmail())
-            .password(savedUser.getPassword())
+                .password("1234")
             .deviceId("asdfasdfasdfsadfsf")
             .build();
 
@@ -72,7 +71,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("SNS로 등록된 사용자가 있을 경우 일반 로그인이 되지 않는다.")
     @Test
-    void normalLoginIfSnsUserExist() throws JsonProcessingException{
+    void normalLoginIfSnsUserExist(){
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -85,7 +84,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email(savedUser.getEmail())
-            .password(savedUser.getPassword())
+            .password("1234")
             .deviceId("asdfasdfasdfsadfsf")
             .build();
 
@@ -98,7 +97,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("등록된 사용자가 없을 경우 일반 로그인을 할 시 예외를 발생시킨다.")
     @Test
-    void normalLoginIfUserNotExist() throws JsonProcessingException{
+    void normalLoginIfUserNotExist(){
         // given
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -115,7 +114,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일반 로그인시 비밀번호가 틀렸을 경우 예외를 발생시킨다.")
     @Test
-    void normalLoginIncorrectPassword() throws JsonProcessingException {
+    void normalLoginIncorrectPassword(){
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -228,5 +227,24 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 "testdeviceId"
             );
+    }
+
+    @DisplayName("비밀번호 암호화 테스트")
+    @Test
+    @Transactional
+    void encryptPassword(){
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("testPassword")
+            .snsType(SnsType.NORMAL)
+            .phoneNumber("01064091048")
+            .build();
+
+        // when
+        String encryptPassword = user.encryptPassword("testPassword");
+        System.out.println(encryptPassword);
+        // then
+        assertThat(encryptPassword).isEqualTo(user.getPassword());
     }
 }
