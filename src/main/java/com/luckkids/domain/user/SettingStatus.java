@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SettingStatus {
-    NO("미완료"),
-    YES("완료");
+    NOCOMPLETE("미완료"),
+    COMPLETE("완료");
 
     private final String text;
 }

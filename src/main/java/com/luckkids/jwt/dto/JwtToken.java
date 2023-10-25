@@ -1,21 +1,31 @@
 package com.luckkids.jwt.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class JwtToken {
     private String accessToken;
     private String refreshToken;
     private String grantType;
     private Long expiresIn;
 
+    @Builder
+    private JwtToken(String accessToken, String refreshToken, String grantType, Long expiresIn) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.grantType = grantType;
+        this.expiresIn = expiresIn;
+    }
+
     public static JwtToken of(String accessToken, String refreshToken, String grantType, Long expiresIn) {
-        return new JwtToken(accessToken, refreshToken, grantType, expiresIn);
+        return JwtToken.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .grantType(grantType)
+            .expiresIn(expiresIn)
+            .build();
     }
 }
