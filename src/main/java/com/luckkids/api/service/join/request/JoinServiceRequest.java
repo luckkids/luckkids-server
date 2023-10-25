@@ -30,7 +30,7 @@ public class JoinServiceRequest {
             .phoneNumber(phoneNumber)
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
-            .settingStatus(SettingStatus.NOCOMPLETE)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
     }
 }
