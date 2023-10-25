@@ -36,7 +36,7 @@ public class UserTest extends IntegrationTestSupport {
             .phoneNumber("01064091048")
             .role(Role.USER)
             .snsType(SnsType.NORMAL)
-            .settingStatus(SettingStatus.NOCOMPLETE)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
 
         User savedUser = userRepository.save(user);
@@ -73,7 +73,7 @@ public class UserTest extends IntegrationTestSupport {
             .phoneNumber("01064091048")
             .role(Role.USER)
             .snsType(SnsType.NORMAL)
-            .settingStatus(SettingStatus.NOCOMPLETE)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
 
         User savedUser = userRepository.save(user);
@@ -101,7 +101,7 @@ public class UserTest extends IntegrationTestSupport {
             .phoneNumber("01064091048")
             .role(Role.USER)
             .snsType(SnsType.NORMAL)
-            .settingStatus(SettingStatus.NOCOMPLETE)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
 
         User savedUser = userRepository.save(user);
@@ -145,7 +145,7 @@ public class UserTest extends IntegrationTestSupport {
             .phoneNumber("01064091048")
             .role(Role.USER)
             .snsType(SnsType.NORMAL)
-            .settingStatus(SettingStatus.NOCOMPLETE)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
 
         User savedUser = userRepository.save(user);
