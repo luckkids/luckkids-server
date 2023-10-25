@@ -45,5 +45,4 @@ public class LoginService {
 
         return LoginResponse.of(user, jwtToken);
     }
-
 }

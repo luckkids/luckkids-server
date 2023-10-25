@@ -11,6 +11,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +53,7 @@ public class User extends BaseTimeEntity {
     @Builder
     public User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
         this.email = email;
-        this.password = password;
+        this.password = encryptPassword(password);
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
         this.role = role;
@@ -69,8 +73,8 @@ public class User extends BaseTimeEntity {
     /*
     * 비밀번호 체크
     */
-    public void checkPassword(String password){
-        if(!this.password.equals(password)){
+    public void checkPassword(String password) {
+        if(!this.password.equals(encryptPassword(password))){
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         }
     }
@@ -106,6 +110,18 @@ public class User extends BaseTimeEntity {
         } else {// deviceId와 일치하는 Push가 없는 경우, 새로운 Push 생성 후Push리스트에 add
             Push push = Push.of(this, pushToken, deviceId);
             push.setUser(this);
+        }
+    }
+
+    public String encryptPassword(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.reset();
+            messageDigest.update(password.getBytes(StandardCharsets.UTF_8));
+            return String.format("%0128x", new BigInteger(1, messageDigest.digest()));
+        }
+        catch (NoSuchAlgorithmException e){
+            throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }
 
