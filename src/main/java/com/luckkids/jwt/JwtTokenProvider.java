@@ -41,13 +41,13 @@ public class JwtTokenProvider {
     // 토큰 생성
     public String generate(String subject, Date expiredAt) {
         return Jwts.builder()
-                .setSubject(subject)
-                .setExpiration(expiredAt)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setSubject(subject)
+            .setExpiration(expiredAt)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
     }
-    
-    
+
+
     // 토큰 만료여부 체크
     public boolean extractSubject(String accessToken) {
         Claims claims = parseClaims(accessToken);
@@ -56,12 +56,12 @@ public class JwtTokenProvider {
 
     private Claims parseClaims(String accessToken) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(accessToken)
-                .getBody();
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(accessToken)
+            .getBody();
     }
-    
+
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
         String headerToken = request.getHeader("Authorization");
@@ -70,15 +70,15 @@ public class JwtTokenProvider {
         }
         return null;
     }
-    
+
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
-    
+
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) throws JsonProcessingException {
         UserInfo userInfo = objectMapper.readValue(this.getUserPk(token), UserInfo.class);
-        return new UsernamePasswordAuthenticationToken(userInfo, "",  Collections.singletonList(new SimpleGrantedAuthority(Role.USER.getText())));
+        return new UsernamePasswordAuthenticationToken(userInfo, "", Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
     }
 }

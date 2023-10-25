@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,5 +37,17 @@ public class Mission extends BaseTimeEntity {
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
+    }
+
+    public Mission update(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+        updateIfNonNull(missionDescription, it -> this.missionDescription = it);
+        updateIfNonNull(alertStatus, it -> this.alertStatus = it);
+        updateIfNonNull(alertTime, it -> this.alertTime = it);
+
+        return this;
+    }
+
+    private <T> void updateIfNonNull(T value, Consumer<T> consumer) {
+        Optional.ofNullable(value).ifPresent(consumer);
     }
 }

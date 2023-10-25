@@ -1,32 +1,34 @@
-package com.luckkids.api.service.mission.request;
+package com.luckkids.api.controller.mission.request;
 
+import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class MissionCreateServiceRequest {
+public class MissionUpdateRequest {
 
     private String missionDescription;
+
     private AlertStatus alertStatus;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime alertTime;
 
     @Builder
-    private MissionCreateServiceRequest(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionUpdateRequest(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
     }
 
-    public Mission toEntity(User user) {
-        return Mission.builder()
-            .user(user)
+    public MissionUpdateServiceRequest toServiceRequest() {
+        return MissionUpdateServiceRequest.builder()
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)

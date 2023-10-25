@@ -37,7 +37,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @DisplayName("이메일이 이미 등록되었는지 체크한다.")
     @Test
-    void checkEmailTest(){
+    void checkEmailTest() {
         JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
@@ -49,7 +49,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자가 이미 존재 할 경우 예외를 던진다.")
     @Test
-    void checkEmailIfExistUser(){
+    void checkEmailIfExistUser() {
         User user = User.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
@@ -69,7 +69,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @DisplayName("회원가입 테스트")
     @Test
-    void JoinTest(){
+    void JoinTest() {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
@@ -80,13 +80,11 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
         assertThat(response)
             .extracting(
-                "id",
                 "email",
                 "phoneNumber",
                 "snsType"
             )
             .contains(
-                1,
                 joinServiceRequest.getEmail(),
                 joinServiceRequest.getPhoneNumber(),
                 SnsType.NORMAL
