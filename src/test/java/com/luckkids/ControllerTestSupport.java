@@ -9,7 +9,9 @@ import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.mail.MailService;
+import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
+import com.luckkids.api.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,6 +38,9 @@ public abstract class ControllerTestSupport {
     protected LoginService loginService;
 
     @MockBean
+    protected MissionReadService missionReadService;
+
+    @MockBean
     protected JoinService joinService;
 
     @MockBean
@@ -44,5 +49,7 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected MailService mailService;
 
+    @MockBean
+    protected SecurityService securityService;
 }
 
