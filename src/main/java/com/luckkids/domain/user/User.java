@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity {
     private List<Push> pushes = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = encryptPassword(password);
         this.snsType = snsType;
