@@ -56,11 +56,24 @@ public class ApiControllerAdvice {
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(JwtTokenException.class)
-    public ApiResponse<Object> JwtTokenException(JwtTokenException e){
+    public ApiResponse<Object> JwtTokenException(JwtTokenException e) {
         return ApiResponse.of(
-                HttpStatus.UNAUTHORIZED,
-                e.getMessage(),
-                null
+            HttpStatus.UNAUTHORIZED,
+            e.getMessage(),
+            null
+        );
+    }
+
+    /**
+     * 존재하지 않는 id Exception
+     **/
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<Object> NotFoundIdxException(IllegalArgumentException e) {
+        return ApiResponse.of(
+            HttpStatus.BAD_REQUEST,
+            e.getMessage(),
+            null
         );
     }
 }

@@ -2,6 +2,7 @@ package com.luckkids.api.service.mission;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
+import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
@@ -9,7 +10,6 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.domain.user.WithMockUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,13 +19,18 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
 class MissionServiceTest extends IntegrationTestSupport {
 
     @Autowired
     MissionService missionService;
+
+    @Autowired
+    MissionReadService missionReadService;
 
     @Autowired
     MissionRepository missionRepository;
@@ -41,7 +46,6 @@ class MissionServiceTest extends IntegrationTestSupport {
 
     @DisplayName("미션 내용들을 받아 미션을 생성한다.")
     @Test
-    @WithMockUserInfo(email = "tkdrl8908@naver.com",role = "USER")
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
@@ -55,7 +59,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        MissionResponse missionResponse = missionService.createMission(request);
+        MissionResponse missionResponse = missionService.createMission(request, user.getId());
 
         // then
         assertThat(missionResponse)
@@ -68,6 +72,84 @@ class MissionServiceTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 tuple("운동하기", CHECKED, LocalTime.of(0, 0)),
                 tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
+            );
+    }
+
+    @DisplayName("미션 생성중 user의 id가 없는 예외가 발생한다.")
+    @Test
+    void createMissionWithException() {
+        // given
+        int userId = 1;
+
+        MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionDescription("책 읽기")
+            .alertStatus(CHECKED)
+            .alertTime(LocalTime.of(23, 30))
+            .build();
+
+        // when // then
+        assertThatThrownBy(() -> missionService.createMission(request, userId))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("해당 유저는 없습니다. id = " + userId);
+    }
+
+    @DisplayName("수정할 미션 내용들을 받아 미션을 수정한다.")
+    @Test
+    void updateMission() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+        Mission savedMission = missionRepository.save(mission);
+        int missionId = savedMission.getId();
+
+        MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+            .missionDescription("책 읽기")
+            .alertStatus(CHECKED)
+            .alertTime(LocalTime.of(23, 30))
+            .build();
+
+        // when
+        MissionResponse missionResponse = missionService.updateMission(missionId, request);
+
+        // then
+        assertThat(missionResponse)
+            .extracting("missionDescription", "alertStatus", "alertTime")
+            .contains("책 읽기", CHECKED, LocalTime.of(23, 30));
+
+        List<Mission> missions = missionRepository.findAll();
+        assertThat(missions).hasSize(1)
+            .extracting("missionDescription", "alertStatus", "alertTime")
+            .containsExactlyInAnyOrder(
+                tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
+            );
+    }
+
+    @DisplayName("수정할 미션 내용 하나만 받아 미션을 수정한다.")
+    @Test
+    void updateOneMission() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
+        Mission savedMission = missionRepository.save(mission);
+        int missionId = savedMission.getId();
+
+        MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+            .missionDescription("책 읽기")
+            .build();
+
+        // when
+        MissionResponse missionResponse = missionService.updateMission(missionId, request);
+
+        // then
+        assertThat(missionResponse)
+            .extracting("missionDescription", "alertStatus", "alertTime")
+            .contains("책 읽기", UNCHECKED, LocalTime.of(0, 0));
+
+        List<Mission> missions = missionRepository.findAll();
+        assertThat(missions).hasSize(1)
+            .extracting("missionDescription", "alertStatus", "alertTime")
+            .containsExactlyInAnyOrder(
+                tuple("책 읽기", UNCHECKED, LocalTime.of(0, 0))
             );
     }
 

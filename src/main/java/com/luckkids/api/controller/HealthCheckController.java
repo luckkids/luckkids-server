@@ -21,7 +21,6 @@ public class HealthCheckController {
      * */
     @PostMapping("/jwt/test")
     public UserInfo test(@LoginUser UserInfo userInfo) {
-        UserInfo userinfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userInfo;
+        return (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
