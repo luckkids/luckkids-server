@@ -7,7 +7,6 @@ import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,23 +18,20 @@ import java.util.List;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
 class MissionReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    MissionReadService missionReadService;
+    private MissionReadService missionReadService;
 
     @Autowired
-    MissionRepository missionRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    private MissionRepository missionRepository;
 
     @AfterEach
     void tearDown() {
         missionRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("로그인 된 유저(유저1)의 미션들을 가져온다.")
@@ -83,6 +79,35 @@ class MissionReadServiceTest extends IntegrationTestSupport {
                 tuple("공부하기", UNCHECKED, LocalTime.of(23, 0))
             );
 
+    }
+
+    @DisplayName("mission의 id를 받아 조회한다.")
+    @Test
+    void findByOne() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission savedMission = missionRepository.save(mission);
+
+        // when
+        Mission result = missionReadService.findByOne(savedMission.getId());
+
+        // then
+        assertThat(result).extracting("missionDescription", "alertStatus", "alertTime")
+            .containsExactly("운동하기", UNCHECKED, LocalTime.of(19, 0));
+
+    }
+
+    @DisplayName("mission의 id를 받아 조회할 때 id가 없는 예외가 발생한다.")
+    @Test
+    void findByOneWithException() {
+        // given
+        int missionId = 1;
+
+        // when // then
+        assertThatThrownBy(() -> missionReadService.findByOne(missionId))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("해당 미션은 없습니다. id = " + missionId);
     }
 
     private User createUser(String email, String password, SnsType snsType, String phoneNumber) {

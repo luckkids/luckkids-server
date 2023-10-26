@@ -2,7 +2,6 @@ package com.luckkids.api.service.mission.response;
 
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,7 +16,7 @@ public class MissionResponse {
     private LocalTime alertTime;
 
     @Builder
-    private MissionResponse(int id, User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionResponse(int id, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         this.id = id;
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;

@@ -11,10 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MailServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    MailService mailService;
+    private MailService mailService;
 
     @Test
-    void SendMailTest(){
+    void SendMailTest() {
         SendMailServiceRequest sendMailServiceRequest = SendMailServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
@@ -25,7 +25,7 @@ public class MailServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void generateCode(){
+    void generateCode() {
         String authNum = mailService.generateCode();
         assertThat(authNum.length()).isEqualTo(6);
     }

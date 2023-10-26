@@ -1,0 +1,12 @@
+[[missionOutCome-update]]
+=== 미션결과 수정
+
+==== HTTP Request
+
+include::{snippets}/missionOutcome-update/http-request.adoc[]
+include::{snippets}/missionOutcome-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/missionOutcome-update/http-response.adoc[]
+include::{snippets}/missionOutcome-update/response-fields.adoc[]
