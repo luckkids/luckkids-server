@@ -41,19 +41,16 @@ public class ApiControllerAdvice {
     /**
      * 임의로 발생시킨 CustomException처리
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(LuckKidsException.class)
     public ApiResponse<Object> LuckKidsException(LuckKidsException e) {
         return ApiResponse.of(
-            HttpStatus.INTERNAL_SERVER_ERROR,
+            HttpStatus.BAD_REQUEST,
             e.getMessage(),
             null
         );
     }
 
-    /*
-     * 임의로 발생시킨 CustomException처리
-     */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(JwtTokenException.class)
     public ApiResponse<Object> JwtTokenException(JwtTokenException e) {

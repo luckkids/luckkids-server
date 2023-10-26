@@ -1,6 +1,7 @@
 package com.luckkids.api.service.join.request;
 
 import com.luckkids.domain.user.Role;
+import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import lombok.Builder;
@@ -25,14 +26,11 @@ public class JoinServiceRequest {
     public User toEntity(){
         return User.builder()
             .email(email)
-            .password(encryptPassword())
+            .password(password)
             .phoneNumber(phoneNumber)
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
+            .settingStatus(SettingStatus.INCOMPLETE)
             .build();
-    }
-
-    public String encryptPassword(){
-        return password;
     }
 }

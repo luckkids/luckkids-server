@@ -2,10 +2,12 @@ package com.luckkids;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.controller.join.JoinController;
+import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
+import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = {
     MissionController.class,
+    LoginController.class,
     JoinController.class,
     MailController.class
 })
@@ -32,6 +35,9 @@ public abstract class ControllerTestSupport {
     protected MissionService missionService;
 
     @MockBean
+    protected LoginService loginService;
+
+    @MockBean
     protected MissionReadService missionReadService;
 
     @MockBean
@@ -45,6 +51,5 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected SecurityService securityService;
-
 }
 

@@ -39,7 +39,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result)
             .extracting("email", "password", "snsType", "phoneNumber")
-            .contains("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+            .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO, "010-1111-1111");
 
     }
 
