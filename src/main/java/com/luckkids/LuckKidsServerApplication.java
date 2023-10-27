@@ -16,4 +16,8 @@ public class LuckKidsServerApplication {
 		SpringApplication.run(LuckKidsServerApplication.class, args);
 	}
 
+	@Bean
+	public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+		return new JPAQueryFactory(entityManager);
+	}
 }
