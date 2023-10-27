@@ -15,7 +15,7 @@ public class MissionOutcomeResponse {
     private MissionStatus missionStatus;
 
     @Builder
-    public MissionOutcomeResponse(Long id, String missionDescription, LocalTime alertTime, MissionStatus missionStatus) {
+    private MissionOutcomeResponse(Long id, String missionDescription, LocalTime alertTime, MissionStatus missionStatus) {
         this.id = id;
         this.missionDescription = missionDescription;
         this.alertTime = alertTime;
