@@ -3,9 +3,12 @@ package com.luckkids.domain.user;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
+import com.luckkids.domain.UserPhrase.UserPhrase;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.jwt.dto.JwtToken;
+import com.luckkids.domain.clover.Clover;
+import com.luckkids.domain.userCharacter.UserCharacter;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +52,15 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Push> pushes = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Clover clover;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserCharacter userCharacter;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserPhrase userPhrase;
 
     @Builder
     private User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
@@ -123,6 +135,21 @@ public class User extends BaseTimeEntity {
         catch (NoSuchAlgorithmException e){
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
+    }
+
+    public void changeUserCharacter(UserCharacter userCharacter){
+        this.userCharacter = userCharacter;
+        userCharacter.changeUser(this);
+    }
+
+    public void changeClover(Clover clover){
+        this.clover = clover;
+        clover.changeUser(this);
+    }
+
+    public void changePhrase(UserPhrase userPhrase){
+        this.userPhrase = userPhrase;
+        userPhrase.changeUser(this);
     }
 
     /**

@@ -15,7 +15,9 @@ public enum ErrorCode {
 
     //JWT
     JWT_EXPIRED("JWT토큰이 만료되었습니다."),
-    JWT_UNKNOWN("JWT토큰이 수신되지않았습니다.");
+    JWT_UNKNOWN("JWT토큰이 수신되지않았습니다."),
+
+    FRIEND_UNKNOWN( "친구가 존재하지 않습니다.");
 
     private final String message;
 
