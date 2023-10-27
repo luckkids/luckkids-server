@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.service.friend;
+package com.luckkids.service.friend;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
@@ -110,7 +110,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
         List<FriendListReadServiceResponse> responseList = response.getContent();
-        PageableCustom pageableCustom = response.getPageableCustom();
+        PageableCustom pageableCustom = response.getPageInfo();
 
         assertThat(responseList).hasSize(2)
             .extracting("characterName", "fileUrl", "cloverCount")
@@ -144,7 +144,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user3.getId(), pageDto);
 
         List<FriendListReadServiceResponse> responseList = response.getContent();
-        PageableCustom pageableCustom = response.getPageableCustom();
+        PageableCustom pageableCustom = response.getPageInfo();
 
         assertThat(responseList).hasSize(0);
 
@@ -193,7 +193,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
         List<FriendListReadServiceResponse> responseList = response.getContent();
-        PageableCustom pageableCustom = response.getPageableCustom();
+        PageableCustom pageableCustom = response.getPageInfo();
 
         // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(10)
@@ -256,7 +256,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
         List<FriendListReadServiceResponse> responseList = response.getContent();
-        PageableCustom pageableCustom = response.getPageableCustom();
+        PageableCustom pageableCustom = response.getPageInfo();
 
         // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(2)
