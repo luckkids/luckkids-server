@@ -23,7 +23,7 @@ public class MissionReadService {
     }
 
     public List<MissionResponse> getMission(int userId) {
-        List<Mission> missions = missionRepository.findAllJoinUser(userId);
+        List<Mission> missions = missionRepository.findAllByUserId(userId);
 
         return missions.stream().map(MissionResponse::of).collect(Collectors.toList());
     }

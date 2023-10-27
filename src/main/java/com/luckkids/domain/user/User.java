@@ -124,15 +124,4 @@ public class User extends BaseTimeEntity {
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }
-
-    /**
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<Mission> missions = new ArrayList<>();
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<MissionComplete> missionCompletes = new ArrayList<>();
-     * @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
-     * private List<Friend> friends = new ArrayList<>();
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<AlertHistory> alertHistories = new ArrayList<>();
-     **/
 }

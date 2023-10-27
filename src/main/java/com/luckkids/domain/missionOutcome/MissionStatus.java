@@ -1,4 +1,4 @@
-package com.luckkids.domain.missonComplete;
+package com.luckkids.domain.missionOutcome;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum MissionStatus {
 
     SUCCEED("성공"),
-    FAILED("실패"),
-    AWAITING("대기");
+    FAILED("실패");
 
     private final String text;
 }

@@ -2,6 +2,7 @@ package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.jwt.exception.JwtTokenException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -70,6 +71,19 @@ public class ApiControllerAdvice {
         return ApiResponse.of(
             HttpStatus.BAD_REQUEST,
             e.getMessage(),
+            null
+        );
+    }
+
+    /**
+     * 데이터 제약 조건으로 인한 Exception
+     **/
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ApiResponse<Object> handleDataIntegrityViolation(DataIntegrityViolationException e) {
+        return ApiResponse.of(
+            HttpStatus.BAD_REQUEST,
+            "데이터 제약 조건으로 인해 작업에 실패했습니다.",
             null
         );
     }

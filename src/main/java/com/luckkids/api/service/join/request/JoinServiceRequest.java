@@ -26,11 +26,15 @@ public class JoinServiceRequest {
     public User toEntity(){
         return User.builder()
             .email(email)
-            .password(password)
+            .password(encryptPassword())
             .phoneNumber(phoneNumber)
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .settingStatus(SettingStatus.INCOMPLETE)
             .build();
+    }
+
+    public String encryptPassword(){
+        return password;
     }
 }

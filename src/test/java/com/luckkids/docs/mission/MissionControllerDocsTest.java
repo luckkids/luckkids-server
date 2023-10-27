@@ -18,6 +18,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
@@ -81,7 +82,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
-                        .description("알람 여부"),
+                        .description("알람 여부. 가능한 값: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("alertTime").type(JsonFieldType.STRING)
                         .description("알람 시간")
                 ),
@@ -139,7 +140,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("미션 내용")
                         .optional(),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
-                        .description("알람 여부")
+                        .description("알람 여부. 가능한 값: " + Arrays.toString(AlertStatus.values()))
                         .optional(),
                     fieldWithPath("alertTime").type(JsonFieldType.STRING)
                         .description("알람 시간")
@@ -181,7 +182,6 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                     createMissionResponse(2, "책 읽기", UNCHECKED, LocalTime.of(20, 0))
                 )
             );
-
 
         // when // then
         mockMvc.perform(
