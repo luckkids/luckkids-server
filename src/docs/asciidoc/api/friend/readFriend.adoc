@@ -1,0 +1,12 @@
+[[read-friend]]
+=== 친구 랭킹 목록조회
+
+==== HTTP Request
+
+include::{snippets}/read-friend/http-request.adoc[]
+include::{snippets}/read-friend/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/read-friend/http-response.adoc[]
+include::{snippets}/read-friend/response-fields.adoc[]

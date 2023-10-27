@@ -1,0 +1,319 @@
+package com.luckkids.api.controller.service.friend;
+
+import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.friend.FriendReadService;
+import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadServiceResponse;
+import com.luckkids.api.service.request.PageInfoServiceRequest;
+import com.luckkids.api.service.response.PageCustom;
+import com.luckkids.api.service.response.PageableCustom;
+import com.luckkids.domain.UserPhrase.UserPhrase;
+import com.luckkids.domain.UserPhrase.UserPhraseRepository;
+import com.luckkids.domain.clover.Clover;
+import com.luckkids.domain.clover.CloverRepository;
+import com.luckkids.domain.friends.Friend;
+import com.luckkids.domain.friends.FriendRepository;
+import com.luckkids.domain.friends.FriendStatus;
+import com.luckkids.domain.user.Role;
+import com.luckkids.domain.user.SnsType;
+import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userCharacter.UserCharacter;
+import com.luckkids.domain.userCharacter.UserCharacterRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.groups.Tuple.tuple;
+
+
+@Transactional
+public class FriendReadServiceTest extends IntegrationTestSupport {
+
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    FriendRepository friendRepository;
+    @Autowired
+    CloverRepository cloverRepository;
+    @Autowired
+    UserCharacterRepository userCharacterRepository;
+    @Autowired
+    FriendReadService friendReadService;
+    @Autowired
+    UserPhraseRepository userPhraseRepository;
+
+    @AfterEach
+    void tearDown() {
+        userPhraseRepository.deleteAllInBatch();
+        cloverRepository.deleteAllInBatch();
+        userCharacterRepository.deleteAllInBatch();
+        friendRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
+
+    @DisplayName("친구의 프로필을 조회한다.")
+    @Test
+    void readProfile(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+
+        createFriend(user1, user2);
+        createPhrase(user2);
+
+        FriendProfileReadServiceResponse response = friendReadService.readProfile(user2.getId());
+
+        assertThat(response)
+            .extracting("phraseDescription", "fileUrl", "characterName", "level")
+            .containsExactlyInAnyOrder(
+                "행운입니다.", "file2", "character2", 2
+            );
+    }
+
+    @DisplayName("존재하지않는 사용자친구의 프로필을 조회시 예외를 발생시킨다.")
+    @Test
+    void readProfileWithoutFriend(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+
+        createFriend(user1, user2);
+        createPhrase(user2);
+
+        assertThatThrownBy(() -> friendReadService.readProfile(3))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("친구가 존재하지 않습니다.");
+    }
+
+    @DisplayName("사용자의 친구 랭킹리스트를 조회한다.")
+    @Test
+    void readListFriend(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+        User user3 = createUser(3);
+
+        createFriend(user1, user2);
+        createFriend(user1, user3);
+        createFriend(user2, user3);
+
+        PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
+            .page(1)
+            .size(10)
+            .build();
+
+        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+
+        List<FriendListReadServiceResponse> responseList = response.getContent();
+        PageableCustom pageableCustom = response.getPageableCustom();
+
+        assertThat(responseList).hasSize(2)
+            .extracting("characterName", "fileUrl", "cloverCount")
+            .containsExactlyInAnyOrder(
+                tuple("character2", "file2", 2),
+                tuple("character3", "file3", 3)
+            );
+        assertThat(pageableCustom)
+            .extracting("currentPage", "totalPages", "totalElements")
+            .containsExactlyInAnyOrder(
+                1,1,2L
+            );
+    }
+
+    @DisplayName("사용자의 친구가 없을 시 빈리스트를 반환한다.")
+    @Test
+    void readListWithoutFriend(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+        User user3 = createUser(3);
+
+        createFriend(user1, user2);
+        createFriend(user1, user3);
+        createFriend(user2, user3);
+
+        PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
+            .page(1)
+            .size(10)
+            .build();
+
+        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user3.getId(), pageDto);
+
+        List<FriendListReadServiceResponse> responseList = response.getContent();
+        PageableCustom pageableCustom = response.getPageableCustom();
+
+        assertThat(responseList).hasSize(0);
+
+        assertThat(pageableCustom)
+            .extracting("currentPage", "totalPages", "totalElements")
+            .containsExactlyInAnyOrder(
+                1,0,0L
+            );
+    }
+
+    @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 첫번째 페이지")
+    @Test
+    void readListFriendFirstPaging(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+        User user3 = createUser(3);
+        User user4 = createUser(4);
+        User user5 = createUser(5);
+        User user6 = createUser(6);
+        User user7 = createUser(7);
+        User user8 = createUser(8);
+        User user9 = createUser(9);
+        User user10 = createUser(10);
+        User user11 = createUser(11);
+        User user12 = createUser(12);
+        User user13 = createUser(13);
+
+        createFriend(user1, user2);
+        createFriend(user1, user3);
+        createFriend(user1, user4);
+        createFriend(user1, user5);
+        createFriend(user1, user6);
+        createFriend(user1, user7);
+        createFriend(user1, user8);
+        createFriend(user1, user9);
+        createFriend(user1, user10);
+        createFriend(user1, user11);
+        createFriend(user1, user12);
+        createFriend(user1, user13);
+
+        PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
+            .page(1)
+            .size(10)
+            .build();
+
+        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+
+        List<FriendListReadServiceResponse> responseList = response.getContent();
+        PageableCustom pageableCustom = response.getPageableCustom();
+
+        // Clover갯수순으로 내림차순 정렬
+        assertThat(responseList).hasSize(10)
+            .extracting("characterName", "fileUrl", "cloverCount")
+            .containsExactlyInAnyOrder(
+                tuple("character13", "file13", 13),
+                tuple("character12", "file12", 12),
+                tuple("character11", "file11", 11),
+                tuple("character10", "file10", 10),
+                tuple("character9", "file9", 9),
+                tuple("character8", "file8", 8),
+                tuple("character7", "file7", 7),
+                tuple("character6", "file6", 6),
+                tuple("character5", "file5", 5),
+                tuple("character4", "file4", 4)
+            );
+
+        assertThat(pageableCustom)
+            .extracting("currentPage", "totalPages", "totalElements")
+            .containsExactlyInAnyOrder(
+                1,2,12L
+            );
+    }
+
+    @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 두번째 페이지")
+    @Test
+    void readListFriendSecondPaging(){
+        User user1 = createUser(1);
+        User user2 = createUser(2);
+        User user3 = createUser(3);
+        User user4 = createUser(4);
+        User user5 = createUser(5);
+        User user6 = createUser(6);
+        User user7 = createUser(7);
+        User user8 = createUser(8);
+        User user9 = createUser(9);
+        User user10 = createUser(10);
+        User user11 = createUser(11);
+        User user12 = createUser(12);
+        User user13 = createUser(13);
+
+        createFriend(user1, user2);
+        createFriend(user1, user3);
+        createFriend(user1, user4);
+        createFriend(user1, user5);
+        createFriend(user1, user6);
+        createFriend(user1, user7);
+        createFriend(user1, user8);
+        createFriend(user1, user9);
+        createFriend(user1, user10);
+        createFriend(user1, user11);
+        createFriend(user1, user12);
+        createFriend(user1, user13);
+
+        PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
+            .page(2)
+            .size(10)
+            .build();
+
+        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+
+        List<FriendListReadServiceResponse> responseList = response.getContent();
+        PageableCustom pageableCustom = response.getPageableCustom();
+
+        // Clover갯수순으로 내림차순 정렬
+        assertThat(responseList).hasSize(2)
+            .extracting("characterName", "fileUrl", "cloverCount")
+            .containsExactlyInAnyOrder(
+                tuple("character3", "file3", 3),
+                tuple("character2", "file2", 2)
+            );
+
+        assertThat(pageableCustom)
+            .extracting("currentPage", "totalPages", "totalElements")
+            .containsExactlyInAnyOrder(
+                2,2,12L
+            );
+    }
+
+    UserPhrase createPhrase(User user){
+        UserPhrase userPhrase = UserPhrase.builder()
+            .user(user)
+            .phraseDescription("행운입니다.")
+            .build();
+
+        return userPhraseRepository.save(userPhrase);
+    }
+
+    Friend createFriend(User requester, User receiver){
+        Friend friend = Friend.builder()
+            .requester(requester)
+            .receiver(receiver)
+            .friendStatus(FriendStatus.ACCEPTED)
+            .build();
+
+        return friendRepository.save(friend);
+    }
+
+    User createUser(int i){
+        User user = User.builder()
+            .email("test"+i)
+            .password("1234")
+            .phoneNumber("01064091048")
+            .snsType(SnsType.NORMAL)
+            .role(Role.USER)
+            .build();
+
+        UserCharacter userCharacter = UserCharacter.builder()
+            .characterName("character"+i)
+            .fileName("file"+i)
+            .level(i)
+            .build();
+
+        Clover clover = Clover.builder()
+            .count(i)
+            .build();
+
+        user.changeUserCharacter(userCharacter);
+        user.changeClover(clover);
+
+        return userRepository.save(user);
+    }
+}

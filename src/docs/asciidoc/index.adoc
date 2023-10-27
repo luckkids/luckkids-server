@@ -26,3 +26,7 @@ include::api/join/joinUser.adoc[]
 == Mail API
 include::api/mail/sendMail.adoc[]
 
+[[Friend-API]]
+== Friend API
+include::api/friend/readFriend.adoc[]
+
