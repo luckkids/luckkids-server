@@ -136,7 +136,6 @@ public class User extends BaseTimeEntity {
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }
-
     public void changeUserCharacter(UserCharacter userCharacter){
         this.userCharacter = userCharacter;
         userCharacter.changeUser(this);

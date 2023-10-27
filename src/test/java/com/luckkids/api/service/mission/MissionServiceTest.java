@@ -4,6 +4,8 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
+import com.luckkids.domain.missionOutcome.MissionOutcome;
+import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -14,10 +16,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.List;
 
+import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,25 +31,27 @@ import static org.assertj.core.groups.Tuple.tuple;
 class MissionServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    MissionService missionService;
+    private MissionService missionService;
 
     @Autowired
-    MissionReadService missionReadService;
+    private MissionRepository missionRepository;
 
     @Autowired
-    MissionRepository missionRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private MissionOutcomeRepository missionOutcomeRepository;
 
     @AfterEach
     void tearDown() {
+        missionOutcomeRepository.deleteAllInBatch();
         missionRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
     @DisplayName("미션 내용들을 받아 미션을 생성한다.")
     @Test
+    @Transactional
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
@@ -92,6 +98,35 @@ class MissionServiceTest extends IntegrationTestSupport {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 유저는 없습니다. id = " + userId);
     }
+
+    @DisplayName("미션을 생성할 때 미션결과 데이터도 생성된다.")
+    @Test
+    @Transactional
+    void createMissionWithEventPublication() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+        missionRepository.save(mission);
+
+        MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionDescription("책 읽기")
+            .alertStatus(CHECKED)
+            .alertTime(LocalTime.of(23, 30))
+            .build();
+
+        // when
+        MissionResponse createdMission = missionService.createMission(request, user.getId());
+
+        // then
+        List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+        assertThat(missionOutcomes).hasSize(1)
+            .extracting(
+                missionOutcome -> missionOutcome.getMission().getId(),
+                MissionOutcome::getMissionStatus
+            )
+            .containsExactly(tuple(createdMission.getId(), FAILED));
+    }
+
 
     @DisplayName("수정할 미션 내용들을 받아 미션을 수정한다.")
     @Test

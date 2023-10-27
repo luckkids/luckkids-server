@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
-    @Query("SELECT m FROM Mission m JOIN FETCH m.user u WHERE u.id = :userId")
-    List<Mission> findAllJoinUser(int userId);
+    @Query("SELECT m FROM Mission m WHERE m.user.id = :userId")
+    List<Mission> findAllByUserId(int userId);
 
 }

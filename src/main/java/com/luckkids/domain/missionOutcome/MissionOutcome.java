@@ -1,4 +1,4 @@
-package com.luckkids.domain.missonComplete;
+package com.luckkids.domain.missionOutcome;
 
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.misson.Mission;
@@ -13,13 +13,14 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MissionComplete extends BaseTimeEntity {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"mission_id", "missionDate"}))
+public class MissionOutcome extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Mission mission;
 
     @Enumerated(EnumType.STRING)
@@ -28,9 +29,15 @@ public class MissionComplete extends BaseTimeEntity {
     private LocalDate missionDate;
 
     @Builder
-    private MissionComplete(Mission mission, MissionStatus missionStatus, LocalDate missionDate) {
+    private MissionOutcome(Mission mission, MissionStatus missionStatus, LocalDate missionDate) {
         this.mission = mission;
         this.missionStatus = missionStatus;
         this.missionDate = missionDate;
+    }
+
+    public MissionOutcome updateOf(MissionStatus missionStatus) {
+        this.missionStatus = missionStatus;
+
+        return this;
     }
 }

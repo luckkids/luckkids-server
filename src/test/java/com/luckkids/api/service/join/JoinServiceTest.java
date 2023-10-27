@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class JoinServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    JoinService joinService;
+    private JoinService joinService;
 
     @Autowired
-    JoinReadService joinReadService;
+    private JoinReadService joinReadService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @AfterEach
     void tearDown() {
