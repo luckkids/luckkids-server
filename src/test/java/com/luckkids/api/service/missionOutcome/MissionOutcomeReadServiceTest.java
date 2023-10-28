@@ -1,8 +1,10 @@
 package com.luckkids.api.service.missionOutcome;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
+import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.user.SnsType;
@@ -15,11 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
+import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static java.util.Optional.empty;
+import static org.assertj.core.api.Assertions.*;
 
 class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 
@@ -41,7 +45,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
+        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome savedMission = missionOutcomeRepository.save(missionOutcome);
 
         // when
@@ -65,6 +69,30 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .hasMessage("해당 미션결과는 없습니다. id = " + missionOutcomeId);
     }
 
+    @DisplayName("없어도 되는 미션 성공 여부를 받아 미션 결과를 조회하여 응답을 반환한다.")
+    @Test
+    void getMissionDetailListForStatus() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
+
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
+
+        // when
+        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionDetailListForStatus(empty());
+
+        // then
+        assertThat(missionOutcomeResponses).hasSize(2)
+            .extracting("missionDescription", "alertTime", "missionStatus")
+            .containsExactlyInAnyOrder(
+                tuple("운동하기", LocalTime.of(19, 0), FAILED),
+                tuple("책읽기", LocalTime.of(20, 0), SUCCEED)
+            );
+    }
+
     private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
         return User.builder()
             .email(email)
@@ -83,11 +111,19 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate) {
+    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate, MissionStatus missionStatus) {
         return MissionOutcome.builder()
             .mission(mission)
             .missionDate(missionDate)
-            .missionStatus(FAILED)
+            .missionStatus(missionStatus)
+            .build();
+    }
+
+    private MissionOutcomeResponse createMissionOutcomeResponse(String missionDescription, LocalTime alertTime, MissionStatus missionStatus) {
+        return MissionOutcomeResponse.builder()
+            .missionDescription(missionDescription)
+            .alertTime(alertTime)
+            .missionStatus(missionStatus)
             .build();
     }
 }

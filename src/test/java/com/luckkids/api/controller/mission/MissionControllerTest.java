@@ -160,7 +160,6 @@ class MissionControllerTest extends ControllerTestSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/missions")
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())

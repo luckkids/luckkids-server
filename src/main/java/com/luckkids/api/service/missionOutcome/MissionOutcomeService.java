@@ -24,7 +24,7 @@ public class MissionOutcomeService {
 
     public Long updateMissionOutcome(Long missionOutcomeId, MissionStatus missionStatus) {
         MissionOutcome missionOutcome = missionOutcomeReadService.findByOne(missionOutcomeId);
-        missionOutcome.updateOf(missionStatus);
+        missionOutcome.updateMissionStatus(missionStatus);
 
         return missionOutcomeId;
     }

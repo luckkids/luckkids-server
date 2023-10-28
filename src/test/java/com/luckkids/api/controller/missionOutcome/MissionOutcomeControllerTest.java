@@ -9,6 +9,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -60,5 +61,20 @@ class MissionOutcomeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("미션 성공 여부는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("미션상태를 받아 미션결과를 조회한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getMissionDetailListForStatus() throws Exception {
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/missionOutComes")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
     }
 }

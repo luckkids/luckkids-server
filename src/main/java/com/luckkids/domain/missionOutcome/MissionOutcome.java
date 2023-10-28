@@ -35,9 +35,7 @@ public class MissionOutcome extends BaseTimeEntity {
         this.missionDate = missionDate;
     }
 
-    public MissionOutcome updateOf(MissionStatus missionStatus) {
+    public void updateMissionStatus(MissionStatus missionStatus) {
         this.missionStatus = missionStatus;
-
-        return this;
     }
 }
