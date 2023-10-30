@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
+import static java.time.LocalDate.now;
 import static java.util.Optional.empty;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -96,7 +97,7 @@ public class MissionOutComeControllerDocsTest extends RestDocsSupport {
         given(securityService.getCurrentUserInfo())
             .willReturn(createUserInfo());
 
-        given(missionOutcomeReadService.getMissionDetailListForStatus(empty(), 1))
+        given(missionOutcomeReadService.getMissionDetailListForStatus(empty(), 1, now()))
             .willReturn(
                 List.of(
                     createMissionOutcomeResponse(1L, "운동하기", LocalTime.of(19, 0), SUCCEED),

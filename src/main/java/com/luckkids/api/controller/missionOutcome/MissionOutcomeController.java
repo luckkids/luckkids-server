@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.time.LocalDate.now;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
@@ -32,6 +33,6 @@ public class MissionOutcomeController {
     @GetMapping("/api/v1/missionOutComes")
     public ApiResponse<List<MissionOutcomeResponse>> getMissionDetailListForStatus(@RequestParam(required = false) MissionStatus missionStatus) {
         int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.ok(missionOutcomeReadService.getMissionDetailListForStatus(ofNullable(missionStatus), userId));
+        return ApiResponse.ok(missionOutcomeReadService.getMissionDetailListForStatus(ofNullable(missionStatus), userId, now()));
     }
 }

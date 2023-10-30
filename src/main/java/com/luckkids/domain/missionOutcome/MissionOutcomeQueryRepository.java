@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class MissionOutcomeQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<MissionOutcomeDetailDto> findMissionDetailsByStatus(Optional<MissionStatus> missionStatus, int userId) {
+    public List<MissionOutcomeDetailDto> findMissionDetailsByStatus(Optional<MissionStatus> missionStatus, int userId, LocalDate missionDate) {
 
         JPAQuery<MissionOutcomeDetailDto> query = jpaQueryFactory
             .select(Projections.constructor(MissionOutcomeDetailDto.class,
@@ -28,8 +29,9 @@ public class MissionOutcomeQueryRepository {
                 mission.alertTime,
                 missionOutcome.missionStatus))
             .from(missionOutcome)
-            .join(missionOutcome.mission, mission)
-            .where(mission.user.id.eq(userId));
+            .where(mission.user.id.eq(userId),
+                missionOutcome.missionDate.eq(missionDate))
+            .join(missionOutcome.mission, mission);
 
         missionStatus.ifPresent(status -> query.where(missionOutcome.missionStatus.eq(status)));
 

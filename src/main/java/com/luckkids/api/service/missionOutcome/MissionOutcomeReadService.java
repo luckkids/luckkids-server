@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,8 @@ public class MissionOutcomeReadService {
             .orElseThrow(() -> new IllegalArgumentException("해당 미션결과는 없습니다. id = " + id));
     }
 
-    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, int userId) {
-        return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId)
+    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, int userId, LocalDate missionDate) {
+        return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId, missionDate)
             .stream()
             .map(MissionOutcomeDetailDto::toMissionOutcomeResponse)
             .toList();
