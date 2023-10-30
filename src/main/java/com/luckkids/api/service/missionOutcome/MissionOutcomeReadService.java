@@ -26,8 +26,8 @@ public class MissionOutcomeReadService {
             .orElseThrow(() -> new IllegalArgumentException("해당 미션결과는 없습니다. id = " + id));
     }
 
-    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus) {
-        return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus)
+    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, int userId) {
+        return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId)
             .stream()
             .map(MissionOutcomeDetailDto::toMissionOutcomeResponse)
             .toList();

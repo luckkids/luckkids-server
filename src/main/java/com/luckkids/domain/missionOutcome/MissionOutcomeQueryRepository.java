@@ -19,7 +19,7 @@ public class MissionOutcomeQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<MissionOutcomeDetailDto> findMissionDetailsByStatus(Optional<MissionStatus> missionStatus) {
+    public List<MissionOutcomeDetailDto> findMissionDetailsByStatus(Optional<MissionStatus> missionStatus, int userId) {
 
         JPAQuery<MissionOutcomeDetailDto> query = jpaQueryFactory
             .select(Projections.constructor(MissionOutcomeDetailDto.class,
@@ -28,7 +28,8 @@ public class MissionOutcomeQueryRepository {
                 mission.alertTime,
                 missionOutcome.missionStatus))
             .from(missionOutcome)
-            .join(missionOutcome.mission, mission);
+            .join(missionOutcome.mission, mission)
+            .where(mission.user.id.eq(userId));
 
         missionStatus.ifPresent(status -> query.where(missionOutcome.missionStatus.eq(status)));
 

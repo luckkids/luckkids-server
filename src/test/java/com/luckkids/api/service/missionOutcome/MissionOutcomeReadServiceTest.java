@@ -82,7 +82,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
 
         // when
-        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionDetailListForStatus(empty());
+        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionDetailListForStatus(empty(), user.getId());
 
         // then
         assertThat(missionOutcomeResponses).hasSize(2)

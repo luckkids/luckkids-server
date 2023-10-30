@@ -45,7 +45,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 
         // when
         List<MissionOutcomeDetailDto> missionOutcomeDetailList =
-            missionOutcomeQueryRepository.findMissionDetailsByStatus(Optional.empty());
+            missionOutcomeQueryRepository.findMissionDetailsByStatus(Optional.empty(), user.getId());
 
         // then
         assertThat(missionOutcomeDetailList).hasSize(2)
@@ -70,7 +70,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 
         // when
         List<MissionOutcomeDetailDto> missionOutcomeDetailList =
-            missionOutcomeQueryRepository.findMissionDetailsByStatus(Optional.of(SUCCEED));
+            missionOutcomeQueryRepository.findMissionDetailsByStatus(Optional.of(SUCCEED), user.getId());
 
         // then
         assertThat(missionOutcomeDetailList).hasSize(1)
