@@ -23,12 +23,14 @@ import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static java.time.LocalDateTime.now;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -213,6 +215,39 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("알림 여부"),
                     fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
                         .description("알림 시간")
+                )
+            ));
+    }
+
+    @DisplayName("등록되어있는 미션을 삭제하는 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void deleteMission() throws Exception {
+        // given
+        given(missionService.deleteMission(1, now()))
+            .willReturn(1);
+
+        // when // then
+        mockMvc.perform(
+                delete("/api/v1/missions/{missionId}", 1)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("mission-delete",
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("missionId")
+                        .description("미션 ID")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.NUMBER)
+                        .description("미션 id")
                 )
             ));
     }

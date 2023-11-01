@@ -54,6 +54,9 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
 
+        userRepository.save(user);
+        missionRepository.save(mission);
+
         MissionOutcomeCreateServiceRequest request = MissionOutcomeCreateServiceRequest.builder()
             .mission(mission)
             .missionDate(LocalDate.of(2023, 10, 25))
@@ -79,6 +82,8 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
+        userRepository.save(user);
+        missionRepository.save(mission);
         MissionOutcome savedMissionOutcome = missionOutcomeRepository.save(missionOutcome);
 
         // when
@@ -105,6 +110,27 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 미션결과는 없습니다. id = " + missionOutcomeId);
 
+
+    }
+
+    @DisplayName("삭제할 id를 받아서 미션결과를 삭제한다.")
+    @Test
+    void deleteMissionOutcome() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.save(missionOutcome);
+        int missionId = mission.getId();
+
+        // when
+        missionOutcomeService.deleteMissionOutcome(missionId, LocalDate.of(2023, 10, 26));
+
+        // then
+        assertThat(missionOutcomeRepository.findAll()).isEmpty();
 
     }
 

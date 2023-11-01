@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MissionOutComeControllerDocsTest extends RestDocsSupport {
+public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
     private final MissionOutcomeService missionOutcomeService = mock(MissionOutcomeService.class);
     private final MissionOutcomeReadService missionOutcomeReadService = mock(MissionOutcomeReadService.class);
@@ -59,7 +59,7 @@ public class MissionOutComeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/missionOutComes/{missionOutcomeId}", 1L)
+                patch("/api/v1/missionOutcomes/{missionOutcomeId}", 1L)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
@@ -107,7 +107,7 @@ public class MissionOutComeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/missionOutComes")
+                get("/api/v1/missionOutcomes")
             )
             .andDo(print())
             .andDo(document("missionOutcome-get",

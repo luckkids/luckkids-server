@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -27,5 +29,9 @@ public class MissionOutcomeService {
         missionOutcome.updateMissionStatus(missionStatus);
 
         return missionOutcomeId;
+    }
+
+    public void deleteMissionOutcome(int missionId, LocalDate missionDate) {
+        missionOutcomeRepository.deleteAllByMissionIdAndMissionDate(missionId, missionDate);
     }
 }

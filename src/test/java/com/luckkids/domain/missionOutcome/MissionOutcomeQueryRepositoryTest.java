@@ -4,8 +4,10 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
+import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,16 @@ import static org.assertj.core.api.Assertions.tuple;
 class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
-    MissionOutcomeQueryRepository missionOutcomeQueryRepository;
+    private MissionOutcomeQueryRepository missionOutcomeQueryRepository;
 
     @Autowired
-    MissionOutcomeRepository missionOutcomeRepository;
+    private MissionOutcomeRepository missionOutcomeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MissionRepository missionRepository;
 
     @DisplayName("미션 성공 여부를 받아 미션 결과를 조회한다.")
     @Test
@@ -41,6 +49,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
 
         // when
@@ -66,6 +76,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
 
         // when

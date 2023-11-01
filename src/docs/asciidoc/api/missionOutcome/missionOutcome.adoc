@@ -1,4 +1,17 @@
-[[missionOutCome-update]]
+[[missionOutcome-get]]
+=== 미션결과 조회
+
+==== HTTP Request
+
+include::{snippets}/missionOutcome-get/http-request.adoc[]
+include::{snippets}/missionOutcome-get/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/missionOutcome-get/http-response.adoc[]
+include::{snippets}/missionOutcome-get/response-fields.adoc[]
+
+[[missionOutcome-update]]
 === 미션결과 수정
 
 ==== HTTP Request
@@ -11,15 +24,3 @@ include::{snippets}/missionOutcome-update/request-fields.adoc[]
 
 include::{snippets}/missionOutcome-update/http-response.adoc[]
 include::{snippets}/missionOutcome-update/response-fields.adoc[]
-
-=== 미션결과 조회
-
-==== HTTP Request
-
-include::{snippets}/missionOutcome-get/http-request.adoc[]
-include::{snippets}/missionOutcome-get/query-parameters.adoc[]
-
-==== HTTP Response
-
-include::{snippets}/missionOutcome-get/http-response.adoc[]
-include::{snippets}/missionOutcome-get/response-fields.adoc[]

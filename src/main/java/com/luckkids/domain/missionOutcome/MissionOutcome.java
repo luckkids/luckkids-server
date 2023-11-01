@@ -20,7 +20,7 @@ public class MissionOutcome extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
 
     @Enumerated(EnumType.STRING)

@@ -30,7 +30,7 @@ class MissionOutcomeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/missionOutComes/{missionOutcomeId}", 1L)
+                patch("/api/v1/missionOutcomes/{missionOutcomeId}", 1L)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -52,7 +52,7 @@ class MissionOutcomeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/missionOutComes/{missionOutcomeId}", 1L)
+                patch("/api/v1/missionOutcomes/{missionOutcomeId}", 1L)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -75,7 +75,7 @@ class MissionOutcomeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/missionOutComes")
+                get("/api/v1/missionOutcomes")
             )
             .andDo(print())
             .andExpect(status().isOk())
