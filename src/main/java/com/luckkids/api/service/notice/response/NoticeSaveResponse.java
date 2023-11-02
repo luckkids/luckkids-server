@@ -8,22 +8,30 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class NoticeSaveResponse {
     private int id;
+    private String title;
     private String noticeDescription;
+    private LocalDateTime createdDate;
 
     @Builder
-    private NoticeSaveResponse(int id, String noticeDescription) {
+    private NoticeSaveResponse(int id, String title, String noticeDescription, LocalDateTime createdDate) {
         this.id = id;
+        this.title = title;
         this.noticeDescription = noticeDescription;
+        this.createdDate = createdDate;
     }
 
     public static NoticeSaveResponse of(Notice notice){
         return NoticeSaveResponse.builder()
             .id(notice.getId())
+            .title(notice.getTitle())
             .noticeDescription(notice.getNoticeDescription())
+            .createdDate(notice.getCreatedDate())
             .build();
     }
 }
