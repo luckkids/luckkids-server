@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface VersionRepository extends JpaRepository<Version, Integer> {
 
-    @Query("select v from Version v order by v.createdDate desc limit 1")
+    @Query("select v from Version v where v.createdDate = (select max(v2.createdDate) from Version v2)")
     public Version findVersionMax();
 }

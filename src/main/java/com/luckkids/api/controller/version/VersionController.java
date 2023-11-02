@@ -6,6 +6,7 @@ import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import com.luckkids.api.service.version.response.VersionResponse;
 import com.luckkids.api.service.version.response.VersionSaveResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,14 @@ public class VersionController {
     private final VersionReadService versionReadService;
     private final VersionService versionService;
 
-    @GetMapping("/")
+    @GetMapping("/find")
     public ApiResponse<VersionResponse> getVersion(){
         return ApiResponse.ok(versionReadService.getVersion());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/save")
-    public ApiResponse<VersionSaveResponse> save(VersionSaveRequest versionSaveRequest){
+    public ApiResponse<VersionSaveResponse> save(@Valid @RequestBody VersionSaveRequest versionSaveRequest){
         return ApiResponse.created(versionService.save(versionSaveRequest.toServiceRequest()));
     }
 }
