@@ -17,10 +17,12 @@ public class Notice extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String title;
     private String noticeDescription;
 
     @Builder
-    private Notice(String noticeDescription) {
+    private Notice(String title, String noticeDescription) {
+        this.title = title;
         this.noticeDescription = noticeDescription;
     }
 }

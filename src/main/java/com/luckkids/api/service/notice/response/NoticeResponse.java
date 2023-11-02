@@ -11,21 +11,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NoticeResponse {
     private int id;
-    private String noticeDescription;
-    private LocalDateTime createDate;
+    private String title;
+    private LocalDateTime createdDate;
 
     @Builder
-    private NoticeResponse(int id, String noticeDescription, LocalDateTime createDate) {
+    private NoticeResponse(int id, String title, LocalDateTime createdDate) {
         this.id = id;
-        this.noticeDescription = noticeDescription;
-        this.createDate = createDate;
+        this.title = title;
+        this.createdDate = createdDate;
     }
 
     public static NoticeResponse of(Notice notice){
         return NoticeResponse.builder()
                 .id(notice.getId())
-                .noticeDescription(notice.getNoticeDescription())
-                .createDate(notice.getCreatedDate())
+                .title(notice.getTitle())
+                .createdDate(notice.getCreatedDate())
                 .build();
     }
 
