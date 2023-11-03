@@ -24,10 +24,9 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +54,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/notice/list")
+                get("/api/v1/notice/list")
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -94,19 +93,19 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                     .id(1)
                     .title("공지사항 타이틀")
                     .noticeDescription("공지사항 내용")
-                    .createDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
                     .build()
             );
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/notice/{id}",1)
+                get("/api/v1/notice/{id}",1)
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("notice-list",
+            .andDo(document("notice-detail",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(
@@ -116,7 +115,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
                     fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("공지사항 ID"),
@@ -152,16 +151,22 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/notice/save")
+                post("/api/v1/notice/save")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
             .andDo(print())
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andDo(document("notice-save",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("title").type(JsonFieldType.STRING)
+                        .description("공지사항 제목"),
+                    fieldWithPath("noticeDescription").type(JsonFieldType.STRING)
+                        .description("공지사항 내용")
+                ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
                         .description("코드"),
@@ -169,7 +174,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
                     fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("공지사항 ID"),

@@ -13,14 +13,14 @@ public class NoticeDetailResponse {
     private int id;
     private String title;
     private String noticeDescription;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     @Builder
-    private NoticeDetailResponse(int id, String title, String noticeDescription, LocalDateTime createDate) {
+    private NoticeDetailResponse(int id, String title, String noticeDescription, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
         this.noticeDescription = noticeDescription;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public static NoticeDetailResponse of(Notice notice){
@@ -28,7 +28,7 @@ public class NoticeDetailResponse {
             .id(notice.getId())
             .title(notice.getTitle())
             .noticeDescription(notice.getNoticeDescription())
-            .createDate(notice.getCreatedDate())
+            .createdDate(notice.getCreatedDate())
             .build();
     }
 }

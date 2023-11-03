@@ -1,0 +1,36 @@
+[[notice-list]]
+=== 공지사항 목록 API
+
+==== HTTP Request
+
+include::{snippets}/notice-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-list/http-response.adoc[]
+include::{snippets}/notice-list/response-fields.adoc[]
+
+[[notice-detail]]
+=== 공지사항 상세 API
+
+==== HTTP Request
+
+include::{snippets}/notice-detail/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-detail/http-response.adoc[]
+include::{snippets}/notice-detail/response-fields.adoc[]
+
+[[notice-save]]
+=== 공지사항 저장 API (추후 공지사항 등록할 때 따로 사용)
+
+==== HTTP Request
+
+include::{snippets}/notice-save/http-request.adoc[]
+include::{snippets}/notice-save/request-body.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-save/http-response.adoc[]
+include::{snippets}/notice-save/response-fields.adoc[]
