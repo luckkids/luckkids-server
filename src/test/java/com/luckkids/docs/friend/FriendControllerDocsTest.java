@@ -87,7 +87,7 @@ public class FriendControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/friend/readlist")
+                get("/api/v1/friend/list")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

@@ -19,7 +19,7 @@ public class FriendController {
     private final FriendReadService friendReadService;
     private final SecurityService securityService;
 
-    @GetMapping("/readlist")
+    @GetMapping("/list")
     public ApiResponse<PageCustom<FriendListReadServiceResponse>> readListFriend(@Valid @RequestBody PageInfoRequest page){
         int userId = securityService.getCurrentUserInfo().getUserId();
         return ApiResponse.ok(friendReadService.readListFriend(userId, page.toServiceRequest()));
