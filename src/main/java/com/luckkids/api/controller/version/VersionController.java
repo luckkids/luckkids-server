@@ -19,7 +19,7 @@ public class VersionController {
     private final VersionReadService versionReadService;
     private final VersionService versionService;
 
-    @GetMapping("/find")
+    @GetMapping("/")
     public ApiResponse<VersionResponse> getVersion(){
         return ApiResponse.ok(versionReadService.getVersion());
     }

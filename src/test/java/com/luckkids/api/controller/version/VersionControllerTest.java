@@ -26,7 +26,7 @@ class VersionControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/version/find")
+                get("/api/v1/version/")
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
