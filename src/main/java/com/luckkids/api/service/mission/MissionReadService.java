@@ -18,12 +18,12 @@ public class MissionReadService {
     private final MissionRepository missionRepository;
 
     public Mission findByOne(int id) {
-        return missionRepository.findById(id)
+        return missionRepository.findByIdAndDeletedDateIsNull(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 미션은 없습니다. id = " + id));
     }
 
     public List<MissionResponse> getMission(int userId) {
-        List<Mission> missions = missionRepository.findAllByUserId(userId);
+        List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNull(userId);
 
         return missions.stream().map(MissionResponse::of).collect(Collectors.toList());
     }

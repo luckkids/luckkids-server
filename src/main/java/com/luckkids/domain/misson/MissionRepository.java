@@ -1,15 +1,17 @@
 package com.luckkids.domain.misson;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
-    @Query("SELECT m FROM Mission m WHERE m.user.id = :userId")
-    List<Mission> findAllByUserId(int userId);
+    List<Mission> findAllByUserIdAndDeletedDateIsNull(int userId);
 
+    Optional<Mission> findByIdAndDeletedDateIsNull(int id);
+
+    List<Mission> findAllByDeletedDateIsNull();
 }

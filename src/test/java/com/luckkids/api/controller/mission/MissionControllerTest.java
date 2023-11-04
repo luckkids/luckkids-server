@@ -175,4 +175,20 @@ class MissionControllerTest extends ControllerTestSupport {
             .email("")
             .build();
     }
+
+    @DisplayName("등록되어있는 미션을 삭제한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void deleteMission() throws Exception {
+        // when // then
+        mockMvc.perform(
+                delete("/api/v1/missions/{missionId}", 1)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
 }

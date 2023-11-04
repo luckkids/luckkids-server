@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -21,7 +22,7 @@ public class Mission extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private String missionDescription;
@@ -31,12 +32,15 @@ public class Mission extends BaseTimeEntity {
 
     private LocalTime alertTime;
 
+    private LocalDateTime deletedDate;
+
     @Builder
-    private Mission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private Mission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime deletedDate) {
         this.user = user;
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
+        this.deletedDate = deletedDate;
     }
 
     public Mission update(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
@@ -45,6 +49,10 @@ public class Mission extends BaseTimeEntity {
         updateIfNonNull(alertTime, it -> this.alertTime = it);
 
         return this;
+    }
+
+    public void delete(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
     }
 
     private <T> void updateIfNonNull(T value, Consumer<T> consumer) {
