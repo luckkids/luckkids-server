@@ -12,10 +12,10 @@ import org.springframework.data.domain.Pageable;
 @Getter
 @NoArgsConstructor
 public class PageInfoRequest {
-    @Min(value = 1, message = "페이지는 1이상부터 입력가능합니다.")
-    private int page;
-    @Min(value = 1,message = "페이지사이즈는 1이상부터 입력가능합니다.")
-    private int size;
+
+    //기본값
+    private int page = 1;
+    private int size = 10;
 
     @Builder
     private PageInfoRequest(int page, int size) {
