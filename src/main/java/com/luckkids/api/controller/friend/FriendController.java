@@ -2,10 +2,10 @@ package com.luckkids.api.controller.friend;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.request.PageInfoRequest;
-import com.luckkids.api.service.friend.response.FriendProfileReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendListReadResponse;
 import com.luckkids.api.service.security.SecurityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ public class FriendController {
     private final SecurityService securityService;
 
     @GetMapping("/list")
-    public ApiResponse<PageCustom<FriendListReadServiceResponse>> readListFriend(@Valid @RequestBody PageInfoRequest page){
+    public ApiResponse<PageCustom<FriendListReadResponse>> readListFriend(PageInfoRequest page){
         int userId = securityService.getCurrentUserInfo().getUserId();
         return ApiResponse.ok(friendReadService.readListFriend(userId, page.toServiceRequest()));
     }
 
     @GetMapping("/profile/{friendId}")
-    public ApiResponse<FriendProfileReadServiceResponse> profile(@PathVariable("friendId") int friendId){
+    public ApiResponse<FriendProfileReadResponse> profile(@PathVariable("friendId") int friendId){
         return ApiResponse.ok(friendReadService.readProfile(friendId));
     }
 }
