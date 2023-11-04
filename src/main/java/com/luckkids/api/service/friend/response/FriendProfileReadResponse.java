@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FriendProfileReadServiceResponse {
+public class FriendProfileReadResponse {
 
     private String phraseDescription;
     private String fileUrl;
@@ -16,7 +16,7 @@ public class FriendProfileReadServiceResponse {
     private int level;
 
     @Builder
-    private FriendProfileReadServiceResponse(String phraseDescription, String fileUrl, String characterName, int level) {
+    private FriendProfileReadResponse(String phraseDescription, String fileUrl, String characterName, int level) {
         this.phraseDescription = phraseDescription;
         this.fileUrl = fileUrl;
         this.characterName = characterName;

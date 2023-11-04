@@ -8,14 +8,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FriendListReadServiceResponse {
+public class FriendListReadResponse {
     private int friendId;
     private String characterName;
     private String fileUrl;
     private int cloverCount;
 
     @Builder
-    private FriendListReadServiceResponse(int friendId, String characterName, String fileUrl, int cloverCount) {
+    private FriendListReadResponse(int friendId, String characterName, String fileUrl, int cloverCount) {
         this.friendId = friendId;
         this.characterName = characterName;
         this.fileUrl = fileUrl;
