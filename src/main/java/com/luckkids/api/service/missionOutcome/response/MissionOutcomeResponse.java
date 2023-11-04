@@ -3,10 +3,12 @@ package com.luckkids.api.service.missionOutcome.response;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Getter
+@NoArgsConstructor
 public class MissionOutcomeResponse {
 
     private Long id;

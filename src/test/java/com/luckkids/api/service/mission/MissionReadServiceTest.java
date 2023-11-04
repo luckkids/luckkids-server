@@ -17,9 +17,7 @@ import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.groups.Tuple.tuple;
+import static org.assertj.core.api.Assertions.*;
 
 class MissionReadServiceTest extends IntegrationTestSupport {
 

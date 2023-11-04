@@ -17,6 +17,7 @@ include::{snippets}/mission-create/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/mission-update/http-request.adoc[]
+include::{snippets}/mission-update/path-parameters.adoc[]
 include::{snippets}/mission-update/request-fields.adoc[]
 
 ==== HTTP Response
