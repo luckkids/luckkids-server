@@ -77,23 +77,23 @@ public class User extends BaseTimeEntity {
     }
 
     public void loginCheckSnsType(SnsType snsType) {
-        if(!this.snsType.equals(snsType)){
+        if (!this.snsType.equals(snsType)) {
             this.snsType.checkSnsType();
         }
     }
 
     /*
-    * 비밀번호 체크
-    */
+     * 비밀번호 체크
+     */
     public void checkPassword(String password) {
-        if(!this.password.equals(encryptPassword(password))){
+        if (!this.password.equals(encryptPassword(password))) {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         }
     }
 
     /*
-    * List<RefreshToken>에 요청값으로 받은 deviceId와 일치하는 기존 RefreshToken이 있는지 조회 후 수정 혹은 등록한다.
-    */
+     * List<RefreshToken>에 요청값으로 받은 deviceId와 일치하는 기존 RefreshToken이 있는지 조회 후 수정 혹은 등록한다.
+     */
     public void checkRefreshToken(JwtToken jwtToken, String deviceId) {
         // deviceId와 일치하는 RefreshToken 찾기
         Optional<RefreshToken> existToken = refreshTokens.stream()
@@ -103,9 +103,8 @@ public class User extends BaseTimeEntity {
         // deviceId와 일치하는 RefreshToken이 이미 존재하는 경우, 해당 토큰 업데이트
         if (existToken.isPresent()) {
             existToken.get().updateRefreshToken(jwtToken.getRefreshToken());
-        }
-        else { // deviceId와 일치하는 RefreshToken이 없는 경우, 새로운 RefreshToken 생성 후 새로운 RefreshToken을 저장
-            RefreshToken refreshToken = RefreshToken.of(this,jwtToken.getRefreshToken(),deviceId);
+        } else { // deviceId와 일치하는 RefreshToken이 없는 경우, 새로운 RefreshToken 생성 후 새로운 RefreshToken을 저장
+            RefreshToken refreshToken = RefreshToken.of(this, jwtToken.getRefreshToken(), deviceId);
             refreshToken.setUser(this);
         }
     }
@@ -131,8 +130,7 @@ public class User extends BaseTimeEntity {
             messageDigest.reset();
             messageDigest.update(password.getBytes(StandardCharsets.UTF_8));
             return String.format("%0128x", new BigInteger(1, messageDigest.digest()));
-        }
-        catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }

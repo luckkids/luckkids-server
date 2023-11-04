@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.time.LocalDateTime.now;
+
 @RequiredArgsConstructor
 @RestController
 public class MissionController {
@@ -39,5 +41,10 @@ public class MissionController {
     public ApiResponse<List<MissionResponse>> getMission() {
         int userId = securityService.getCurrentUserInfo().getUserId();
         return ApiResponse.ok(missionReadService.getMission(userId));
+    }
+
+    @DeleteMapping("/api/v1/missions/{missionId}")
+    public ApiResponse<Integer> deleteMission(@PathVariable int missionId) {
+        return ApiResponse.ok(missionService.deleteMission(missionId, now()));
     }
 }

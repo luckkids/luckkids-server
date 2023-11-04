@@ -8,6 +8,7 @@ import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,9 +29,13 @@ class MissionReadServiceTest extends IntegrationTestSupport {
     @Autowired
     private MissionRepository missionRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @AfterEach
     void tearDown() {
         missionRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("로그인 된 유저(유저1)의 미션들을 가져온다.")
@@ -43,6 +48,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
         Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
 
+        userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         // when
@@ -66,6 +72,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
         Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
 
+        userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         // when
@@ -86,6 +93,8 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+
+        userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
 
         // when

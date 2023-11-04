@@ -7,8 +7,10 @@ import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
+import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,9 +35,17 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MissionRepository missionRepository;
+
     @AfterEach
     void tearDown() {
         missionOutcomeRepository.deleteAllInBatch();
+        missionRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("mission의 id를 받아 미션결과를 조회한다.")
@@ -46,6 +56,9 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), FAILED);
+
+        userRepository.save(user);
+        missionRepository.save(mission);
         MissionOutcome savedMission = missionOutcomeRepository.save(missionOutcome);
 
         // when
@@ -79,6 +92,8 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
 
         // when

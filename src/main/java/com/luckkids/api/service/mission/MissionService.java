@@ -1,6 +1,7 @@
 package com.luckkids.api.service.mission;
 
 import com.luckkids.api.event.missionOutcome.MissionOutcomeCreateEvent;
+import com.luckkids.api.event.missionOutcome.MissionOutcomeDeleteEvent;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Transactional
 @RequiredArgsConstructor
@@ -45,5 +48,14 @@ public class MissionService {
         );
 
         return MissionResponse.of(updatedMission);
+    }
+
+    public int deleteMission(int missionId, LocalDateTime deletedDate) {
+        Mission mission = missionReadService.findByOne(missionId);
+        mission.delete(deletedDate);
+
+        eventPublisher.publishEvent(new MissionOutcomeDeleteEvent(this, mission.getId()));
+
+        return missionId;
     }
 }
