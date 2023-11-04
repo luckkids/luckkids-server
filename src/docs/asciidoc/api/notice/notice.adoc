@@ -16,6 +16,7 @@ include::{snippets}/notice-list/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/notice-detail/http-request.adoc[]
+include::{snippets}/notice-detail/path-parameters.adoc[]
 
 ==== HTTP Response
 

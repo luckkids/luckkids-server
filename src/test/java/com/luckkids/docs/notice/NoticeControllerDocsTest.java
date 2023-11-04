@@ -23,8 +23,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,7 +48,6 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void findListNotice() throws Exception {
         // given
-
         given(noticeReadService.getNoticeList())
             .willReturn(List.of(
                 createNoticeResponse(1, "공지사항 타이틀1"),
@@ -108,6 +110,10 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
             .andDo(document("notice-detail",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                pathParameters(
+                        parameterWithName("id")
+                                .description("공지사항 ID")
+                ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
                         .description("코드"),
