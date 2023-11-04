@@ -21,13 +21,10 @@ public class PageCustom<T> implements Serializable {
         this.pageInfo = pageInfo;
     }
 
-    @Builder
-    private PageCustom(List<T> content, Page<T> pageable) {
-        this.content = content;
-        this.pageInfo = PageableCustom.of(pageable);
-    }
-
     public static <T> PageCustom<T> of(Page<T> page) {
-        return new PageCustom<>(page.getContent(), page);
+        return PageCustom.<T>builder()
+                .content(page.getContent())
+                .pageInfo(PageableCustom.of(page))
+                .build();
     }
 }

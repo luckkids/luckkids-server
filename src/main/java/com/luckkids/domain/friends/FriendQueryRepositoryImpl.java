@@ -1,8 +1,9 @@
 package com.luckkids.domain.friends;
 
-import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendListReadResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
+import com.luckkids.domain.friends.projection.FriendListReadDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.luckkids.domain.UserPhrase.QUserPhrase.userPhrase;
 import static com.luckkids.domain.clover.QClover.clover;
@@ -20,19 +22,19 @@ import static com.luckkids.domain.user.QUser.user;
 import static com.luckkids.domain.userCharacter.QUserCharacter.userCharacter;
 
 @RequiredArgsConstructor
-public class FriendRepositoryCustomImpl implements FriendRepositoryCustom{
+public class FriendQueryRepositoryImpl implements FriendQueryRepository{
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public Page<FriendListReadServiceResponse> readListFriend(int userId, PageInfoServiceRequest page) {
+    public Page<FriendListReadResponse> readListFriend(int userId, PageInfoServiceRequest page) {
         Pageable pageable = page.toPageable();
 
-        List<FriendListReadServiceResponse> results = queryFactory
-            .select(Projections.bean(FriendListReadServiceResponse.class,
-                friend.receiver.id.as("friendId"),
-                userCharacter.characterName.as("characterName"),
-                userCharacter.fileName.as("fileUrl"),
-                clover.count.as("cloverCount")
+        List<FriendListReadDto> results = queryFactory
+            .select(Projections.constructor(FriendListReadDto.class,
+                friend.receiver.id,
+                userCharacter.characterName,
+                userCharacter.fileName,
+                clover.count
             ))
             .from(friend)
             .join(friend.receiver, user)
@@ -60,13 +62,17 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom{
                     .and(friend.requester.id.eq(userId))
             );
 
-        return PageableExecutionUtils.getPage(results, pageable, totalQuery::fetchOne);
+        return PageableExecutionUtils.getPage(
+                results.stream()
+                        .map(dto -> dto.toServiceResponse())
+                        .collect(Collectors.toList())
+               , pageable, totalQuery::fetchOne);
     }
 
     @Override
-    public FriendProfileReadServiceResponse readProfile(int friendId) {
+    public FriendProfileReadResponse readProfile(int friendId) {
         return queryFactory
-            .select(Projections.bean(FriendProfileReadServiceResponse.class,
+            .select(Projections.bean(FriendProfileReadResponse.class,
                 userPhrase.phraseDescription.as("phraseDescription"),
                 userCharacter.fileName.as("fileUrl"),
                 userCharacter.characterName.as("characterName"),

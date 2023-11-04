@@ -2,8 +2,8 @@ package com.luckkids.api.service.friend;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendListReadResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.domain.friends.FriendRepository;
@@ -20,12 +20,12 @@ public class FriendReadService {
 
     private final FriendRepository friendRepository;
 
-    public PageCustom<FriendListReadServiceResponse> readListFriend(int userId, PageInfoServiceRequest page){
+    public PageCustom<FriendListReadResponse> readListFriend(int userId, PageInfoServiceRequest page){
         return PageCustom.of(friendRepository.readListFriend(userId, page));
     }
 
-    public FriendProfileReadServiceResponse readProfile(int friendId){
-        FriendProfileReadServiceResponse friendProfileReadServiceResponse = friendRepository.readProfile(friendId);
+    public FriendProfileReadResponse readProfile(int friendId){
+        FriendProfileReadResponse friendProfileReadServiceResponse = friendRepository.readProfile(friendId);
         Optional.ofNullable(friendProfileReadServiceResponse).orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN));
         return friendProfileReadServiceResponse;
     }
