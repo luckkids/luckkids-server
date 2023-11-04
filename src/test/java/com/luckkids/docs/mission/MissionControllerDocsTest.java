@@ -29,10 +29,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,7 +74,6 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                 post("/api/v1/missions/new")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isCreated())
@@ -128,13 +130,16 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                 patch("/api/v1/missions/{missionId}", 1)
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("mission-update",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("missionId")
+                        .description("미션 ID")
+                ),
                 requestFields(
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용")
@@ -186,7 +191,6 @@ public class MissionControllerDocsTest extends RestDocsSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/missions")
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())

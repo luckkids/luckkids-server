@@ -14,6 +14,7 @@ import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
+import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.security.SecurityService;
 import jakarta.persistence.EntityManager;
@@ -67,5 +68,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected EntityManager entityManager;
+
+    @MockBean
+    protected MissionOutcomeReadService missionOutcomeReadService;
 }
 
