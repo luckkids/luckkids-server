@@ -22,10 +22,6 @@ public class FriendControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void readList() throws Exception {
         // given
-        PageInfoRequest request = PageInfoRequest.builder()
-            .size(10)
-            .page(1)
-            .build();
 
         given(securityService.getCurrentUserInfo())
             .willReturn(createUserInfo());
@@ -33,7 +29,6 @@ public class FriendControllerTest extends ControllerTestSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/friend/list")
-                    .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .with(csrf())
@@ -45,60 +40,6 @@ public class FriendControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("친구 랭킹 리스트 조회시 페이지사이즈는 1이상이여야한다.")
-    @Test
-    @WithMockUser("USER")
-    void readListWithoutSize() throws Exception {
-        // given
-        PageInfoRequest request = PageInfoRequest.builder()
-            .page(1)
-            .build();
-
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo());
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/friend/list")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.statusCode").value("400"))
-            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("페이지사이즈는 1이상부터 입력가능합니다."));
-    }
-
-    @DisplayName("친구 랭킹 리스트 조회 페이지는 1이상이여야한다.")
-    @Test
-    @WithMockUser("USER")
-    void readListWithoutPage() throws Exception {
-        // given
-        PageInfoRequest request = PageInfoRequest.builder()
-            .size(10)
-            .build();
-
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo());
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/friend/list")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.statusCode").value("400"))
-            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("페이지는 1이상부터 입력가능합니다."));
-    }
 
     @DisplayName("친구 프로필 조회를 한다.")
     @Test

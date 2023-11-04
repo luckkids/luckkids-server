@@ -35,5 +35,5 @@ include::api/mail/sendMail.adoc[]
 
 [[Friend-API]]
 == Friend API
-include::api/friend/readFriend.adoc[]
+include::api/friend/friend.adoc[]
 

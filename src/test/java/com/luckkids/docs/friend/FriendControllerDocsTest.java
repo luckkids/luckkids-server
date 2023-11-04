@@ -1,9 +1,9 @@
 package com.luckkids.docs.friend;
 
 import com.luckkids.api.controller.friend.FriendController;
-import com.luckkids.api.controller.request.PageInfoRequest;
 import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendListReadResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
@@ -24,12 +24,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,19 +48,14 @@ public class FriendControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void readFriend() throws Exception {
         // given
-        PageInfoRequest request = PageInfoRequest.builder()
-            .page(1)
-            .size(10)
-            .build();
-
-        List<FriendListReadServiceResponse> friendList = Arrays.asList(
-            FriendListReadServiceResponse.builder()
+        List<FriendListReadResponse> friendList = Arrays.asList(
+            FriendListReadResponse.builder()
                 .friendId(1)
                 .characterName("캐릭터이름1")
                 .fileUrl("http://example.com/file1")
                 .cloverCount(10)
                 .build(),
-            FriendListReadServiceResponse.builder()
+            FriendListReadResponse.builder()
                 .friendId(2)
                 .characterName("캐릭터이름2")
                 .fileUrl("http://example.com/file2")
@@ -74,7 +69,7 @@ public class FriendControllerDocsTest extends RestDocsSupport {
             .currentPage(1)
             .build();
 
-        PageCustom<FriendListReadServiceResponse> pageCustom = PageCustom.<FriendListReadServiceResponse>builder()
+        PageCustom<FriendListReadResponse> pageCustom = PageCustom.<FriendListReadResponse>builder()
             .content(friendList)
             .pageInfo(pageableCustom)
             .build();
@@ -88,20 +83,19 @@ public class FriendControllerDocsTest extends RestDocsSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/friend/list")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("read-friend",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
-                requestFields(
-                    fieldWithPath("size").type(JsonFieldType.NUMBER)
-                        .description("페이지사이즈"),
-                    fieldWithPath("page").type(JsonFieldType.NUMBER)
-                        .description("페이지")
+                queryParameters(
+                        parameterWithName("page")
+                                .description("페이지 기본값(1)")
+                                .optional(),
+                        parameterWithName("size")
+                                .description("페이지 사이즈 기본값(10)")
+                                .optional()
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -130,6 +124,57 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("총 리스트개수")
                 )
             ));
+    }
+
+    @DisplayName("친구 프로필 조회 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void readFriendProfile() throws Exception {
+        // given
+        given(friendReadService.readProfile(anyInt()))
+                .willReturn(FriendProfileReadResponse.builder()
+                        .phraseDescription("행운문구!!")
+                        .characterName("캐릭터이름")
+                        .level(10)
+                        .fileUrl("https://test.com/file")
+                        .build()
+                );
+
+        // when // then
+        mockMvc.perform(
+                    get("/api/v1/friend/profile/{friendId}",1)
+                            .contentType(APPLICATION_JSON)
+                            .accept(APPLICATION_JSON)
+                            .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("friend-profile",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("friendId")
+                                        .description("친구 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.phraseDescription").type(JsonFieldType.STRING)
+                                        .description("친구 행운문구"),
+                                fieldWithPath("data.fileUrl").type(JsonFieldType.STRING)
+                                        .description("친구 캐릭터 파일URL"),
+                                fieldWithPath("data.characterName").type(JsonFieldType.STRING)
+                                        .description("친구 캐릭터 명"),
+                                fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+                                        .description("친구 레벨")
+                        )
+                ));
     }
 
     private UserInfo createUserInfo() {

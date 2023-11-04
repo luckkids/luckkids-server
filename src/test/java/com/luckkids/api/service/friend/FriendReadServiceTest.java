@@ -2,9 +2,8 @@ package com.luckkids.api.service.friend;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.response.FriendListReadServiceResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadServiceResponse;
+import com.luckkids.api.service.friend.response.FriendListReadResponse;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
@@ -68,7 +67,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         createFriend(user1, user2);
         createPhrase(user2);
 
-        FriendProfileReadServiceResponse response = friendReadService.readProfile(user2.getId());
+        FriendProfileReadResponse response = friendReadService.readProfile(user2.getId());
 
         assertThat(response)
             .extracting("phraseDescription", "fileUrl", "characterName", "level")
@@ -107,9 +106,9 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
-        List<FriendListReadServiceResponse> responseList = response.getContent();
+        List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
         assertThat(responseList).hasSize(2)
@@ -141,9 +140,9 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user3.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user3.getId(), pageDto);
 
-        List<FriendListReadServiceResponse> responseList = response.getContent();
+        List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
         assertThat(responseList).hasSize(0);
@@ -190,9 +189,9 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
-        List<FriendListReadServiceResponse> responseList = response.getContent();
+        List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
         // Clover갯수순으로 내림차순 정렬
@@ -253,9 +252,9 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadServiceResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
 
-        List<FriendListReadServiceResponse> responseList = response.getContent();
+        List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
         // Clover갯수순으로 내림차순 정렬
