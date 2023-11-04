@@ -6,6 +6,7 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
+import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -54,6 +57,8 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+
+        userRepository.save(user);
         missionRepository.save(mission);
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
@@ -104,6 +109,8 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+
+        userRepository.save(user);
         missionRepository.save(mission);
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
@@ -132,6 +139,8 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+
+        userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
         int missionId = savedMission.getId();
 
@@ -163,6 +172,8 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
+
+        userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
         int missionId = savedMission.getId();
 
@@ -186,6 +197,29 @@ class MissionServiceTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("미션 ID를 받아 미션을 삭제한다.(삭제일을 업데이트한다. Soft Delete)")
+    @Test
+    void deleteMission() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
+        userRepository.save(user);
+        Mission savedMission = missionRepository.save(mission);
+        int missionId = savedMission.getId();
+
+        // when
+        missionService.deleteMission(missionId, LocalDateTime.of(2023, 10, 31, 0, 0, 0));
+
+        // then
+        assertThat(missionRepository.findAllByDeletedDateIsNull()).isEmpty();
+
+        assertThat(missionRepository.findAll()).hasSize(1)
+            .extracting("missionDescription", "alertStatus", "alertTime", "deletedDate")
+            .containsExactlyInAnyOrder(
+                tuple("운동하기", UNCHECKED, LocalTime.of(0, 0), LocalDateTime.of(2023, 10, 31, 0, 0, 0))
+            );
+    }
+
     private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
         return User.builder()
             .email(email)
@@ -201,6 +235,14 @@ class MissionServiceTest extends IntegrationTestSupport {
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
+            .build();
+    }
+
+    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate, MissionStatus missionStatus) {
+        return MissionOutcome.builder()
+            .mission(mission)
+            .missionDate(missionDate)
+            .missionStatus(missionStatus)
             .build();
     }
 }

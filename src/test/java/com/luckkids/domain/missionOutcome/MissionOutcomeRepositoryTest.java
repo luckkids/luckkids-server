@@ -3,8 +3,10 @@ package com.luckkids.domain.missionOutcome;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
+import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.time.LocalTime;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
@@ -23,6 +26,12 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MissionRepository missionRepository;
 
     @DisplayName("유니크로 설정된 missionId와 missionDate를 똑같은 것으로 2번 인서트하려고 할 때 예외가 난다.")
     @Test
@@ -33,12 +42,33 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
 
+        userRepository.save(user);
+        missionRepository.save(mission);
         missionOutcomeRepository.save(missionOutcome1);
 
         // when // then
         assertThatThrownBy(() -> missionOutcomeRepository.save(missionOutcome2))
             .isInstanceOf(DataIntegrityViolationException.class);
 
+    }
+
+    @DisplayName("미션 ID와 미션 날짜를 받아서 미션결과를 다 삭제한다.")
+    @Test
+    void deleteAllByMissionIdAndMissionDate() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.save(missionOutcome);
+
+        // when
+        missionOutcomeRepository.deleteAllByMissionIdAndMissionDate(mission.getId(), LocalDate.of(2023, 10, 25));
+
+        // then
+        assertThat(missionOutcomeRepository.findAll()).hasSize(0).isEmpty();
     }
 
     private User createUser(String email, String password, SnsType snsType, String phoneNumber) {

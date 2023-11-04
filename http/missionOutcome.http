@@ -1,5 +1,5 @@
 ### 미션결과 수정
-PATCH localhost:8080/api/v1/missionOutComes/1
+PATCH localhost:8080/api/v1/missionOutcomes/1
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
@@ -8,6 +8,6 @@ Authorization: Bearer JWT_TOKEN
 }
 
 ### 미션결과 조회
-GET localhost:8080/api/v1/missionOutComes
+GET localhost:8080/api/v1/missionOutcomes
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
