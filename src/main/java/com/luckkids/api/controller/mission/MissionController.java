@@ -6,7 +6,6 @@ import com.luckkids.api.controller.mission.request.MissionUpdateRequest;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
 import com.luckkids.api.service.mission.response.MissionResponse;
-import com.luckkids.api.service.security.SecurityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,13 +21,11 @@ public class MissionController {
 
     private final MissionService missionService;
     private final MissionReadService missionReadService;
-    private final SecurityService securityService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/missions/new")
     public ApiResponse<MissionResponse> createMission(@Valid @RequestBody MissionCreateRequest request) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.created(missionService.createMission(request.toServiceRequest(), userId));
+        return ApiResponse.created(missionService.createMission(request.toServiceRequest()));
     }
 
     @PatchMapping("/api/v1/missions/{missionId}")
@@ -39,8 +36,7 @@ public class MissionController {
 
     @GetMapping("/api/v1/missions")
     public ApiResponse<List<MissionResponse>> getMission() {
-        int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.ok(missionReadService.getMission(userId));
+        return ApiResponse.ok(missionReadService.getMission());
     }
 
     @DeleteMapping("/api/v1/missions/{missionId}")
