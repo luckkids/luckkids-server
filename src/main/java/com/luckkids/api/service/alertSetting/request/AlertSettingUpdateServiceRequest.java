@@ -1,0 +1,20 @@
+package com.luckkids.api.service.alertSetting.request;
+
+import com.luckkids.domain.alertSetting.AlertType;
+import com.luckkids.domain.misson.AlertStatus;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class AlertSettingUpdateServiceRequest {
+    private AlertType alertType;
+    private AlertStatus alertStatus;
+
+    @Builder
+    public AlertSettingUpdateServiceRequest(AlertType alertType, AlertStatus alertStatus) {
+        this.alertType = alertType;
+        this.alertStatus = alertStatus;
+    }
+}
