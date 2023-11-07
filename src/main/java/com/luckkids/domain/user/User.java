@@ -3,7 +3,7 @@ package com.luckkids.domain.user;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.UserPhrase.UserPhrase;
+import com.luckkids.domain.userPhrase.UserPhrase;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.jwt.dto.JwtToken;

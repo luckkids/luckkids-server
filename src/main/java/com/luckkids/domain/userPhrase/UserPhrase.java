@@ -1,4 +1,4 @@
-package com.luckkids.domain.UserPhrase;
+package com.luckkids.domain.userPhrase;
 
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.luckkids.domain.UserPhrase;
+package com.luckkids.domain.userPhrase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

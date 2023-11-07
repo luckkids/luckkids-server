@@ -15,7 +15,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.luckkids.domain.UserPhrase.QUserPhrase.userPhrase;
+import static com.luckkids.domain.userPhrase.QUserPhrase.userPhrase;
 import static com.luckkids.domain.clover.QClover.clover;
 import static com.luckkids.domain.friends.QFriend.friend;
 import static com.luckkids.domain.user.QUser.user;
