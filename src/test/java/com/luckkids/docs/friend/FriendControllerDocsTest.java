@@ -145,7 +145,6 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                     get("/api/v1/friend/profile/{friendId}",1)
                             .contentType(APPLICATION_JSON)
                             .accept(APPLICATION_JSON)
-                            .with(csrf())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
