@@ -1,6 +1,7 @@
 package com.luckkids.api.service.missionOutcome;
 
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeQueryRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
@@ -21,16 +22,24 @@ public class MissionOutcomeReadService {
 
     private final MissionOutcomeRepository missionOutcomeRepository;
     private final MissionOutcomeQueryRepository missionOutcomeQueryRepository;
+    
+    private final SecurityService securityService;
 
     public MissionOutcome findByOne(Long id) {
         return missionOutcomeRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 미션결과는 없습니다. id = " + id));
     }
 
-    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, int userId, LocalDate missionDate) {
+    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
+        int userId = securityService.getCurrentUserInfo().getUserId();
         return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId, missionDate)
             .stream()
             .map(MissionOutcomeDetailDto::toMissionOutcomeResponse)
             .toList();
+    }
+
+    public int countUserSuccessfulMissions() {
+        int userId = securityService.getCurrentUserInfo().getUserId();
+        return missionOutcomeRepository.countSuccessfulMissionsByUserId(userId);
     }
 }

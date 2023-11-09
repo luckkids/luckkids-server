@@ -5,10 +5,8 @@ import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRe
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
-import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.missionOutcome.MissionStatus;
-import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -38,11 +36,10 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
     private final MissionOutcomeService missionOutcomeService = mock(MissionOutcomeService.class);
     private final MissionOutcomeReadService missionOutcomeReadService = mock(MissionOutcomeReadService.class);
-    private final SecurityService securityService = mock(SecurityService.class);
 
     @Override
     protected Object initController() {
-        return new MissionOutcomeController(missionOutcomeService, missionOutcomeReadService, securityService);
+        return new MissionOutcomeController(missionOutcomeService, missionOutcomeReadService);
     }
 
     @DisplayName("등록되어있는 미션결과를 수정하는 API")
@@ -55,7 +52,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
             .build();
 
         given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
-            .willReturn(1L);
+            .willReturn(100);
 
         // when // then
         mockMvc.perform(
@@ -84,7 +81,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.NUMBER)
-                        .description("미션결과 id")
+                        .description("지금까지 성공한 미션의 개수")
                 )
             ));
     }
@@ -94,10 +91,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void getMissionDetailListForStatus() throws Exception {
         // given
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo());
-
-        given(missionOutcomeReadService.getMissionDetailListForStatus(empty(), 1, now()))
+        given(missionOutcomeReadService.getMissionDetailListForStatus(empty(), now()))
             .willReturn(
                 List.of(
                     createMissionOutcomeResponse(1L, "운동하기", LocalTime.of(19, 0), SUCCEED),
@@ -146,13 +140,6 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
             .missionDescription(missionDescription)
             .alertTime(alertTime)
             .missionStatus(missionStatus)
-            .build();
-    }
-
-    private UserInfo createUserInfo() {
-        return UserInfo.builder()
-            .userId(1)
-            .email("")
             .build();
     }
 }
