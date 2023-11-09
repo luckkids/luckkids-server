@@ -10,6 +10,7 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
@@ -86,6 +88,9 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         missionRepository.save(mission);
         MissionOutcome savedMissionOutcome = missionOutcomeRepository.save(missionOutcome);
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user.getId()));
+
         // when
         missionOutcomeService.updateMissionOutcome(savedMissionOutcome.getId(), SUCCEED);
 
@@ -99,6 +104,32 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트하고 결과를 확인한다.")
+    @Test
+    void updateMissionOutcomeStatusByIdAndVerifyResult() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
+
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user.getId()));
+
+        // when
+        int count1 = missionOutcomeService.updateMissionOutcome(missionOutcome1.getId(), SUCCEED);
+        int count2 = missionOutcomeService.updateMissionOutcome(missionOutcome2.getId(), SUCCEED);
+
+        // then
+        assertThat(count1).isEqualTo(1);
+        assertThat(count2).isEqualTo(2);
+    }
+
     @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트 할 때 id가 없으면 예외가 발생한다.")
     @Test
     void updateMissionOutcomeWithException() {
@@ -109,8 +140,6 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> missionOutcomeService.updateMissionOutcome(missionOutcomeId, SUCCEED))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 미션결과는 없습니다. id = " + missionOutcomeId);
-
-
     }
 
     @DisplayName("삭제할 id를 받아서 미션결과를 삭제한다.")
@@ -157,6 +186,13 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             .mission(mission)
             .missionDate(missionDate)
             .missionStatus(FAILED)
+            .build();
+    }
+
+    private UserInfo createUserInfo(int userId) {
+        return UserInfo.builder()
+            .userId(userId)
+            .email("")
             .build();
     }
 }

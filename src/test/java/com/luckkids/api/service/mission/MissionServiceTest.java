@@ -6,20 +6,19 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
-import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -28,6 +27,7 @@ import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 class MissionServiceTest extends IntegrationTestSupport {
 
@@ -61,6 +61,9 @@ class MissionServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         missionRepository.save(mission);
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user.getId()));
+
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
@@ -68,7 +71,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        MissionResponse missionResponse = missionService.createMission(request, user.getId());
+        MissionResponse missionResponse = missionService.createMission(request);
 
         // then
         assertThat(missionResponse)
@@ -90,6 +93,9 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         int userId = 1;
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(userId));
+
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
@@ -97,7 +103,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
 
         // when // then
-        assertThatThrownBy(() -> missionService.createMission(request, userId))
+        assertThatThrownBy(() -> missionService.createMission(request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 유저는 없습니다. id = " + userId);
     }
@@ -113,6 +119,9 @@ class MissionServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         missionRepository.save(mission);
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user.getId()));
+
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
@@ -120,7 +129,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
 
         // when
-        MissionResponse createdMission = missionService.createMission(request, user.getId());
+        MissionResponse createdMission = missionService.createMission(request);
 
         // then
         List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
@@ -238,11 +247,10 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate, MissionStatus missionStatus) {
-        return MissionOutcome.builder()
-            .mission(mission)
-            .missionDate(missionDate)
-            .missionStatus(missionStatus)
+    private UserInfo createUserInfo(int userId) {
+        return UserInfo.builder()
+            .userId(userId)
+            .email("")
             .build();
     }
 }

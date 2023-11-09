@@ -5,6 +5,7 @@ import com.luckkids.api.event.missionOutcome.MissionOutcomeDeleteEvent;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -25,10 +26,12 @@ public class MissionService {
 
     private final MissionReadService missionReadService;
     private final UserReadService userReadService;
+    private final SecurityService securityService;
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public MissionResponse createMission(MissionCreateServiceRequest request, int userId) {
+    public MissionResponse createMission(MissionCreateServiceRequest request) {
+        int userId = securityService.getCurrentUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
 
         Mission mission = request.toEntity(user);
