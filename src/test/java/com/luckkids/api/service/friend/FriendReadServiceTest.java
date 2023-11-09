@@ -32,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
-
 @Transactional
 public class FriendReadServiceTest extends IntegrationTestSupport {
 
@@ -57,6 +56,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         friendRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
+
 
     @DisplayName("친구의 프로필을 조회한다.")
     @Test
@@ -272,23 +272,23 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             );
     }
 
-    UserPhrase createPhrase(User user){
+    void createPhrase(User user){
         UserPhrase userPhrase = UserPhrase.builder()
             .user(user)
             .phraseDescription("행운입니다.")
             .build();
 
-        return userPhraseRepository.save(userPhrase);
+        userPhraseRepository.save(userPhrase);
     }
 
-    Friend createFriend(User requester, User receiver){
+    void createFriend(User requester, User receiver){
         Friend friend = Friend.builder()
             .requester(requester)
             .receiver(receiver)
             .friendStatus(FriendStatus.ACCEPTED)
             .build();
 
-        return friendRepository.save(friend);
+        friendRepository.save(friend);
     }
 
     User createUser(int i){

@@ -7,6 +7,7 @@ import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.domain.friends.FriendRepository;
+import com.luckkids.domain.friends.projection.FriendProfileReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +26,7 @@ public class FriendReadService {
     }
 
     public FriendProfileReadResponse readProfile(int friendId){
-        FriendProfileReadResponse friendProfileReadServiceResponse = friendRepository.readProfile(friendId);
-        Optional.ofNullable(friendProfileReadServiceResponse).orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN));
-        return friendProfileReadServiceResponse;
+        return Optional.ofNullable(friendRepository.readProfile(friendId).toServiceResponse())
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN));
     }
 }

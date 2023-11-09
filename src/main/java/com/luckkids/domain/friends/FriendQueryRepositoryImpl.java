@@ -4,6 +4,7 @@ import com.luckkids.api.service.friend.response.FriendListReadResponse;
 import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.domain.friends.projection.FriendListReadDto;
+import com.luckkids.domain.friends.projection.FriendProfileReadDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -70,9 +71,9 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository{
     }
 
     @Override
-    public FriendProfileReadResponse readProfile(int friendId) {
+    public FriendProfileReadDto readProfile(int friendId) {
         return queryFactory
-            .select(Projections.bean(FriendProfileReadResponse.class,
+            .select(Projections.constructor(FriendProfileReadDto.class,
                 userPhrase.phraseDescription.as("phraseDescription"),
                 userCharacter.fileName.as("fileUrl"),
                 userCharacter.characterName.as("characterName"),
