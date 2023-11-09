@@ -32,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
-@Transactional
 public class FriendReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -157,39 +156,14 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 첫번째 페이지")
     @Test
     void readListFriendFirstPaging(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
-        User user3 = createUser(3);
-        User user4 = createUser(4);
-        User user5 = createUser(5);
-        User user6 = createUser(6);
-        User user7 = createUser(7);
-        User user8 = createUser(8);
-        User user9 = createUser(9);
-        User user10 = createUser(10);
-        User user11 = createUser(11);
-        User user12 = createUser(12);
-        User user13 = createUser(13);
-
-        createFriend(user1, user2);
-        createFriend(user1, user3);
-        createFriend(user1, user4);
-        createFriend(user1, user5);
-        createFriend(user1, user6);
-        createFriend(user1, user7);
-        createFriend(user1, user8);
-        createFriend(user1, user9);
-        createFriend(user1, user10);
-        createFriend(user1, user11);
-        createFriend(user1, user12);
-        createFriend(user1, user13);
+        int userId = createManyUser();
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(1)
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(userId, pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -220,39 +194,14 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 두번째 페이지")
     @Test
     void readListFriendSecondPaging(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
-        User user3 = createUser(3);
-        User user4 = createUser(4);
-        User user5 = createUser(5);
-        User user6 = createUser(6);
-        User user7 = createUser(7);
-        User user8 = createUser(8);
-        User user9 = createUser(9);
-        User user10 = createUser(10);
-        User user11 = createUser(11);
-        User user12 = createUser(12);
-        User user13 = createUser(13);
-
-        createFriend(user1, user2);
-        createFriend(user1, user3);
-        createFriend(user1, user4);
-        createFriend(user1, user5);
-        createFriend(user1, user6);
-        createFriend(user1, user7);
-        createFriend(user1, user8);
-        createFriend(user1, user9);
-        createFriend(user1, user10);
-        createFriend(user1, user11);
-        createFriend(user1, user12);
-        createFriend(user1, user13);
+        int userId = createManyUser();
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(2)
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(userId, pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -314,5 +263,14 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         user.changeClover(clover);
 
         return userRepository.save(user);
+    }
+
+    int createManyUser(){
+        User user1 = createUser(1);
+        for(int i=2; i<=13; i++){
+            User user = createUser(i);
+            createFriend(user1, user);
+        }
+        return user1.getId();
     }
 }
