@@ -15,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
+import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -39,8 +42,8 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
-        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
 
         userRepository.save(user);
         missionRepository.save(mission);
@@ -58,7 +61,7 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25));
+        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
 
         userRepository.save(user);
         missionRepository.save(mission);
@@ -69,6 +72,27 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionOutcomeRepository.findAll()).hasSize(0).isEmpty();
+    }
+
+    @DisplayName("해당 유저의 성공한 미션의 수를 조회한다.")
+    @Test
+    void countSuccessfulMissionsByUserId() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27), FAILED);
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
+
+        // when
+        int count = missionOutcomeRepository.countSuccessfulMissionsByUserId(user.getId());
+
+        // then
+        assertThat(count).isEqualTo(2);
     }
 
     private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
@@ -89,11 +113,11 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
             .build();
     }
 
-    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate) {
+    private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate, MissionStatus missionStatus) {
         return MissionOutcome.builder()
             .mission(mission)
             .missionDate(missionDate)
-            .missionStatus(FAILED)
+            .missionStatus(ofNullable(missionStatus).orElse(FAILED))
             .build();
     }
 

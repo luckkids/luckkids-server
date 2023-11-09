@@ -24,11 +24,11 @@ public class MissionOutcomeService {
         missionOutcomeRepository.save(missionOutcome);
     }
 
-    public Long updateMissionOutcome(Long missionOutcomeId, MissionStatus missionStatus) {
+    public int updateMissionOutcome(Long missionOutcomeId, MissionStatus missionStatus) {
         MissionOutcome missionOutcome = missionOutcomeReadService.findByOne(missionOutcomeId);
         missionOutcome.updateMissionStatus(missionStatus);
 
-        return missionOutcomeId;
+        return missionOutcomeReadService.countUserSuccessfulMissions();
     }
 
     public void deleteMissionOutcome(int missionId, LocalDate missionDate) {

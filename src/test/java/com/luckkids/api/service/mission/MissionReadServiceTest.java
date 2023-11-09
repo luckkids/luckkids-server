@@ -9,6 +9,7 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import java.util.List;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 class MissionReadServiceTest extends IntegrationTestSupport {
 
@@ -51,8 +53,11 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user1.getId()));
+
         // when
-        List<MissionResponse> missions = missionReadService.getMission(user1.getId());
+        List<MissionResponse> missions = missionReadService.getMission();
 
         // then
         assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
@@ -75,8 +80,11 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user2.getId()));
+
         // when
-        List<MissionResponse> missions = missionReadService.getMission(user2.getId());
+        List<MissionResponse> missions = missionReadService.getMission();
 
         // then
         assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
@@ -136,4 +144,10 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
+    private UserInfo createUserInfo(int userId) {
+        return UserInfo.builder()
+            .userId(userId)
+            .email("")
+            .build();
+    }
 }
