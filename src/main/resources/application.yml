@@ -18,7 +18,7 @@ jwt:
   secret-key: ${jwt_key}
 
 slack:
-  webhook-url: ${slack_webhook-url}
+  webhook-url: ${slack_webhook_url}
 
 ---
 spring:
