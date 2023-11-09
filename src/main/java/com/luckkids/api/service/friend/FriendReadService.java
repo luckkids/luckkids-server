@@ -26,7 +26,7 @@ public class FriendReadService {
     }
 
     public FriendProfileReadResponse readProfile(int friendId){
-        return Optional.ofNullable(friendRepository.readProfile(friendId).toServiceResponse())
-            .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN));
+        return Optional.ofNullable(friendRepository.readProfile(friendId))
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN)).toServiceResponse();
     }
 }
