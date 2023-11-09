@@ -36,11 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendControllerDocsTest extends RestDocsSupport {
 
     private final FriendReadService friendReadService = mock(FriendReadService.class);
-    private final SecurityService securityService = mock(SecurityService.class);
 
     @Override
     protected Object initController() {
-        return new FriendController(friendReadService, securityService);
+        return new FriendController(friendReadService);
     }
 
     @DisplayName("친구랭킹목록 API")
@@ -74,10 +73,7 @@ public class FriendControllerDocsTest extends RestDocsSupport {
             .pageInfo(pageableCustom)
             .build();
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo());
-
-        given(friendReadService.readListFriend(anyInt(),any(PageInfoServiceRequest.class)))
+        given(friendReadService.readListFriend(any(PageInfoServiceRequest.class)))
             .willReturn(pageCustom);
 
         // when // then

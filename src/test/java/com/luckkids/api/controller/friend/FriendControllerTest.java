@@ -23,9 +23,6 @@ public class FriendControllerTest extends ControllerTestSupport {
     void readList() throws Exception {
         // given
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo());
-
         // when // then
         mockMvc.perform(
                 get("/api/v1/friend/list")

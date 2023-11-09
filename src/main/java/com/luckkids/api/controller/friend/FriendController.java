@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.*;
 public class FriendController {
 
     private final FriendReadService friendReadService;
-    private final SecurityService securityService;
 
     @GetMapping("/list")
     public ApiResponse<PageCustom<FriendListReadResponse>> readListFriend(PageInfoRequest page){
-        int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.ok(friendReadService.readListFriend(userId, page.toServiceRequest()));
+        return ApiResponse.ok(friendReadService.readListFriend(page.toServiceRequest()));
     }
 
     @GetMapping("/profile/{friendId}")

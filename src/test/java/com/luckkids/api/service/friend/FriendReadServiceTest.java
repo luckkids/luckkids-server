@@ -7,6 +7,7 @@ import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.userPhrase.UserPhrase;
 import com.luckkids.domain.userPhrase.UserPhraseRepository;
 import com.luckkids.domain.clover.Clover;
@@ -20,6 +21,7 @@ import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
+import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
+import static org.mockito.BDDMockito.given;
 
 public class FriendReadServiceTest extends IntegrationTestSupport {
 
@@ -46,6 +49,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
     FriendReadService friendReadService;
     @Autowired
     UserPhraseRepository userPhraseRepository;
+    @Autowired
+    SecurityService securityService;
 
     @AfterEach
     void tearDown() {
@@ -105,7 +110,10 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user1.getId(), pageDto);
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user1.getId()));
+
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -129,6 +137,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         User user1 = createUser(1);
         User user2 = createUser(2);
         User user3 = createUser(3);
+        User user4 = createUser(4);
 
         createFriend(user1, user2);
         createFriend(user1, user3);
@@ -139,7 +148,10 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(user3.getId(), pageDto);
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user4.getId()));
+
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -163,7 +175,10 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(userId, pageDto);
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(userId));
+
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -201,7 +216,10 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(userId, pageDto);
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(userId));
+
+        PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
@@ -272,5 +290,12 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             createFriend(user1, user);
         }
         return user1.getId();
+    }
+
+    private UserInfo createUserInfo(int userId) {
+        return UserInfo.builder()
+            .userId(userId)
+            .email("")
+            .build();
     }
 }

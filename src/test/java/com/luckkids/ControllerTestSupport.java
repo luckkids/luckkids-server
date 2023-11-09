@@ -61,9 +61,6 @@ public abstract class ControllerTestSupport {
     protected FriendReadService friendReadService;
 
     @MockBean
-    protected SecurityService securityService;
-
-    @MockBean
     protected MissionOutcomeService missionOutcomeService;
 
     @MockBean
