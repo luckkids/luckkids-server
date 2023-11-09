@@ -23,8 +23,6 @@ class ErrorNotifierTest extends IntegrationTestSupport {
 
         // then
         System.out.println("슬랙 보내기 성공!");
-
-
     }
 
 }
