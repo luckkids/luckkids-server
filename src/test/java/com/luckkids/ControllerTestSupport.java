@@ -1,6 +1,7 @@
 package com.luckkids;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
@@ -61,5 +62,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected MissionOutcomeReadService missionOutcomeReadService;
+
+    @MockBean
+    protected ErrorNotifier errorNotifier;
 }
 
