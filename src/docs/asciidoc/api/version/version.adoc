@@ -1,24 +1,24 @@
-[[versioin-find]]
+[[versioin-get]]
 === 버전조회 API
 
 ==== HTTP Request
 
-include::{snippets}/version-find/http-request.adoc[]
+include::{snippets}/version-get/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/version-find/http-response.adoc[]
-include::{snippets}/version-find/response-fields.adoc[]
+include::{snippets}/version-get/http-response.adoc[]
+include::{snippets}/version-get/response-fields.adoc[]
 
-[[version-save]]
+[[version-create]]
 === 버전 저장 API (추후 버전 등록할 때 따로 사용)
 
 ==== HTTP Request
 
-include::{snippets}/version-save/http-request.adoc[]
-include::{snippets}/version-save/request-fields.adoc[]
+include::{snippets}/version-create/http-request.adoc[]
+include::{snippets}/version-create/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/version-save/http-response.adoc[]
-include::{snippets}/version-save/response-fields.adoc[]
+include::{snippets}/version-create/http-response.adoc[]
+include::{snippets}/version-create/response-fields.adoc[]

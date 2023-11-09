@@ -56,9 +56,8 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/notice/list")
+                get("/api/v1/notices/")
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
@@ -101,13 +100,12 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/notice/{id}",1)
+                get("/api/v1/notices/{id}",1)
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("notice-detail",
+            .andDo(document("notice-get",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 pathParameters(
@@ -157,14 +155,13 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notice/save")
+                post("/api/v1/notices/new")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isCreated())
-            .andDo(document("notice-save",
+            .andDo(document("notice-create",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(

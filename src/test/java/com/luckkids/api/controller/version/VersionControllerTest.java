@@ -26,7 +26,7 @@ class VersionControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/version/")
+                get("/api/v1/versions/")
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -48,7 +48,7 @@ class VersionControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/version/save")
+                post("/api/v1/versions/new")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -70,7 +70,7 @@ class VersionControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/version/save")
+                post("/api/v1/versions/new")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

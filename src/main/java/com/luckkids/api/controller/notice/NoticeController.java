@@ -28,14 +28,14 @@ public class NoticeController {
         return ApiResponse.ok(noticeReadService.getNotice(id));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ApiResponse<List<NoticeResponse>> getNoticeList(){
         return ApiResponse.ok(noticeReadService.getNoticeList());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/save")
-    public ApiResponse<NoticeSaveResponse> saveNotice(@Valid @RequestBody NoticeSaveRequest noticeSaveRequest){
+    @PostMapping("/new")
+    public ApiResponse<NoticeSaveResponse> createNotice(@Valid @RequestBody NoticeSaveRequest noticeSaveRequest){
         return ApiResponse.created(noticeService.saveNotice(noticeSaveRequest.toServiceRequest()));
     }
 }

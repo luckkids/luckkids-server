@@ -52,13 +52,12 @@ public class VersionControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/version/")
+                get("/api/v1/versions/")
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("version-find",
+            .andDo(document("version-get",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(
@@ -78,7 +77,7 @@ public class VersionControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("공지사항을 등록하는 API")
+    @DisplayName("버전을 등록하는 API")
     @Test
     @WithMockUser(roles = "USER")
     void saveVersion() throws Exception {
@@ -97,14 +96,13 @@ public class VersionControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/version/save")
+                post("/api/v1/versions/new")
                     .content(objectMapper.writeValueAsString(versionSaveRequest))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isCreated())
-            .andDo(document("version-save",
+            .andDo(document("version-create",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
