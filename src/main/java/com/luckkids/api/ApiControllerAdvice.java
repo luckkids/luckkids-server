@@ -2,6 +2,7 @@ package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.jwt.exception.JwtTokenException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -9,9 +10,28 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ApiControllerAdvice {
+
+    private final ErrorNotifier errorNotifier;
+
+    /**
+     * 예상치 못한 서버로직에러 발생시 처리
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<Object> exception(Exception e) throws IOException {
+        errorNotifier.sendErrorToSlack(e);
+        return ApiResponse.of(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "서버 로직 에러",
+            null
+        );
+    }
 
     /**
      * validation Exception
@@ -23,19 +43,6 @@ public class ApiControllerAdvice {
             HttpStatus.BAD_REQUEST,
             e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
             null
-        );
-    }
-
-    /**
-     * 예상치 못한 서버로직에러 발생시 처리
-     */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ApiResponse<Object> exception(Exception e) {
-        return ApiResponse.of(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "서버 로직 에러",
-            e.getMessage()
         );
     }
 

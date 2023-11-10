@@ -54,7 +54,6 @@ public class MailControllerDocsTest extends RestDocsSupport {
                 post("/api/v1/mail/send")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())

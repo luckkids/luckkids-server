@@ -3,7 +3,6 @@ spring:
     default: local
 
   mail:
-    # Google smtp server 사용
     host: smtp.gmail.com
     port: 587
     username: nav104888@gmail.com
@@ -17,6 +16,9 @@ spring:
 
 jwt:
   secret-key: ${jwt_key}
+
+slack:
+  webhook-url: ${slack_webhook_url}
 
 ---
 spring:
@@ -56,7 +58,7 @@ spring:
     url: jdbc:h2:mem:~/luckKids;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
-    password: 
+    password:
 
   jpa:
     hibernate:

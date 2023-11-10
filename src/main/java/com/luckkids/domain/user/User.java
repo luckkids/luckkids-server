@@ -5,6 +5,7 @@ import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
+import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.jwt.dto.JwtToken;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -38,24 +39,33 @@ public class User extends BaseTimeEntity {
 
     private String phoneNumber;
 
+    private int missionCount;
+
+    private String luckPharase;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
     private SettingStatus settingStatus;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Push> pushes = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserCharacter userCharacter;
+
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, int missionCount, String luckPharase, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = encryptPassword(password);
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
+        this.missionCount = missionCount;
+        this.luckPharase = luckPharase;
         this.role = role;
         this.settingStatus = settingStatus;
     }
@@ -122,4 +132,19 @@ public class User extends BaseTimeEntity {
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }
+    public void changeUserCharacter(UserCharacter userCharacter){
+        this.userCharacter = userCharacter;
+        userCharacter.changeUser(this);
+    }
+
+    /**
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<Mission> missions = new ArrayList<>();
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<MissionComplete> missionCompletes = new ArrayList<>();
+     * @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
+     * private List<Friend> friends = new ArrayList<>();
+     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     * private List<AlertHistory> alertHistories = new ArrayList<>();
+     **/
 }

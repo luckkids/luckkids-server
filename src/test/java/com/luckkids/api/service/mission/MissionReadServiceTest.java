@@ -1,6 +1,7 @@
 package com.luckkids.api.service.mission;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
