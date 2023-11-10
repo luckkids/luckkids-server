@@ -1,6 +1,7 @@
 package com.luckkids.api.controller.alertSetting;
 
 import com.luckkids.ControllerTestSupport;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.misson.AlertStatus;
@@ -23,10 +24,14 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void getAlertSetting() throws Exception {
         // given
+        AlertSettingRequest request = AlertSettingRequest.builder()
+            .deviceId("testdeviceId")
+            .build();
 
         // when // then
         mockMvc.perform(
                 get("/api/v1/alertSetting/")
+                    .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
             )
@@ -37,7 +42,30 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("알림설정")
+    @DisplayName("알림세팅조회시 디바이스ID는 필수이다.")
+    @Test
+    @WithMockUser("USER")
+    void getAlertSettingWithoutDeviceId() throws Exception {
+        // given
+        AlertSettingRequest request = AlertSettingRequest.builder()
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/alertSetting/")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."))
+            .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("알림설정 수정")
     @Test
     @WithMockUser("USER")
     void updateAlertSetting() throws Exception {
@@ -45,6 +73,7 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
         AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
             .alertType(AlertType.ENTIRE)
             .alertStatus(AlertStatus.CHECKED)
+            .deviceId("testdevice")
             .build();
 
         // when // then
@@ -62,13 +91,14 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("알림설정시 알림타입은 필수이다.")
+    @DisplayName("알림설정 수정시 알림타입은 필수이다.")
     @Test
     @WithMockUser("USER")
     void updateAlertSettingWithoutType() throws Exception {
         // given
         AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
             .alertStatus(AlertStatus.CHECKED)
+            .deviceId("testdevice")
             .build();
 
         // when // then
@@ -87,6 +117,32 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
+    @DisplayName("알림설정 수정시 디바이스ID는 필수이다.")
+    @Test
+    @WithMockUser("USER")
+    void updateAlertSettingWithoutDeviceId() throws Exception {
+        // given
+        AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
+            .alertType(AlertType.ENTIRE)
+            .alertStatus(AlertStatus.CHECKED)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                patch("/api/v1/alertSetting/update")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."))
+            .andExpect(jsonPath("$.data").isEmpty());
+    }
+
     @DisplayName("알림설정시 알림설정여부는 필수이다.")
     @Test
     @WithMockUser("USER")
@@ -94,6 +150,7 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
         // given
         AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
             .alertType(AlertType.ENTIRE)
+            .deviceId("testDevice")
             .build();
 
         // when // then

@@ -1,9 +1,11 @@
 package com.luckkids.docs.alertSetting;
 
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
@@ -43,7 +45,11 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void getAlertSetting() throws Exception {
         // given
-        given(alertSettingReadService.getAlertSetting())
+        AlertSettingRequest request = AlertSettingRequest.builder()
+            .deviceId("testdeviceId")
+            .build();
+
+        given(alertSettingReadService.getAlertSetting(any(AlertSettingServiceRequest.class)))
             .willReturn(
                 AlertSettingResponse.builder()
                     .id(1)
@@ -57,6 +63,8 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/alertSetting/")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
@@ -93,6 +101,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
         AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
                 .alertType(AlertType.ENTIRE)
                 .alertStatus(AlertStatus.UNCHECKED)
+                .deviceId("testDeviceId")
                 .build();
         // given
         given(alertSettingService.updateAlertSetting(any(AlertSettingUpdateServiceRequest.class)))
@@ -120,7 +129,9 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("alertType").type(JsonFieldType.STRING)
                         .description("알림타입 가능한 값: "+Arrays.toString(AlertType.values())),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
-                        .description("알림여부")
+                        .description("알림여부"),
+                    fieldWithPath("deviceId").type(JsonFieldType.STRING)
+                        .description("디바이스ID")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
