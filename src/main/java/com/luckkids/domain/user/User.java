@@ -136,15 +136,4 @@ public class User extends BaseTimeEntity {
         this.userCharacter = userCharacter;
         userCharacter.changeUser(this);
     }
-
-    /**
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<Mission> missions = new ArrayList<>();
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<MissionComplete> missionCompletes = new ArrayList<>();
-     * @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
-     * private List<Friend> friends = new ArrayList<>();
-     * @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-     * private List<AlertHistory> alertHistories = new ArrayList<>();
-     **/
 }
