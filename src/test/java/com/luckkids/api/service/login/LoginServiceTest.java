@@ -200,12 +200,14 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .deviceId("testdeviceId")
+            .pushKey("testPushKey")
             .build();
 
         LoginServiceRequest request2 = LoginServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
             .deviceId("testdeviceId")
+            .pushKey("testPushKey2")
             .build();
 
         // when
