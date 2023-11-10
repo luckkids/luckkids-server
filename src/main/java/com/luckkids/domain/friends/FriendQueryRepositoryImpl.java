@@ -1,7 +1,6 @@
 package com.luckkids.domain.friends;
 
 import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.domain.friends.projection.FriendListReadDto;
 import com.luckkids.domain.friends.projection.FriendProfileReadDto;
@@ -16,8 +15,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.luckkids.domain.userPhrase.QUserPhrase.userPhrase;
-import static com.luckkids.domain.clover.QClover.clover;
 import static com.luckkids.domain.friends.QFriend.friend;
 import static com.luckkids.domain.user.QUser.user;
 import static com.luckkids.domain.userCharacter.QUserCharacter.userCharacter;
