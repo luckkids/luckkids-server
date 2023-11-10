@@ -10,9 +10,11 @@ import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AlertSettingService {
 
     private final AlertSettingRepository alertSettingRepository;
