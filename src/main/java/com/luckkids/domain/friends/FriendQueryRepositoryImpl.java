@@ -35,17 +35,16 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository{
                 friend.receiver.id,
                 userCharacter.characterName,
                 userCharacter.fileName,
-                clover.count
+                user.missionCount
             ))
             .from(friend)
             .join(friend.receiver, user)
-            .join(user.clover, clover)
             .join(user.userCharacter, userCharacter)
             .where(
                 friend.friendStatus.eq(FriendStatus.ACCEPTED)
                     .and(friend.requester.id.eq(userId))
             )
-            .orderBy(clover.count.desc())
+            .orderBy(user.missionCount.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -56,7 +55,6 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository{
             )
             .from(friend)
             .join(friend.receiver, user)
-            .join(user.clover, clover)
             .join(user.userCharacter, userCharacter)
             .where(
                 friend.friendStatus.eq(FriendStatus.ACCEPTED)
@@ -74,13 +72,12 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository{
     public FriendProfileReadDto readProfile(int friendId) {
         return queryFactory
             .select(Projections.constructor(FriendProfileReadDto.class,
-                userPhrase.phraseDescription.as("phraseDescription"),
+                user.luckPharase.as("phraseDescription"),
                 userCharacter.fileName.as("fileUrl"),
                 userCharacter.characterName.as("characterName"),
                 userCharacter.level.as("level")
                 ))
             .from(user)
-            .join(user.userPhrase, userPhrase)
             .join(user.userCharacter, userCharacter)
             .where(user.id.eq(friendId))
             .fetchOne();

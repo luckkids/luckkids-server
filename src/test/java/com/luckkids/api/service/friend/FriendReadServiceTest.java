@@ -8,10 +8,6 @@ import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
 import com.luckkids.api.service.security.SecurityService;
-import com.luckkids.domain.userPhrase.UserPhrase;
-import com.luckkids.domain.userPhrase.UserPhraseRepository;
-import com.luckkids.domain.clover.Clover;
-import com.luckkids.domain.clover.CloverRepository;
 import com.luckkids.domain.friends.Friend;
 import com.luckkids.domain.friends.FriendRepository;
 import com.luckkids.domain.friends.FriendStatus;
@@ -26,7 +22,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,20 +37,14 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
     @Autowired
     FriendRepository friendRepository;
     @Autowired
-    CloverRepository cloverRepository;
-    @Autowired
     UserCharacterRepository userCharacterRepository;
     @Autowired
     FriendReadService friendReadService;
-    @Autowired
-    UserPhraseRepository userPhraseRepository;
     @Autowired
     SecurityService securityService;
 
     @AfterEach
     void tearDown() {
-        userPhraseRepository.deleteAllInBatch();
-        cloverRepository.deleteAllInBatch();
         userCharacterRepository.deleteAllInBatch();
         friendRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
@@ -69,7 +58,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         User user2 = createUser(2);
 
         createFriend(user1, user2);
-        createPhrase(user2);
 
         FriendProfileReadResponse response = friendReadService.readProfile(user2.getId());
 
@@ -87,7 +75,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         User user2 = createUser(2);
 
         createFriend(user1, user2);
-        createPhrase(user2);
 
         assertThatThrownBy(() -> friendReadService.readProfile(3))
             .isInstanceOf(LuckKidsException.class)
@@ -119,7 +106,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         PageableCustom pageableCustom = response.getPageInfo();
 
         assertThat(responseList).hasSize(2)
-            .extracting("characterName", "fileUrl", "cloverCount")
+            .extracting("characterName", "fileUrl", "missionCount")
             .containsExactlyInAnyOrder(
                 tuple("character2", "file2", 2),
                 tuple("character3", "file3", 3)
@@ -185,7 +172,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
 
         // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(10)
-            .extracting("characterName", "fileUrl", "cloverCount")
+            .extracting("characterName", "fileUrl", "missionCount")
             .containsExactlyInAnyOrder(
                 tuple("character13", "file13", 13),
                 tuple("character12", "file12", 12),
@@ -226,7 +213,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
 
         // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(2)
-            .extracting("characterName", "fileUrl", "cloverCount")
+            .extracting("characterName", "fileUrl", "missionCount")
             .containsExactlyInAnyOrder(
                 tuple("character3", "file3", 3),
                 tuple("character2", "file2", 2)
@@ -237,15 +224,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 2,2,12L
             );
-    }
-
-    void createPhrase(User user){
-        UserPhrase userPhrase = UserPhrase.builder()
-            .user(user)
-            .phraseDescription("행운입니다.")
-            .build();
-
-        userPhraseRepository.save(userPhrase);
     }
 
     void createFriend(User requester, User receiver){
@@ -263,6 +241,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .email("test"+i)
             .password("1234")
             .phoneNumber("01064091048")
+            .missionCount(i)
+            .luckPharase("행운입니다.")
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .build();
@@ -273,12 +253,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .level(i)
             .build();
 
-        Clover clover = Clover.builder()
-            .count(i)
-            .build();
-
         user.changeUserCharacter(userCharacter);
-        user.changeClover(clover);
 
         return userRepository.save(user);
     }

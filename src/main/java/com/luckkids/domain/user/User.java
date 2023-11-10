@@ -3,12 +3,10 @@ package com.luckkids.domain.user;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.userPhrase.UserPhrase;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
-import com.luckkids.jwt.dto.JwtToken;
-import com.luckkids.domain.clover.Clover;
 import com.luckkids.domain.userCharacter.UserCharacter;
+import com.luckkids.jwt.dto.JwtToken;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +39,10 @@ public class User extends BaseTimeEntity {
 
     private String phoneNumber;
 
+    private int missionCount;
+
+    private String luckPharase;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -54,20 +56,16 @@ public class User extends BaseTimeEntity {
     private List<Push> pushes = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Clover clover;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserCharacter userCharacter;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private UserPhrase userPhrase;
-
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, int missionCount, String luckPharase, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = encryptPassword(password);
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
+        this.missionCount = missionCount;
+        this.luckPharase = luckPharase;
         this.role = role;
         this.settingStatus = settingStatus;
     }
@@ -137,16 +135,6 @@ public class User extends BaseTimeEntity {
     public void changeUserCharacter(UserCharacter userCharacter){
         this.userCharacter = userCharacter;
         userCharacter.changeUser(this);
-    }
-
-    public void changeClover(Clover clover){
-        this.clover = clover;
-        clover.changeUser(this);
-    }
-
-    public void changePhrase(UserPhrase userPhrase){
-        this.userPhrase = userPhrase;
-        userPhrase.changeUser(this);
     }
 
     /**

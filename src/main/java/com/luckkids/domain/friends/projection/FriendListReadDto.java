@@ -6,14 +6,14 @@ public record FriendListReadDto(
         int friendId,
         String characterName,
         String fileUrl,
-        int cloverCount) {
+        int missionCount) {
 
     public FriendListReadResponse toServiceResponse(){
         return FriendListReadResponse.builder()
                 .friendId(friendId)
                 .characterName(characterName)
                 .fileUrl(fileUrl)
-                .cloverCount(cloverCount)
+                .missionCount(missionCount)
                 .build();
     }
 }

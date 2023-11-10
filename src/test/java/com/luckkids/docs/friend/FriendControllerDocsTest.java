@@ -52,13 +52,13 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                 .friendId(1)
                 .characterName("캐릭터이름1")
                 .fileUrl("http://example.com/file1")
-                .cloverCount(10)
+                .missionCount(10)
                 .build(),
             FriendListReadResponse.builder()
                 .friendId(2)
                 .characterName("캐릭터이름2")
                 .fileUrl("http://example.com/file2")
-                .cloverCount(20)
+                .missionCount(20)
                 .build()
         );
 
@@ -110,8 +110,8 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("캐릭터이름"),
                     fieldWithPath("data.content[].fileUrl").type(JsonFieldType.STRING)
                         .description("캐릭터 파일"),
-                    fieldWithPath("data.content[].cloverCount").type(JsonFieldType.NUMBER)
-                        .description("클로버갯수"),
+                    fieldWithPath("data.content[].missionCount").type(JsonFieldType.NUMBER)
+                        .description("미션갯수"),
                     fieldWithPath("data.pageInfo.currentPage").type(JsonFieldType.NUMBER)
                         .description("현재페이지"),
                     fieldWithPath("data.pageInfo.totalPages").type(JsonFieldType.NUMBER)

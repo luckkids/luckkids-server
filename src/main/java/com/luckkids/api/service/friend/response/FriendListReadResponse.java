@@ -11,13 +11,13 @@ public class FriendListReadResponse {
     private int friendId;
     private String characterName;
     private String fileUrl;
-    private int cloverCount;
+    private int missionCount;
 
     @Builder
-    private FriendListReadResponse(int friendId, String characterName, String fileUrl, int cloverCount) {
+    private FriendListReadResponse(int friendId, String characterName, String fileUrl, int missionCount) {
         this.friendId = friendId;
         this.characterName = characterName;
         this.fileUrl = fileUrl;
-        this.cloverCount = cloverCount;
+        this.missionCount = missionCount;
     }
 }
