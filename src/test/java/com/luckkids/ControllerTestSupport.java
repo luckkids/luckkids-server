@@ -8,6 +8,8 @@ import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
+import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
@@ -17,7 +19,12 @@ import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
+import com.luckkids.api.service.notice.NoticeReadService;
+import com.luckkids.api.service.notice.NoticeService;
 import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.api.service.version.VersionReadService;
+import com.luckkids.api.service.version.VersionService;
+import org.mockito.Mock;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +37,8 @@ import org.springframework.test.web.servlet.MockMvc;
     JoinController.class,
     MailController.class,
     MissionOutcomeController.class,
+    VersionController.class,
+    NoticeController.class,
     FriendController.class
 })
 public abstract class ControllerTestSupport {
@@ -64,6 +73,18 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected MissionOutcomeService missionOutcomeService;
 
+    @MockBean
+    protected VersionReadService versionReadService;
+
+    @MockBean
+    protected VersionService versionService;
+
+    @MockBean
+    protected NoticeReadService noticeReadService;
+
+    @MockBean
+    protected NoticeService noticeService;
+  
     @MockBean
     protected EntityManager entityManager;
 

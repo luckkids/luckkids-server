@@ -1,5 +1,6 @@
 package com.luckkids.domain.push;
 
+import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Push {
+public class Push extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
