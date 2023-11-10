@@ -6,7 +6,6 @@ import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
-import com.luckkids.api.service.security.SecurityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
