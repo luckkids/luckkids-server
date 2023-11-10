@@ -60,7 +60,7 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository{
 
         return PageableExecutionUtils.getPage(
                 results.stream()
-                        .map(dto -> dto.toServiceResponse())
+                        .map(FriendListReadDto::toServiceResponse)
                         .collect(Collectors.toList())
                , pageable, totalQuery::fetchOne);
     }

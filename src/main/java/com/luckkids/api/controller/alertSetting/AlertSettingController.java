@@ -3,7 +3,9 @@ package com.luckkids.api.controller.alertSetting;
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
+import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
+import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.api.service.security.SecurityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,18 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/alertSetting")
 public class AlertSettingController {
 
-    private final SecurityService securityService;
     private final AlertSettingReadService alertSettingReadService;
+    private final AlertSettingService alertSettingService;
 
-    @GetMapping("/find")
-    public ApiResponse<AlertSettingResponse> find(){
-        int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.ok(alertSettingReadService.find(userId));
+    @GetMapping("/")
+    public ApiResponse<AlertSettingResponse> getAlertSetting(){
+        return ApiResponse.ok(alertSettingReadService.getAlertSetting());
     }
 
     @PatchMapping("/update")
-    public ApiResponse<AlertSettingResponse> update(@RequestBody @Valid AlertSettingUpdateRequest alertSettingUpdateRequest){
-        int userId = securityService.getCurrentUserInfo().getUserId();
-        return ApiResponse.ok(alertSettingReadService.update(alertSettingUpdateRequest.toServiceRequest(), userId));
+    public ApiResponse<AlertSettingUpdateResponse> updateAlertSetting(@RequestBody @Valid AlertSettingUpdateRequest alertSettingUpdateRequest){
+        return ApiResponse.ok(alertSettingService.updateAlertSetting(alertSettingUpdateRequest.toServiceRequest()));
     }
 }
