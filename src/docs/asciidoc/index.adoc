@@ -33,3 +33,7 @@ include::api/join/joinUser.adoc[]
 
 include::api/mail/sendMail.adoc[]
 
+[[Friend-API]]
+== Friend API
+include::api/friend/friend.adoc[]
+

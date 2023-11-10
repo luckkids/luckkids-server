@@ -57,7 +57,6 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                 post("/api/v1/auth/login")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
-                    .with(csrf())
             )
             .andDo(print())
             .andExpect(status().isOk())

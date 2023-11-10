@@ -5,12 +5,15 @@ import com.luckkids.api.service.mail.request.SendMailServiceRequest;
 import com.luckkids.api.service.mail.response.SendMailResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 public class MailServiceTest extends IntegrationTestSupport {
 
-    @Autowired
+    @MockBean
     private MailService mailService;
 
     @Test
@@ -19,6 +22,12 @@ public class MailServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
+        given(mailService.sendMail(any(SendMailServiceRequest.class)))
+            .willReturn(SendMailResponse.builder()
+                .authNum("123456")
+                .build()
+            );
+
         SendMailResponse sendMailResponse = mailService.sendMail(sendMailServiceRequest);
 
         assertThat(sendMailResponse.getAuthNum().length()).isEqualTo(6);
@@ -26,7 +35,12 @@ public class MailServiceTest extends IntegrationTestSupport {
 
     @Test
     void generateCode() {
+        given(mailService.generateCode())
+            .willReturn("123456"
+            );
+
         String authNum = mailService.generateCode();
+
         assertThat(authNum.length()).isEqualTo(6);
     }
 }

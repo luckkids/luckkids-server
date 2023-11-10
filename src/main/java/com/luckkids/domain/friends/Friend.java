@@ -4,6 +4,7 @@ import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,11 @@ public class Friend extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private FriendStatus friendStatus;
+
+    @Builder
+    private Friend(User requester, User receiver, FriendStatus friendStatus) {
+        this.requester = requester;
+        this.receiver = receiver;
+        this.friendStatus = friendStatus;
+    }
 }
