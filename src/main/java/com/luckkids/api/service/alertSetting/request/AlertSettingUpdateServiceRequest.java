@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 public class AlertSettingUpdateServiceRequest {
     private AlertType alertType;
     private AlertStatus alertStatus;
+    private String deviceId;
 
     @Builder
-    public AlertSettingUpdateServiceRequest(AlertType alertType, AlertStatus alertStatus) {
+    public AlertSettingUpdateServiceRequest(AlertType alertType, AlertStatus alertStatus, String deviceId) {
         this.alertType = alertType;
         this.alertStatus = alertStatus;
+        this.deviceId = deviceId;
     }
 }

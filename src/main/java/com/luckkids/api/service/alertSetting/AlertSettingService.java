@@ -21,7 +21,7 @@ public class AlertSettingService {
     private final UserReadService userReadService;
 
     public AlertSettingUpdateResponse updateAlertSetting(AlertSettingUpdateServiceRequest request){
-        AlertSetting alertSetting = alertSettingReadService.findOneByUserId();
+        AlertSetting alertSetting = alertSettingReadService.findOneByUserIdAndDeviceId(request.getDeviceId());
         alertSetting.update(request.getAlertType(), request.getAlertStatus());
         return AlertSettingUpdateResponse.of(alertSetting);
     }

@@ -2,6 +2,7 @@ package com.luckkids.api.service.alertSetting;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.security.SecurityService;
@@ -28,7 +29,13 @@ public class AlertSettingReadService {
             .orElseThrow(() -> new LuckKidsException(ErrorCode.ALERT_SETTING_UNKNOWN));
     }
 
-    public AlertSettingResponse getAlertSetting(){
-        return AlertSettingResponse.of(findOneByUserId());
+    public AlertSetting findOneByUserIdAndDeviceId(String deviceId){
+        int userId = securityService.getCurrentUserInfo().getUserId();
+        return alertSettingRepository.findByUserIdAndDeviceId(userId,deviceId)
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.ALERT_SETTING_UNKNOWN));
+    }
+
+    public AlertSettingResponse getAlertSetting(AlertSettingServiceRequest alertSettingServiceRequest){
+        return AlertSettingResponse.of(findOneByUserIdAndDeviceId(alertSettingServiceRequest.getDeviceId()));
     }
 }

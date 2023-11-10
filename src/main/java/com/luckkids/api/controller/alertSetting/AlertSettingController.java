@@ -1,6 +1,7 @@
 package com.luckkids.api.controller.alertSetting;
 
 import com.luckkids.api.ApiResponse;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
@@ -8,6 +9,7 @@ import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Bag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +21,8 @@ public class AlertSettingController {
     private final AlertSettingService alertSettingService;
 
     @GetMapping("/")
-    public ApiResponse<AlertSettingResponse> getAlertSetting(){
-        return ApiResponse.ok(alertSettingReadService.getAlertSetting());
+    public ApiResponse<AlertSettingResponse> getAlertSetting(@RequestBody @Valid AlertSettingRequest alertSettingRequest){
+        return ApiResponse.ok(alertSettingReadService.getAlertSetting(alertSettingRequest.toServiceRequest()));
     }
 
     @PatchMapping("/update")

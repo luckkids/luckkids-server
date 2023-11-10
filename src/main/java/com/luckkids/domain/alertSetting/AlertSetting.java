@@ -18,6 +18,7 @@ public class AlertSetting extends BaseTimeEntity {
     private int id;
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+    private String deviceId;
     @Enumerated(EnumType.STRING)
     private AlertStatus entire;
     @Enumerated(EnumType.STRING)
@@ -28,8 +29,9 @@ public class AlertSetting extends BaseTimeEntity {
     private AlertStatus notice;
 
     @Builder
-    private AlertSetting(User user, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+    private AlertSetting(User user, String deviceId, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
         this.user = user;
+        this.deviceId = deviceId;
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
