@@ -93,7 +93,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @DisplayName("회원가입시 비밀번호가 단방향 암호화가 되었는지 체크한다.")
     @Test
-    void JoinTestWithEncryptPasssword(){
+    void JoinTestWithEncryptPassword() {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")

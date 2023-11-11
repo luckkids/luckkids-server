@@ -1,7 +1,6 @@
 package com.luckkids.api.service.mission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
@@ -109,7 +108,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission result = missionReadService.findByOne(savedMission.getId());
 
         // then
-        assertThat(result).extracting("missionDescription", "alertStatus", "alertTime")
+        assertThat(result).extracting("description", "alertStatus", "alertTime")
             .containsExactly("운동하기", UNCHECKED, LocalTime.of(19, 0));
 
     }
