@@ -29,7 +29,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
     @Test
     void findByOne() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         User savedUser = userRepository.save(user);
         int userId = savedUser.getId();
 
@@ -38,8 +38,8 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result)
-            .extracting("email", "password", "snsType", "phoneNumber")
-            .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO, "010-1111-1111");
+            .extracting("email", "password", "snsType")
+            .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO);
 
     }
 
@@ -56,12 +56,11 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 }

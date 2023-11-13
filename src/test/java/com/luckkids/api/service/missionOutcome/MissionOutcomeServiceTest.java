@@ -53,7 +53,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Transactional
     void createMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
 
         userRepository.save(user);
@@ -80,7 +80,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void updateMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
@@ -108,7 +108,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void updateMissionOutcomeStatusByIdAndVerifyResult() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
@@ -146,7 +146,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void deleteMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
@@ -163,12 +163,11 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 
