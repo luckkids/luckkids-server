@@ -24,13 +24,13 @@ import static org.mockito.BDDMockito.given;
 
 public class AlertSettingServiceTest extends IntegrationTestSupport {
     @Autowired
-    AlertSettingRepository alertSettingRepository;
+    private AlertSettingRepository alertSettingRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    AlertSettingService alertSettingService;
+    private AlertSettingService alertSettingService;
     @Autowired
-    SecurityService securityService;
+    private SecurityService securityService;
 
     @AfterEach
     void tearDown() {

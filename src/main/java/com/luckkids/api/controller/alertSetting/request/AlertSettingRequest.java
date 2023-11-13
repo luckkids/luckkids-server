@@ -14,7 +14,7 @@ public class AlertSettingRequest {
     private String deviceId;
 
     @Builder
-    public AlertSettingRequest(String deviceId) {
+    private AlertSettingRequest(String deviceId) {
         this.deviceId = deviceId;
     }
 
