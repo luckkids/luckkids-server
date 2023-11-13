@@ -14,20 +14,17 @@ public class JoinServiceRequest {
 
     private String email;
     private String password;
-    private String phoneNumber;
 
     @Builder
-    private JoinServiceRequest(String email, String password, String phoneNumber) {
+    private JoinServiceRequest(String email, String password) {
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
     }
 
     public User toEntity(){
         return User.builder()
             .email(email)
             .password(encryptPassword())
-            .phoneNumber(phoneNumber)
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .settingStatus(SettingStatus.INCOMPLETE)

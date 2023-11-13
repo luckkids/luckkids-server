@@ -53,7 +53,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
         User user = User.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .build();
@@ -73,7 +72,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);
@@ -81,12 +79,10 @@ public class JoinServiceTest extends IntegrationTestSupport {
         assertThat(response)
             .extracting(
                 "email",
-                "phoneNumber",
                 "snsType"
             )
             .contains(
                 joinServiceRequest.getEmail(),
-                joinServiceRequest.getPhoneNumber(),
                 SnsType.NORMAL
             );
     }
@@ -97,7 +93,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);

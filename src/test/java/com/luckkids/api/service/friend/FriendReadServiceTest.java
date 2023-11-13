@@ -240,7 +240,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         User user = User.builder()
             .email("test"+i)
             .password("1234")
-            .phoneNumber("01064091048")
             .missionCount(i)
             .luckPharase("행운입니다.")
             .snsType(SnsType.NORMAL)
