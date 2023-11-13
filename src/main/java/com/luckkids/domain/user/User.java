@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
 
     private int missionCount;
 
-    private String luckPharase;
+    private String luckPhrases;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -59,13 +59,13 @@ public class User extends BaseTimeEntity {
     private UserCharacter userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber, int missionCount, String luckPharase, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, String phoneNumber, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = encryptPassword(password);
         this.snsType = snsType;
         this.phoneNumber = phoneNumber;
         this.missionCount = missionCount;
-        this.luckPharase = luckPharase;
+        this.luckPhrases = luckPhrases;
         this.role = role;
         this.settingStatus = settingStatus;
     }
@@ -132,7 +132,8 @@ public class User extends BaseTimeEntity {
             throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
         }
     }
-    public void changeUserCharacter(UserCharacter userCharacter){
+
+    public void changeUserCharacter(UserCharacter userCharacter) {
         this.userCharacter = userCharacter;
         userCharacter.changeUser(this);
     }

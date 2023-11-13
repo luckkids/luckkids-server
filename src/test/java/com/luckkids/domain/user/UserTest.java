@@ -20,15 +20,17 @@ import static org.assertj.core.api.Assertions.tuple;
 public class UserTest extends IntegrationTestSupport {
 
     @Autowired
-    PushRepository pushRepository;
+    private PushRepository pushRepository;
+
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
     @Autowired
-    RefreshTokenRepository refreshTokenRepository;
+    private RefreshTokenRepository refreshTokenRepository;
 
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
-    void checkPushAndUpdate(){
+    void checkPushAndUpdate() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -59,13 +61,13 @@ public class UserTest extends IntegrationTestSupport {
         assertThat(getPush)
             .extracting("pushToken", "deviceId")
             .containsExactlyInAnyOrder(
-               "testPushKey2", "testDeviceId"
+                "testPushKey2", "testDeviceId"
             );
     }
 
     @DisplayName("같은 deviceid로 저장되어있는 pushkey가 없을 시 저장한다.")
     @Test
-    void checkPushAndSave(){
+    void checkPushAndSave() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -93,7 +95,7 @@ public class UserTest extends IntegrationTestSupport {
 
     @DisplayName("같은 deviceid로 저장되어있는 refreshToken과 상이한 데이터가 들어올시 저장한다.")
     @Test
-    void checkRefreshTokenAndUpdate(){
+    void checkRefreshTokenAndUpdate() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -137,7 +139,7 @@ public class UserTest extends IntegrationTestSupport {
 
     @DisplayName("같은 deviceid로 저장되어있는 refreshToken가 없을 시 저장한다.")
     @Test
-    void checkRefreshTokenAndSave(){
+    void checkRefreshTokenAndSave() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")

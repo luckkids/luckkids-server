@@ -26,13 +26,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class LoginServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    LoginService loginService;
+    private LoginService loginService;
+
     @Autowired
-    RefreshTokenRepository refreshTokenRepository;
+    private RefreshTokenRepository refreshTokenRepository;
+
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
     @Autowired
-    PushRepository pushRepository;
+    private PushRepository pushRepository;
 
     @AfterEach
     void tearDown() {
@@ -43,7 +46,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일반으로 등록된 사용자가 있을 경우 일반 로그인을 한다.")
     @Test
-    void normalLoginIfUserExist() throws JsonProcessingException{
+    void normalLoginIfUserExist() throws JsonProcessingException {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -56,7 +59,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email(savedUser.getEmail())
-                .password("1234")
+            .password("1234")
             .deviceId("asdfasdfasdfsadfsf")
             .build();
 
@@ -71,7 +74,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("SNS로 등록된 사용자가 있을 경우 일반 로그인이 되지 않는다.")
     @Test
-    void normalLoginIfSnsUserExist(){
+    void normalLoginIfSnsUserExist() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -97,7 +100,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("등록된 사용자가 없을 경우 일반 로그인을 할 시 예외를 발생시킨다.")
     @Test
-    void normalLoginIfUserNotExist(){
+    void normalLoginIfUserNotExist() {
         // given
         LoginServiceRequest request = LoginServiceRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -114,7 +117,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일반 로그인시 비밀번호가 틀렸을 경우 예외를 발생시킨다.")
     @Test
-    void normalLoginIncorrectPassword(){
+    void normalLoginIncorrectPassword() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -174,11 +177,11 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(refreshTokens).hasSize(2)
-                .extracting("refreshToken")
-                .containsExactlyInAnyOrder(
-                        loginResponse1.getRefreshToken(),
-                        loginResponse2.getRefreshToken()
-                );
+            .extracting("refreshToken")
+            .containsExactlyInAnyOrder(
+                loginResponse1.getRefreshToken(),
+                loginResponse2.getRefreshToken()
+            );
         assertThat(pushes.size()).isEqualTo(2);
     }
 
@@ -218,10 +221,10 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(refreshTokens).hasSize(1)
-                .extracting("deviceId")
-                .containsExactlyInAnyOrder(
+            .extracting("deviceId")
+            .containsExactlyInAnyOrder(
                 "testdeviceId"
-                );
+            );
         assertThat(pushes).hasSize(1)
             .extracting("deviceId")
             .containsExactlyInAnyOrder(
@@ -232,7 +235,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @DisplayName("비밀번호 암호화 테스트")
     @Test
     @Transactional
-    void encryptPassword(){
+    void encryptPassword() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
