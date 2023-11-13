@@ -1,13 +1,14 @@
 package com.luckkids.domain.friends;
 
-import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
-import com.luckkids.api.service.request.PageInfoServiceRequest;
+import com.luckkids.domain.friends.projection.FriendListDto;
 import com.luckkids.domain.friends.projection.FriendProfileReadDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FriendQueryRepository {
 
-    public Page<FriendListReadResponse> readListFriend(int userId, PageInfoServiceRequest page);
-    public FriendProfileReadDto readProfile(int friendId);
+    Page<FriendListDto> getFriendsList(int userId, Pageable pageable);
+
+    FriendProfileReadDto readProfile(int friendId);
+
 }

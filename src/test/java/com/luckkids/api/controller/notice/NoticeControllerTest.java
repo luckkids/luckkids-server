@@ -2,7 +2,6 @@ package com.luckkids.api.controller.notice;
 
 import com.luckkids.ControllerTestSupport;
 import com.luckkids.api.controller.notice.request.NoticeSaveRequest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,11 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class NoticeControllerTest extends ControllerTestSupport {
-
-    @BeforeEach
-    void setNotice(){
-
-    }
 
     @DisplayName("공지사항 목록을 조회한다.")
     @Test
@@ -49,7 +43,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/notices/{id}",1)
+                get("/api/v1/notices/{id}", 1)
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )

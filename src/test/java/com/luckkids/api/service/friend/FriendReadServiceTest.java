@@ -23,7 +23,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,15 +35,19 @@ import static org.mockito.BDDMockito.given;
 public class FriendReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
     @Autowired
-    FriendRepository friendRepository;
+    private FriendRepository friendRepository;
+
     @Autowired
-    UserCharacterRepository userCharacterRepository;
+    private UserCharacterRepository userCharacterRepository;
+
     @Autowired
-    FriendReadService friendReadService;
+    private FriendReadService friendReadService;
+
     @Autowired
-    SecurityService securityService;
+    private SecurityService securityService;
 
     @AfterEach
     void tearDown() {
@@ -50,17 +56,31 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         userRepository.deleteAllInBatch();
     }
 
-
     @DisplayName("친구의 프로필을 조회한다.")
     @Test
-    void readProfile(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
+    void readProfile() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
 
-        createFriend(user1, user2);
+        IntStream.rangeClosed(1, 2).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
 
-        FriendProfileReadResponse response = friendReadService.readProfile(user2.getId());
+            users.add(user);
+            userCharacters.add(userCharacter);
+        });
 
+        Friend friend = createFriend(users.get(0), users.get(1));
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.save(friend);
+
+        // when
+        FriendProfileReadResponse response = friendReadService.readProfile(users.get(1).getId());
+
+        // then
         assertThat(response)
             .extracting("phraseDescription", "fileUrl", "characterName", "level")
             .containsExactlyInAnyOrder(
@@ -70,12 +90,26 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지않는 사용자친구의 프로필을 조회시 예외를 발생시킨다.")
     @Test
-    void readProfileWithoutFriend(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
+    void readProfileWithoutFriend() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
 
-        createFriend(user1, user2);
+        IntStream.rangeClosed(1, 2).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
 
+            users.add(user);
+            userCharacters.add(userCharacter);
+        });
+
+        Friend friend = createFriend(users.get(0), users.get(1));
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.save(friend);
+
+        // when // then
         assertThatThrownBy(() -> friendReadService.readProfile(3))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("친구가 존재하지 않습니다.");
@@ -83,14 +117,27 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 친구 랭킹리스트를 조회한다.")
     @Test
-    void readListFriend(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
-        User user3 = createUser(3);
+    void readListFriend() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
+        List<Friend> friends = new ArrayList<>();
 
-        createFriend(user1, user2);
-        createFriend(user1, user3);
-        createFriend(user2, user3);
+        IntStream.rangeClosed(1, 3).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
+
+            users.add(user);
+            userCharacters.add(userCharacter);
+        });
+
+        friends.add(createFriend(users.get(0), users.get(1)));
+        friends.add(createFriend(users.get(0), users.get(2)));
+        friends.add(createFriend(users.get(1), users.get(2)));
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.saveAll(friends);
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(1)
@@ -98,10 +145,12 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user1.getId()));
+            .willReturn(createUserInfo(users.get(0).getId()));
 
+        // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
+        // then
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
@@ -114,21 +163,33 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         assertThat(pageableCustom)
             .extracting("currentPage", "totalPages", "totalElements")
             .containsExactlyInAnyOrder(
-                1,1,2L
+                1, 1, 2L
             );
     }
 
     @DisplayName("사용자의 친구가 없을 시 빈리스트를 반환한다.")
     @Test
-    void readListWithoutFriend(){
-        User user1 = createUser(1);
-        User user2 = createUser(2);
-        User user3 = createUser(3);
-        User user4 = createUser(4);
+    void readListWithoutFriend() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
+        List<Friend> friends = new ArrayList<>();
 
-        createFriend(user1, user2);
-        createFriend(user1, user3);
-        createFriend(user2, user3);
+        IntStream.rangeClosed(1, 4).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
+
+            users.add(user);
+            userCharacters.add(userCharacter);
+        });
+
+        friends.add(createFriend(users.get(0), users.get(1)));
+        friends.add(createFriend(users.get(0), users.get(2)));
+        friends.add(createFriend(users.get(1), users.get(2)));
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.saveAll(friends);
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(1)
@@ -136,10 +197,12 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user4.getId()));
+            .willReturn(createUserInfo(users.get(3).getId()));
 
+        // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
+        // then
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
@@ -148,14 +211,34 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         assertThat(pageableCustom)
             .extracting("currentPage", "totalPages", "totalElements")
             .containsExactlyInAnyOrder(
-                1,0,0L
+                1, 0, 0L
             );
     }
 
     @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 첫번째 페이지")
     @Test
-    void readListFriendFirstPaging(){
-        int userId = createManyUser();
+    void readListFriendFirstPaging() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
+        List<Friend> friends = new ArrayList<>();
+
+        User user1 = createUser(1);
+        users.add(user1);
+
+        IntStream.rangeClosed(2, 13).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
+            Friend friend = createFriend(user1, user);
+
+            users.add(user);
+            userCharacters.add(userCharacter);
+            friends.add(friend);
+        });
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.saveAll(friends);
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(1)
@@ -163,14 +246,15 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(userId));
+            .willReturn(createUserInfo(user1.getId()));
 
+        // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
+        // then
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
-        // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(10)
             .extracting("characterName", "fileUrl", "missionCount")
             .containsExactlyInAnyOrder(
@@ -189,14 +273,34 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         assertThat(pageableCustom)
             .extracting("currentPage", "totalPages", "totalElements")
             .containsExactlyInAnyOrder(
-                1,2,12L
+                1, 2, 12L
             );
     }
 
     @DisplayName("사용자의 친구가 많을 시 페이징 처리를 한다. 두번째 페이지")
     @Test
-    void readListFriendSecondPaging(){
-        int userId = createManyUser();
+    void readListFriendSecondPaging() {
+        // given
+        List<User> users = new ArrayList<>();
+        List<UserCharacter> userCharacters = new ArrayList<>();
+        List<Friend> friends = new ArrayList<>();
+
+        User user1 = createUser(1);
+        users.add(user1);
+
+        IntStream.rangeClosed(2, 13).forEach(i -> {
+            User user = createUser(i);
+            UserCharacter userCharacter = createUserCharacter(user, i);
+            Friend friend = createFriend(user1, user);
+
+            users.add(user);
+            userCharacters.add(userCharacter);
+            friends.add(friend);
+        });
+
+        userRepository.saveAll(users);
+        userCharacterRepository.saveAll(userCharacters);
+        friendRepository.saveAll(friends);
 
         PageInfoServiceRequest pageDto = PageInfoServiceRequest.builder()
             .page(2)
@@ -204,14 +308,15 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(userId));
+            .willReturn(createUserInfo(user1.getId()));
 
+        // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
 
+        // then
         List<FriendListReadResponse> responseList = response.getContent();
         PageableCustom pageableCustom = response.getPageInfo();
 
-        // Clover갯수순으로 내림차순 정렬
         assertThat(responseList).hasSize(2)
             .extracting("characterName", "fileUrl", "missionCount")
             .containsExactlyInAnyOrder(
@@ -222,48 +327,36 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         assertThat(pageableCustom)
             .extracting("currentPage", "totalPages", "totalElements")
             .containsExactlyInAnyOrder(
-                2,2,12L
+                2, 2, 12L
             );
     }
 
-    void createFriend(User requester, User receiver){
-        Friend friend = Friend.builder()
+    private User createUser(int i) {
+        return User.builder()
+            .email("test" + i)
+            .password("1234")
+            .missionCount(i)
+            .luckPhrases("행운입니다.")
+            .snsType(SnsType.NORMAL)
+            .role(Role.USER)
+            .build();
+    }
+
+    private UserCharacter createUserCharacter(User user, int i) {
+        return UserCharacter.builder()
+            .user(user)
+            .characterName("character" + i)
+            .fileName("file" + i)
+            .level(i)
+            .build();
+    }
+
+    private Friend createFriend(User requester, User receiver) {
+        return Friend.builder()
             .requester(requester)
             .receiver(receiver)
             .friendStatus(FriendStatus.ACCEPTED)
             .build();
-
-        friendRepository.save(friend);
-    }
-
-    User createUser(int i){
-        User user = User.builder()
-            .email("test"+i)
-            .password("1234")
-            .missionCount(i)
-            .luckPharase("행운입니다.")
-            .snsType(SnsType.NORMAL)
-            .role(Role.USER)
-            .build();
-
-        UserCharacter userCharacter = UserCharacter.builder()
-            .characterName("character"+i)
-            .fileName("file"+i)
-            .level(i)
-            .build();
-
-        user.changeUserCharacter(userCharacter);
-
-        return userRepository.save(user);
-    }
-
-    int createManyUser(){
-        User user1 = createUser(1);
-        for(int i=2; i<=13; i++){
-            User user = createUser(i);
-            createFriend(user1, user);
-        }
-        return user1.getId();
     }
 
     private UserInfo createUserInfo(int userId) {

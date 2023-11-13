@@ -2,14 +2,15 @@ package com.luckkids.api.controller.friend;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.request.PageInfoRequest;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
-import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.security.SecurityService;
-import jakarta.validation.Valid;
+import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
+import com.luckkids.api.service.response.PageCustom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,12 +20,12 @@ public class FriendController {
     private final FriendReadService friendReadService;
 
     @GetMapping("/list")
-    public ApiResponse<PageCustom<FriendListReadResponse>> readListFriend(PageInfoRequest page){
+    public ApiResponse<PageCustom<FriendListReadResponse>> readListFriend(PageInfoRequest page) {
         return ApiResponse.ok(friendReadService.readListFriend(page.toServiceRequest()));
     }
 
     @GetMapping("/profile/{friendId}")
-    public ApiResponse<FriendProfileReadResponse> profile(@PathVariable("friendId") int friendId){
+    public ApiResponse<FriendProfileReadResponse> profile(@PathVariable("friendId") int friendId) {
         return ApiResponse.ok(friendReadService.readProfile(friendId));
     }
 }

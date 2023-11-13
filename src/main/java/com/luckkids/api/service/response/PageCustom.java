@@ -1,6 +1,5 @@
 package com.luckkids.api.service.response;
 
-import com.luckkids.api.service.request.PageInfoServiceRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,15 +15,15 @@ public class PageCustom<T> implements Serializable {
     private PageableCustom pageInfo;
 
     @Builder
-    private  PageCustom (List<T> content, PageableCustom pageInfo) {
+    private PageCustom(List<T> content, PageableCustom pageInfo) {
         this.content = content;
         this.pageInfo = pageInfo;
     }
 
     public static <T> PageCustom<T> of(Page<T> page) {
         return PageCustom.<T>builder()
-                .content(page.getContent())
-                .pageInfo(PageableCustom.of(page))
-                .build();
+            .content(page.getContent())
+            .pageInfo(PageableCustom.of(page))
+            .build();
     }
 }

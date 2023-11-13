@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    UserReadService userReadService;
+    private UserReadService userReadService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @AfterEach
     void tearDown() {
@@ -38,8 +38,8 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result)
-            .extracting("email", "password", "snsType")
-            .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO);
+        .extracting("email", "password", "snsType")
+        .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO);
 
     }
 

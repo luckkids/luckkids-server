@@ -80,7 +80,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(2)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("description", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("운동하기", CHECKED, LocalTime.of(0, 0)),
                 tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
@@ -169,7 +169,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("description", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
             );
@@ -200,7 +200,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("description", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("책 읽기", UNCHECKED, LocalTime.of(0, 0))
             );
@@ -223,7 +223,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         assertThat(missionRepository.findAllByDeletedDateIsNull()).isEmpty();
 
         assertThat(missionRepository.findAll()).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime", "deletedDate")
+            .extracting("description", "alertStatus", "alertTime", "deletedDate")
             .containsExactlyInAnyOrder(
                 tuple("운동하기", UNCHECKED, LocalTime.of(0, 0), LocalDateTime.of(2023, 10, 31, 0, 0, 0))
             );
