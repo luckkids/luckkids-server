@@ -55,7 +55,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     @Transactional
     void findByOne() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), FAILED);
 
@@ -88,7 +88,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     @Test
     void getMissionDetailListForStatus() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
@@ -117,7 +117,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     @Test
     void countUserSuccessfulMissions() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
@@ -137,12 +137,11 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         assertThat(count).isEqualTo(2);
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 

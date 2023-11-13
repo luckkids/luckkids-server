@@ -10,14 +10,12 @@ public class JoinResponse {
 
     private int id;
     private String email;
-    private String phoneNumber;
     private SnsType snsType;
 
     @Builder
-    private JoinResponse(int id, String email, String phoneNumber, SnsType snsType){
+    private JoinResponse(int id, String email, SnsType snsType){
         this.id = id;
         this.email = email;
-        this.phoneNumber = phoneNumber;
         this.snsType = snsType;
     }
 
@@ -25,7 +23,6 @@ public class JoinResponse {
         return JoinResponse.builder()
             .id(user.getId())
             .email(user.getEmail())
-            .phoneNumber(user.getPhoneNumber())
             .snsType(user.getSnsType())
             .build();
     }

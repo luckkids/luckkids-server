@@ -40,7 +40,7 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
     @Test
     void isUniqueMissionIdAndMissionDate() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
@@ -59,7 +59,7 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
     @Test
     void deleteAllByMissionIdAndMissionDate() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), null);
 
@@ -78,7 +78,7 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
     @Test
     void countSuccessfulMissionsByUserId() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
@@ -95,12 +95,11 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         assertThat(count).isEqualTo(2);
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 

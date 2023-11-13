@@ -1,7 +1,6 @@
 package com.luckkids.api.service.mission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
@@ -44,8 +43,8 @@ class MissionReadServiceTest extends IntegrationTestSupport {
     @Test
     void getMission1() {
         // given
-        User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
-        User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO);
+        User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1_1 = createMission(user1, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
         Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
@@ -71,8 +70,8 @@ class MissionReadServiceTest extends IntegrationTestSupport {
     @Test
     void getMission2() {
         // given
-        User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
-        User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO);
+        User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1_1 = createMission(user1, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
         Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
@@ -99,7 +98,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
     @Test
     void findByOne() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
 
         userRepository.save(user);
@@ -109,7 +108,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission result = missionReadService.findByOne(savedMission.getId());
 
         // then
-        assertThat(result).extracting("missionDescription", "alertStatus", "alertTime")
+        assertThat(result).extracting("description", "alertStatus", "alertTime")
             .containsExactly("운동하기", UNCHECKED, LocalTime.of(19, 0));
 
     }
@@ -126,12 +125,11 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .hasMessage("해당 미션은 없습니다. id = " + missionId);
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 
