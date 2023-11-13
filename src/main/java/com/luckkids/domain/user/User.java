@@ -37,8 +37,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
 
-    private String phoneNumber;
-
     private int missionCount;
 
     private String luckPhrases;
@@ -59,11 +57,10 @@ public class User extends BaseTimeEntity {
     private UserCharacter userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, String phoneNumber, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
         this.email = email;
         this.password = encryptPassword(password);
         this.snsType = snsType;
-        this.phoneNumber = phoneNumber;
         this.missionCount = missionCount;
         this.luckPhrases = luckPhrases;
         this.role = role;

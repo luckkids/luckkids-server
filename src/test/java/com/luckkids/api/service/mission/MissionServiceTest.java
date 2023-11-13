@@ -55,7 +55,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Transactional
     void createMission() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
@@ -113,7 +113,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Transactional
     void createMissionWithEventPublication() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
@@ -146,7 +146,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Test
     void updateMission() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
@@ -179,7 +179,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Test
     void updateOneMission() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
@@ -210,7 +210,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     @Test
     void deleteMission() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
         userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
@@ -229,12 +229,11 @@ class MissionServiceTest extends IntegrationTestSupport {
             );
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 

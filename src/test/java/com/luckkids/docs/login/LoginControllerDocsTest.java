@@ -7,9 +7,12 @@ import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SettingStatus;
+import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -89,7 +92,7 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
                         .description("Refresh-Token"),
                     fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
-                        .description("미션 및 캐릭터 초기세팅여부")
+                        .description("미션 및 캐릭터 초기세팅여부. 가능한 값: "+ Arrays.toString(SettingStatus.values()))
                 )
             ));
     }

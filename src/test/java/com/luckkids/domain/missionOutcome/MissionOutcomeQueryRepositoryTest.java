@@ -43,7 +43,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     @Test
     void findMissionDetailsByStatus1() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
@@ -70,7 +70,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     @Test
     void findMissionDetailsByStatus2() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
@@ -90,12 +90,11 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
             .contains(tuple("책읽기", LocalTime.of(20, 0), SUCCEED));
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 

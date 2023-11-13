@@ -14,21 +14,17 @@ public class JoinRequest {
     private String email;
     @NotBlank(message = "비밀번호는 필수입니다.")
     private String password;
-    @NotBlank(message = "핸드폰번호는 필수입니다.")
-    private String phoneNumber;
 
     @Builder
-    private JoinRequest(String email, String password, String phoneNumber) {
+    private JoinRequest(String email, String password) {
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
     }
 
     public JoinServiceRequest toServiceRequest(){
         return JoinServiceRequest.builder()
                 .email(email)
                 .password(password)
-                .phoneNumber(phoneNumber)
                 .build();
     }
 }

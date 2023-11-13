@@ -52,7 +52,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
             .build();
 
         User savedUser = userRepository.save(user);
@@ -80,7 +79,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .snsType(SnsType.KAKAO)
-            .phoneNumber("01064091048")
             .build();
 
         User savedUser = userRepository.save(user);
@@ -123,7 +121,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
             .build();
 
         userRepository.save(user);
@@ -150,7 +147,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
             .build();
 
         userRepository.save(user);
@@ -194,7 +190,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("1234")
             .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
             .build();
 
         userRepository.save(user);
@@ -241,7 +236,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .email("tkdrl8908@naver.com")
             .password("testPassword")
             .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
             .build();
 
         // when

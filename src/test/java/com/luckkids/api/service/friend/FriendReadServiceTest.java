@@ -335,7 +335,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         return User.builder()
             .email("test" + i)
             .password("1234")
-            .phoneNumber("01064091048")
             .missionCount(i)
             .luckPhrases("행운입니다.")
             .snsType(SnsType.NORMAL)
