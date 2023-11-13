@@ -13,9 +13,6 @@ import static org.mockito.BDDMockito.given;
 
 public class MailServiceTest extends IntegrationTestSupport {
 
-    @MockBean
-    private MailService mailService;
-
     @Test
     void SendMailTest() {
         SendMailServiceRequest sendMailServiceRequest = SendMailServiceRequest.builder()
