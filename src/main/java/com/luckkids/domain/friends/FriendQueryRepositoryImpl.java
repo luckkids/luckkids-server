@@ -34,7 +34,10 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
             .from(friend)
             .join(friend.receiver, user)
             .leftJoin(user.userCharacter, userCharacter)
-            .where(getFriendshipCondition(userId))
+            .where(
+                isFriendStatusAccepted(),
+                isRequesterIdEqualTo(userId)
+            )
             .orderBy(user.missionCount.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -49,7 +52,7 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
     public FriendProfileReadDto readProfile(int friendId) {
         return queryFactory
             .select(Projections.constructor(FriendProfileReadDto.class,
-                user.luckPharase.as("phraseDescription"),
+                user.luckPhrases.as("phraseDescription"),
                 userCharacter.fileName.as("fileUrl"),
                 userCharacter.characterName.as("characterName"),
                 userCharacter.level.as("level")
@@ -65,13 +68,19 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
             queryFactory
                 .select(friend.count())
                 .from(friend)
-                .where(getFriendshipCondition(userId))
+                .where(
+                    isFriendStatusAccepted(),
+                    isRequesterIdEqualTo(userId)
+                )
                 .fetchOne()
         ).orElse(0L);
     }
 
-    private BooleanExpression getFriendshipCondition(int userId) {
-        return friend.friendStatus.eq(FriendStatus.ACCEPTED)
-            .and(friend.requester.id.eq(userId));
+    private BooleanExpression isFriendStatusAccepted() {
+        return friend.friendStatus.eq(FriendStatus.ACCEPTED);
+    }
+
+    private BooleanExpression isRequesterIdEqualTo(int userId) {
+        return friend.requester.id.eq(userId);
     }
 }
