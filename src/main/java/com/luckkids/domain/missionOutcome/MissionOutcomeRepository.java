@@ -16,5 +16,5 @@ public interface MissionOutcomeRepository extends JpaRepository<MissionOutcome, 
         "FROM MissionOutcome mo " +
         "WHERE mo.missionStatus = 'SUCCEED' " +
         "AND mo.mission.id IN (SELECT m.id FROM Mission m WHERE m.user.id = :userId)")
-    int countSuccessfulMissionsByUserId(@Param("userId") int userId);
+    int countSuccessfulMissionsByUserId(int userId);
 }

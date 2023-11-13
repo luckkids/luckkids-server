@@ -137,7 +137,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
-                        .description("로그인타입"+ Arrays.toString(SnsType.values()))
+                        .description("로그인타입. 가능한 값: "+ Arrays.toString(SnsType.values()))
                 )
             ));
     }

@@ -92,7 +92,7 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
                         .description("Refresh-Token"),
                     fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
-                        .description("미션 및 캐릭터 초기세팅여부"+ Arrays.toString(SettingStatus.values()))
+                        .description("미션 및 캐릭터 초기세팅여부. 가능한 값: "+ Arrays.toString(SettingStatus.values()))
                 )
             ));
     }
