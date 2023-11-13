@@ -14,10 +14,14 @@ public class UserCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+
     private int level;
+
     private String characterName;
+
     private String fileName;
 
     @Builder
@@ -28,7 +32,7 @@ public class UserCharacter {
         this.fileName = fileName;
     }
 
-    public void changeUser(User user){
+    public void changeUser(User user) {
         this.user = user;
     }
 }

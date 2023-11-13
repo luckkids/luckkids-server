@@ -7,7 +7,6 @@ import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
-import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +28,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,12 +84,12 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(
-                        parameterWithName("page")
-                                .description("페이지 기본값(1)")
-                                .optional(),
-                        parameterWithName("size")
-                                .description("페이지 사이즈 기본값(10)")
-                                .optional()
+                    parameterWithName("page")
+                        .description("페이지 기본값(1)")
+                        .optional(),
+                    parameterWithName("size")
+                        .description("페이지 사이즈 기본값(10)")
+                        .optional()
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -128,48 +126,48 @@ public class FriendControllerDocsTest extends RestDocsSupport {
     void readFriendProfile() throws Exception {
         // given
         given(friendReadService.readProfile(anyInt()))
-                .willReturn(FriendProfileReadResponse.builder()
-                        .phraseDescription("행운문구!!")
-                        .characterName("캐릭터이름")
-                        .level(10)
-                        .fileUrl("https://test.com/file")
-                        .build()
-                );
+            .willReturn(FriendProfileReadResponse.builder()
+                .phraseDescription("행운문구!!")
+                .characterName("캐릭터이름")
+                .level(10)
+                .fileUrl("https://test.com/file")
+                .build()
+            );
 
         // when // then
         mockMvc.perform(
-                    get("/api/v1/friend/profile/{friendId}",1)
-                            .contentType(APPLICATION_JSON)
-                            .accept(APPLICATION_JSON)
+                get("/api/v1/friend/profile/{friendId}", 1)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("friend-profile",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("friendId")
+                        .description("친구 ID")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.phraseDescription").type(JsonFieldType.STRING)
+                        .description("친구 행운문구"),
+                    fieldWithPath("data.fileUrl").type(JsonFieldType.STRING)
+                        .description("친구 캐릭터 파일URL"),
+                    fieldWithPath("data.characterName").type(JsonFieldType.STRING)
+                        .description("친구 캐릭터 명"),
+                    fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+                        .description("친구 레벨")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("friend-profile",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("friendId")
-                                        .description("친구 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메세지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.phraseDescription").type(JsonFieldType.STRING)
-                                        .description("친구 행운문구"),
-                                fieldWithPath("data.fileUrl").type(JsonFieldType.STRING)
-                                        .description("친구 캐릭터 파일URL"),
-                                fieldWithPath("data.characterName").type(JsonFieldType.STRING)
-                                        .description("친구 캐릭터 명"),
-                                fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-                                        .description("친구 레벨")
-                        )
-                ));
+            ));
     }
 
     private UserInfo createUserInfo() {

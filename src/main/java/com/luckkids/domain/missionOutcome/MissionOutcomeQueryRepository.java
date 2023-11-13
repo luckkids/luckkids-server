@@ -25,7 +25,7 @@ public class MissionOutcomeQueryRepository {
         JPAQuery<MissionOutcomeDetailDto> query = jpaQueryFactory
             .select(Projections.constructor(MissionOutcomeDetailDto.class,
                 missionOutcome.id,
-                mission.missionDescription,
+                mission.description,
                 mission.alertTime,
                 missionOutcome.missionStatus))
             .from(missionOutcome)

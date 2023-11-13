@@ -49,7 +49,6 @@ class JoinControllerTest extends ControllerTestSupport {
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         // when // then
@@ -74,7 +73,6 @@ class JoinControllerTest extends ControllerTestSupport {
         // given
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
-            .phoneNumber("01012341234")
             .build();
 
         // when // then
@@ -90,31 +88,6 @@ class JoinControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("비밀번호는 필수입니다."))
-            .andExpect(jsonPath("$.data").isEmpty());
-    }
-
-    @DisplayName("회원가입시 핸드폰번호는 필수이다.")
-    @Test
-    @WithMockUser(roles = "USER")
-    void joinUserWithoutPhoneNumber() throws Exception {
-        // given
-        JoinRequest request = JoinRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .build();
-
-        // when // then
-        mockMvc.perform(
-                post("/api/v1/join/user")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.statusCode").value("400"))
-            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("핸드폰번호는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
 }

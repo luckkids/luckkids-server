@@ -31,7 +31,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
     @Test
     void findAllByUserIdAndDeletedDateIsNull() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1 = createMission(user, "운동하기", CHECKED, LocalTime.of(19, 0), null);
         Mission mission2 = createMission(user, "책읽기", CHECKED, LocalTime.of(22, 0), null);
 
@@ -43,7 +43,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(missions).hasSize(2)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("description", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("운동하기", CHECKED, LocalTime.of(19, 0)),
                 tuple("책읽기", CHECKED, LocalTime.of(22, 0))
@@ -54,7 +54,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
     @Test
     void findByIdAndDeletedDateIsNull() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(19, 0), null);
 
         userRepository.save(user);
@@ -67,7 +67,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
         assertThat(foundMission)
             .isPresent()
             .hasValueSatisfying(m -> {
-                assertThat(m.getMissionDescription()).isEqualTo("운동하기");
+                assertThat(m.getDescription()).isEqualTo("운동하기");
                 assertThat(m.getAlertStatus()).isEqualTo(CHECKED);
                 assertThat(m.getAlertTime()).isEqualTo(LocalTime.of(19, 0));
                 assertThat(m.getDeletedDate()).isNull();
@@ -79,7 +79,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
     @Test
     void findAllByDeletedDateIsNull() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
         Mission mission1 = createMission(user, "운동하기", CHECKED, LocalTime.of(19, 0), LocalDateTime.of(2023, 10, 31, 0, 0, 0));
         Mission mission2 = createMission(user, "책읽기", CHECKED, LocalTime.of(22, 0), null);
 
@@ -91,16 +91,15 @@ class MissionRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime", "deletedDate")
+            .extracting("description", "alertStatus", "alertTime", "deletedDate")
             .containsExactly(tuple("책읽기", CHECKED, LocalTime.of(22, 0), null));
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 

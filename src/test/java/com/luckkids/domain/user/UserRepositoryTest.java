@@ -19,7 +19,7 @@ class UserRepositoryTest extends IntegrationTestSupport {
     void findByEmail() {
         // given
         String email = "user@daum.net";
-        User user = createUser(email, "user1234!", SnsType.KAKAO, "010-1111-1111");
+        User user = createUser(email, "user1234!", SnsType.KAKAO);
         userRepository.save(user);
 
         // when
@@ -30,12 +30,11 @@ class UserRepositoryTest extends IntegrationTestSupport {
 
     }
 
-    private User createUser(String email, String password, SnsType snsType, String phoneNumber) {
+    private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
-            .phoneNumber(phoneNumber)
             .build();
     }
 }

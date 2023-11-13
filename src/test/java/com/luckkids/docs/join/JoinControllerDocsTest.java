@@ -10,11 +10,14 @@ import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -93,14 +96,12 @@ public class JoinControllerDocsTest extends RestDocsSupport {
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         given(joinService.joinUser(any(JoinServiceRequest.class)))
             .willReturn(JoinResponse.builder()
                 .id(1)
                 .email("tkdrl8908@naver.com")
-                .phoneNumber("01012341234")
                 .snsType(SnsType.NORMAL)
                 .build()
             );
@@ -120,9 +121,7 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("email").type(JsonFieldType.STRING)
                         .description("이메일"),
                     fieldWithPath("password").type(JsonFieldType.STRING)
-                        .description("패스워드"),
-                    fieldWithPath("phoneNumber").type(JsonFieldType.STRING)
-                        .description("핸드폰 번호")
+                        .description("패스워드")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -137,10 +136,8 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                         .description("id"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일"),
-                    fieldWithPath("data.phoneNumber").type(JsonFieldType.STRING)
-                        .description("핸드폰번호"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
-                        .description("로그인타입")
+                        .description("로그인타입. 가능한 값: "+ Arrays.toString(SnsType.values()))
                 )
             ));
     }

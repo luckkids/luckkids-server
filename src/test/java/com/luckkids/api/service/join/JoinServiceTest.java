@@ -53,7 +53,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
         User user = User.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .build();
@@ -73,7 +72,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);
@@ -81,23 +79,20 @@ public class JoinServiceTest extends IntegrationTestSupport {
         assertThat(response)
             .extracting(
                 "email",
-                "phoneNumber",
                 "snsType"
             )
             .contains(
                 joinServiceRequest.getEmail(),
-                joinServiceRequest.getPhoneNumber(),
                 SnsType.NORMAL
             );
     }
 
     @DisplayName("회원가입시 비밀번호가 단방향 암호화가 되었는지 체크한다.")
     @Test
-    void JoinTestWithEncryptPasssword(){
+    void JoinTestWithEncryptPassword() {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
-            .phoneNumber("01012341234")
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);

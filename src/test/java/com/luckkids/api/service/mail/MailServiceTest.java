@@ -4,8 +4,6 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.mail.request.SendMailServiceRequest;
 import com.luckkids.api.service.mail.response.SendMailResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

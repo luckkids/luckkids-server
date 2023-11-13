@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class Mission extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private String missionDescription;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private AlertStatus alertStatus;
@@ -34,17 +35,20 @@ public class Mission extends BaseTimeEntity {
 
     private LocalDateTime deletedDate;
 
+    private LocalDate push_date;
+
     @Builder
-    private Mission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime deletedDate) {
+    private Mission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime deletedDate, LocalDate push_date) {
         this.user = user;
-        this.missionDescription = missionDescription;
+        this.description = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
         this.deletedDate = deletedDate;
+        this.push_date = push_date;
     }
 
     public Mission update(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
-        updateIfNonNull(missionDescription, it -> this.missionDescription = it);
+        updateIfNonNull(missionDescription, it -> this.description = it);
         updateIfNonNull(alertStatus, it -> this.alertStatus = it);
         updateIfNonNull(alertTime, it -> this.alertTime = it);
 
