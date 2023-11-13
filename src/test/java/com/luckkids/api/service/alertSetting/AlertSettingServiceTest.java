@@ -18,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.user.SnsType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -55,7 +57,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingUpdateResponse alertSettingUpdateResponse = alertSettingService.updateAlertSetting(alertSettingUpdateServiceRequest);
 
         assertThat(alertSettingUpdateResponse).extracting("entire","mission","notice","luck")
-            .contains(AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.UNCHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, AlertStatus.UNCHECKED);
     }
 
     @DisplayName("사용자의 알림설정을 등록한다.")
@@ -69,7 +71,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingResponse alertSettingResponse = alertSettingService.createAlertSetting();
 
         assertThat(alertSettingResponse).extracting("entire","mission","notice","luck")
-            .contains(AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("사용자의 알림설정을 등록시 사용자가 없다면 예외가 발생한다.")
@@ -88,18 +90,17 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
             User.builder()
                 .email("test"+i)
                 .password("password")
-                .snsType(SnsType.NORMAL)
-                .phoneNumber("01064091048")
+                .snsType(NORMAL)
                 .build());
     }
 
     private void createAlertSetting(User user){
         AlertSetting alertSetting = AlertSetting.builder()
             .user(user)
-            .entire(AlertStatus.CHECKED)
-            .mission(AlertStatus.CHECKED)
-            .notice(AlertStatus.CHECKED)
-            .luck(AlertStatus.CHECKED)
+            .entire(CHECKED)
+            .mission(CHECKED)
+            .notice(CHECKED)
+            .luck(CHECKED)
             .build();
 
         alertSettingRepository.save(alertSetting);

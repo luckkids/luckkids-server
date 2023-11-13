@@ -18,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.user.SnsType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -51,7 +53,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         AlertSetting alertSetting = alertSettingReadService.findOneByUserId();
 
         assertThat(alertSetting).extracting("entire","mission","notice","luck")
-            .contains(AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
@@ -77,7 +79,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         AlertSetting alertSetting = alertSettingReadService.findOneByUserIdAndDeviceId("testDeviceId");
 
         assertThat(alertSetting).extracting("entire","mission","notice","luck")
-            .contains(AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("userId와 deviceId로 AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
@@ -107,7 +109,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         AlertSettingResponse alertSettingResponse = alertSettingReadService.getAlertSetting(request);
 
         assertThat(alertSettingResponse).extracting("entire","mission","notice","luck")
-            .contains(AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("사용자의 기기가 아닌 DeviceId로 알림세팅을 조회시 예외가 발생한다.")
@@ -148,8 +150,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             User.builder()
             .email("test"+i)
             .password("password")
-            .snsType(SnsType.NORMAL)
-            .phoneNumber("01064091048")
+            .snsType(NORMAL)
             .build());
     }
 
@@ -157,10 +158,10 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         AlertSetting alertSetting = AlertSetting.builder()
             .user(user)
             .deviceId("testDeviceId")
-            .entire(AlertStatus.CHECKED)
-            .mission(AlertStatus.CHECKED)
-            .notice(AlertStatus.CHECKED)
-            .luck(AlertStatus.CHECKED)
+            .entire(CHECKED)
+            .mission(CHECKED)
+            .notice(CHECKED)
+            .luck(CHECKED)
             .build();
 
         alertSettingRepository.save(alertSetting);

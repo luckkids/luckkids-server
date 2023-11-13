@@ -8,4 +8,5 @@ public interface AlertSettingRepository extends JpaRepository<AlertSetting, Inte
 
     public Optional<AlertSetting> findByUserId(int userId);
     public Optional<AlertSetting> findByUserIdAndDeviceId(int userId, String deviceId);
+
 }
