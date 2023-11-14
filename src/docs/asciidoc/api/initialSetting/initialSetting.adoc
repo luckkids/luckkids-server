@@ -1,0 +1,12 @@
+[[create-initialSetting]]
+=== 초기세팅 저장
+
+==== HTTP Request
+
+include::{snippets}/create-initialSetting/http-request.adoc[]
+include::{snippets}/create-initialSetting/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/create-initialSetting/http-response.adoc[]
+include::{snippets}/create-initialSetting/response-fields.adoc[]
