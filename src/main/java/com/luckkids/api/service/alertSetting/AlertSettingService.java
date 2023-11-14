@@ -1,5 +1,6 @@
 package com.luckkids.api.service.alertSetting;
 
+import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
@@ -7,6 +8,7 @@ import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,10 @@ public class AlertSettingService {
         return AlertSettingUpdateResponse.of(alertSetting);
     }
 
-    public AlertSettingResponse createAlertSetting(){
+    public AlertSettingResponse createAlertSetting(AlertSettingCreateServiceRequest alertSettingCreateServiceRequest){
         int userId = securityService.getCurrentUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        AlertSetting savedAlertSetting = alertSettingRepository.save(AlertSetting.of(user));
+        AlertSetting savedAlertSetting = alertSettingRepository.save(AlertSetting.of(user, alertSettingCreateServiceRequest.getAlertStatus()));
         return AlertSettingResponse.of(savedAlertSetting);
     }
 }
