@@ -1,9 +1,10 @@
 package com.luckkids;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.friend.FriendController;
-import com.luckkids.api.ErrorNotifier;
+import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
@@ -14,6 +15,7 @@ import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.friend.FriendReadService;
+import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
@@ -24,10 +26,8 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
-import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
-import org.mockito.Mock;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,7 +43,8 @@ import org.springframework.test.web.servlet.MockMvc;
     VersionController.class,
     NoticeController.class,
     FriendController.class,
-    AlertSettingController.class
+    AlertSettingController.class,
+    InitialSettingController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -103,5 +104,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected ErrorNotifier errorNotifier;
+
+    @MockBean
+    protected InitialSettingService initialSettingService;
 }
 
