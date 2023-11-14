@@ -1,5 +1,6 @@
 package com.luckkids.api.service.mission.response;
 
+import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import lombok.Builder;
@@ -29,6 +30,14 @@ public class MissionResponse {
             .missionDescription(mission.getDescription())
             .alertStatus(mission.getAlertStatus())
             .alertTime(mission.getAlertTime())
+            .build();
+    }
+
+    public InitialSettingMissionResponse toInitialSettingResponse(){
+        return InitialSettingMissionResponse.builder()
+            .missionDescription(missionDescription)
+            .alertStatus(alertStatus)
+            .alertTime(alertTime)
             .build();
     }
 }

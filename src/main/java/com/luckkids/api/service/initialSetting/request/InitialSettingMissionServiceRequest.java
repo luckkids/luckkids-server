@@ -1,5 +1,6 @@
 package com.luckkids.api.service.initialSetting.request;
 
+import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.domain.misson.AlertStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,5 +29,13 @@ public class InitialSettingMissionServiceRequest {
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
+    }
+
+    public MissionCreateServiceRequest toMissionServiceRequest(){
+        return MissionCreateServiceRequest.builder()
+            .missionDescription(missionDescription)
+            .alertStatus(alertStatus)
+            .alertTime(alertTime)
+            .build();
     }
 }

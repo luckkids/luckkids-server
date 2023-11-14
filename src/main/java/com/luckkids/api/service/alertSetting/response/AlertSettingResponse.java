@@ -1,5 +1,6 @@
 package com.luckkids.api.service.alertSetting.response;
 
+import com.luckkids.api.service.initialSetting.response.InitialSettingAlertResponse;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.misson.AlertStatus;
 import lombok.Builder;
@@ -32,6 +33,15 @@ public class AlertSettingResponse {
             .mission(alertSetting.getMission())
             .luck(alertSetting.getLuck())
             .notice(alertSetting.getNotice())
+            .build();
+    }
+
+    public InitialSettingAlertResponse toInitialSettingResponse(){
+        return InitialSettingAlertResponse.builder()
+            .entire(entire)
+            .mission(mission)
+            .luck(luck)
+            .notice(notice)
             .build();
     }
 }
