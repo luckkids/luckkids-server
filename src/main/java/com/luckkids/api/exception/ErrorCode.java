@@ -22,7 +22,10 @@ public enum ErrorCode {
   
     ALERT_UNKNOWN("존재하지 않는 공지사항입니다."),
   
-    FRIEND_UNKNOWN( "친구가 존재하지 않습니다.");
+    FRIEND_UNKNOWN( "친구가 존재하지 않습니다."),
+
+    //Alert Setting
+    ALERT_SETTING_UNKNOWN("해당 사용자가 알림설정이 되어있지 않습니다.");
 
     private final String message;
 

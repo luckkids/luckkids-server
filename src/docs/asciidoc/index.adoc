@@ -30,10 +30,21 @@ include::api/join/joinUser.adoc[]
 
 [[Mail-API]]
 == Mail API
-
 include::api/mail/sendMail.adoc[]
 
 [[Friend-API]]
 == Friend API
 include::api/friend/friend.adoc[]
+
+[[Notice-API]]
+== Notice API
+include::api/notice/notice.adoc[]
+
+[[Version-API]]
+== Version API
+include::api/version/version.adoc[]
+
+[[AlertSetting-API]]
+== AlertSetting API
+include::api/alertSetting/alertSetting.adoc[]
 
