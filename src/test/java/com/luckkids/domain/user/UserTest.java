@@ -1,11 +1,13 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.luckkids.domain.user.SettingStatus.COMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -27,6 +30,9 @@ public class UserTest extends IntegrationTestSupport {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private UserReadService userReadService;
 
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
@@ -134,7 +140,7 @@ public class UserTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("같은 deviceid로 저장되어있는 refreshToken가 없을 시 저장한다.")
+    @DisplayName("같은 deviceid로 저장되어있는 refreshToken가 없을 시 수정한다.")
     @Test
     void checkRefreshTokenAndSave() {
         // given
@@ -166,5 +172,27 @@ public class UserTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 tuple("testRefreshToken", "testDeviceId")
             );
+    }
+
+    @DisplayName("사용자의 초기세팅 여부를 변경한다.")
+    @Test
+    void changeSettingStatus() {
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .role(Role.USER)
+            .snsType(SnsType.NORMAL)
+            .settingStatus(SettingStatus.INCOMPLETE)
+            .build();
+
+        User savedUser = userRepository.save(user);
+
+        // when
+        User findUser = userReadService.findByOne(savedUser.getId());
+        findUser.changeSettingStatus(COMPLETE);
+
+        // then
+        assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
     }
 }
