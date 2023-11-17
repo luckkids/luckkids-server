@@ -2,7 +2,7 @@
 <configuration scan="true">
 
     <!-- 로그 파일이 저장될 경로 -->
-    <property name="LOG_PATH" value="/var/log/project/luckKids"/>
+    <property name="LOG_PATH" value="/var/log/project/luckkids"/>
 <!--    D:\luck-kids-server\luck-kids-server\src\main\resources\logback\logs-->
 <!--    /var/log/project/luckKids-->
     <!-- 로그 파일 이름 -->
