@@ -20,6 +20,9 @@ jwt:
 slack:
   webhook-url: ${slack_webhook_url}
 
+logging:
+  config: classpath:logback/logback-config.xml
+
 ---
 spring:
   config:
