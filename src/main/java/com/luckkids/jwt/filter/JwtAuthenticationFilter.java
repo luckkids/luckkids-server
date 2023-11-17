@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/auth",         //로그인 예정
         "/api/v1/join",         //회원가입
         "/api/v1/mail",
+        "/api/v1/file",
         "/docs"                 //API문서는 예외
     };
 
