@@ -16,9 +16,6 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-    all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
     asciidoctorExt
 }
 
@@ -31,8 +28,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
