@@ -19,7 +19,7 @@
         4) DEBUG : 디버깅하기 위한 메시지 표시
         5) TRACE :  Debug보다 훨씬 상세한 메시지 표시
     -->
-    <property name="LOG_LEVEL" value="DEBUG"/>
+    <property name="LOG_LEVEL" value="INFO"/>
 
     <!-- CONSOLE에 로그 출력 세팅 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
