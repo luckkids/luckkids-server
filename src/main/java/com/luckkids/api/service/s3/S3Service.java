@@ -80,7 +80,7 @@ public class S3Service{
 
             amazonS3Client.putObject(bucketName, fileName, multipartFile.getInputStream(), objectMetadata);
 
-            return amazonS3Client.getUrl(bucketName, fileName).toString();
+            return fileName;
         } catch(Exception e) {
             throw new LuckKidsException(ErrorCode.S3_DOWNLOAD);
         }

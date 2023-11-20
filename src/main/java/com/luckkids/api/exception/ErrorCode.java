@@ -29,7 +29,8 @@ public enum ErrorCode {
 
     //S3
     S3_PREVIEW("파일 미리보기중 오류가 발생했습니다."),
-    S3_DOWNLOAD("파일 다운로드중 오류가 발생했습니다.");
+    S3_DOWNLOAD("파일 다운로드중 오류가 발생했습니다."),
+    S3_UPLOAD("파일 업로드중 오류가 발생했습니다.");
 
     private final String message;
 

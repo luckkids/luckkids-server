@@ -1,5 +1,6 @@
 package com.luckkids.api.controller.s3;
 
+import com.luckkids.api.ApiResponse;
 import com.luckkids.api.service.s3.S3Service;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class S3Controller {
     }
 
     @GetMapping("/preview/{fileName}")
-    public String preview(@PathVariable("fileName") String fileName, HttpServletResponse response){
-        return s3Service.preview(fileName, response);
+    public void preview(@PathVariable("fileName") String fileName, HttpServletResponse response){
+        s3Service.preview(fileName, response);
     }
 }
