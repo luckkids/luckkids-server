@@ -26,11 +26,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final String[] excludePath = {
-        "/api/v1/jwt",          //토큰발급 테스트 API
-        "/api/v1/auth",         //로그인 예정
-        "/api/v1/join",         //회원가입
+        "/api/v1/jwt",                  //토큰발급 테스트 API
+        "/api/v1/auth",                 //로그인 예정
+        "/api/v1/join",                 //회원가입
         "/api/v1/mail",
-        "/docs"                 //API문서는 예외
+        "/api/v1/user/changePassword", //비밀번호 재설정
+        "/docs"                         //API문서는 예외
     };
 
     @Override
