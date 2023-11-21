@@ -1,0 +1,12 @@
+[[user-changePassword]]
+=== 비밀번호 재설정
+
+==== HTTP Request
+
+include::{snippets}/user-changePassword/http-request.adoc[]
+include::{snippets}/user-changePassword/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-changePassword/http-response.adoc[]
+include::{snippets}/user-changePassword/response-fields.adoc[]
