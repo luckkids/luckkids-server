@@ -2,6 +2,9 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.user.request.UserFindSnsTypeServiceRequest;
+import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
+import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,10 @@ public class UserReadService {
     public User findByEmail(String email){
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new LuckKidsException(ErrorCode.USER_EMAIL));
+    }
+
+    public UserFindSnsTypeResponse findSnsType(UserFindSnsTypeServiceRequest userFindSnsTypeServiceRequest){
+        return UserFindSnsTypeResponse.of(findByEmail(userFindSnsTypeServiceRequest.getEmail()));
     }
 
 }
