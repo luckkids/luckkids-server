@@ -35,7 +35,7 @@ spring:
     datasource: mysql
     database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
