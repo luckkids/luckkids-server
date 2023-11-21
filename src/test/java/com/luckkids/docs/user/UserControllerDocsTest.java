@@ -1,7 +1,7 @@
 package com.luckkids.docs.user;
 
-import com.luckkids.api.controller.user.UserController;
-import com.luckkids.api.controller.user.request.UserChangePasswordRequest;
+import com.luckkids.api.controller.password.PasswordController;
+import com.luckkids.api.controller.password.request.UserChangePasswordRequest;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserChangePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserChangePasswordResponse;
@@ -27,7 +27,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
     @Override
     protected Object initController() {
-        return new UserController(userService);
+        return new PasswordController(userService);
     }
 
     @DisplayName("비밀번호 재설정 API")
@@ -48,13 +48,13 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/changePassword")
+                patch("/api/v1/password/update")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("user-changePassword",
+            .andDo(document("update-password",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(

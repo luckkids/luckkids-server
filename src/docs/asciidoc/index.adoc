@@ -48,7 +48,7 @@ include::api/version/version.adoc[]
 == AlertSetting API
 include::api/alertSetting/alertSetting.adoc[]
 
-[[User-API]]
-== User API
-include::api/user/user.adoc[]
+[[Password-API]]
+== Password API
+include::api/password/password.adoc[]
 

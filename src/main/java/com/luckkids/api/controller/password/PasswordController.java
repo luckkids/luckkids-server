@@ -1,7 +1,7 @@
-package com.luckkids.api.controller.user;
+package com.luckkids.api.controller.password;
 
 import com.luckkids.api.ApiResponse;
-import com.luckkids.api.controller.user.request.UserChangePasswordRequest;
+import com.luckkids.api.controller.password.request.UserChangePasswordRequest;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.response.UserChangePasswordResponse;
 import jakarta.validation.Valid;
@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
-public class UserController {
+@RequestMapping("/api/v1/password")
+public class PasswordController {
 
     private final UserService userService;
 
-    @PatchMapping("/changePassword")
+    @PatchMapping("/update")
     public ApiResponse<UserChangePasswordResponse> changePassword(@RequestBody @Valid UserChangePasswordRequest userChangePasswordRequest){
         return ApiResponse.ok(userService.changePassword(userChangePasswordRequest.toServiceRequest()));
     }
+
 }

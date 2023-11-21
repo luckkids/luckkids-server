@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.user;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.user.request.UserChangePasswordRequest;
+import com.luckkids.api.controller.password.request.UserChangePasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class UserControllerTest extends ControllerTestSupport {
+public class PasswordControllerTest extends ControllerTestSupport {
 
     @DisplayName("비밀번호를 재설정한다.")
     @Test
@@ -27,7 +27,7 @@ public class UserControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/changePassword")
+                patch("/api/v1/password/update")
                     .content(objectMapper.writeValueAsString(userChangePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -50,7 +50,7 @@ public class UserControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/changePassword")
+                patch("/api/v1/password/update")
                     .content(objectMapper.writeValueAsString(userChangePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -74,7 +74,7 @@ public class UserControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/changePassword")
+                patch("/api/v1/password/update")
                     .content(objectMapper.writeValueAsString(userChangePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

@@ -35,7 +35,7 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/api/v1/mail/**"),
                         new AntPathRequestMatcher("/api/v1/auth/**"),
                         new AntPathRequestMatcher("/api/v1/join/**"),
-                        new AntPathRequestMatcher("/api/v1/user/changePassword"),
+                        new AntPathRequestMatcher("/api/v1/password/**"),
                         new AntPathRequestMatcher("/docs/**"),
                         new AntPathRequestMatcher("/css/**"),
                         new AntPathRequestMatcher("/images/**"),
