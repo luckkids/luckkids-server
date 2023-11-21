@@ -134,4 +134,8 @@ public class User extends BaseTimeEntity {
         this.userCharacter = userCharacter;
         userCharacter.changeUser(this);
     }
+
+    public void changeLuckPhrases(String luckPhrases){
+        this.luckPhrases = luckPhrases;
+    }
 }
