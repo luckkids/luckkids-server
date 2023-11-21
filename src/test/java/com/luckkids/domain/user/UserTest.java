@@ -1,6 +1,7 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -27,6 +28,9 @@ public class UserTest extends IntegrationTestSupport {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private UserReadService userReadService;
 
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
@@ -165,6 +169,32 @@ public class UserTest extends IntegrationTestSupport {
             .extracting("refreshToken", "deviceId")
             .containsExactlyInAnyOrder(
                 tuple("testRefreshToken", "testDeviceId")
+            );
+    }
+
+    @DisplayName("사용자의 행운문구를 수정한다.")
+    @Test
+    void updateLuckPhrases() {
+        // given
+        User user = User.builder()
+            .email("tkdrl8908@naver.com")
+            .password("1234")
+            .role(Role.USER)
+            .snsType(SnsType.NORMAL)
+            .settingStatus(SettingStatus.INCOMPLETE)
+            .build();
+
+        User savedUser = userRepository.save(user);
+
+        // when
+        savedUser.changeLuckPhrases("행운입니다!!");
+
+        // then
+
+        assertThat(savedUser)
+            .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
+            .contains(
+                "tkdrl8908@naver.com", "행운입니다!!",Role.USER,SnsType.NORMAL,SettingStatus.INCOMPLETE
             );
     }
 }
