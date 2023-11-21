@@ -167,4 +167,25 @@ public class UserTest extends IntegrationTestSupport {
                 tuple("testRefreshToken", "testDeviceId")
             );
     }
+
+    @DisplayName("사용자 비밀번호를 변경한다.")
+    @Test
+    @Transactional
+    void changePasswordTest(){
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        String beforePassword = user.getPassword();
+        User savedUser = userRepository.save(user);
+        savedUser.changePassword("123456");
+        String afterPassword = savedUser.getPassword();
+
+        assertThat(beforePassword).isNotEqualTo(afterPassword);
+    }
+
+    private User createUser(String email, String password, SnsType snsType) {
+        return User.builder()
+            .email(email)
+            .password(password)
+            .snsType(snsType)
+            .build();
+    }
 }
