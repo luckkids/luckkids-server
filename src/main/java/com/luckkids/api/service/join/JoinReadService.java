@@ -2,6 +2,7 @@ package com.luckkids.api.service.join;
 
 import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,13 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class JoinReadService {
 
+    private final UserReadService userReadService;
     private final UserRepository userRepository;
-
     public JoinCheckEmailResponse checkEmail(JoinCheckEmailServiceRequest joinCheckEmailServiceRequest){
         String email = joinCheckEmailServiceRequest.getEmail();
-        User user =  userRepository.findByEmail(email);
 
-        Optional.ofNullable(user).ifPresent(User::checkSnsType);
+        userRepository.findByEmail(email)
+            .ifPresent(User::checkSnsType);
 
         return JoinCheckEmailResponse.of(email);
     }

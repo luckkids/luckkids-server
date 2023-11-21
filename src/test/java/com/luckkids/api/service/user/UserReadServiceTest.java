@@ -1,6 +1,7 @@
 package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -54,6 +55,30 @@ class UserReadServiceTest extends IntegrationTestSupport {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 유저는 없습니다. id = " + userId);
 
+    }
+
+    @DisplayName("이메일을 받아서 해당 이메일을 사용하는 사용자를 가져온다")
+    @Test
+    void findByEmail() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        userRepository.save(user);
+        // when
+        User findUser = userReadService.findByEmail(user.getEmail());
+        // then
+        assertThat(findUser).extracting("email", "password", "snsType")
+            .contains("test@email.com", findUser.encryptPassword("1234"), SnsType.NORMAL);
+    }
+
+    @DisplayName("이메일을 받아서 해당 이메일을 사용하는 사용자를 조회시 존재하지 않는 사용자일 경우 예외를 발생시킨다.")
+    @Test
+    void findByEmailThrowException() {
+        // given
+
+        // when then
+        assertThatThrownBy(() -> userReadService.findByEmail("test@email.com"))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
     }
 
     private User createUser(String email, String password, SnsType snsType) {
