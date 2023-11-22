@@ -1,6 +1,7 @@
 package com.luckkids.domain.missionOutcome;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
@@ -88,6 +89,40 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
         assertThat(missionOutcomeDetailList).hasSize(1)
             .extracting("missionDescription", "alertTime", "missionStatus")
             .contains(tuple("책읽기", LocalTime.of(20, 0), SUCCEED));
+    }
+
+    @DisplayName("검색할 범위 날짜를 받아 성공한 미션들이 있는지 조회한다.")
+    @Test
+    void findMissionOutcomeByDateRangeAndStatus() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 11, 25), FAILED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 11, 25), FAILED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 11, 26), SUCCEED);
+        MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 11, 26), FAILED);
+
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
+
+        // when
+        List<MissionOutcomeCalenderDto> missionOutcomes =
+            missionOutcomeQueryRepository.findMissionOutcomeByDateRangeAndStatus(
+                user.getId(),
+                LocalDate.of(2023, 11, 1),
+                LocalDate.of(2023, 12, 31)
+            );
+
+        // then
+        assertThat(missionOutcomes).hasSize(2)
+            .extracting("missionDate", "hasSucceed")
+            .containsExactlyInAnyOrder(
+                tuple(LocalDate.of(2023, 11, 25), false),
+                tuple(LocalDate.of(2023, 11, 26), true)
+            );
+
     }
 
     private User createUser(String email, String password, SnsType snsType) {

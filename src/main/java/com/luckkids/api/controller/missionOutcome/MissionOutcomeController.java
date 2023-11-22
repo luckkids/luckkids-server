@@ -33,4 +33,5 @@ public class MissionOutcomeController {
 
         return ApiResponse.ok(missionOutcomeReadService.getMissionDetailListForStatus(ofNullable(missionStatus), now()));
     }
+
 }

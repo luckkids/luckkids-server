@@ -43,7 +43,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(missions).hasSize(2)
-            .extracting("description", "alertStatus", "alertTime")
+            .extracting("missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("운동하기", CHECKED, LocalTime.of(19, 0)),
                 tuple("책읽기", CHECKED, LocalTime.of(22, 0))
@@ -67,7 +67,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
         assertThat(foundMission)
             .isPresent()
             .hasValueSatisfying(m -> {
-                assertThat(m.getDescription()).isEqualTo("운동하기");
+                assertThat(m.getMissionDescription()).isEqualTo("운동하기");
                 assertThat(m.getAlertStatus()).isEqualTo(CHECKED);
                 assertThat(m.getAlertTime()).isEqualTo(LocalTime.of(19, 0));
                 assertThat(m.getDeletedDate()).isNull();
@@ -91,7 +91,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(missions).hasSize(1)
-            .extracting("description", "alertStatus", "alertTime", "deletedDate")
+            .extracting("missionDescription", "alertStatus", "alertTime", "deletedDate")
             .containsExactly(tuple("책읽기", CHECKED, LocalTime.of(22, 0), null));
     }
 

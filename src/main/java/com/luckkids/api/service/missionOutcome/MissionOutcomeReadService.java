@@ -1,11 +1,13 @@
 package com.luckkids.api.service.missionOutcome;
 
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeQueryRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class MissionOutcomeReadService {
 
     private final MissionOutcomeRepository missionOutcomeRepository;
     private final MissionOutcomeQueryRepository missionOutcomeQueryRepository;
-    
+
     private final SecurityService securityService;
 
     public MissionOutcome findByOne(Long id) {
@@ -41,5 +43,15 @@ public class MissionOutcomeReadService {
     public int countUserSuccessfulMissions() {
         int userId = securityService.getCurrentUserInfo().getUserId();
         return missionOutcomeRepository.countSuccessfulMissionsByUserId(userId);
+    }
+
+    public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {
+        int userId = securityService.getCurrentUserInfo().getUserId();
+
+        LocalDate startDate = missionDate.withDayOfMonth(1);
+        LocalDate endDate = startDate.plusMonths(2).minusDays(1);
+
+        List<MissionOutcomeCalenderDto> result = missionOutcomeQueryRepository.findMissionOutcomeByDateRangeAndStatus(userId, startDate, endDate);
+        return MissionOutcomeForCalendarResponse.of(startDate, endDate, result);
     }
 }
