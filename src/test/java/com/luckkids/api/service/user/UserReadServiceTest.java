@@ -2,6 +2,8 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.user.request.UserFindSnsTypeServiceRequest;
+import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -77,6 +79,33 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
         // when then
         assertThatThrownBy(() -> userReadService.findByEmail("test@email.com"))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
+    }
+
+    @DisplayName("입력받은 이메일의 회원가입 형태를 확인한다.")
+    @Test
+    void findSnsTypeTest(){
+        User user = createUser("test@email.com", "1234", SnsType.KAKAO);
+        userRepository.save(user);
+
+        UserFindSnsTypeServiceRequest userFindSnsTypeServiceRequest = UserFindSnsTypeServiceRequest.builder()
+            .email("test@email.com")
+            .build();
+
+        UserFindSnsTypeResponse userFindSnsTypeResponse = userReadService.findSnsType(userFindSnsTypeServiceRequest);
+
+        assertThat(userFindSnsTypeResponse.getSnsType()).isEqualTo(SnsType.KAKAO);
+    }
+
+    @DisplayName("입력받은 이메일의 회원가입 형태를 확인시 사용자가 존재하지않으면 예외를 발생시킨다.")
+    @Test
+    void findSnsTypeTestThrowException(){
+        UserFindSnsTypeServiceRequest userFindSnsTypeServiceRequest = UserFindSnsTypeServiceRequest.builder()
+            .email("test@email.com")
+            .build();
+
+        assertThatThrownBy(() -> userReadService.findSnsType(userFindSnsTypeServiceRequest))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
     }

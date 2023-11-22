@@ -25,6 +25,7 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
@@ -104,6 +105,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected UserService userService;
+
+    @MockBean
+    protected UserReadService userReadService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;
