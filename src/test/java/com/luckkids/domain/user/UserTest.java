@@ -174,7 +174,7 @@ public class UserTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 행운문구를 수정한다.")
     @Test
-    void updateLuckPhrases() {
+    void updateLuckPhrasesTest() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -187,7 +187,7 @@ public class UserTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // when
-        savedUser.changeLuckPhrases("행운입니다!!");
+        savedUser.updateLuckPhrases("행운입니다!!");
 
         // then
 

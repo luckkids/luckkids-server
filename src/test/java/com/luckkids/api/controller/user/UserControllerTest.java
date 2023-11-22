@@ -1,4 +1,4 @@
-package com.luckkids.api.service.user;
+package com.luckkids.api.controller.user;
 
 import com.luckkids.ControllerTestSupport;
 import com.luckkids.api.controller.user.request.UserLuckPhrasesRequest;
@@ -25,7 +25,7 @@ public class UserControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/update")
+                patch("/api/v1/user/phrase")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -47,7 +47,7 @@ public class UserControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/update")
+                patch("/api/v1/user/phrase")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

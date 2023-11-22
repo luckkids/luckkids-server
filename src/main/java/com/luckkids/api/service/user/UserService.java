@@ -16,10 +16,10 @@ public class UserService {
     private final UserReadService userReadService;
     private final SecurityService securityService;
 
-    public UserLuckPhrasesResponse update(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest){
+    public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest){
         int userId = securityService.getCurrentUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        user.changeLuckPhrases(userLuckPhrasesServiceRequest.getLuckPhrases());
+        user.updateLuckPhrases(userLuckPhrasesServiceRequest.getLuckPhrases());
         return UserLuckPhrasesResponse.of(user);
     }
 }

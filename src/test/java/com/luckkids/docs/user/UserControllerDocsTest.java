@@ -48,7 +48,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
             .luckPhrases("행운입니다.!")
             .build();
 
-        given(userService.update(any(UserLuckPhrasesServiceRequest.class)))
+        given(userService.updatePhrase(any(UserLuckPhrasesServiceRequest.class)))
             .willReturn(UserLuckPhrasesResponse.builder()
                 .luckPhrases("행운입니다.!")
                 .build()
@@ -56,13 +56,13 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/user/update")
+                patch("/api/v1/user/phrase")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("user-update",
+            .andDo(document("update-phrase",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(

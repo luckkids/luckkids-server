@@ -32,7 +32,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 행운문구를 수정한다.")
     @Test
     @Transactional
-    void updateTest(){
+    void updatePhraseTest(){
         User user = createUser("test@email.com","1234",SnsType.NORMAL);
         userRepository.save(user);
         given(securityService.getCurrentUserInfo())
@@ -42,7 +42,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             .luckPhrases("행운입니다.")
             .build();
 
-        userService.update(userLuckPhrasesServiceRequest);
+        userService.updatePhrase(userLuckPhrasesServiceRequest);
 
         User savedUser = userReadService.findByOne(user.getId());
 

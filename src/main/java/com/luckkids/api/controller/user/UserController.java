@@ -18,8 +18,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @PatchMapping("/update")
-    public ApiResponse<UserLuckPhrasesResponse> update(@RequestBody @Valid UserLuckPhrasesRequest userLuckPhrasesRequest){
-        return ApiResponse.ok(userService.update(userLuckPhrasesRequest.toServiceRequest()));
+    @PatchMapping("/phrase")
+    public ApiResponse<UserLuckPhrasesResponse> updatePhrase(@RequestBody @Valid UserLuckPhrasesRequest userLuckPhrasesRequest){
+        return ApiResponse.ok(userService.updatePhrase(userLuckPhrasesRequest.toServiceRequest()));
     }
 }
