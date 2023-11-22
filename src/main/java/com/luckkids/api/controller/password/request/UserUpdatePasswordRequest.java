@@ -1,6 +1,6 @@
 package com.luckkids.api.controller.password.request;
 
-import com.luckkids.api.service.user.request.UserChangePasswordServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserChangePasswordRequest {
+public class UserUpdatePasswordRequest {
 
     @NotBlank(message = "이메일은 필수입니다.")
     private String email;
@@ -16,13 +16,13 @@ public class UserChangePasswordRequest {
     private String password;
 
     @Builder
-    private UserChangePasswordRequest(String email, String password) {
+    private UserUpdatePasswordRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public UserChangePasswordServiceRequest toServiceRequest(){
-        return UserChangePasswordServiceRequest.builder()
+    public UserUpdatePasswordServiceRequest toServiceRequest(){
+        return UserUpdatePasswordServiceRequest.builder()
             .email(email)
             .password(password)
             .build();

@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserChangePasswordResponse {
+public class UserUpdatePasswordResponse {
     private String email;
 
     @Builder
-    private UserChangePasswordResponse(String email) {
+    private UserUpdatePasswordResponse(String email) {
         this.email = email;
     }
 
-    public static UserChangePasswordResponse of(User user){
-        return UserChangePasswordResponse.builder()
+    public static UserUpdatePasswordResponse of(User user){
+        return UserUpdatePasswordResponse.builder()
             .email(user.getEmail())
             .build();
     }

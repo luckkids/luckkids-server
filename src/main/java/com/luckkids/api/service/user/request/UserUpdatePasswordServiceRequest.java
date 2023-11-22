@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserChangePasswordServiceRequest {
+public class UserUpdatePasswordServiceRequest {
     private String email;
     private String password;
 
     @Builder
-    private UserChangePasswordServiceRequest(String email, String password) {
+    private UserUpdatePasswordServiceRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }

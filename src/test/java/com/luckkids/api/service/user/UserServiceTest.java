@@ -2,8 +2,8 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.user.request.UserChangePasswordServiceRequest;
-import com.luckkids.api.service.user.response.UserChangePasswordResponse;
+import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
+import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -35,12 +35,12 @@ public class UserServiceTest extends IntegrationTestSupport {
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         userRepository.save(user);
 
-        UserChangePasswordServiceRequest userChangePasswordServiceRequest = UserChangePasswordServiceRequest.builder()
+        UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest = UserUpdatePasswordServiceRequest.builder()
             .email("test@email.com")
             .password("123456")
             .build();
 
-        UserChangePasswordResponse userChangePasswordResponse = userService.changePassword(userChangePasswordServiceRequest);
+        UserUpdatePasswordResponse userChangePasswordResponse = userService.updatePassword(userUpdatePasswordServiceRequest);
 
         User findUser = userReadService.findByOne(user.getId());
 
@@ -51,12 +51,12 @@ public class UserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경시 사용자가 존재하지않으면 예외를 발생시킨다.")
     @Test
     void changePasswordTestThrowException(){
-        UserChangePasswordServiceRequest userChangePasswordServiceRequest = UserChangePasswordServiceRequest.builder()
+        UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest = UserUpdatePasswordServiceRequest.builder()
             .email("test@email.com")
             .password("123456")
             .build();
 
-        assertThatThrownBy(() -> userService.changePassword(userChangePasswordServiceRequest))
+        assertThatThrownBy(() -> userService.updatePassword(userUpdatePasswordServiceRequest))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
     }

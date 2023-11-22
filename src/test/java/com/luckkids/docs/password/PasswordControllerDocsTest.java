@@ -1,14 +1,14 @@
 package com.luckkids.docs.password;
 
 import com.luckkids.api.controller.password.PasswordController;
-import com.luckkids.api.controller.password.request.UserChangePasswordRequest;
 import com.luckkids.api.controller.password.request.UserFindSnsTypeRequest;
+import com.luckkids.api.controller.password.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
-import com.luckkids.api.service.user.request.UserChangePasswordServiceRequest;
 import com.luckkids.api.service.user.request.UserFindSnsTypeServiceRequest;
-import com.luckkids.api.service.user.response.UserChangePasswordResponse;
+import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
+import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
@@ -23,9 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,21 +42,21 @@ public class PasswordControllerDocsTest extends RestDocsSupport {
     @Test
     void changePassword() throws Exception {
         // given
-        UserChangePasswordRequest request = UserChangePasswordRequest.builder()
+        UserUpdatePasswordRequest request = UserUpdatePasswordRequest.builder()
             .email("test@email.com")
             .password("1234")
             .build();
 
-        given(userService.changePassword(any(UserChangePasswordServiceRequest.class)))
+        given(userService.updatePassword(any(UserUpdatePasswordServiceRequest.class)))
             .willReturn(
-                UserChangePasswordResponse.builder()
+                UserUpdatePasswordResponse.builder()
                     .email("test@email.com")
                     .build()
             );
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/password/update")
+                patch("/api/v1/password/")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
@@ -105,7 +103,7 @@ public class PasswordControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/password/checkEmail")
+                get("/api/v1/password/findSnsType")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )

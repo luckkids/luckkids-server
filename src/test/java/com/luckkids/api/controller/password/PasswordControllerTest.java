@@ -1,8 +1,8 @@
 package com.luckkids.api.controller.password;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.password.request.UserChangePasswordRequest;
 import com.luckkids.api.controller.password.request.UserFindSnsTypeRequest;
+import com.luckkids.api.controller.password.request.UserUpdatePasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -22,15 +22,15 @@ public class PasswordControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void changePassword() throws Exception {
         // given
-        UserChangePasswordRequest userChangePasswordRequest = UserChangePasswordRequest.builder()
+        UserUpdatePasswordRequest userUpdatePasswordRequest = UserUpdatePasswordRequest.builder()
             .email("test@email.com")
             .password("1234")
             .build();
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/password/update")
-                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                patch("/api/v1/password/")
+                    .content(objectMapper.writeValueAsString(userUpdatePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -46,14 +46,14 @@ public class PasswordControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void changePasswordWithoutEmail() throws Exception {
         // given
-        UserChangePasswordRequest userChangePasswordRequest = UserChangePasswordRequest.builder()
+        UserUpdatePasswordRequest userUpdatePasswordRequest = UserUpdatePasswordRequest.builder()
             .password("1234")
             .build();
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/password/update")
-                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                patch("/api/v1/password/")
+                    .content(objectMapper.writeValueAsString(userUpdatePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -70,14 +70,14 @@ public class PasswordControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void changePasswordWithoutPassword() throws Exception {
         // given
-        UserChangePasswordRequest userChangePasswordRequest = UserChangePasswordRequest.builder()
+        UserUpdatePasswordRequest userUpdatePasswordRequest = UserUpdatePasswordRequest.builder()
             .email("test@email.com")
             .build();
 
         // when // then
         mockMvc.perform(
-                patch("/api/v1/password/update")
-                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                patch("/api/v1/password/")
+                    .content(objectMapper.writeValueAsString(userUpdatePasswordRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -100,7 +100,7 @@ public class PasswordControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/password/checkEmail")
+                get("/api/v1/password/findSnsType")
                     .content(objectMapper.writeValueAsString(userFindSnsTypeRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -122,7 +122,7 @@ public class PasswordControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/password/checkEmail")
+                get("/api/v1/password/findSnsType")
                     .content(objectMapper.writeValueAsString(userFindSnsTypeRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
