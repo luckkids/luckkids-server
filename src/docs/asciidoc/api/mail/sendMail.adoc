@@ -10,3 +10,16 @@ include::{snippets}/send-mail/request-fields.adoc[]
 
 include::{snippets}/send-mail/http-response.adoc[]
 include::{snippets}/send-mail/response-fields.adoc[]
+
+[[send-password]]
+=== 이메일 임시비밀번호 전송
+
+==== HTTP Request
+
+include::{snippets}/send-password/http-request.adoc[]
+include::{snippets}/send-password/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/send-password/http-response.adoc[]
+include::{snippets}/send-password/response-fields.adoc[]

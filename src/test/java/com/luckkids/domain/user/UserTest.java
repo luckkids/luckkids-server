@@ -175,11 +175,11 @@ public class UserTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     @Transactional
-    void changePasswordTest(){
+    void updatePasswordTest(){
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         String beforePassword = user.getPassword();
         User savedUser = userRepository.save(user);
-        savedUser.changePassword("123456");
+        savedUser.updatePassword("123456");
         String afterPassword = savedUser.getPassword();
 
         assertThat(beforePassword).isNotEqualTo(afterPassword);

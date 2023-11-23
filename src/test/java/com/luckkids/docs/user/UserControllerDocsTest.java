@@ -3,12 +3,15 @@ package com.luckkids.docs.user;
 import com.luckkids.api.controller.login.request.LoginRequest;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.user.request.UserLuckPhrasesRequest;
+import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
+import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SettingStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -80,6 +83,54 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.luckPhrases").type(JsonFieldType.STRING)
                         .description("행운문구")
+                )
+            ));
+    }
+
+    @DisplayName("비밀번호 재설정 API")
+    @Test
+    void changePassword() throws Exception {
+        // given
+        UserUpdatePasswordRequest request = UserUpdatePasswordRequest.builder()
+            .email("test@email.com")
+            .password("1234")
+            .build();
+
+        given(userService.updatePassword(any(UserUpdatePasswordServiceRequest.class)))
+            .willReturn(
+                UserUpdatePasswordResponse.builder()
+                    .email("test@email.com")
+                    .build()
+            );
+
+        // when // then
+        mockMvc.perform(
+                patch("/api/v1/user/password/")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("update-password",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일"),
+                    fieldWithPath("password").type(JsonFieldType.STRING)
+                        .description("비밀번호")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.email").type(JsonFieldType.STRING)
+                        .description("이메일")
                 )
             ));
     }

@@ -2,7 +2,7 @@ package com.luckkids.docs.password;
 
 import com.luckkids.api.controller.password.PasswordController;
 import com.luckkids.api.controller.password.request.UserFindSnsTypeRequest;
-import com.luckkids.api.controller.password.request.UserUpdatePasswordRequest;
+import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserFindSnsTypeServiceRequest;
@@ -30,60 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class PasswordControllerDocsTest extends RestDocsSupport {
-    private final UserService userService = mock(UserService.class);
     private final UserReadService userReadService = mock(UserReadService.class);
 
     @Override
     protected Object initController() {
-        return new PasswordController(userService, userReadService);
-    }
-
-    @DisplayName("비밀번호 재설정 API")
-    @Test
-    void changePassword() throws Exception {
-        // given
-        UserUpdatePasswordRequest request = UserUpdatePasswordRequest.builder()
-            .email("test@email.com")
-            .password("1234")
-            .build();
-
-        given(userService.updatePassword(any(UserUpdatePasswordServiceRequest.class)))
-            .willReturn(
-                UserUpdatePasswordResponse.builder()
-                    .email("test@email.com")
-                    .build()
-            );
-
-        // when // then
-        mockMvc.perform(
-                patch("/api/v1/password/")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("update-password",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestFields(
-                    fieldWithPath("email").type(JsonFieldType.STRING)
-                        .description("이메일"),
-                    fieldWithPath("password").type(JsonFieldType.STRING)
-                        .description("비밀번호")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.email").type(JsonFieldType.STRING)
-                        .description("이메일")
-                )
-            ));
+        return new PasswordController(userReadService);
     }
 
     @DisplayName("이메일 SNS타입 확인 API")
