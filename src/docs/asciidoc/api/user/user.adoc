@@ -1,0 +1,12 @@
+[[update-phrase]]
+=== 사용자 프로필 행운문구 수정 API
+
+==== HTTP Request
+
+include::{snippets}/update-phrase/http-request.adoc[]
+include::{snippets}/update-phrase/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-phrase/http-response.adoc[]
+include::{snippets}/update-phrase/response-fields.adoc[]

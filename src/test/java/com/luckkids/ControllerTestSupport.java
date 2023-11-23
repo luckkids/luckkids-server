@@ -10,6 +10,7 @@ import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
@@ -25,6 +26,7 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
 import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import org.mockito.Mock;
@@ -43,7 +45,8 @@ import org.springframework.test.web.servlet.MockMvc;
     VersionController.class,
     NoticeController.class,
     FriendController.class,
-    AlertSettingController.class
+    AlertSettingController.class,
+    UserController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -100,6 +103,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected AlertSettingService alertSettingService;
+
+    @MockBean
+    protected UserService userService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;
