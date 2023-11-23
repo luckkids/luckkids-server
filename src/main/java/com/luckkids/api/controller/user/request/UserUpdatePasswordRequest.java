@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.password.request;
+package com.luckkids.api.controller.user.request;
 
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import jakarta.validation.constraints.NotBlank;

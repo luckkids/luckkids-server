@@ -134,7 +134,7 @@ public class User extends BaseTimeEntity {
         this.luckPhrases = luckPhrases;
     }
 
-    public void changePassword(String password){
+    public void updatePassword(String password){
         this.password = encryptPassword(password);
     }
 }

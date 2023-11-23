@@ -20,7 +20,7 @@ public class UserService {
 
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
-        user.changePassword(userUpdatePasswordServiceRequest.getPassword());
+        user.updatePassword(userUpdatePasswordServiceRequest.getPassword());
         return UserUpdatePasswordResponse.of(user);
     }
 
