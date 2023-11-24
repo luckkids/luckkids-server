@@ -11,6 +11,7 @@ import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
@@ -25,14 +26,17 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
+import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+@ActiveProfiles("test")
 @WebMvcTest(controllers = {
     MissionController.class,
     LoginController.class,
@@ -44,6 +48,7 @@ import org.springframework.test.web.servlet.MockMvc;
     FriendController.class,
     AlertSettingController.class,
     HomeController.class
+    UserController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -93,6 +98,9 @@ public abstract class ControllerTestSupport {
     protected NoticeService noticeService;
 
     @MockBean
+    protected EntityManager entityManager;
+
+    @MockBean
     protected MissionOutcomeReadService missionOutcomeReadService;
 
     @MockBean
@@ -100,6 +108,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected AlertSettingService alertSettingService;
+
+    @MockBean
+    protected UserService userService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;

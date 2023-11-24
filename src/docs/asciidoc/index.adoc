@@ -59,3 +59,9 @@ include::api/alertSetting/alertSetting.adoc[]
 == Home API
 
 include::api/home/home.adoc[]
+
+[[UserUpdate-API]]
+== UserUpdate API
+
+include::api/user/user.adoc[]
+
