@@ -1,7 +1,11 @@
 package com.luckkids.domain.missionOutcome;
 
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,7 @@ public class MissionOutcomeQueryRepository {
         JPAQuery<MissionOutcomeDetailDto> query = jpaQueryFactory
             .select(Projections.constructor(MissionOutcomeDetailDto.class,
                 missionOutcome.id,
-                mission.description,
+                mission.missionDescription,
                 mission.alertTime,
                 missionOutcome.missionStatus))
             .from(missionOutcome)
@@ -36,5 +40,28 @@ public class MissionOutcomeQueryRepository {
         missionStatus.ifPresent(status -> query.where(missionOutcome.missionStatus.eq(status)));
 
         return query.fetch();
+    }
+
+    public List<MissionOutcomeCalenderDto> findMissionOutcomeByDateRangeAndStatus(int userId, LocalDate startDate, LocalDate endDate) {
+
+        NumberExpression<Integer> successCount = new CaseBuilder()
+            .when(missionOutcome.missionStatus.eq(MissionStatus.SUCCEED))
+            .then(1)
+            .otherwise(0)
+            .sum();
+
+        BooleanExpression isMissionSuccessful = successCount.gt(0);
+
+        return jpaQueryFactory
+            .select(Projections.constructor(MissionOutcomeCalenderDto.class,
+                missionOutcome.missionDate,
+                isMissionSuccessful))
+            .from(missionOutcome)
+            .join(missionOutcome.mission, mission)
+            .where(mission.user.id.eq(userId),
+                missionOutcome.missionDate.between(startDate, endDate))
+            .groupBy(missionOutcome.missionDate)
+            .orderBy(missionOutcome.missionDate.asc())
+            .fetch();
     }
 }

@@ -108,7 +108,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission result = missionReadService.findByOne(savedMission.getId());
 
         // then
-        assertThat(result).extracting("description", "alertStatus", "alertTime")
+        assertThat(result).extracting("missionDescription", "alertStatus", "alertTime")
             .containsExactly("운동하기", UNCHECKED, LocalTime.of(19, 0));
 
     }

@@ -11,16 +11,18 @@ endif::[]
 
 [[Mission-API]]
 == Mission API
+
 include::api/mission/mission.adoc[]
 
 [[MissionOutcome-API]]
 == MissionOutcome API
+
 include::api/missionOutcome/missionOutcome.adoc[]
 
 [[Login-API]]
 == Login API
-include::api/login/login.adoc[]
 
+include::api/login/login.adoc[]
 
 [[Join-API]]
 == Join API
@@ -30,25 +32,36 @@ include::api/join/joinUser.adoc[]
 
 [[Mail-API]]
 == Mail API
+
 include::api/mail/sendMail.adoc[]
 
 [[Friend-API]]
 == Friend API
+
 include::api/friend/friend.adoc[]
 
 [[Notice-API]]
 == Notice API
+
 include::api/notice/notice.adoc[]
 
 [[Version-API]]
 == Version API
+
 include::api/version/version.adoc[]
 
 [[AlertSetting-API]]
 == AlertSetting API
+
 include::api/alertSetting/alertSetting.adoc[]
+
+[[Home-API]]
+== Home API
+
+include::api/home/home.adoc[]
 
 [[UserUpdate-API]]
 == UserUpdate API
+
 include::api/user/user.adoc[]
 

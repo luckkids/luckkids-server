@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.friend.FriendController;
+import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
@@ -46,6 +47,7 @@ import org.springframework.test.web.servlet.MockMvc;
     NoticeController.class,
     FriendController.class,
     AlertSettingController.class,
+    HomeController.class
     UserController.class
 })
 public abstract class ControllerTestSupport {
@@ -55,6 +57,9 @@ public abstract class ControllerTestSupport {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected EntityManager entityManager;
 
     @MockBean
     protected MissionService missionService;
