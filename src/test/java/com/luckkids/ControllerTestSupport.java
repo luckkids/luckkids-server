@@ -10,7 +10,6 @@ import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
-import com.luckkids.api.controller.password.PasswordController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
@@ -46,7 +45,6 @@ import org.springframework.test.web.servlet.MockMvc;
     NoticeController.class,
     FriendController.class,
     AlertSettingController.class,
-    PasswordController.class,
     UserController.class
 })
 public abstract class ControllerTestSupport {

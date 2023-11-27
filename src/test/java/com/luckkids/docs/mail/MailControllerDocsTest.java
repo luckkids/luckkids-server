@@ -1,5 +1,6 @@
 package com.luckkids.docs.mail;
 
+import com.luckkids.api.controller.mail.request.MailFindSnsTypeRequest;
 import com.luckkids.api.controller.mail.request.SendMailRequest;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mail.request.SendPasswordRequest;
@@ -8,11 +9,17 @@ import com.luckkids.api.service.mail.request.SendMailServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
 import com.luckkids.api.service.mail.response.SendMailResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.api.service.user.request.UserFindSnsTypeServiceRequest;
+import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -24,6 +31,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,10 +39,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MailControllerDocsTest extends RestDocsSupport {
 
     private final MailService mailService = mock(MailService.class);
+    private final UserReadService userReadService = mock(UserReadService.class);
 
     @Override
     protected Object initController() {
-        return new MailController(mailService);
+        return new MailController(mailService, userReadService);
     }
 
     @DisplayName("이메일 인증코드 전송 API")
@@ -123,6 +132,51 @@ public class MailControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.tempPassword").type(JsonFieldType.STRING)
                         .description("임시비밀번호")
+                )
+            ));
+    }
+
+    @DisplayName("이메일 SNS타입 확인 API")
+    @Test
+    void findSnsType() throws Exception {
+        // given
+        MailFindSnsTypeRequest request = MailFindSnsTypeRequest.builder()
+            .email("test@email.com")
+            .build();
+
+        given(userReadService.findSnsType(any(UserFindSnsTypeServiceRequest.class)))
+            .willReturn(
+                UserFindSnsTypeResponse.builder()
+                    .snsType(SnsType.NORMAL)
+                    .build()
+            );
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/mail/findSnsType")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("checkEmail-SnsType",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.snsType").type(JsonFieldType.STRING)
+                        .description("가입한 SNS형식. 가능한 값: "+ Arrays.toString(SnsType.values()))
                 )
             ));
     }

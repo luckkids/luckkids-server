@@ -10,3 +10,16 @@ include::{snippets}/update-phrase/request-fields.adoc[]
 
 include::{snippets}/update-phrase/http-response.adoc[]
 include::{snippets}/update-phrase/response-fields.adoc[]
+
+[[update-password]]
+=== 비밀번호 재설정
+
+==== HTTP Request
+
+include::{snippets}/update-password/http-request.adoc[]
+include::{snippets}/update-password/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-password/http-response.adoc[]
+include::{snippets}/update-password/response-fields.adoc[]
