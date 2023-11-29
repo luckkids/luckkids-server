@@ -62,27 +62,27 @@ public class MailServiceTest extends IntegrationTestSupport {
         assertThat(sendPasswordResponse.getEmail()).isEqualTo("tkdrl8908@test.com");
     }
 
-    @Test
-    void generateCode() {
-        given(mailService.generateCode())
-            .willReturn("123456"
-            );
-
-        String authNum = mailService.generateCode();
-
-        assertThat(authNum.length()).isEqualTo(6);
-    }
-
-    @Test
-    void generateTempPassword() {
-        given(mailService.generateTempPassword())
-            .willReturn("AsDWET2s24asASd"
-            );
-
-        String tempPassword = mailService.generateTempPassword();
-
-        assertThat(tempPassword.length()).isEqualTo(15);
-    }
+//    @Test
+//    void generateCode() {
+//        given(mailService.generateCode())
+//            .willReturn("123456"
+//            );
+//
+//        String authNum = mailService.generateCode();
+//
+//        assertThat(authNum.length()).isEqualTo(6);
+//    }
+//
+//    @Test
+//    void generateTempPassword() {
+//        given(mailService.generateTempPassword())
+//            .willReturn("AsDWET2s24asASd"
+//            );
+//
+//        String tempPassword = mailService.generateTempPassword();
+//
+//        assertThat(tempPassword.length()).isEqualTo(15);
+//    }
 
     private User createUser(String email, String password, SnsType snsType) {
         return User.builder()

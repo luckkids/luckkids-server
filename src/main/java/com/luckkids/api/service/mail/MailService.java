@@ -79,7 +79,7 @@ public class MailService {
         }
     }
 
-    public String generateCode() {
+    private String generateCode() {
         StringBuilder builder = new StringBuilder();
         Random random = new Random();
         random.ints(6, 1, 10).forEach(builder::append);
@@ -87,7 +87,7 @@ public class MailService {
         return builder.toString();
     }
 
-    public String generateTempPassword() {
+    private String generateTempPassword() {
         SecureRandom random = new SecureRandom();
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*(){}[]";
         return random.ints(15, 0, chars.length())
