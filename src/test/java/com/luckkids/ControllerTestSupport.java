@@ -47,7 +47,7 @@ import org.springframework.test.web.servlet.MockMvc;
     NoticeController.class,
     FriendController.class,
     AlertSettingController.class,
-    HomeController.class
+    HomeController.class,
     UserController.class
 })
 public abstract class ControllerTestSupport {
@@ -96,9 +96,6 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected NoticeService noticeService;
-
-    @MockBean
-    protected EntityManager entityManager;
 
     @MockBean
     protected MissionOutcomeReadService missionOutcomeReadService;
