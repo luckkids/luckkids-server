@@ -1,9 +1,9 @@
 package com.luckkids.api.service.mail;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.mail.request.SendMailServiceRequest;
+import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendMailResponse;
+import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -11,7 +11,6 @@ import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,20 +27,20 @@ public class MailServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void SendMailTest() {
-        SendMailServiceRequest sendMailServiceRequest = SendMailServiceRequest.builder()
+    void sendAuthCodeTest() {
+        SendAuthCodeServiceRequest sendAuthCodeServiceRequest = SendAuthCodeServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
 
-        given(mailService.sendMail(any(SendMailServiceRequest.class)))
-            .willReturn(SendMailResponse.builder()
+        given(mailService.sendAuthCode(any(SendAuthCodeServiceRequest.class)))
+            .willReturn(SendAuthCodeResponse.builder()
                 .authNum("123456")
                 .build()
             );
 
-        SendMailResponse sendMailResponse = mailService.sendMail(sendMailServiceRequest);
+        SendAuthCodeResponse sendAuthCodeResponse = mailService.sendAuthCode(sendAuthCodeServiceRequest);
 
-        assertThat(sendMailResponse.getAuthNum().length()).isEqualTo(6);
+        assertThat(sendAuthCodeResponse.getAuthNum().length()).isEqualTo(6);
     }
 
     @Test
@@ -54,13 +53,13 @@ public class MailServiceTest extends IntegrationTestSupport {
 
         given(mailService.sendPassword(any(SendPasswordServiceRequest.class)))
             .willReturn(SendPasswordResponse.builder()
-                .tempPassword("AsDWET2s24asASd")
+                .email("tkdrl8908@test.com")
                 .build()
             );
 
         SendPasswordResponse sendPasswordResponse = mailService.sendPassword(sendPasswordServiceRequest);
 
-        assertThat(sendPasswordResponse.getTempPassword().length()).isEqualTo(15);
+        assertThat(sendPasswordResponse.getEmail()).isEqualTo("tkdrl8908@test.com");
     }
 
     @Test

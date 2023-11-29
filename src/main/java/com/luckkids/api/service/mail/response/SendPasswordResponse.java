@@ -8,16 +8,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SendPasswordResponse {
 
-    private String tempPassword;
+    private String email;
 
     @Builder
-    private SendPasswordResponse(String tempPassword) {
-        this.tempPassword = tempPassword;
+    private SendPasswordResponse(String email) {
+        this.email = email;
     }
 
-    public static SendPasswordResponse of(String tempPassword){
+    public static SendPasswordResponse of(String email){
         return SendPasswordResponse.builder()
-            .tempPassword(tempPassword)
+            .email(email)
             .build();
     }
 }

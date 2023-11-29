@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserFindSnsTypeServiceRequest {
+public class UserFindEmailServiceRequest {
 
     private String email;
 
     @Builder
-    private UserFindSnsTypeServiceRequest(String email) {
+    private UserFindEmailServiceRequest(String email) {
         this.email = email;
     }
 }

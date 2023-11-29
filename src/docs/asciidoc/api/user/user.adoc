@@ -23,3 +23,16 @@ include::{snippets}/update-password/request-fields.adoc[]
 
 include::{snippets}/update-password/http-response.adoc[]
 include::{snippets}/update-password/response-fields.adoc[]
+
+[[user-findEmail]]
+=== 비밀번호 재설정 전 이메일 가입형식 조회 (존재X 시  에러발생)
+
+==== HTTP Request
+
+include::{snippets}/user-findEmail/http-request.adoc[]
+include::{snippets}/user-findEmail/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-findEmail/http-response.adoc[]
+include::{snippets}/user-findEmail/response-fields.adoc[]

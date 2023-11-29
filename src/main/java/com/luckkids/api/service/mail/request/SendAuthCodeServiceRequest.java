@@ -4,12 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SendMailServiceRequest {
+public class SendAuthCodeServiceRequest {
 
     private String email;
 
     @Builder
-    private SendMailServiceRequest(String email) {
+    private SendAuthCodeServiceRequest(String email) {
         this.email = email;
     }
 }

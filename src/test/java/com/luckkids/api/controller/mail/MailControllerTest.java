@@ -1,9 +1,9 @@
 package com.luckkids.api.controller.mail;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.mail.request.MailFindSnsTypeRequest;
-import com.luckkids.api.controller.mail.request.SendMailRequest;
+import com.luckkids.api.controller.mail.request.SendAuthCodeRequest;
 import com.luckkids.api.controller.mail.request.SendPasswordRequest;
+import com.luckkids.api.controller.user.request.UserFindEmailRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -23,13 +23,13 @@ class MailControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void sendMail() throws Exception {
         // given
-        SendMailRequest request = SendMailRequest.builder()
+        SendAuthCodeRequest request = SendAuthCodeRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/mail/send")
+                post("/api/v1/mail/authCode")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -46,12 +46,12 @@ class MailControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void sendMailWithoutEmail() throws Exception {
         // given
-        SendMailRequest request = SendMailRequest.builder()
+        SendAuthCodeRequest request = SendAuthCodeRequest.builder()
             .build();
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/mail/send")
+                post("/api/v1/mail/authCode")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -111,16 +111,16 @@ class MailControllerTest extends ControllerTestSupport {
     @DisplayName("비밀번호 재설정전 이메일의 회원가입 형태를 조회한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void findSnsType() throws Exception {
+    void findEmailTest() throws Exception {
         // given
-        MailFindSnsTypeRequest mailFindSnsTypeRequest = MailFindSnsTypeRequest.builder()
+        UserFindEmailRequest userFindEmailRequest = UserFindEmailRequest.builder()
             .email("test@email.com")
             .build();
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/mail/findSnsType")
-                    .content(objectMapper.writeValueAsString(mailFindSnsTypeRequest))
+                get("/api/v1/user/findEmail")
+                    .content(objectMapper.writeValueAsString(userFindEmailRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
@@ -134,15 +134,15 @@ class MailControllerTest extends ControllerTestSupport {
     @DisplayName("비밀번호 재설정전 이메일의 회원가입 형태를 조회시 이메일은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void findSnsTypeWithoutEmail() throws Exception {
+    void findEmailWithoutEmail() throws Exception {
         // given
-        MailFindSnsTypeRequest mailFindSnsTypeRequest = MailFindSnsTypeRequest.builder()
+        UserFindEmailRequest userFindEmailRequest = UserFindEmailRequest.builder()
             .build();
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/mail/findSnsType")
-                    .content(objectMapper.writeValueAsString(mailFindSnsTypeRequest))
+                get("/api/v1/user/findEmail")
+                    .content(objectMapper.writeValueAsString(userFindEmailRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
             )
