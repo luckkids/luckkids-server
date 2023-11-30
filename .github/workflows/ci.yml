@@ -25,5 +25,3 @@ jobs:
  
     - name: 🍀 테스트 진행
       run: ./gradlew --info test
-
-      
