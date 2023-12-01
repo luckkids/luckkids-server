@@ -1,0 +1,83 @@
+spring:
+  profiles:
+    default: dev
+
+  mail:
+    host: ${{ secrets.MAIL_HOST }}
+    port: 587
+    username: ${{ secrets.MAIL_USERNAME }}
+    password: ${{ secrets.MAIL_PASSWORD }}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        jdbc:
+          exception-handling: ignore
+
+logging:
+  level:
+    p6spy: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+jwt:
+  secret-key: ${{ secrets.JWT_SECRET_KEY }}
+
+slack:
+  webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${{ secrets.DEV_DB_URL }}
+    username: ${{ secrets.DEV_DB_USERNAME }}
+    password: ${{ secrets.DEV_DB_PASSWORD }}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:~/luck-kids;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${{ secrets.PROD_DB_URL }}
+    username: ${{ secrets.PROD_DB_USERNAME }}
+    password: ${{ secrets.PROD_DB_PASSWORD }}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
