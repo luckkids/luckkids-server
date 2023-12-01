@@ -30,6 +30,9 @@ jobs:
 
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
+  
+      - name: 🍀 비밀 설정 파일 복사
+        run: ./gradlew copySecret
 
       - name: 🍀 테스트 진행
         env:
