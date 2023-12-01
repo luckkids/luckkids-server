@@ -19,7 +19,6 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           submodules: true
 
-      - uses: actions/checkout@v3
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
         with:
@@ -28,7 +27,7 @@ jobs:
 
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
-  
+
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
