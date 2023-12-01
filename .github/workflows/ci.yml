@@ -1,8 +1,6 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -30,6 +28,9 @@ jobs:
 
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
+  
+      - name: 🍀 비밀 설정 파일 복사
+        run: ./gradlew copySecret
 
       - name: 🍀 테스트 진행
         env:
@@ -37,4 +38,4 @@ jobs:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-        run: ./gradlew --info test
+        run: ./gradlew test
