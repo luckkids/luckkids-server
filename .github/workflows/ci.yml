@@ -39,3 +39,4 @@ jobs:
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
         run: ./gradlew test
+
