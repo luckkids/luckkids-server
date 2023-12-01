@@ -123,9 +123,6 @@ bootJar {
 }
 
 // submodule
-
-processResources.dependsOn('copySecret')
-
 tasks.register('copySecret', Copy) {
     from './luck-kids-server-submodule-config'
     include "application*.yml"
