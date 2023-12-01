@@ -16,7 +16,7 @@ jobs:
       - name: 🍀 서브모듈 추가
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.GIT_TOKEN || github.token }}
           submodules: true
 
       - name: 🍀 JDK 17 세팅
