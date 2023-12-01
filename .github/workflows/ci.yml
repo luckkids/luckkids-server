@@ -1,6 +1,8 @@
 name: Java CI with Gradle
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -14,6 +16,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: 🍀 서브모듈 추가
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          submodules: true
+
+      - uses: actions/checkout@v3
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
         with:
@@ -24,6 +32,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: 🍀 테스트 진행
+        env:
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
         run: ./gradlew --info test
-
-      
