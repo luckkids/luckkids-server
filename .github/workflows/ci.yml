@@ -1,10 +1,8 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    types: [ opened, reopened ]
+    types: [ opened, reopened, synchronize ]
     branches: [ "main" ]
 
 permissions:
