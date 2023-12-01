@@ -6,6 +6,7 @@ import com.luckkids.api.controller.login.request.LoginOauthRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
 import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +27,8 @@ public class LoginController {
 	}
 
 	@PostMapping("/oauth/login")
-	public void oauthLogin(@RequestBody LoginOauthRequest loginOauthRequest){
-
+	public ApiResponse<OAuthLoginResponse> oauthLogin(@RequestBody LoginOauthRequest loginOauthRequest) throws JsonProcessingException {
+		return ApiResponse.ok(loginService.oauthLogin(loginOauthRequest.toServiceRequest()));
 	}
 
 }

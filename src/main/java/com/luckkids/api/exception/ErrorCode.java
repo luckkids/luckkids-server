@@ -25,7 +25,9 @@ public enum ErrorCode {
     FRIEND_UNKNOWN( "친구가 존재하지 않습니다."),
 
     //Alert Setting
-    ALERT_SETTING_UNKNOWN("해당 사용자가 알림설정이 되어있지 않습니다.");
+    ALERT_SETTING_UNKNOWN("해당 사용자가 알림설정이 되어있지 않습니다."),
+
+    OAUTH_UNKNOWN("존재하지않는 로그인방식입니다.");
 
     private final String message;
 
