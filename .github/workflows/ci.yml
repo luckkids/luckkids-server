@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: 🍀 JDK 17 세팅
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - uses: actions/checkout@v3
+      - name: 🍀 JDK 17 세팅
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
 
-    - name: 🍀 gradlew 실행 권한 설정
-      run: chmod +x gradlew
- 
-    - name: 🍀 테스트 진행
-      run: ./gradlew --info test
+      - name: 🍀 gradlew 실행 권한 설정
+        run: chmod +x gradlew
+
+      - name: 🍀 테스트 진행
+        run: ./gradlew --info test
 
       

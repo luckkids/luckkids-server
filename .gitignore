@@ -38,6 +38,3 @@ out/
 
 ### QClass ###
 src/main/generated/
-
-### yml ###
-**/resources/*.yml
