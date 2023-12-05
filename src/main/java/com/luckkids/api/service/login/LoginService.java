@@ -64,7 +64,6 @@ public class LoginService {
     }
 
     public String kakaoLogin(String code){
-        String asd = kakaoApiClient.getToken(code);
         return kakaoApiClient.getToken(code);
     }
 
