@@ -1,16 +1,11 @@
 package com.luckkids.api.client;
 
-import com.luckkids.api.client.request.KakaoLoginRequest;
-import com.luckkids.api.feign.KakaoFeignCall;
-import com.luckkids.api.feign.request.KakaoGetTokenRequest;
-import com.luckkids.api.feign.response.KakaoTokenResponse;
-import lombok.NoArgsConstructor;
+import com.luckkids.api.feign.kakao.KakaoApiFeignCall;
+import com.luckkids.api.feign.kakao.KakaoAuthFeignCall;
+import com.luckkids.api.feign.kakao.request.KakaoGetTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +19,8 @@ public class KakaoApiClient{
     @Value("${oauth.kakao.client-secret}")
     private String clientSecret;
 
-    private final KakaoFeignCall kakaoFeignCall;
+    private final KakaoAuthFeignCall kakaoAuthFeignCall;
+    private final KakaoApiFeignCall kakaoApiFeignCall;
     public String getToken(String code) {
         KakaoGetTokenRequest kakaoGetTokenRequest = KakaoGetTokenRequest.builder()
             .client_id(clientId)
@@ -33,7 +29,10 @@ public class KakaoApiClient{
             .grant_type(GRANT_TYPE)
             .build();
 
-        KakaoTokenResponse response = kakaoFeignCall.getToken(kakaoGetTokenRequest);
-        return response.getAccessToken();
+        return kakaoAuthFeignCall.getToken(kakaoGetTokenRequest).getAccessToken();
+    }
+
+    public String getEmail(String code){
+        return kakaoApiFeignCall.getUserInfo("Bearer " + getToken(code)).getEmail();
     }
 }
