@@ -57,7 +57,6 @@ jobs:
         env:
           SLACK_CHANNEL: '#럭키즈-서버-배포-알림'
           SLACK_COLOR: '#FF0000'
-          SLACK_ICON: https://repository-images.githubusercontent.com/594831409/540d66b0-37c0-4bb3-ae90-eb39fcb6008c
           SLACK_MESSAGE: '테스트 실패: ${{ github.repository }}'
           SLACK_TITLE: '럭키즈 서버 PR 테스트 실패 알림 🍀'
           SLACK_USERNAME: GitHub Actions
