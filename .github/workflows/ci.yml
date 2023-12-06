@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
   checks: write
+  id-token: write
 
 jobs:
   test:
@@ -44,7 +45,6 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           files: 'build/test-results/**/*.xml'
 
       - name: 🍀 테스트 실패 Comment
