@@ -1,28 +1,26 @@
-package com.luckkids.api.feign.response;
+package com.luckkids.api.feign.kakao.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoTokenResponse {
 
-    @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonProperty("token_type")
     private String tokenType;
 
-    @JsonProperty("refresh_token")
     private String refreshToken;
 
-    @JsonProperty("expires_in")
     private String expiresIn;
 
-    @JsonProperty("refresh_token_expires_in")
     private String refreshTokenExpiresIn;
 
-    @JsonProperty("scope")
     private String scope;
 }

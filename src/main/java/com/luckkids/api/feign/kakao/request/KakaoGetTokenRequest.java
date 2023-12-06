@@ -1,4 +1,4 @@
-package com.luckkids.api.feign.request;
+package com.luckkids.api.feign.kakao.request;
 
 import lombok.Builder;
 import lombok.Getter;
