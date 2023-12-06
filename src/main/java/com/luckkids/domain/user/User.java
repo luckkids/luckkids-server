@@ -59,7 +59,7 @@ public class User extends BaseTimeEntity {
     @Builder
     private User(String email, String password, SnsType snsType, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
         this.email = email;
-        this.password = encryptPassword(password);
+        this.password = (password == null) ? null : encryptPassword(password);;
         this.snsType = snsType;
         this.missionCount = missionCount;
         this.luckPhrases = luckPhrases;
