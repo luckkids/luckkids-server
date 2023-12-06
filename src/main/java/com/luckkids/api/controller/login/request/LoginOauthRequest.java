@@ -24,6 +24,8 @@ public class LoginOauthRequest {
         return OAuthLoginServiceRequest.builder()
             .code(code)
             .snsType(snsType)
+            .deviceId(deviceId)
+            .pushKey(pushKey)
             .build();
     }
 

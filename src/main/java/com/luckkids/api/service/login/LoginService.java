@@ -1,6 +1,7 @@
 package com.luckkids.api.service.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.luckkids.api.client.GoogleApiClient;
 import com.luckkids.api.client.KakaoApiClient;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
@@ -8,9 +9,7 @@ import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
-import com.luckkids.domain.user.SnsType;
-import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.user.*;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.UserInfo;
@@ -28,6 +27,7 @@ public class LoginService {
     private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final KakaoApiClient kakaoApiClient;
+    private final GoogleApiClient googleApiClient;
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userRepository.findByEmail(loginServiceRequest.getEmail());     //회원조회
@@ -43,12 +43,21 @@ public class LoginService {
 
     public OAuthLoginResponse oauthLogin(OAuthLoginServiceRequest oAuthLoginServiceRequest) throws JsonProcessingException {
         String email = switch (oAuthLoginServiceRequest.getSnsType()) {
-            case KAKAO -> kakaoLogin(oAuthLoginServiceRequest.getCode());
-            case GOOGLE -> googleLogin(oAuthLoginServiceRequest.getCode());
+            case KAKAO -> kakaoApiClient.getEmail(oAuthLoginServiceRequest.getCode());
+            case GOOGLE -> googleApiClient.getEmail(oAuthLoginServiceRequest.getCode());
             case APPLE -> appleLogin(oAuthLoginServiceRequest.getCode());
             default -> throw new LuckKidsException(ErrorCode.OAUTH_UNKNOWN);
         };
-        User user = userRepository.findByEmail(email);                              //회원조회
+        User user = Optional.ofNullable(userRepository.findByEmail(email))
+            .orElseGet(() ->
+                userRepository.save(User.builder()
+                    .email(email)
+                    .missionCount(0)
+                    .snsType(oAuthLoginServiceRequest.getSnsType())
+                    .role(Role.USER)
+                    .settingStatus(SettingStatus.INCOMPLETE)
+                    .build())
+            );
 
         user.loginCheckSnsType(oAuthLoginServiceRequest.getSnsType());              //SNS가입여부확인
 
@@ -61,14 +70,6 @@ public class LoginService {
         user.checkRefreshToken(jwtToken, deviceId);                                 //deviceId로 기존 refreshToken 조회 후 수정 혹은 등록
         user.checkPushKey(pushKey, deviceId);                                       //deviceId로 기존 push 조회 후 수정 혹은 등록
         return jwtToken;
-    }
-
-    public String kakaoLogin(String code){
-        return kakaoApiClient.getToken(code);
-    }
-
-    public String googleLogin(String code){
-        return "";
     }
 
     public String appleLogin(String code){
