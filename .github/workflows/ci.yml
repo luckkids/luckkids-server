@@ -41,8 +41,8 @@ jobs:
         run: ./gradlew test
 
       - name: 🍀 테스트 결과 Report
-        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: 'build/test-results/**/*.xml'
 
@@ -56,10 +56,8 @@ jobs:
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_CHANNEL: '#럭키즈-서버-배포-알림'
+          SLACK_CHANNEL: ${{ secrets.SLACK_GIT_ACTIONS_CHANNEL_NAME }}
           SLACK_COLOR: ${{ job.status }}
           SLACK_MESSAGE: '테스트 실패: ${{ github.repository }}'
-          SLACK_ICON: https://cdn-icons-png.flaticon.com/512/3400/3400195.png
           SLACK_TITLE: '럭키즈 서버 PR 테스트 실패 알림 🍀'
-          SLACK_USERNAME: GitHub Actions
           SLACK_WEBHOOK: ${{ secrets.SLACK_GIT_ACTIONS_WEBHOOK_URL }}
