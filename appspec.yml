@@ -11,6 +11,11 @@ permissions:
     pattern: "**"
     owner: ec2-user
     group: ec2-user
+  - object: /home/ec2-user/luck-kids-server/deploy.sh
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
 
 hooks:
   ApplicationStart:
