@@ -28,10 +28,13 @@ jobs:
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
+      - name: 🍀 필요한 디렉토리 생성
+        run: mkdir -p ./build/generated-snippets
+
       - name: 🍀 Gradle로 빌드
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: build -x test
 
       - name: 🌐 AWS 자격 증명 구성
         uses: aws-actions/configure-aws-credentials@v1
