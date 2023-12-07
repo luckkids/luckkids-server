@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.friend.FriendController;
+import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.mail.MailController;
@@ -33,8 +34,10 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+@ActiveProfiles("test")
 @WebMvcTest(controllers = {
     MissionController.class,
     LoginController.class,
@@ -45,6 +48,7 @@ import org.springframework.test.web.servlet.MockMvc;
     NoticeController.class,
     FriendController.class,
     AlertSettingController.class,
+    HomeController.class,
     UserController.class
 })
 public abstract class ControllerTestSupport {
@@ -54,6 +58,9 @@ public abstract class ControllerTestSupport {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected EntityManager entityManager;
 
     @MockBean
     protected MissionService missionService;
@@ -90,9 +97,6 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected NoticeService noticeService;
-  
-    @MockBean
-    protected EntityManager entityManager;
 
     @MockBean
     protected MissionOutcomeReadService missionOutcomeReadService;

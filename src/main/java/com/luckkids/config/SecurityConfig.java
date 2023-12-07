@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
@@ -30,19 +31,7 @@ public class SecurityConfig {
             .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/v1/jwt/**"),
-                        new AntPathRequestMatcher("/api/v1/mail/**"),
-                        new AntPathRequestMatcher("/api/v1/auth/**"),
-                        new AntPathRequestMatcher("/api/v1/join/**"),
-                        new AntPathRequestMatcher("/api/v1/password/**"),
-                        new AntPathRequestMatcher("/docs/**"),
-                        new AntPathRequestMatcher("/css/**"),
-                        new AntPathRequestMatcher("/images/**"),
-                        new AntPathRequestMatcher("/js/**"),
-                        new AntPathRequestMatcher("/h2-console/**"),
-                        new AntPathRequestMatcher("/health-check")
-                ).permitAll()
+                .requestMatchers(getPublicMatchers()).permitAll()
                 .anyRequest().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
             )
 
@@ -53,6 +42,21 @@ public class SecurityConfig {
             .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthenticationFilter.class); //JwtAuthenticationFilter에서 뱉은 에러를 처리하기 위한 Filter
 
         return http.build();
+    }
+
+    private RequestMatcher[] getPublicMatchers() {
+        return new RequestMatcher[]{
+            new AntPathRequestMatcher("/api/v1/jwt/**"),
+            new AntPathRequestMatcher("/api/v1/mail/**"),
+            new AntPathRequestMatcher("/api/v1/auth/**"),
+            new AntPathRequestMatcher("/api/v1/join/**"),
+            new AntPathRequestMatcher("/docs/**"),
+            new AntPathRequestMatcher("/css/**"),
+            new AntPathRequestMatcher("/images/**"),
+            new AntPathRequestMatcher("/js/**"),
+            new AntPathRequestMatcher("/h2-console/**"),
+            new AntPathRequestMatcher("/health-check")
+        };
     }
 }
 
