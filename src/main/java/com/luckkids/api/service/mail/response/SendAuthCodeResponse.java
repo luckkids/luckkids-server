@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SendMailResponse {
+public class SendAuthCodeResponse {
 
     private String authNum;
 
     @Builder
-    private SendMailResponse(String authNum) {
+    private SendAuthCodeResponse(String authNum) {
         this.authNum = authNum;
     }
 
-    public static SendMailResponse of(String authNum){
-        return SendMailResponse.builder()
+    public static SendAuthCodeResponse of(String authNum){
+        return SendAuthCodeResponse.builder()
             .authNum(authNum)
             .build();
     }

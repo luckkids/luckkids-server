@@ -5,6 +5,7 @@ import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -24,9 +25,10 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
+    private final UserReadService userReadService;
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
-        User user = userRepository.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
+        User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
 
         Optional.ofNullable(user).orElseThrow(()->new LuckKidsException(ErrorCode.USER_UNKNOWN));
 
