@@ -29,7 +29,9 @@ jobs:
         run: ./gradlew copySecret
 
       - name: 🍀 Gradle로 빌드
-        run: ./gradlew build -x test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
 
       - name: 🌐 AWS 자격 증명 구성
         uses: aws-actions/configure-aws-credentials@v1
