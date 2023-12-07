@@ -52,6 +52,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
+          github_token: ${{ secrets.GIT_TOKEN }}
           report_paths: 'build/test-results/test/TEST-*.xml'
 
       - name: 🍀 테스트 실패시 슬랙 알림
