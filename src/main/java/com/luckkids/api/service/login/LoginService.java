@@ -14,6 +14,7 @@ import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.UserInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class LoginService {
     private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
@@ -34,7 +36,9 @@ public class LoginService {
 
         user.loginCheckSnsType(SnsType.NORMAL);                                     //2. SNS가입여부확인
 
-        user.checkPassword(loginServiceRequest.getPassword());                      //3. 비밀번호 체크 -> 암호화는 추후 추가예정
+        if(!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())){
+            throw new LuckKidsException(ErrorCode.USER_PASSWORD);
+        } //3. 비밀번호 체크
 
         UserInfo userInfo = UserInfo.of(user.getId(), user.getEmail());
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);                   //4. JWT토큰생성
