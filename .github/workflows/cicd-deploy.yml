@@ -1,0 +1,61 @@
+name: 🚀 Deploy workflow on production environment
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🍀 서브모듈 추가
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          submodules: true
+
+      - name: 🍀 JDK 17 세팅
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: 🍀 gradlew 실행 권한 설정
+        run: chmod +x gradlew
+
+      - name: 🍀 비밀 설정 파일 복사
+        run: ./gradlew copySecret
+
+      - name: 🍀 Gradle로 빌드
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build -x test
+
+      - name: 🌐 AWS 자격 증명 구성
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: 📦 luck-kids-server로 jar, appspec, 배포 스크립트 복사
+        run: |
+          mkdir -p luck-kids-server
+          cp ./build/libs/*.jar ./luck-kids-server/
+          cp ./appspec.yml ./luck-kids-server/
+          cp ./deploy.sh ./luck-kids-server/
+
+      - name: 🗜️ 배포 패키지 생성
+        run: zip -r -qq -j ./deploy.zip ./luck-kids-server/*.jar ./luck-kids-server/appspec.yml ./luck-kids-server/deploy.sh
+
+      - name: 🚛 S3로 업로드
+        run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
+
+      - name: 🚀 CodeDeploy를 이용한 배포
+        run: aws deploy create-deployment
+          --application-name ${{ secrets.CODEDEPLOY_APPLICATION }}
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_GROUP }}
+          --s3-location bucket=${{ secrets.CICD_S3_BUCKET }},bundleType=zip,key=deploy.zip
