@@ -8,8 +8,6 @@ on:
 permissions:
   contents: read
   checks: write
-  pull-requests: read
-  issues: write
 
 jobs:
   test:
@@ -43,16 +41,9 @@ jobs:
         run: ./gradlew test
 
       - name: 🍀 테스트 결과 Report
-        if: always()
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: 'build/test-results/**/*.xml'
-
-      - name: 🍀 테스트 실패 Comment
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
-          github_token: ${{ secrets.GIT_TOKEN }}
           report_paths: 'build/test-results/test/TEST-*.xml'
 
       - name: 🍀 테스트 실패시 슬랙 알림
