@@ -64,17 +64,20 @@ jobs:
           mkdir -p before-deploy
           cp ./build/libs/*.jar ./before-deploy/
           cp ./appspec.yml ./before-deploy/
-          cp scripts/deploy.sh ./before-deploy/
+          cp scripts/*.sh  ./before-deploy/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/deploy.sh
+        run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/*.sh
 
       - name: 🚛 S3로 업로드
         run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
 
       - name: 🚀 CodeDeploy를 이용한 배포
-        run: aws deploy create-deployment
-          --application-name ${{ secrets.CODEDEPLOY_APPLICATION }}
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_GROUP }}
-          --s3-location bucket=${{ secrets.CICD_S3_BUCKET }},bundleType=zip,key=deploy.zip
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ secrets.CODEDEPLOY_APPLICATION }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_GROUP }} \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=${{ secrets.CICD_S3_BUCKET }},bundleType=zip,key=deploy.zip \
+          --region ap-northeast-2
