@@ -3,11 +3,11 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/luck-kids-server
+    destination: /home/ec2-user/app
     overwrite: yes
 
 permissions:
-  - object: /home/ec2-user/luck-kids-server
+  - object: /home/ec2-user/app
     pattern: "**"
     owner: ec2-user
     group: ec2-user
@@ -15,6 +15,6 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: /home/ec2-user/luck-kids-server/deploy.sh
+    - location: /home/ec2-user/app/deploy.sh
       timeout: 60
       runas: ec2-user
