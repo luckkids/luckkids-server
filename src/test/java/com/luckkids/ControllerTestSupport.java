@@ -7,6 +7,7 @@ import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
+import com.luckkids.api.controller.luckMission.LuckMissionController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
@@ -19,6 +20,7 @@ import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
+import com.luckkids.api.service.luckMission.LuckMissionReadService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
@@ -44,7 +46,8 @@ import org.springframework.test.web.servlet.MockMvc;
     NoticeController.class,
     FriendController.class,
     AlertSettingController.class,
-    InitialSettingController.class
+    InitialSettingController.class,
+    LuckMissionController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -107,5 +110,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected InitialSettingService initialSettingService;
+
+    @MockBean
+    protected LuckMissionReadService luckMissionReadService;
 }
 
