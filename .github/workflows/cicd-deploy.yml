@@ -10,11 +10,14 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: 🍀 서브모듈 추가
+      - name: 🍀 서브모듈 추가 및 업데이트
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GIT_TOKEN }}
-          submodules: true
+          submodules: 'recursive'
+
+      - name: 🍀 서브모듈 업데이트
+        run: git submodule update --init --recursive
 
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
@@ -26,7 +29,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: 🍀 Gradle 캐시 설정
-        uses: actions/cache@v2
+        uses: actions/checkout@v3
         with:
           path: |
             ~/.gradle/caches
@@ -42,7 +45,7 @@ jobs:
         run: mkdir -p ./build/generated-snippets
 
       - name: 🍀 Gradle로 빌드
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v2.6.0
         with:
           arguments: build -x test --parallel
         env:
