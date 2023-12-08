@@ -79,6 +79,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+jar {
+    enabled = false
+}
+
 /**
  * QueryDSL Build Options
  */
