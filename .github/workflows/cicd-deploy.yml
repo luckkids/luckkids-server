@@ -34,7 +34,7 @@ jobs:
       - name: 🍀 Gradle로 빌드
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean build -x test
+          arguments: build -x test
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
