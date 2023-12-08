@@ -3,6 +3,7 @@ package com.luckkids;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
+import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
 import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.join.JoinController;
@@ -15,6 +16,8 @@ import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
+import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
@@ -49,7 +52,8 @@ import org.springframework.test.web.servlet.MockMvc;
     FriendController.class,
     AlertSettingController.class,
     HomeController.class,
-    UserController.class
+    UserController.class,
+    ConfirmEmailController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -112,6 +116,12 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected UserReadService userReadService;
+
+    @MockBean
+    protected ConfirmEmailReadService confirmEmailReadService;
+
+    @MockBean
+    protected ConfirmEmailService confirmEmailService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;

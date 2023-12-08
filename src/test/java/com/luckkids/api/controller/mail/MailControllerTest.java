@@ -29,7 +29,7 @@ class MailControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/mail/authCode")
+                post("/api/v1/mail/authUrl")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -51,7 +51,7 @@ class MailControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/mail/authCode")
+                post("/api/v1/mail/authUrl")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

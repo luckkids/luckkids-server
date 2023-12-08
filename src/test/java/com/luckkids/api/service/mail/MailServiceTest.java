@@ -3,7 +3,7 @@ package com.luckkids.api.service.mail;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
+import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -27,20 +27,20 @@ public class MailServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void sendAuthCodeTest() {
+    void sendAuthUrlTest() {
         SendAuthCodeServiceRequest sendAuthCodeServiceRequest = SendAuthCodeServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .build();
 
-        given(mailService.sendAuthCode(any(SendAuthCodeServiceRequest.class)))
-            .willReturn(SendAuthCodeResponse.builder()
-                .authNum("123456")
+        given(mailService.sendAuthUrl(any(SendAuthCodeServiceRequest.class)))
+            .willReturn(SendAuthUrlResponse.builder()
+                .authKey("7MMfhzwplTsqvw")
                 .build()
             );
 
-        SendAuthCodeResponse sendAuthCodeResponse = mailService.sendAuthCode(sendAuthCodeServiceRequest);
+        SendAuthUrlResponse sendAuthCodeResponse = mailService.sendAuthUrl(sendAuthCodeServiceRequest);
 
-        assertThat(sendAuthCodeResponse.getAuthNum().length()).isEqualTo(6);
+        assertThat(sendAuthCodeResponse.getAuthKey()).isEqualTo("7MMfhzwplTsqvw");
     }
 
     @Test
