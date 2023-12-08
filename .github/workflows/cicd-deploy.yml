@@ -45,12 +45,12 @@ jobs:
         run: mkdir -p ./build/generated-snippets
 
       - name: 🍀 Gradle로 빌드
-        run: ./gradlew build -x test --parallel
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+        run: ./gradlew build -x test --parallel
 
       - name: 🌐 AWS 자격 증명 구성
         uses: aws-actions/configure-aws-credentials@v2
