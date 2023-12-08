@@ -28,8 +28,9 @@ public enum ErrorCode {
     //Alert Setting
     ALERT_SETTING_UNKNOWN("해당 사용자가 알림설정이 되어있지 않습니다."),
 
-    EMAIL_UNKNOWN("인증이 실패하였습니다."),
-    EMAIL_INCOMPLETE("인증이 완료되지 않았습니다.");
+    EMAIL_FAIL("인증이 실패하였습니다."),
+    EMAIL_INCOMPLETE("인증이 완료되지 않았습니다."),
+    EMAIL_UNKNOWN("이메일이 존재하지않습니다.");
 
     private final String message;
 

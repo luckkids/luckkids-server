@@ -1,5 +1,7 @@
 package com.luckkids.api.service.confirmEmail;
 
+import com.luckkids.api.exception.ErrorCode;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
@@ -27,12 +29,13 @@ public class ConfirmEmailService {
         return ConfirmEmailCheckResponse.of(confirmEmail.getEmail());
     }
 
-    public void createConfirmEmail(CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest){
-        confirmEmailRepository.save(createConfrimEmailServiceRequest.toEntity());
+    public ConfirmEmail createConfirmEmail(CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest){
+        return confirmEmailRepository.save(createConfrimEmailServiceRequest.toEntity());
     }
 
-    public void removeConfirmEmail(String email, String authKey){
-        ConfirmEmail confirmEmail = confirmEmailReadService.findByEmailAndAuthKey(email, authKey);
+    public void removeConfirmEmail(int id){
+        ConfirmEmail confirmEmail = confirmEmailRepository.findById(id)
+                .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_UNKNOWN));
         confirmEmailRepository.delete(confirmEmail);
     }
 }

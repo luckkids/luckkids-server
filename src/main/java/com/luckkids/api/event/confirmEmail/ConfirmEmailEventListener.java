@@ -34,7 +34,7 @@ public class ConfirmEmailEventListener implements ApplicationListener<Applicatio
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    confirmEmailService.removeConfirmEmail(event.getEmail(), event.getAuthKey());
+                    confirmEmailService.removeConfirmEmail(event.getId());
                     timer.cancel();
                 }
             }, 3 * 60 * 1000);

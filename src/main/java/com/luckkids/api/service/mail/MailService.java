@@ -12,6 +12,7 @@ import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
+import com.luckkids.domain.confirmEmail.ConfirmEmail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class MailService {
             .authKey(authKey)
             .build();
 
-        confirmEmailService.createConfirmEmail(createConfrimEmailServiceRequest);
+        ConfirmEmail confirmEmail = confirmEmailService.createConfirmEmail(createConfrimEmailServiceRequest);
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
@@ -65,7 +66,7 @@ public class MailService {
 
         sendMail(sendMailRequest);
 
-        eventPublisher.publishEvent(new ConfirmEmaiRemoveEvent(this, email, authKey));
+        eventPublisher.publishEvent(new ConfirmEmaiRemoveEvent(this, confirmEmail.getId()));
 
         return SendAuthUrlResponse.of(authKey);
     }

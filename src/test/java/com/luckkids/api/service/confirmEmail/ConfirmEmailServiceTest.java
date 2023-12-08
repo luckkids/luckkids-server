@@ -100,9 +100,9 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
     void removeConfirmEmail(){
         ConfirmEmail confirmEmail = createConfirmEmail("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
 
-        confirmEmailRepository.save(confirmEmail);
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
 
-        confirmEmailService.removeConfirmEmail("test@test.com", "testtesttest");
+        confirmEmailService.removeConfirmEmail(savedConfirmEmail.getId());
 
         assertThatThrownBy(() -> confirmEmailReadService.findByEmailAndAuthKey("test@test.com", "testtesttest"))
             .isInstanceOf(LuckKidsException.class)

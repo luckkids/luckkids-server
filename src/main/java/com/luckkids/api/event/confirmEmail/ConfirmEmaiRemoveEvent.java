@@ -5,13 +5,12 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class ConfirmEmaiRemoveEvent extends ApplicationEvent {
-    private String email;
-    private String authKey;
 
-    public ConfirmEmaiRemoveEvent(Object source, String email, String authKey) {
+    private int id;
+
+    public ConfirmEmaiRemoveEvent(Object source, int id) {
         super(source);
-        this.email = email;
-        this.authKey = authKey;
+        this.id = id;
     }
 
 }

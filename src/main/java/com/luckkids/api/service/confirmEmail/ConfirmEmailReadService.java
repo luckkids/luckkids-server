@@ -16,11 +16,11 @@ public class ConfirmEmailReadService {
 
     public ConfirmEmail findByEmail(String email){
         return confirmEmailRepository.findByEmail(email)
-            .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_UNKNOWN));
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_FAIL));
     }
 
     public ConfirmEmail findByEmailAndAuthKey(String email, String authKey){
         return confirmEmailRepository.findByEmailAndAuthKey(email, authKey)
-            .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_UNKNOWN));
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_FAIL));
     }
 }
