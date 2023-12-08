@@ -17,7 +17,17 @@ permissions:
       - file
 
 hooks:
+  AfterInstall:
+    - location: stop.sh
+      timeout: 60
+      runas: ec2-user
+
   ApplicationStart:
-    - location: deploy.sh
+    - location: start.sh
+      timeout: 60
+      runas: ec2-user
+
+  ValidateService:
+    - location: health.sh
       timeout: 60
       runas: ec2-user
