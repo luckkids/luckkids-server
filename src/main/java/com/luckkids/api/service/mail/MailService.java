@@ -1,23 +1,29 @@
 package com.luckkids.api.service.mail;
 
 import com.luckkids.api.controller.mail.request.SendMailRequest;
+import com.luckkids.api.event.confirmEmail.ConfirmEmaiRemoveEvent;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
+import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
+import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -27,20 +33,41 @@ public class MailService {
 
     private final JavaMailSender javaMailSender;
     private final UserService userService;
+    private final ConfirmEmailService confirmEmailService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public SendAuthCodeResponse sendAuthCode(SendAuthCodeServiceRequest sendAuthCodeServiceRequest) {
+    @Value("${domain.url.confirmEmail}")
+    private String confirmEmailUrl;
+
+    public SendAuthUrlResponse sendAuthUrl(SendAuthCodeServiceRequest sendAuthCodeServiceRequest) {
         String email = sendAuthCodeServiceRequest.getEmail();
-        String authNum = generateCode();
+        String authKey = generateRandomKey();
+
+        CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest = CreateConfrimEmailServiceRequest.builder()
+            .email(email)
+            .authKey(authKey)
+            .build();
+
+        confirmEmailService.createConfirmEmail(createConfrimEmailServiceRequest);
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
-            .subject("Luck-Maker 회원가입 인증번호")
-            .text("인증번호: "+authNum)
+            .subject("Luck-Kids의 이메일을 인증하세요")
+            .text(
+                "안녕하세요.\n\n" +
+                    "다음 링크를 통해 이메일 주소를 인증하세요.\n\n" +
+                    confirmEmailUrl+"/"+email+"/"+authKey+ "\n\n" +
+                    "이 주소로 인증을 요청하지 않았다면 이 이메일을 무시하셔도 됩니다.\n\n" +
+                    "감사합니다.\n\n" +
+                    "LuckKids팀"
+            )
             .build();
 
         sendMail(sendMailRequest);
 
-        return SendAuthCodeResponse.of(authNum);
+        eventPublisher.publishEvent(new ConfirmEmaiRemoveEvent(this, email, authKey));
+
+        return SendAuthUrlResponse.of(authKey);
     }
 
     @Transactional
@@ -70,7 +97,7 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-            mimeMessageHelper.setTo(sendMailRequest.getText()); // 메일 수신자
+            mimeMessageHelper.setTo(sendMailRequest.getEmail()); // 메일 수신자
             mimeMessageHelper.setSubject(sendMailRequest.getSubject()); // 메일 제목
             mimeMessageHelper.setText(sendMailRequest.getText()); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
@@ -79,12 +106,12 @@ public class MailService {
         }
     }
 
-    private String generateCode() {
-        StringBuilder builder = new StringBuilder();
-        Random random = new Random();
-        random.ints(6, 1, 10).forEach(builder::append);
+    private String generateRandomKey() {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] keyBytes = new byte[10];
+        secureRandom.nextBytes(keyBytes);
 
-        return builder.toString();
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(keyBytes);
     }
 
     private String generateTempPassword() {
