@@ -3,9 +3,9 @@
 REPOSITORY=/home/ec2-user/app
 PROJECT_NAME=luck-kids-server
 
-echo "> Build 파일 복사"
-
-cp $REPOSITORY/zip/*.jar $REPOSITORY/
+echo "> nohup.out 파일 권한 설정"
+touch $REPOSITORY/nohup.out
+chmod 664 $REPOSITORY/nohup.out
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
