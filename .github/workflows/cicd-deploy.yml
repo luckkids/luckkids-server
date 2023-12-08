@@ -45,9 +45,7 @@ jobs:
         run: mkdir -p ./build/generated-snippets
 
       - name: 🍀 Gradle로 빌드
-        uses: gradle/gradle-build-action@v2.6.0
-        with:
-          arguments: build -x test --parallel
+        run: ./gradlew build -x test --parallel
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
