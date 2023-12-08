@@ -62,7 +62,7 @@ public class MailControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("email").type(JsonFieldType.STRING)
-                        .description("중복체크 할 이메일")
+                        .description("발송 할 이메일")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
