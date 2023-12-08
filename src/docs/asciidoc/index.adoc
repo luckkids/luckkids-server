@@ -52,3 +52,7 @@ include::api/alertSetting/alertSetting.adoc[]
 == InitialSetting API
 include::api/initialSetting/initialSetting.adoc[]
 
+[[LuckMission-API]]
+== LuckMission API
+include::api/luckMission/luckMission.adoc[]
+
