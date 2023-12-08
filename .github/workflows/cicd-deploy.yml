@@ -32,9 +32,13 @@ jobs:
         run: mkdir -p ./build/generated-snippets
 
       - name: 🍀 Gradle로 빌드
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build -x test
+        env:
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+        run: ./gradlew clean build -x test
+
 
       - name: 🌐 AWS 자격 증명 구성
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,15 +47,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: 📦 luck-kids-server로 jar, appspec, 배포 스크립트 복사
+      - name: 📦 jar, appspec, 배포 스크립트 복사
         run: |
-          mkdir -p luck-kids-server
-          cp ./build/libs/*.jar ./luck-kids-server/
-          cp ./appspec.yml ./luck-kids-server/
-          cp ./deploy.sh ./luck-kids-server/
+          mkdir -p app
+          cp ./build/libs/*.jar ./app/
+          cp ./appspec.yml ./app/
+          cp scripts/deploy.sh ./app/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq -j ./deploy.zip ./luck-kids-server/*.jar ./luck-kids-server/appspec.yml ./luck-kids-server/deploy.sh
+        run: zip -r -qq -j ./deploy.zip ./app/*.jar ./app/appspec.yml ./app/deploy.sh
 
       - name: 🚛 S3로 업로드
         run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
