@@ -25,6 +25,16 @@ jobs:
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
 
+      - name: 🍀 Gradle 캐시 설정
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
@@ -34,7 +44,7 @@ jobs:
       - name: 🍀 Gradle로 빌드
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build -x test
+          arguments: build -x test --parallel
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
