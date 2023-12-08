@@ -3,10 +3,6 @@
 REPOSITORY=/home/ec2-user/app
 PROJECT_NAME=luck-kids-server
 
-echo "> nohup.out 파일 권한 설정"
-touch $REPOSITORY/nohup.out
-chmod 664 $REPOSITORY/nohup.out
-
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
 CURRENT_PID=$(pgrep -fl $PROJECT_NAME | grep java | awk '{print $1}')
@@ -34,5 +30,5 @@ chmod +x $JAR_NAME
 echo "> $JAR_NAME 실행"
 
 nohup java -jar \
-    -Dspring.profiles.active=dev \
+    -Dspring.profiles.active=prod \
     $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
