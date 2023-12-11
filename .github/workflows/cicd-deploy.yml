@@ -38,7 +38,7 @@ jobs:
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
-      - name: 🍀 Gradle로 빌드 및 DocsTest 실행
+      - name: 🍀 Gradle 빌드
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
