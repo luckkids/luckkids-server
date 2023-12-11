@@ -1,8 +1,10 @@
 package com.luckkids.api.client.google;
 
+import com.luckkids.api.client.OAuthApiClient;
 import com.luckkids.api.feign.google.GoogleApiFeignCall;
 import com.luckkids.api.feign.google.GoogleAuthFeignCall;
 import com.luckkids.api.feign.google.request.GoogleGetTokenRequest;
+import com.luckkids.domain.user.SnsType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleApiClient {
+public class GoogleApiClient implements OAuthApiClient {
 
     private static final String GRANT_TYPE = "authorization_code";
 
@@ -27,6 +29,13 @@ public class GoogleApiClient {
 
     private final GoogleAuthFeignCall googleAuthFeignCall;
     private final GoogleApiFeignCall googleApiFeignCall;
+
+    @Override
+    public SnsType oAuthSnsType() {
+        return SnsType.GOOGLE;
+    }
+
+    @Override
     public String getToken(String code) {
         GoogleGetTokenRequest googleGetTokenRequest = GoogleGetTokenRequest.builder()
             .client_id(clientId)
@@ -39,6 +48,7 @@ public class GoogleApiClient {
         return googleAuthFeignCall.getToken(googleGetTokenRequest).getAccessToken();
     }
 
+    @Override
     public String getEmail(String code){
         return googleApiFeignCall.getUserInfo("Bearer " + getToken(code)).getEmail();
     }

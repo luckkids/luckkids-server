@@ -2,9 +2,11 @@ package com.luckkids.api.client.apple;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luckkids.api.client.OAuthApiClient;
 import com.luckkids.api.client.apple.dto.AppleIdTokenPayload;
 import com.luckkids.api.feign.apple.AppleAuthFeignCall;
 import com.luckkids.api.feign.apple.request.AppleGetTokenRequest;
+import com.luckkids.domain.user.SnsType;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,7 +25,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class AppleApiClient {
+public class AppleApiClient implements OAuthApiClient {
     private static final String GRANT_TYPE = "authorization_code";
 
     @Value("${oauth.apple.client-id}")
@@ -43,6 +45,13 @@ public class AppleApiClient {
 
     private final AppleAuthFeignCall appleAuthFeignCall;
     private final ObjectMapper objectMapper;
+
+    @Override
+    public SnsType oAuthSnsType() {
+        return SnsType.APPLE;
+    }
+
+    @Override
     public String getToken(String code) {
         AppleGetTokenRequest appleGetTokenRequest = AppleGetTokenRequest.builder()
             .client_id(clientId)
@@ -54,6 +63,7 @@ public class AppleApiClient {
         return appleAuthFeignCall.getToken(appleGetTokenRequest).getIdToken();
     }
 
+    @Override
     public String getEmail(String code){
         return decodePayload(getToken(code), AppleIdTokenPayload.class).getEmail();
     }
@@ -73,7 +83,6 @@ public class AppleApiClient {
     }
 
     private PrivateKey getPrivateKey() {
-
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
 
@@ -88,7 +97,6 @@ public class AppleApiClient {
     }
 
     private <T> T decodePayload(String token, Class<T> targetClass) {
-
         String[] tokenParts = token.split("\\.");
         String payloadJWT = tokenParts[1];
         Base64.Decoder decoder = Base64.getUrlDecoder();
