@@ -42,6 +42,7 @@ public class AppleApiClient {
     private String privateKey;
 
     private final AppleAuthFeignCall appleAuthFeignCall;
+    private final ObjectMapper objectMapper;
     public String getToken(String code) {
         AppleGetTokenRequest appleGetTokenRequest = AppleGetTokenRequest.builder()
             .client_id(clientId)
@@ -92,8 +93,7 @@ public class AppleApiClient {
         String payloadJWT = tokenParts[1];
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String payload = new String(decoder.decode(payloadJWT));
-        ObjectMapper objectMapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         try {
             return objectMapper.readValue(payload, targetClass);
