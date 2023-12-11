@@ -14,16 +14,16 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: scripts/run_was.sh
+    - location: scripts/stop.sh
       timeout: 60
       runas: ec2-user
 
   ApplicationStart:
-    - location: scripts/health_check.sh
+    - location: scripts/start.sh
       timeout: 60
       runas: ec2-user
 
   ValidateService:
-    - location: scripts/switch.sh
+    - location: scripts/health.sh
       timeout: 60
       runas: ec2-user
