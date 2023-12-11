@@ -16,9 +16,6 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           submodules: 'recursive'
 
-      - name: 🍀 서브모듈 업데이트
-        run: git submodule update --init --recursive
-
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
         with:
