@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.luckkids'
-version = '1.0.1-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss")
+version = '1.0.1-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+9"))
 
 java {
     sourceCompatibility = '17'
