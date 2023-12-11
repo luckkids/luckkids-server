@@ -1,6 +1,7 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.user.UserReadService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ class UserRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserReadService userReadService;
+
     @DisplayName("유저의 이메일로 유저 정보를 조회한다.")
     @Test
     void findByEmail() {
@@ -23,7 +27,7 @@ class UserRepositoryTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         // when
-        User findUser = userRepository.findByEmail(email);
+        User findUser = userReadService.findByEmail(email);
 
         // then
         assertThat(findUser.getEmail()).isEqualTo(email);

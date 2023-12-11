@@ -5,6 +5,7 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -36,6 +37,9 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private PushRepository pushRepository;
+
+    @Autowired
+    private UserReadService userReadService;
 
     @AfterEach
     void tearDown() {
@@ -167,7 +171,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         LoginResponse loginResponse1 = loginService.normalLogin(request1);
         LoginResponse loginResponse2 = loginService.normalLogin(request2);
 
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        User savedUser = userReadService.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
         List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
@@ -212,7 +216,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         loginService.normalLogin(request1);
         loginService.normalLogin(request2);
 
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        User savedUser = userReadService.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
         List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 

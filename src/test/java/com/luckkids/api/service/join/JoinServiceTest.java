@@ -6,6 +6,7 @@ import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -29,6 +30,9 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserReadService userReadService;
 
     @AfterEach
     void tearDown() {
@@ -97,7 +101,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);
 
-        User user = userRepository.findByEmail(response.getEmail());
+        User user = userReadService.findByEmail(response.getEmail());
         String password = user.getPassword();
         String encryptPassword = user.encryptPassword("1234");
 

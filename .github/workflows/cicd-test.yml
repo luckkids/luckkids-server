@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: 🚀 Deploy workflow on test environment
 
 on:
   pull_request:

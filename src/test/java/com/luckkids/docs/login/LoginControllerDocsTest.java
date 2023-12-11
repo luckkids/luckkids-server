@@ -37,7 +37,7 @@ public class LoginControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("일반 로그인 API")
     @Test
-    void createMission() throws Exception {
+    void normalLogin() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
