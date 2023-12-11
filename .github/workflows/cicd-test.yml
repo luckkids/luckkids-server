@@ -1,4 +1,4 @@
-name: 🚀 Deploy workflow on test environment
+name: ✋ Test
 
 on:
   pull_request:

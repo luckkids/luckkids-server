@@ -1,4 +1,4 @@
-name: 🚀 Deploy workflow on production environment
+name: 🚀 Deploy
 
 on:
   pull_request:
@@ -61,13 +61,13 @@ jobs:
 
       - name: 📦 jar, appspec, 배포 스크립트 복사
         run: |
-          mkdir -p before-deploy
+          mkdir -p before-deploy/scripts
           cp ./build/libs/*.jar ./before-deploy/
           cp ./appspec.yml ./before-deploy/
-          cp scripts/*.sh  ./before-deploy/
+          cp -r scripts/ ./before-deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/*.sh
+        run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/scripts/*.sh
 
       - name: 🚛 S3로 업로드
         run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
