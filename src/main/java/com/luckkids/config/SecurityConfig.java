@@ -60,9 +60,7 @@ public class SecurityConfig {
             new AntPathRequestMatcher("/css/**"),
             new AntPathRequestMatcher("/images/**"),
             new AntPathRequestMatcher("/js/**"),
-            new AntPathRequestMatcher("/h2-console/**"),
-            new AntPathRequestMatcher("/health-check"),
-            new AntPathRequestMatcher("/profile"),
+            new AntPathRequestMatcher("/health-check")
         };
     }
 }
