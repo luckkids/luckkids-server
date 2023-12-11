@@ -27,5 +27,5 @@ do
         echo "> Health check failed."
         exit 1
     fi
-    sleep 5
+    sleep 10
 done
