@@ -7,27 +7,23 @@ files:
     overwrite: yes
 
 permissions:
-  - object: /home/ec2-user/app
+  - object: /home/ec2-user
     pattern: "**"
     owner: ec2-user
     group: ec2-user
-    mode: 755
-    type:
-      - directory
-      - file
 
 hooks:
   AfterInstall:
-    - location: stop.sh
+    - location: scripts/run_was.sh
       timeout: 60
       runas: ec2-user
 
   ApplicationStart:
-    - location: start.sh
+    - location: scripts/health_check.sh
       timeout: 60
       runas: ec2-user
 
   ValidateService:
-    - location: health.sh
+    - location: scripts/switch.sh
       timeout: 60
       runas: ec2-user
