@@ -67,7 +67,7 @@ jobs:
           cp -r ./scripts/ ./before-deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/scripts/*.sh
+        run: zip -r -qq ./deploy.zip ./before-deploy/
 
       - name: 🚛 S3로 업로드
         run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
