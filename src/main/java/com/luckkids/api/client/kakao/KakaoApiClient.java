@@ -1,4 +1,4 @@
-package com.luckkids.api.client;
+package com.luckkids.api.client.kakao;
 
 import com.luckkids.api.feign.kakao.KakaoApiFeignCall;
 import com.luckkids.api.feign.kakao.KakaoAuthFeignCall;

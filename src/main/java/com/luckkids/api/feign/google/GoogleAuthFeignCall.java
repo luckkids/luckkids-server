@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
-@FeignClient(name="${oauth.google.name.auth}", url="${oauth.google.url.auth}", configuration = FeignConfig.class)
+@FeignClient(name="${oauth.google.auth.name}", url="${oauth.google.auth.url}", configuration = FeignConfig.class)
 public interface GoogleAuthFeignCall {
     @PostMapping(value="/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     GoogleTokenResponse getToken(@RequestBody GoogleGetTokenRequest googleGetTokenRequest);

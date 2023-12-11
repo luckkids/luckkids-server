@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
-@FeignClient(name="${oauth.kakao.name.auth}", url="${oauth.kakao.url.auth}", configuration = FeignConfig.class)
+@FeignClient(name="${oauth.kakao.auth.name}", url="${oauth.kakao.auth.url}", configuration = FeignConfig.class)
 public interface KakaoAuthFeignCall {
 
     @PostMapping(value="/oauth/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

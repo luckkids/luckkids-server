@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Component
-@FeignClient(name="${oauth.google.name.api}", url="${oauth.google.url.api}", configuration = FeignConfig.class)
+@FeignClient(name="${oauth.google.api.name}", url="${oauth.google.api.url}", configuration = FeignConfig.class)
 public interface GoogleApiFeignCall {
 
     @GetMapping(value = "/oauth2/v1/userinfo", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

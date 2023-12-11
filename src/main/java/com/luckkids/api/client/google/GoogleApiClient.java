@@ -1,4 +1,4 @@
-package com.luckkids.api.client;
+package com.luckkids.api.client.google;
 
 import com.luckkids.api.feign.google.GoogleApiFeignCall;
 import com.luckkids.api.feign.google.GoogleAuthFeignCall;
