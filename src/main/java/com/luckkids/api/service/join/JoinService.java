@@ -8,6 +8,7 @@ import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +17,12 @@ import org.springframework.stereotype.Service;
 public class JoinService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public JoinResponse joinUser(JoinServiceRequest joinServiceRequest){
         try {
             User user = joinServiceRequest.toEntity();
+            user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
 
             return JoinResponse.of(savedUser);
