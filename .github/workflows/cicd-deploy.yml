@@ -38,10 +38,10 @@ jobs:
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
-      - name: 🍀 필요한 디렉토리 생성
-        run: mkdir -p ./build/generated-snippets
+      - name: 🍀 스니펫 생성을 위한 테스트 실행
+        run: ./gradlew test --tests *DocsTest
 
-      - name: 🍀 Gradle로 빌드
+      - name: 🍀 Gradle로 빌드 (테스트 제외)
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
