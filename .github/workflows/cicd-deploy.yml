@@ -61,10 +61,10 @@ jobs:
 
       - name: 📦 jar, appspec, 배포 스크립트 복사
         run: |
-          mkdir -p before-deploy/scripts
+          mkdir -p before-deploy
           cp ./build/libs/*.jar ./before-deploy/
           cp ./appspec.yml ./before-deploy/
-          cp -r scripts/ ./before-deploy/scripts/
+          cp -r ./scripts/ ./before-deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성
         run: zip -r -qq -j ./deploy.zip ./before-deploy/*.jar ./before-deploy/appspec.yml ./before-deploy/scripts/*.sh
