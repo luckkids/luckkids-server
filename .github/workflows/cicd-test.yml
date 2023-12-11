@@ -10,8 +10,10 @@ permissions:
   checks: write
 
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-gradle-wrapper.outputs.cache-key }}
 
     steps:
       - name: 🍀 서브모듈 추가
@@ -26,6 +28,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: 🍀 Cache Gradle Wrapper
+        uses: actions/cache@v3
+        id: cache-gradle-wrapper
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
 
@@ -38,7 +55,7 @@ jobs:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-        run: ./gradlew test
+        run: ./gradlew test --parallel
 
       - name: 🍀 테스트 결과 Report
         uses: mikepenz/action-junit-report@v3
