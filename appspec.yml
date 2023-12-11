@@ -5,6 +5,9 @@ files:
   - source: /
     destination: /home/ec2-user/app
     overwrite: yes
+  - source: /scripts
+    destination: /home/ec2-user/app/scripts
+    overwrite: yes
 
 permissions:
   - object: /home/ec2-user
