@@ -38,16 +38,13 @@ jobs:
       - name: 🍀 비밀 설정 파일 복사
         run: ./gradlew copySecret
 
-      - name: 🍀 스니펫 생성을 위한 테스트 실행
-        run: ./gradlew test --tests *DocsTest
-
       - name: 🍀 Gradle로 빌드 및 DocsTest 실행
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-        run: ./gradlew build -x test --tests *DocsTest --parallel
+        run: ./gradlew build --parallel
 
       - name: 🌐 AWS 자격 증명 구성
         uses: aws-actions/configure-aws-credentials@v2
