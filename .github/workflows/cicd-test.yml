@@ -12,7 +12,6 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: 🍀 서브모듈 추가
         uses: actions/checkout@v3
