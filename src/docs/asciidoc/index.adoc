@@ -32,7 +32,8 @@ include::api/join/joinUser.adoc[]
 
 [[Mail-API]]
 == Mail API
-include::api/mail/mail.adoc
+
+include::api/mail/mail.adoc[]
 
 [[Friend-API]]
 == Friend API
