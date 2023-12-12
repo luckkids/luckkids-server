@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    USER_UNKNOWN( "해당 사용자가 존재하지 않습니다"),
+    USER_UNKNOWN( "해당 사용자가 존재하지 않습니다."),
+    USER_EMAIL( "해당 이메일을 사용중인 사용자가 존재하지 않습니다."),
     USER_PASSWORD("아이디 또는 패스워드가 일치하지 않습니다."),
     USER_NORMAL( "이미 가입된 계정입니다."),
     USER_KAKAO( "카카오로그인으로 이미 가입된 계정입니다."),

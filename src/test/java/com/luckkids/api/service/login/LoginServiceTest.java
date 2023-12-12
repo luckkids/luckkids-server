@@ -5,6 +5,7 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,6 +39,12 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Autowired
     private PushRepository pushRepository;
 
+    @Autowired
+    private UserReadService userReadService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @AfterEach
     void tearDown() {
         refreshTokenRepository.deleteAllInBatch();
@@ -48,11 +56,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIfUserExist() throws JsonProcessingException {
         // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
         User savedUser = userRepository.save(user);
 
@@ -75,11 +79,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIfSnsUserExist() {
         // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.KAKAO)
-            .build();
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.KAKAO);
 
         User savedUser = userRepository.save(user);
 
@@ -117,11 +117,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIncorrectPassword() {
         // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
         userRepository.save(user);
 
@@ -143,11 +139,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void normalLoginOtherDevicePushToken() throws JsonProcessingException {
         // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
         userRepository.save(user);
 
@@ -167,7 +159,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         LoginResponse loginResponse1 = loginService.normalLogin(request1);
         LoginResponse loginResponse2 = loginService.normalLogin(request2);
 
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        User savedUser = userReadService.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
         List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
@@ -186,11 +178,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void normalLoginSameDevicePushToken() throws JsonProcessingException {
         // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
         userRepository.save(user);
 
@@ -212,7 +200,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         loginService.normalLogin(request1);
         loginService.normalLogin(request2);
 
-        User savedUser = userRepository.findByEmail("tkdrl8908@naver.com");
+        User savedUser = userReadService.findByEmail("tkdrl8908@naver.com");
         List<Push> pushes = savedUser.getPushes();
         List<RefreshToken> refreshTokens = savedUser.getRefreshTokens();
 
@@ -229,21 +217,11 @@ public class LoginServiceTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("비밀번호 암호화 테스트")
-    @Test
-    @Transactional
-    void encryptPassword() {
-        // given
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("testPassword")
-            .snsType(SnsType.NORMAL)
+    User createUser(String email, String password, SnsType snsType){
+        return User.builder()
+            .email(email)
+            .password(bCryptPasswordEncoder.encode(password))
+            .snsType(snsType)
             .build();
-
-        // when
-        String encryptPassword = user.encryptPassword("testPassword");
-        System.out.println(encryptPassword);
-        // then
-        assertThat(encryptPassword).isEqualTo(user.getPassword());
     }
 }

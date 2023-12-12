@@ -1,10 +1,13 @@
 package com.luckkids.api.service.user;
 
+import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
+import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
+import com.luckkids.domain.user.User;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
 import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
-import com.luckkids.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,13 @@ public class UserService {
 
     private final UserReadService userReadService;
     private final SecurityService securityService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
+        User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
+        user.updatePassword(bCryptPasswordEncoder.encode(userUpdatePasswordServiceRequest.getPassword()));
+        return UserUpdatePasswordResponse.of(user);
+    }
 
     public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest){
         int userId = securityService.getCurrentUserInfo().getUserId();
