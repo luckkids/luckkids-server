@@ -50,7 +50,9 @@ public class LoginService {
     }
 
     public OAuthLoginResponse oauthLogin(OAuthLoginServiceRequest oAuthLoginServiceRequest) throws JsonProcessingException {
-        OAuthApiClient client = clients.get(oAuthLoginServiceRequest.getSnsType());
+        SnsType snsType = oAuthLoginServiceRequest.getSnsType();
+
+        OAuthApiClient client = clients.get(snsType);
         Optional.ofNullable(client).orElseThrow(() -> new LuckKidsException(ErrorCode.OAUTH_UNKNOWN));
 
         String email = client.getEmail(oAuthLoginServiceRequest.getCode());
@@ -60,13 +62,13 @@ public class LoginService {
                 userRepository.save(User.builder()
                     .email(email)
                     .missionCount(0)
-                    .snsType(oAuthLoginServiceRequest.getSnsType())
+                    .snsType(snsType)
                     .role(Role.USER)
                     .settingStatus(SettingStatus.INCOMPLETE)
                     .build())
             );
 
-        user.loginCheckSnsType(oAuthLoginServiceRequest.getSnsType());              //SNS가입여부확인
+        user.loginCheckSnsType(snsType);              //SNS가입여부확인
 
         return OAuthLoginResponse.of(user, setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey()));
     }
