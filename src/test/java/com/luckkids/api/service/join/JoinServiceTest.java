@@ -15,6 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,6 +34,9 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserReadService userReadService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @AfterEach
     void tearDown() {
@@ -103,8 +107,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
 
         User user = userReadService.findByEmail(response.getEmail());
         String password = user.getPassword();
-        String encryptPassword = user.encryptPassword("1234");
 
-        assertThat(password).isEqualTo(encryptPassword);
+        assertThat(bCryptPasswordEncoder.matches("1234", password)).isTrue();
     }
 }

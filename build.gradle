@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.luckkids'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.1-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+9"))
 
 java {
     sourceCompatibility = '17'
@@ -80,6 +80,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+jar {
+    enabled = false
+}
+
 /**
  * QueryDSL Build Options
  */
@@ -128,4 +132,15 @@ tasks.register('copySecret', Copy) {
     from './luck-kids-server-submodule-config'
     include "application*.yml"
     into 'src/main/resources'
+}
+
+processResources {
+    filesMatching('**/application.yml') {
+        expand([
+                'MAIL_PASSWORD'   : System.getenv('MAIL_PASSWORD'),
+                'JWT_SECRET_KEY'  : System.getenv('JWT_SECRET_KEY'),
+                'DEV_DB_PASSWORD' : System.getenv('DEV_DB_PASSWORD'),
+                'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD')
+        ])
+    }
 }

@@ -3,18 +3,27 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/luck-kids-server
+    destination: /home/ec2-user/app
     overwrite: yes
 
 permissions:
-  - object: /home/ec2-user/luck-kids-server
+  - object: /home/ec2-user
     pattern: "**"
     owner: ec2-user
     group: ec2-user
-    mode: 755
 
 hooks:
+  AfterInstall:
+    - location: scripts/run_new_was.sh
+      timeout: 60
+      runas: ec2-user
+
   ApplicationStart:
-    - location: /home/ec2-user/luck-kids-server/deploy.sh
+    - location: scripts/health.sh
+      timeout: 60
+      runas: ec2-user
+
+  ValidateService:
+    - location: scripts/switch.sh
       timeout: 60
       runas: ec2-user

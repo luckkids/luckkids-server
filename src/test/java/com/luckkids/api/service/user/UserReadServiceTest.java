@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,6 +23,9 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @AfterEach
     void tearDown() {
@@ -42,7 +46,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result)
         .extracting("email", "password", "snsType")
-        .contains("user@daum.net", result.encryptPassword("user1234!") , SnsType.KAKAO);
+        .contains("user@daum.net", user.getPassword() , SnsType.KAKAO);
 
     }
 
@@ -69,7 +73,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
         User findUser = userReadService.findByEmail(user.getEmail());
         // then
         assertThat(findUser).extracting("email", "password", "snsType")
-            .contains("test@email.com", findUser.encryptPassword("1234"), SnsType.NORMAL);
+            .contains("test@email.com", user.getPassword(), SnsType.NORMAL);
     }
 
     @DisplayName("이메일을 받아서 해당 이메일을 사용하는 사용자를 조회시 존재하지 않는 사용자일 경우 예외를 발생시킨다.")
@@ -113,7 +117,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
     private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
-            .password(password)
+            .password(bCryptPasswordEncoder.encode(password))
             .snsType(snsType)
             .build();
     }

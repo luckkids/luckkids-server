@@ -1,4 +1,4 @@
-name: 🚀 Deploy workflow on test environment
+name: ✋ Test
 
 on:
   pull_request:
@@ -12,7 +12,6 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: 🍀 서브모듈 추가
         uses: actions/checkout@v3
@@ -26,6 +25,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: 🍀 Gradle 캐시 설정
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: 🍀 gradlew 실행 권한 설정
         run: chmod +x gradlew
 
@@ -38,7 +47,7 @@ jobs:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-        run: ./gradlew test
+        run: ./gradlew test --parallel
 
       - name: 🍀 테스트 결과 Report
         uses: mikepenz/action-junit-report@v3

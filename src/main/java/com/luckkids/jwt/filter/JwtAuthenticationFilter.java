@@ -32,7 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/mail",                 //이메일발송
         "/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
         "/docs",                        //API문서는 예외
-        "/api/v1/confirmEmail"
+        "/api/v1/confirmEmail",
+        "/health-check"
     };
 
     @Override
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         try {
             // Header에서 토큰 받아옴
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
@@ -52,8 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 세팅
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            else{
+            } else {
                 throw new JwtTokenException(ErrorCode.JWT_UNKNOWN);
             }
         } catch (ExpiredJwtException e) {
