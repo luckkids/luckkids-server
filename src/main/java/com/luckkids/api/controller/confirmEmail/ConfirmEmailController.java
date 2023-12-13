@@ -2,12 +2,14 @@ package com.luckkids.api.controller.confirmEmail;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.confirmEmail.request.ConfirmEmailCheckRequest;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,15 +18,20 @@ public class ConfirmEmailController {
 
     private final ConfirmEmailService confirmEmailService;
 
-    @GetMapping("/{email}/{authKey}")
-    public String confirmEmail(@PathVariable(name = "email") String email,@PathVariable(name = "authKey") String authKey){
+    @GetMapping
+    public ModelAndView confirmEmail(String key){
+        ModelAndView mav = new ModelAndView();
         try {
-            confirmEmailService.confirmEmail(email, authKey);
-            return "success";
+            confirmEmailService.confirmEmail(key);
+            mav.setViewName("success");
         }
-        catch (Exception e){
-            return "fail";
+        catch (LuckKidsException e){
+            mav.setViewName("fail");
+            mav.addObject("message", e.getMessage());
+        }catch (Exception e){
+            mav.setViewName("fail");
         }
+        return mav;
     }
 
     @PostMapping("/check")

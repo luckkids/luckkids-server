@@ -1,6 +1,7 @@
 package com.luckkids.api.service.confirmEmail;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.component.Aes256Component;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
@@ -24,6 +25,8 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
     private ConfirmEmailRepository confirmEmailRepository;
     @Autowired
     private ConfirmEmailReadService confirmEmailReadService;
+    @Autowired
+    private Aes256Component aes256Component;
 
     @AfterEach
     void tearDown() {
@@ -71,7 +74,7 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
 
         ConfirmEmail savedConfirmEmail =  confirmEmailRepository.save(confirmEmail);
 
-        confirmEmailService.confirmEmail(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
+        confirmEmailService.confirmEmail(aes256Component.encrypt(savedConfirmEmail.getEmail()+"/"+savedConfirmEmail.getAuthKey()));
 
         ConfirmEmail findConfirmEmail = confirmEmailReadService.findByEmailAndAuthKey(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
 

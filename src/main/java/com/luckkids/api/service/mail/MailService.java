@@ -1,7 +1,7 @@
 package com.luckkids.api.service.mail;
 
+import com.luckkids.api.component.Aes256Component;
 import com.luckkids.api.controller.mail.request.SendMailRequest;
-import com.luckkids.api.event.confirmEmail.ConfirmEmaiRemoveEvent;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
@@ -17,15 +17,15 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +35,7 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private final UserService userService;
     private final ConfirmEmailService confirmEmailService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final Aes256Component aes256Component;
 
     @Value("${domain.url.confirmEmail}")
     private String confirmEmailUrl;
@@ -44,12 +44,14 @@ public class MailService {
         String email = sendAuthCodeServiceRequest.getEmail();
         String authKey = generateRandomKey();
 
+        String encrypt = URLEncoder.encode(aes256Component.encrypt(email+"/"+authKey), StandardCharsets.UTF_8);
+
         CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest = CreateConfrimEmailServiceRequest.builder()
             .email(email)
             .authKey(authKey)
             .build();
 
-        ConfirmEmail confirmEmail = confirmEmailService.createConfirmEmail(createConfrimEmailServiceRequest);
+        confirmEmailService.createConfirmEmail(createConfrimEmailServiceRequest);
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
@@ -57,7 +59,7 @@ public class MailService {
             .text(
                 "안녕하세요.\n\n" +
                     "다음 링크를 통해 이메일 주소를 인증하세요.\n\n" +
-                    confirmEmailUrl+"/"+email+"/"+authKey+ "\n\n" +
+                    confirmEmailUrl+"?key="+encrypt+ "\n\n" +
                     "이 주소로 인증을 요청하지 않았다면 이 이메일을 무시하셔도 됩니다.\n\n" +
                     "감사합니다.\n\n" +
                     "LuckKids팀"
@@ -65,8 +67,6 @@ public class MailService {
             .build();
 
         sendMail(sendMailRequest);
-
-        eventPublisher.publishEvent(new ConfirmEmaiRemoveEvent(this, confirmEmail.getId()));
 
         return SendAuthUrlResponse.of(authKey);
     }
