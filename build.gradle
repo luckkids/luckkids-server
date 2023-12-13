@@ -140,7 +140,8 @@ processResources {
                 'MAIL_PASSWORD'   : System.getenv('MAIL_PASSWORD'),
                 'JWT_SECRET_KEY'  : System.getenv('JWT_SECRET_KEY'),
                 'DEV_DB_PASSWORD' : System.getenv('DEV_DB_PASSWORD'),
-                'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD')
+                'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD'),
+                'AES_KEY': System.getenv('AES_KEY')
         ])
     }
 }
