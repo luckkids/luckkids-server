@@ -48,7 +48,6 @@ jobs:
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
           AES_KEY: ${{ secrets.AES_KEY }}
-          CONFIRM_DOMAIN: ${{ secrets.CONFIRM_DOMAIN }}
         run: ./gradlew test --parallel
 
       - name: 🍀 테스트 결과 Report
