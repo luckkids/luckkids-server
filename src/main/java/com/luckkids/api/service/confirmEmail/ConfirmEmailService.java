@@ -1,8 +1,6 @@
 package com.luckkids.api.service.confirmEmail;
 
 import com.luckkids.api.component.Aes256Component;
-import com.luckkids.api.exception.ErrorCode;
-import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
@@ -22,7 +20,6 @@ public class ConfirmEmailService {
     private final Aes256Component aes256Component;
 
     public void confirmEmail(String encryptKey){
-
         String decryptKey = aes256Component.decrypt(encryptKey);
 
         String[] value = decryptKey.split("/");
@@ -41,11 +38,5 @@ public class ConfirmEmailService {
 
     public void createConfirmEmail(CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest){
         confirmEmailRepository.save(createConfrimEmailServiceRequest.toEntity());
-    }
-
-    public void removeConfirmEmail(int id){
-        ConfirmEmail confirmEmail = confirmEmailRepository.findById(id)
-                .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_UNKNOWN));
-        confirmEmailRepository.delete(confirmEmail);
     }
 }

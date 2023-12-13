@@ -4,11 +4,15 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class confirmEmailTest extends IntegrationTestSupport {
+
+    @Autowired
+    private ConfirmEmailRepository confirmEmailRepository;
 
     @Test
     @DisplayName("이메일의 인증완료 여부를 체크한다.")
@@ -19,9 +23,11 @@ public class confirmEmailTest extends IntegrationTestSupport {
             .confirmStatus(ConfirmStatus.INCOMPLETE)
             .build();
 
-        assertThatThrownBy(confirmEmail::checkEmail)
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
+
+        assertThatThrownBy(savedConfirmEmail::checkEmail)
             .isInstanceOf(LuckKidsException.class)
-            .hasMessage("인증이 완료되지 않았습니다.");
+            .hasMessage("이메일 인증이 완료되지 않았습니다.");
     }
 
     @Test
@@ -33,7 +39,9 @@ public class confirmEmailTest extends IntegrationTestSupport {
             .confirmStatus(ConfirmStatus.INCOMPLETE)
             .build();
 
-        confirmEmail.confirm();
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
+
+        savedConfirmEmail.confirm();
 
         assertThat(confirmEmail.getConfirmStatus()).isEqualTo(ConfirmStatus.COMPLETE);
     }

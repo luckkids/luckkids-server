@@ -64,7 +64,7 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
 
         assertThatThrownBy(() -> confirmEmailService.checkEmail(confirmEmailCheckServiceRequest))
             .isInstanceOf(LuckKidsException.class)
-            .hasMessage("인증이 완료되지 않았습니다.");
+            .hasMessage("이메일 인증이 완료되지 않았습니다.");
     }
 
     @DisplayName("이메일 인증을 처리한다.")
@@ -96,20 +96,6 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
         assertThat(confirmEmail)
             .extracting("email", "authKey", "confirmStatus")
             .contains("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
-    }
-
-    @DisplayName("이메일인증값을 삭제한다.")
-    @Test
-    void removeConfirmEmail(){
-        ConfirmEmail confirmEmail = createConfirmEmail("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
-
-        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
-
-        confirmEmailService.removeConfirmEmail(savedConfirmEmail.getId());
-
-        assertThatThrownBy(() -> confirmEmailReadService.findByEmailAndAuthKey("test@test.com", "testtesttest"))
-            .isInstanceOf(LuckKidsException.class)
-            .hasMessage("인증이 실패하였습니다.");
     }
 
     private ConfirmEmail createConfirmEmail(String email, String authKey, ConfirmStatus confirmStatus){
