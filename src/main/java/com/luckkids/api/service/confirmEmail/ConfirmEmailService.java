@@ -1,9 +1,9 @@
 package com.luckkids.api.service.confirmEmail;
 
-import com.luckkids.api.component.Aes256Component;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.confirmEmail.ConfirmEmail;
 import com.luckkids.domain.confirmEmail.ConfirmEmailRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,10 @@ public class ConfirmEmailService {
 
     private final ConfirmEmailRepository confirmEmailRepository;
     private final ConfirmEmailReadService confirmEmailReadService;
-    private final Aes256Component aes256Component;
+    private final SecurityService securityService;
 
     public void confirmEmail(String encryptKey){
-        String decryptKey = aes256Component.decrypt(encryptKey);
+        String decryptKey = securityService.decrypt(encryptKey);
 
         String[] value = decryptKey.split("/");
 

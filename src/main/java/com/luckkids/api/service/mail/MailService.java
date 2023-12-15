@@ -1,6 +1,5 @@
 package com.luckkids.api.service.mail;
 
-import com.luckkids.api.component.Aes256Component;
 import com.luckkids.api.controller.mail.request.SendMailRequest;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
@@ -10,9 +9,9 @@ import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
 import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
-import com.luckkids.domain.confirmEmail.ConfirmEmail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private final UserService userService;
     private final ConfirmEmailService confirmEmailService;
-    private final Aes256Component aes256Component;
+    private final SecurityService securityService;
 
     @Value("${domain.url.confirmEmail}")
     private String confirmEmailUrl;
@@ -44,7 +43,7 @@ public class MailService {
         String email = sendAuthCodeServiceRequest.getEmail();
         String authKey = generateRandomKey();
 
-        String encrypt = URLEncoder.encode(aes256Component.encrypt(email+"/"+authKey), StandardCharsets.UTF_8);
+        String encrypt = URLEncoder.encode(securityService.encrypt(email+"/"+authKey), StandardCharsets.UTF_8);
 
         CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest = CreateConfrimEmailServiceRequest.builder()
             .email(email)
