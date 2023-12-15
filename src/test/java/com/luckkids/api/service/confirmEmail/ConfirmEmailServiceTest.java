@@ -1,11 +1,11 @@
 package com.luckkids.api.service.confirmEmail;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.component.Aes256Component;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.confirmEmail.ConfirmEmail;
 import com.luckkids.domain.confirmEmail.ConfirmEmailRepository;
 import com.luckkids.domain.confirmEmail.ConfirmStatus;
@@ -13,11 +13,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ConfirmEmailServiceTest extends IntegrationTestSupport {
+@ActiveProfiles("test")
+@SpringBootTest
+public class ConfirmEmailServiceTest {
 
     @Autowired
     private ConfirmEmailService confirmEmailService;
@@ -26,7 +30,7 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
     @Autowired
     private ConfirmEmailReadService confirmEmailReadService;
     @Autowired
-    private Aes256Component aes256Component;
+    private SecurityService securityService;
 
     @AfterEach
     void tearDown() {
@@ -74,7 +78,7 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
 
         ConfirmEmail savedConfirmEmail =  confirmEmailRepository.save(confirmEmail);
 
-        confirmEmailService.confirmEmail(aes256Component.encrypt(savedConfirmEmail.getEmail()+"/"+savedConfirmEmail.getAuthKey()));
+        confirmEmailService.confirmEmail(securityService.encrypt(savedConfirmEmail.getEmail()+"/"+savedConfirmEmail.getAuthKey()));
 
         ConfirmEmail findConfirmEmail = confirmEmailReadService.findByEmailAndAuthKey(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
 
