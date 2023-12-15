@@ -19,4 +19,4 @@ RUN export MAIL_PASSWORD=$MAIL_PASSWORD && \
     export PROD_DB_PASSWORD=$PROD_DB_PASSWORD && \
     ./gradlew bootJar
 
-ENTRYPOINT java -Duser.timezone=GMT+09:00 -jar -Dspring.profiles.active=dev /home/project/luck-kids-server/build/libs/luck-kids-server-1.0.1-SNAPSHOT-*.jar
+ENTRYPOINT java -Dserver.servlet.context-path=/luckkids -Duser.timezone=GMT+09:00 -jar -Dspring.profiles.active=dev /home/project/luck-kids-server/build/libs/luck-kids-server-1.0.1-SNAPSHOT-*.jar
