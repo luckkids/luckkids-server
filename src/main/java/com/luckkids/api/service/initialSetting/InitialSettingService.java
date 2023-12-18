@@ -40,7 +40,7 @@ public class InitialSettingService {
     public InitialSettingResponse initialSetting(InitialSettingServiceRequest request){
         List<InitialSettingMissionResponse> initialSettingMissionResponses = request.getMissions().stream()
             .map(initialSettingMissionServiceRequest ->
-                missionService.createMission(initialSettingMissionServiceRequest.toMissionServiceRequest()).toInitialSettingResponse())
+                missionService.createMission(initialSettingMissionServiceRequest.toMissionServiceRequest(request.getAlertSetting().getAlertStatus())).toInitialSettingResponse())
             .toList();
 
         InitialSettingCharacterResponse initialSettingCharacterResponse = userCharacterService.createUserCharacter(request.getCharacter().toCharacterServiceRequest()).toInitialSettingResponse();

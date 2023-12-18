@@ -7,6 +7,7 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.User;
