@@ -45,7 +45,7 @@ public class MailControllerDocsTest extends RestDocsSupport {
 
         given(mailService.sendAuthCode(any(SendAuthCodeServiceRequest.class)))
             .willReturn(SendAuthCodeResponse.builder()
-                .authNum("232422")
+                .authNum("aiowjeo123k25nbu")
                 .build()
             );
 
