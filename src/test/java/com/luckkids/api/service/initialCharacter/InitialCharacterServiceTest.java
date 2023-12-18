@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -47,12 +48,12 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
         List<InitialCharacterRandResponse> initialCharacterRandResponses = initialCharacterService.findAll();
 
         assertThat(initialCharacterRandResponses).hasSize(4)
-            .extracting("characterName", "fileName")
+            .extracting("characterName", "fileName", "fileUrl")
             .containsExactlyInAnyOrder(
-                tuple("테스트1", "test1.json"),
-                tuple("테스트2", "test2.json"),
-                tuple("테스트3", "test3.json"),
-                tuple("테스트4", "test4.json")
+                tuple("테스트1", "test1.json", "https://d1i0as5mndfs61.cloudfront.net/test1.json"),
+                tuple("테스트2", "test2.json", "https://d1i0as5mndfs61.cloudfront.net/test2.json"),
+                tuple("테스트3", "test3.json", "https://d1i0as5mndfs61.cloudfront.net/test3.json"),
+                tuple("테스트4", "test4.json", "https://d1i0as5mndfs61.cloudfront.net/test4.json")
             );
     }
 

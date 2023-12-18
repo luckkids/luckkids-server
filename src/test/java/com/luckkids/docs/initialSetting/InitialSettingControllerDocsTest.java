@@ -193,10 +193,12 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             InitialCharacterRandResponse.builder()
                 .fileName("test1.json")
                 .characterName("테스트1")
+                .fileUrl("https://d1i0as5mndfs61.cloudfront.net/test1.json")
                 .build(),
             InitialCharacterRandResponse.builder()
                 .fileName("test2.json")
                 .characterName("테스트2")
+                .fileUrl("https://d1i0as5mndfs61.cloudfront.net/test2.json")
                 .build()
         );
 
@@ -224,7 +226,9 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data[].characterName").type(JsonFieldType.STRING)
                         .description("캐릭터명"),
                     fieldWithPath("data[].fileName").type(JsonFieldType.STRING)
-                        .description("파일명")
+                        .description("파일명"),
+                    fieldWithPath("data[].fileUrl").type(JsonFieldType.STRING)
+                        .description("파일URL")
                 )
             ));
     }
