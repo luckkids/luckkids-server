@@ -1,14 +1,9 @@
 package com.luckkids.docs.luckMission;
 
-import com.luckkids.api.controller.join.request.JoinCheckEmailRequest;
 import com.luckkids.api.controller.luckMission.LuckMissionController;
-import com.luckkids.api.service.join.JoinService;
-import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
-import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.luckMission.LuckMissionReadService;
 import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.domain.luckMission.LuckMission;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -17,17 +12,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
