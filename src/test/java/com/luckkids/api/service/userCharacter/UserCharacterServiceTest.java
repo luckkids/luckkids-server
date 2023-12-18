@@ -31,6 +31,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     @AfterEach
     void tearDown() {
         userCharacterRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("사용자가 선택한 캐릭터를 저장한다.")
