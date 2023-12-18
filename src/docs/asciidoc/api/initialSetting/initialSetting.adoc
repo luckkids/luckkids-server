@@ -10,3 +10,15 @@ include::{snippets}/create-initialSetting/request-fields.adoc[]
 
 include::{snippets}/create-initialSetting/http-response.adoc[]
 include::{snippets}/create-initialSetting/response-fields.adoc[]
+
+[[get-initialCharacter]]
+=== 초기 캐릭터 조회
+
+==== HTTP Request
+
+include::{snippets}/get-initialCharacter/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-initialCharacter/http-response.adoc[]
+include::{snippets}/get-initialCharacter/response-fields.adoc[]
