@@ -174,9 +174,30 @@ public class UserTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("사용자의 초기세팅 여부를 변경한다.")
+    @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
-    void changeSettingStatus() {
+    @Transactional
+    void updatePasswordTest(){
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        String beforePassword = user.getPassword();
+        User savedUser = userRepository.save(user);
+        savedUser.updatePassword("123456");
+        String afterPassword = savedUser.getPassword();
+
+        assertThat(beforePassword).isNotEqualTo(afterPassword);
+    }
+
+    private User createUser(String email, String password, SnsType snsType) {
+        return User.builder()
+            .email(email)
+            .password(password)
+            .snsType(snsType)
+            .build();
+    }
+
+    @DisplayName("사용자의 행운문구를 수정한다.")
+    @Test
+    void updateLuckPhrasesTest() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -194,5 +215,14 @@ public class UserTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
+        savedUser.updateLuckPhrases("행운입니다!!");
+
+        // then
+
+        assertThat(savedUser)
+            .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
+            .contains(
+                "tkdrl8908@naver.com", "행운입니다!!",Role.USER,SnsType.NORMAL,SettingStatus.INCOMPLETE
+            );
     }
 }

@@ -26,7 +26,7 @@ public class Mission extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private String description;
+    private String missionDescription;
 
     @Enumerated(EnumType.STRING)
     private AlertStatus alertStatus;
@@ -40,7 +40,7 @@ public class Mission extends BaseTimeEntity {
     @Builder
     private Mission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime deletedDate, LocalDate push_date) {
         this.user = user;
-        this.description = missionDescription;
+        this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
         this.deletedDate = deletedDate;
@@ -48,7 +48,7 @@ public class Mission extends BaseTimeEntity {
     }
 
     public Mission update(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
-        updateIfNonNull(missionDescription, it -> this.description = it);
+        updateIfNonNull(missionDescription, it -> this.missionDescription = it);
         updateIfNonNull(alertStatus, it -> this.alertStatus = it);
         updateIfNonNull(alertTime, it -> this.alertTime = it);
 

@@ -1,7 +1,5 @@
 package com.luckkids.api.controller.mail.request;
 
-import com.luckkids.api.service.mail.request.SendMailServiceRequest;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,18 +7,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SendMailRequest {
-
-    @NotBlank(message = "이메일은 필수입니다.")
     private String email;
-
-    public SendMailServiceRequest toServiceRequest(){
-        return SendMailServiceRequest.builder()
-                .email(email)
-                .build();
-    }
+    private String subject;
+    private String text;
 
     @Builder
-    public SendMailRequest(String email) {
+    private SendMailRequest(String email, String subject, String text) {
         this.email = email;
+        this.subject = subject;
+        this.text = text;
     }
 }

@@ -1,0 +1,12 @@
+[[home-calender]]
+=== 홈/캘린더
+
+==== HTTP Request
+
+include::{snippets}/home-calender/http-request.adoc[]
+include::{snippets}/home-calender/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/home-calender/http-response.adoc[]
+include::{snippets}/home-calender/response-fields.adoc[]

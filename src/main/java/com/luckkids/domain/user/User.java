@@ -1,7 +1,5 @@
 package com.luckkids.domain.user;
 
-import com.luckkids.api.exception.ErrorCode;
-import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -12,10 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +53,7 @@ public class User extends BaseTimeEntity {
     @Builder
     private User(String email, String password, SnsType snsType, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
         this.email = email;
-        this.password = encryptPassword(password);
+        this.password = password;
         this.snsType = snsType;
         this.missionCount = missionCount;
         this.luckPhrases = luckPhrases;
@@ -74,15 +68,6 @@ public class User extends BaseTimeEntity {
     public void loginCheckSnsType(SnsType snsType) {
         if (!this.snsType.equals(snsType)) {
             this.snsType.checkSnsType();
-        }
-    }
-
-    /*
-     * 비밀번호 체크
-     */
-    public void checkPassword(String password) {
-        if (!this.password.equals(encryptPassword(password))) {
-            throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         }
     }
 
@@ -119,18 +104,14 @@ public class User extends BaseTimeEntity {
         }
     }
 
-    public String encryptPassword(String password) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-            messageDigest.reset();
-            messageDigest.update(password.getBytes(StandardCharsets.UTF_8));
-            return String.format("%0128x", new BigInteger(1, messageDigest.digest()));
-        } catch (NoSuchAlgorithmException e) {
-            throw new LuckKidsException("비밀번호 암호화중 에러가 발생했습니다.");
-        }
+    public void updateLuckPhrases(String luckPhrases){
+        this.luckPhrases = luckPhrases;
     }
 
-    public void changeSettingStatus(SettingStatus settingStatus){
+    public void changeSettingStatus(SettingStatus settingStatus) {
         this.settingStatus = settingStatus;
+    }
+    public void updatePassword(String password){
+        this.password = password;
     }
 }

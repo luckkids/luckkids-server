@@ -5,6 +5,7 @@ import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
+import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
 import com.luckkids.api.controller.luckMission.LuckMissionController;
@@ -12,6 +13,7 @@ import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
@@ -29,14 +31,18 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+@ActiveProfiles("test")
 @WebMvcTest(controllers = {
     MissionController.class,
     LoginController.class,
@@ -48,7 +54,9 @@ import org.springframework.test.web.servlet.MockMvc;
     FriendController.class,
     AlertSettingController.class,
     InitialSettingController.class,
-    LuckMissionController.class
+    LuckMissionController.class,
+    HomeController.class,
+    UserController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -57,6 +65,9 @@ public abstract class ControllerTestSupport {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected EntityManager entityManager;
 
     @MockBean
     protected MissionService missionService;
@@ -93,9 +104,6 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected NoticeService noticeService;
-  
-    @MockBean
-    protected EntityManager entityManager;
 
     @MockBean
     protected MissionOutcomeReadService missionOutcomeReadService;
@@ -105,6 +113,12 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected AlertSettingService alertSettingService;
+
+    @MockBean
+    protected UserService userService;
+
+    @MockBean
+    protected UserReadService userReadService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;

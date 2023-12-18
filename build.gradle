@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.luckkids'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.1-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+9"))
 
 java {
     sourceCompatibility = '17'
@@ -15,9 +15,6 @@ java {
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
-    }
-    all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
     asciidoctorExt
 }
@@ -31,8 +28,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -57,8 +52,11 @@ dependencies {
     // mysql
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
 
+    // mariadb
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
     // etc
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
     // RestDocs
@@ -79,6 +77,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jar {
+    enabled = false
 }
 
 /**
@@ -121,5 +123,23 @@ bootJar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}") {
         into 'static/docs'
+    }
+}
+
+// submodule
+tasks.register('copySecret', Copy) {
+    from './luck-kids-server-submodule-config'
+    include "application*.yml"
+    into 'src/main/resources'
+}
+
+processResources {
+    filesMatching('**/application.yml') {
+        expand([
+                'MAIL_PASSWORD'   : System.getenv('MAIL_PASSWORD'),
+                'JWT_SECRET_KEY'  : System.getenv('JWT_SECRET_KEY'),
+                'DEV_DB_PASSWORD' : System.getenv('DEV_DB_PASSWORD'),
+                'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD')
+        ])
     }
 }

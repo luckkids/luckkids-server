@@ -27,7 +27,7 @@ public class MissionResponse {
     public static MissionResponse of(Mission mission) {
         return MissionResponse.builder()
             .id(mission.getId())
-            .missionDescription(mission.getDescription())
+            .missionDescription(mission.getMissionDescription())
             .alertStatus(mission.getAlertStatus())
             .alertTime(mission.getAlertTime())
             .build();

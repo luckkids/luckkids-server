@@ -29,7 +29,7 @@ include::{snippets}/notice-get/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/notice-create/http-request.adoc[]
-include::{snippets}/notice-create/request-body.adoc[]
+include::{snippets}/notice-create/request-fields.adoc[]
 
 ==== HTTP Response
 

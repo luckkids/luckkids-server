@@ -1,0 +1,38 @@
+[[update-phrase]]
+=== 사용자 프로필 행운문구 수정 API
+
+==== HTTP Request
+
+include::{snippets}/update-phrase/http-request.adoc[]
+include::{snippets}/update-phrase/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-phrase/http-response.adoc[]
+include::{snippets}/update-phrase/response-fields.adoc[]
+
+[[update-password]]
+=== 비밀번호 재설정
+
+==== HTTP Request
+
+include::{snippets}/update-password/http-request.adoc[]
+include::{snippets}/update-password/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-password/http-response.adoc[]
+include::{snippets}/update-password/response-fields.adoc[]
+
+[[user-findEmail]]
+=== 비밀번호 재설정 전 이메일 가입형식 조회 (존재X 시  에러발생)
+
+==== HTTP Request
+
+include::{snippets}/user-findEmail/http-request.adoc[]
+include::{snippets}/user-findEmail/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-findEmail/http-response.adoc[]
+include::{snippets}/user-findEmail/response-fields.adoc[]
