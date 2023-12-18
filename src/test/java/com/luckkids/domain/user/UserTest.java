@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.luckkids.domain.user.SettingStatus.COMPLETE;
+import static com.luckkids.domain.user.SettingStatus.INCOMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -216,9 +217,9 @@ public class UserTest extends IntegrationTestSupport {
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
         savedUser.updateLuckPhrases("행운입니다!!");
+        savedUser.changeSettingStatus(INCOMPLETE);
 
         // then
-
         assertThat(savedUser)
             .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
             .contains(

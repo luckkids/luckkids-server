@@ -12,6 +12,8 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
+import com.luckkids.api.service.luckMission.LuckMissionReadService;
+import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -41,10 +43,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InitialSettingControllerDocsTest extends RestDocsSupport {
     private final InitialSettingService initialSettingService = mock(InitialSettingService.class);
     private final InitialCharacterService initialCharacterService = mock(InitialCharacterService.class);
+    private final LuckMissionReadService luckMissionReadService = mock(LuckMissionReadService.class);
 
     @Override
     protected Object initController() {
-        return new InitialSettingController(initialSettingService, initialCharacterService);
+        return new InitialSettingController(initialSettingService, initialCharacterService, luckMissionReadService);
     }
 
     @DisplayName("사용자 초기세팅 API")
@@ -224,5 +227,51 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("파일명")
                 )
             ));
+    }
+
+    @DisplayName("럭키즈에서 미리 등록한 미션조회 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getLuckMission() throws Exception {
+        // given
+        given(luckMissionReadService.getLuckMissions())
+            .willReturn(
+                List.of(
+                    createMissionResponse("일찍일어나기", LocalTime.of(1, 0)),
+                    createMissionResponse("책읽기", LocalTime.of(2, 0))
+                )
+            );
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/initialSetting/luckMission")
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("get-luckMission",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].description").type(JsonFieldType.STRING)
+                        .description("미션내용"),
+                    fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
+                        .description("알림시간")
+                )
+            ));
+    }
+
+    private LuckMissionResponse createMissionResponse(String description, LocalTime alertTime){
+        return LuckMissionResponse.builder()
+            .description(description)
+            .alertTime(alertTime)
+            .build();
     }
 }

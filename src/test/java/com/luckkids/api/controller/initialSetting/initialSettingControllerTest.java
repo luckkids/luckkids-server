@@ -450,4 +450,23 @@ public class initialSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("OK"))
             .andExpect(jsonPath("$.message").value("OK"));
     }
+
+    @DisplayName("럭키즈가 등록해둔 미션조회 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getLuckMission() throws Exception {
+        // given
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/initialSetting/luckMission")
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
 }
