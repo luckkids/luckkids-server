@@ -1,6 +1,8 @@
 package com.luckkids.docs.initialSetting;
 
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
+import com.luckkids.api.service.initialCharacter.InitialCharacterService;
+import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.request.InitialSettingAlertServiceRequest;
 import com.luckkids.api.service.initialSetting.request.InitialSettingCharacterServiceRequest;
@@ -31,16 +33,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class InitialSettingControllerDocsTest extends RestDocsSupport {
     private final InitialSettingService initialSettingService = mock(InitialSettingService.class);
+    private final InitialCharacterService initialCharacterService = mock(InitialCharacterService.class);
 
     @Override
     protected Object initController() {
-        return new InitialSettingController(initialSettingService);
+        return new InitialSettingController(initialSettingService, initialCharacterService);
     }
 
     @DisplayName("사용자 초기세팅 API")
@@ -110,7 +114,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/initialSetting/new")
+                post("/api/v1/initialSetting")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
@@ -134,8 +138,6 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("설정미션 요청 데이터"),
                     fieldWithPath("missions[].missionDescription").type(JsonFieldType.STRING)
                         .description("미션내용"),
-                    fieldWithPath("missions[].alertStatus").type(JsonFieldType.STRING)
-                        .description("알림여부. 가능한값: "+Arrays.toString(AlertStatus.values())),
                     fieldWithPath("missions[].alertTime").type(JsonFieldType.STRING)
                         .description("알림시간")
                 ),
@@ -174,6 +176,52 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("미션알림여부. 가능한값: "+Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.missions[].alertTime").type(JsonFieldType.STRING)
                         .description("미션알림시간")
+                )
+            ));
+    }
+
+    @DisplayName("초기캐릭터 조회 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void findAllInitialChracter() throws Exception {
+        // given
+
+        List<InitialCharacterRandResponse> initialCharacterRandResponses = Arrays.asList(
+            InitialCharacterRandResponse.builder()
+                .fileName("test1.json")
+                .characterName("테스트1")
+                .build(),
+            InitialCharacterRandResponse.builder()
+                .fileName("test2.json")
+                .characterName("테스트2")
+                .build()
+        );
+
+        given(initialCharacterService.findAll())
+            .willReturn(initialCharacterRandResponses);
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/initialSetting/character")
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("get-initialCharacter",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].characterName").type(JsonFieldType.STRING)
+                        .description("캐릭터명"),
+                    fieldWithPath("data[].fileName").type(JsonFieldType.STRING)
+                        .description("파일명")
                 )
             ));
     }

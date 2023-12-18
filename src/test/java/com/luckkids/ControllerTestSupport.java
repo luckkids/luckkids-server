@@ -16,6 +16,7 @@ import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.friend.FriendReadService;
+import com.luckkids.api.service.initialCharacter.InitialCharacterService;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
@@ -113,5 +114,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected LuckMissionReadService luckMissionReadService;
+
+    @MockBean
+    protected InitialCharacterService initialCharacterService;
 }
 
