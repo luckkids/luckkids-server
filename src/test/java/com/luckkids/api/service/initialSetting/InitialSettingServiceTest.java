@@ -10,9 +10,14 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterR
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.domain.missionOutcome.MissionOutcome;
+import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
+import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +46,21 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
     @Autowired
     private UserReadService userReadService;
+    @Autowired
+    private AlertSettingRepository alertSettingRepository;
+    @Autowired
+    private MissionRepository missionRepository;
+    @Autowired
+    private MissionOutcomeRepository missionOutcomeRepository;
+    @Autowired
+    private UserCharacterRepository userCharacterRepository;
 
     @AfterEach
     void tearDown() {
+        userCharacterRepository.deleteAllInBatch();
+        missionOutcomeRepository.deleteAllInBatch();
+        missionRepository.deleteAllInBatch();
+        alertSettingRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
