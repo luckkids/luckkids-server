@@ -14,6 +14,7 @@ import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.UserInfo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
     @Autowired
     private UserReadService userReadService;
+
+    @AfterEach
+    void tearDown() {
+        userRepository.deleteAllInBatch();
+    }
 
     @DisplayName("사용자의 초기세팅 데이터를 저장한다.")
     @Test
