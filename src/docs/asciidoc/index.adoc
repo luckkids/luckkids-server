@@ -30,6 +30,11 @@ include::api/login/login.adoc[]
 include::api/join/checkEmail.adoc[]
 include::api/join/joinUser.adoc[]
 
+[[confirmEmail-API]]
+== confirmEmail API
+
+include::api/confirmEmail/confirmEmail.adoc[]
+
 [[Mail-API]]
 == Mail API
 

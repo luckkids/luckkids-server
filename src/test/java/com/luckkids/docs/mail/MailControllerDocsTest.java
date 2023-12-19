@@ -6,7 +6,7 @@ import com.luckkids.api.controller.mail.request.SendPasswordRequest;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
 import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
+import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import com.luckkids.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -43,15 +43,15 @@ public class MailControllerDocsTest extends RestDocsSupport {
             .email("tkdrl8908@naver.com")
             .build();
 
-        given(mailService.sendAuthCode(any(SendAuthCodeServiceRequest.class)))
-            .willReturn(SendAuthCodeResponse.builder()
-                .authNum("232422")
+        given(mailService.sendAuthUrl(any(SendAuthCodeServiceRequest.class)))
+            .willReturn(SendAuthUrlResponse.builder()
+                .authKey("7MMfhzwplTsqvw")
                 .build()
             );
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/mail/authCode")
+                post("/api/v1/mail/authUrl")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
@@ -62,7 +62,7 @@ public class MailControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("email").type(JsonFieldType.STRING)
-                        .description("중복체크 할 이메일")
+                        .description("발송 할 이메일")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -73,8 +73,8 @@ public class MailControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.authNum").type(JsonFieldType.STRING)
-                        .description("인증코드")
+                    fieldWithPath("data.authKey").type(JsonFieldType.STRING)
+                        .description("인증키")
                 )
             ));
     }
