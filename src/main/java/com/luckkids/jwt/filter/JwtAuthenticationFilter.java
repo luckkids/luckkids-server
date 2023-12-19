@@ -31,13 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/join",                 //회원가입
         "/api/v1/mail",                 //이메일발송
         "/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
-        "/docs",                         //API문서는 예외
+        "/docs",                        //API문서는 예외
+        "/api/v1/confirmEmail",
         "/health-check"
     };
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = request.getServletPath();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 

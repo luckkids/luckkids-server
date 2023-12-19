@@ -4,7 +4,7 @@ import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.mail.request.SendAuthCodeRequest;
 import com.luckkids.api.controller.mail.request.SendPasswordRequest;
 import com.luckkids.api.service.mail.MailService;
-import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
+import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
 import com.luckkids.api.service.mail.response.SendPasswordResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ public class MailController {
 
     private final MailService mailService;
 
-    @PostMapping("/authCode")
-    public ApiResponse<SendAuthCodeResponse> sendAuthorizationCode(@Valid @RequestBody SendAuthCodeRequest sendAuthCodeRequest){
-        return ApiResponse.ok(mailService.sendAuthCode(sendAuthCodeRequest.toServiceRequest()));
+    @PostMapping("/authUrl")
+    public ApiResponse<SendAuthUrlResponse> sendAuthUrl(@Valid @RequestBody SendAuthCodeRequest sendAuthCodeRequest){
+        return ApiResponse.ok(mailService.sendAuthUrl(sendAuthCodeRequest.toServiceRequest()));
     }
 
     @PostMapping("/password")
