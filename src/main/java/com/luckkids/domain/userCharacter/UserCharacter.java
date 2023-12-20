@@ -20,15 +20,15 @@ public class UserCharacter {
 
     private int level;
 
-    private String characterName;
+    private String characterNickname;
 
     private String fileName;
 
     @Builder
-    private UserCharacter(User user, int level, String characterName, String fileName) {
+    private UserCharacter(User user, int level, String characterNickname, String fileName) {
         this.user = user;
         this.level = level;
-        this.characterName = characterName;
+        this.characterNickname = characterNickname;
         this.fileName = fileName;
     }
 

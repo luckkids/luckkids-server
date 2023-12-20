@@ -75,7 +75,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
             .willReturn(createUserInfo(user.getId()));
 
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .fileName("test.json")
             .build();
 
@@ -114,7 +114,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
         assertThat(savedUser.getSettingStatus()).isEqualTo(COMPLETE);
 
-        assertThat(initialSettingCharacterResponse).extracting("characterName","fileName")
+        assertThat(initialSettingCharacterResponse).extracting("characterNickname","fileName")
             .containsExactly("럭키즈","test.json");
 
         assertThat(initialSettingMissionResponse).hasSize(10)

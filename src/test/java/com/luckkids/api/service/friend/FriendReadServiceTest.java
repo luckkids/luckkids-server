@@ -345,7 +345,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
     private UserCharacter createUserCharacter(User user, int i) {
         return UserCharacter.builder()
             .user(user)
-            .characterName("character" + i)
+            .characterNickname("character" + i)
             .fileName("file" + i)
             .level(i)
             .build();

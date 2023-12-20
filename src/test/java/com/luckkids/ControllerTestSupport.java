@@ -5,11 +5,10 @@ import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
 import com.luckkids.api.controller.friend.FriendController;
-import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.home.HomeController;
+import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
-import com.luckkids.api.controller.luckMission.LuckMissionController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
@@ -57,7 +56,6 @@ import org.springframework.test.web.servlet.MockMvc;
     FriendController.class,
     AlertSettingController.class,
     InitialSettingController.class,
-    LuckMissionController.class,
     HomeController.class,
     UserController.class,
     ConfirmEmailController.class

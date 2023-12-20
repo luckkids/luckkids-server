@@ -2,18 +2,14 @@ package com.luckkids.api.service.initialCharacter;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
-import com.luckkids.domain.initialCharacter.InitialCharacter;
-import com.luckkids.domain.initialCharacter.InitialCharacterRepository;
-import com.luckkids.domain.user.User;
-import com.luckkids.domain.userCharacter.UserCharacter;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.groups.Tuple;
+import com.luckkids.domain.character.CharacterId;
+import com.luckkids.domain.character.LuckkidsCharacter;
+import com.luckkids.domain.character.LuckkidsCharacterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -27,19 +23,19 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
     private InitialCharacterService initialCharacterService;
 
     @Autowired
-    private InitialCharacterRepository initialCharacterRepository;
+    private LuckkidsCharacterRepository luckkidsCharacterRepository;
 
     @BeforeEach
     void settingCharacter(){
         IntStream.rangeClosed(1, 4).forEach(i -> {
-            InitialCharacter character = createInitialCharacter(i);
-            initialCharacterRepository.save(character);
+            LuckkidsCharacter luckkidsCharacter = createCharacter(i);
+            luckkidsCharacterRepository.save(luckkidsCharacter);
         });
     }
 
     @AfterEach
     void tearDown() {
-        initialCharacterRepository.deleteAllInBatch();
+        luckkidsCharacterRepository.deleteAllInBatch();
     }
 
     @Test
@@ -57,10 +53,15 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
             );
     }
 
-    InitialCharacter createInitialCharacter(int i){
-        return InitialCharacter.builder()
-            .characterName("테스트"+i)
+    LuckkidsCharacter createCharacter(int i){
+        return LuckkidsCharacter.builder()
             .fileName("test"+i+".json")
+            .characterId(
+                CharacterId.builder()
+                    .level(1)
+                    .characterName("테스트"+i)
+                    .build()
+            )
             .build();
     }
 

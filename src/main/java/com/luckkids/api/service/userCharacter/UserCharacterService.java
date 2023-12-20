@@ -5,7 +5,6 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
 import com.luckkids.api.service.userCharacter.response.UserCharacterCreateResponse;
 import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +23,7 @@ public class UserCharacterService {
     public UserCharacterCreateResponse createUserCharacter(UserCharacterCreateServiceRequest request){
         int userId = securityService.getCurrentUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
+
         UserCharacter userCharacter = request.toEntity(user);
         return UserCharacterCreateResponse.of(userCharacterRepository.save(userCharacter));
     }

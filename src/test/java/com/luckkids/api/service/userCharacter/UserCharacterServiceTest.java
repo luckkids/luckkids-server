@@ -47,14 +47,14 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
         UserCharacterCreateServiceRequest userCharacterCreateServiceRequest = UserCharacterCreateServiceRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         UserCharacterCreateResponse userCharacterCreateResponse = userCharacterService.createUserCharacter(userCharacterCreateServiceRequest);
 
         // then
         assertThat(userCharacterCreateResponse)
-            .extracting("characterName", "fileName")
+            .extracting("characterNickname", "fileName")
             .contains("럭키즈", "test.json");
 
         Optional<UserCharacter> userCharacter = userCharacterRepository.findById(userCharacterCreateResponse.getId());
@@ -62,7 +62,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         assertThat(userCharacter)
             .isPresent()
             .hasValueSatisfying(character -> {
-                assertThat(character.getCharacterName()).isEqualTo("럭키즈");
+                assertThat(character.getCharacterNickname()).isEqualTo("럭키즈");
                 assertThat(character.getFileName()).isEqualTo("test.json");
             });
     }

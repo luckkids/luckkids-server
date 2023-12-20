@@ -32,7 +32,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSetting() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .fileName("test.json")
             .build();
 
@@ -114,7 +114,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("캐릭터 이름은 필수입니다."))
+            .andExpect(jsonPath("$.message").value("캐릭터 닉네임은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -124,7 +124,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutFileName() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -212,7 +212,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -259,7 +259,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -305,7 +305,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
@@ -340,7 +340,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -386,7 +386,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .fileName("test.json")
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();

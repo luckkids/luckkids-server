@@ -1,6 +1,5 @@
 package com.luckkids.api.service.initialSetting.response;
 
-import com.luckkids.api.service.initialSetting.request.InitialSettingCharacterServiceRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class InitialSettingCharacterResponse {
 
     private int id;
-    private String characterName;
+    private String characterNickname;
     private String fileName;
 
     @Builder
-    private InitialSettingCharacterResponse(int id, String characterName, String fileName) {
+    private InitialSettingCharacterResponse(int id, String characterNickname, String fileName) {
         this.id = id;
-        this.characterName = characterName;
+        this.characterNickname = characterNickname;
         this.fileName = fileName;
     }
 }

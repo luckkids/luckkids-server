@@ -56,7 +56,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
     void createInitialSetting() throws Exception {
         // given
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .fileName("test.json")
             .build();
 
@@ -83,7 +83,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             .build();
 
         InitialSettingCharacterResponse initialSettingCharacterResponse = InitialSettingCharacterResponse.builder()
-            .characterName("럭키즈")
+            .characterNickname("럭키즈")
             .fileName("test.json")
             .build();
 
@@ -133,8 +133,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("알림상태. 가능한값: "+Arrays.toString(AlertStatus.values())),
                     fieldWithPath("character").type(JsonFieldType.OBJECT)
                         .description("캐릭터설정 요청 데이터"),
-                    fieldWithPath("character.characterName").type(JsonFieldType.STRING)
-                        .description("캐릭터 명"),
+                    fieldWithPath("character.characterNickname").type(JsonFieldType.STRING)
+                        .description("캐릭터 닉네임"),
                     fieldWithPath("character.fileName").type(JsonFieldType.STRING)
                         .description("캐릭터 파일명"),
                     fieldWithPath("missions[]").type(JsonFieldType.ARRAY)
@@ -167,7 +167,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("캐릭터설정 응답 데이터"),
                     fieldWithPath("data.character.id").type(JsonFieldType.NUMBER)
                         .description("캐릭터설정 ID"),
-                    fieldWithPath("data.character.characterName").type(JsonFieldType.STRING)
+                    fieldWithPath("data.character.characterNickname").type(JsonFieldType.STRING)
                         .description("캐릭터 명"),
                     fieldWithPath("data.character.fileName").type(JsonFieldType.STRING)
                         .description("캐릭터 파일명"),

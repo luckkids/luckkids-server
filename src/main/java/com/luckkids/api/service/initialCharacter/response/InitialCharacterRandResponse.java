@@ -1,10 +1,9 @@
 package com.luckkids.api.service.initialCharacter.response;
 
-import com.luckkids.domain.initialCharacter.InitialCharacter;
+import com.luckkids.domain.character.LuckkidsCharacter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 @NoArgsConstructor
@@ -20,11 +19,11 @@ public class InitialCharacterRandResponse {
         this.fileUrl = fileUrl;
     }
 
-    public static InitialCharacterRandResponse of(InitialCharacter initialCharacter, String cloudFrontUrl){
+    public static InitialCharacterRandResponse of(LuckkidsCharacter character, String cloudFrontUrl){
         return InitialCharacterRandResponse.builder()
-            .characterName(initialCharacter.getCharacterName())
-            .fileName(initialCharacter.getFileName())
-            .fileUrl(cloudFrontUrl+initialCharacter.getFileName())
+            .characterName(character.getCharacterId().getCharacterName())
+            .fileName(character.getFileName())
+            .fileUrl(cloudFrontUrl+character.getFileName())
             .build();
     }
 }

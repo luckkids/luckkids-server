@@ -34,7 +34,9 @@ public enum ErrorCode {
     EMAIL_EXPIRED("이메일인증이 3분 경과되었습니다."),
 
     AES_ENCRYPT("암호화를 실패하였습니다."),
-    AES_DECRYPT("복호화를 실패하였습니다.");
+    AES_DECRYPT("복호화를 실패하였습니다."),
+
+    LUCKKIDS_CHARACTER_UNKNOWN("럭키즈 캐릭터가 존재하지않습니다.");
 
     private final String message;
 

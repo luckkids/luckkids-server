@@ -13,26 +13,28 @@ public class UserCharacterCreateResponse {
     private int id;
     private String fileName;
     private String characterName;
+    private String characterNickname;
 
     @Builder
-    private UserCharacterCreateResponse(int id, String fileName, String characterName) {
+    private UserCharacterCreateResponse(int id, String fileName, String characterName, String characterNickname) {
         this.id = id;
         this.fileName = fileName;
         this.characterName = characterName;
+        this.characterNickname = characterNickname;
     }
 
     public static UserCharacterCreateResponse of(UserCharacter userCharacter){
         return UserCharacterCreateResponse.builder()
             .id(userCharacter.getId())
             .fileName(userCharacter.getFileName())
-            .characterName(userCharacter.getCharacterName())
+            .characterNickname(userCharacter.getCharacterNickname())
             .build();
     }
 
     public InitialSettingCharacterResponse toInitialSettingResponse(){
         return InitialSettingCharacterResponse.builder()
             .fileName(fileName)
-            .characterName(characterName)
+            .characterNickname(characterNickname)
             .build();
     }
 

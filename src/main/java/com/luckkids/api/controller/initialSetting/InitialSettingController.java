@@ -8,7 +8,6 @@ import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.luckMission.LuckMissionReadService;
 import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
-import com.luckkids.domain.initialCharacter.InitialCharacter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

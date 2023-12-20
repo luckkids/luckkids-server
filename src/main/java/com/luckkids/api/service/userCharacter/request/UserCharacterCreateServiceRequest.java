@@ -10,20 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCharacterCreateServiceRequest {
 
+    private String characterNickname;
     private String fileName;
-    private String characterName;
 
     @Builder
-    private UserCharacterCreateServiceRequest(String fileName, String characterName) {
+    private UserCharacterCreateServiceRequest(String characterNickname, String fileName) {
+        this.characterNickname = characterNickname;
         this.fileName = fileName;
-        this.characterName = characterName;
     }
 
     public UserCharacter toEntity(User user){
         return UserCharacter.builder()
             .user(user)
             .fileName(fileName)
-            .characterName(characterName)
+            .characterNickname(characterNickname)
             .level(1)
             .build();
     }
