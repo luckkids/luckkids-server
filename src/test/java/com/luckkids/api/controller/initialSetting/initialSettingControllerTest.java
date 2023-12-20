@@ -5,7 +5,7 @@ import com.luckkids.api.controller.initialSetting.request.InitialSettingAlertReq
 import com.luckkids.api.controller.initialSetting.request.InitialSettingCharacterRequest;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingMissionRequest;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
-import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;

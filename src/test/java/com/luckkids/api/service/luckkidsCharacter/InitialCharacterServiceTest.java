@@ -1,7 +1,7 @@
-package com.luckkids.api.service.initialCharacter;
+package com.luckkids.api.service.luckkidsCharacter;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.domain.character.CharacterId;
 import com.luckkids.domain.character.LuckkidsCharacter;
 import com.luckkids.domain.character.LuckkidsCharacterRepository;
@@ -31,6 +31,11 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
             LuckkidsCharacter luckkidsCharacter = createCharacter(i);
             luckkidsCharacterRepository.save(luckkidsCharacter);
         });
+
+        IntStream.rangeClosed(1, 4).forEach(i -> {
+            LuckkidsCharacter luckkidsCharacter = createCharacterlevel2(i);
+            luckkidsCharacterRepository.save(luckkidsCharacter);
+        });
     }
 
     @AfterEach
@@ -41,7 +46,7 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("초기캐릭터 파일정보를 모두 조회한다.")
     void findAll(){
-        List<InitialCharacterRandResponse> initialCharacterRandResponses = initialCharacterService.findAll();
+        List<InitialCharacterRandResponse> initialCharacterRandResponses = initialCharacterService.findAllByCharacterIdLevel1();
 
         assertThat(initialCharacterRandResponses).hasSize(4)
             .extracting("characterName", "fileName", "fileUrl")
@@ -60,6 +65,18 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
                 CharacterId.builder()
                     .level(1)
                     .characterName("테스트"+i)
+                    .build()
+            )
+            .build();
+    }
+
+    LuckkidsCharacter createCharacterlevel2(int i){
+        return LuckkidsCharacter.builder()
+            .fileName("테스트2"+i+".json")
+            .characterId(
+                CharacterId.builder()
+                    .level(2)
+                    .characterName("테스트2"+i)
                     .build()
             )
             .build();

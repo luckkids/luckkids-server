@@ -20,7 +20,7 @@ import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
 import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.initialCharacter.InitialCharacterService;
+import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;

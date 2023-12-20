@@ -1,8 +1,8 @@
 package com.luckkids.docs.initialSetting;
 
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
-import com.luckkids.api.service.initialCharacter.InitialCharacterService;
-import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
+import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.request.InitialSettingAlertServiceRequest;
 import com.luckkids.api.service.initialSetting.request.InitialSettingCharacterServiceRequest;
@@ -202,7 +202,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                 .build()
         );
 
-        given(initialCharacterService.findAll())
+        given(initialCharacterService.findAllByCharacterIdLevel1())
             .willReturn(initialCharacterRandResponses);
 
         // when // then

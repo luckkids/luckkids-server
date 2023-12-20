@@ -1,6 +1,6 @@
-package com.luckkids.api.service.initialCharacter;
+package com.luckkids.api.service.luckkidsCharacter;
 
-import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.domain.character.LuckkidsCharacterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +18,8 @@ public class InitialCharacterService {
     @Value("${cloudfront.s3-url}")
     private String cloudFrontUrl;
 
-    public List<InitialCharacterRandResponse> findAll(){
-        return luckkidsCharacterRepository.findAll()
+    public List<InitialCharacterRandResponse> findAllByCharacterIdLevel1(){
+        return luckkidsCharacterRepository.findAllByCharacterIdLevel(1)
             .stream()
             .map(character -> InitialCharacterRandResponse.of(character, cloudFrontUrl))
             .toList();

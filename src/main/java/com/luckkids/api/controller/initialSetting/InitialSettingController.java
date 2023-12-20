@@ -2,8 +2,8 @@ package com.luckkids.api.controller.initialSetting;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
-import com.luckkids.api.service.initialCharacter.InitialCharacterService;
-import com.luckkids.api.service.initialCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
+import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.luckMission.LuckMissionReadService;
@@ -30,8 +30,8 @@ public class InitialSettingController {
     }
 
     @GetMapping("/character")
-    public ApiResponse<List<InitialCharacterRandResponse>> findAll(){
-        return ApiResponse.ok(initialCharacterService.findAll());
+    public ApiResponse<List<InitialCharacterRandResponse>> findBylevel1(){
+        return ApiResponse.ok(initialCharacterService.findAllByCharacterIdLevel1());
     }
 
     @ResponseStatus(HttpStatus.CREATED)

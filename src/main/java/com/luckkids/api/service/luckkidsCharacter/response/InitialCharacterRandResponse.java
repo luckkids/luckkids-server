@@ -1,4 +1,4 @@
-package com.luckkids.api.service.initialCharacter.response;
+package com.luckkids.api.service.luckkidsCharacter.response;
 
 import com.luckkids.domain.character.LuckkidsCharacter;
 import lombok.Builder;
