@@ -1,7 +1,7 @@
 package com.luckkids.api.service.luckkidsCharacter;
 
 import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
-import com.luckkids.domain.character.LuckkidsCharacterRepository;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

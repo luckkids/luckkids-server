@@ -2,9 +2,9 @@ package com.luckkids.api.service.luckkidsCharacter;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
-import com.luckkids.domain.character.CharacterId;
-import com.luckkids.domain.character.LuckkidsCharacter;
-import com.luckkids.domain.character.LuckkidsCharacterRepository;
+import com.luckkids.domain.luckkidsCharacter.CharacterId;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

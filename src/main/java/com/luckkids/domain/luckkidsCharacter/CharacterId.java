@@ -1,4 +1,4 @@
-package com.luckkids.domain.character;
+package com.luckkids.domain.luckkidsCharacter;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
