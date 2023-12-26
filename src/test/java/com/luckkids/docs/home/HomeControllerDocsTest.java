@@ -7,6 +7,7 @@ import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -21,8 +22,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +36,7 @@ public class HomeControllerDocsTest extends RestDocsSupport {
         return new HomeController(missionOutcomeReadService);
     }
 
-    @DisplayName("홈 화면의 캘린더 정보를 조회한다.")
+    @DisplayName("홈 화면의 캘린더 정보를 조회하는 API")
     @Test
     @WithMockUser(roles = "USER")
     void getMissionOutcomeForCalendar() throws Exception {
@@ -88,6 +88,41 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                         .description("미션 날짜"),
                     fieldWithPath("data.calender[].hasSucceed").type(JsonFieldType.BOOLEAN)
                         .description("미션 성공 여부")
+                )
+            ));
+    }
+
+    @DisplayName("홈 화면의 캘린더 정보중 특정 날짜를 선택해 세부정보를 조회하는 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getMissionOutcomeForCalendarDetail() throws Exception {
+        // given
+        given(missionOutcomeReadService.getMissionOutcomeForCalendarDetail(any(LocalDate.class)))
+            .willReturn(List.of("운동하기", "책읽기")
+            );
+
+        // when // then
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/home/calender/{missionDate}", LocalDate.of(2023, 12, 26))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("home-calender-detail",
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("missionDate")
+                        .description("미션 날짜")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
+                        .description("미션 내용들")
                 )
             ));
     }

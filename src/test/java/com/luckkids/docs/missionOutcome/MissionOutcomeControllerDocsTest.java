@@ -86,7 +86,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("미션상태를 받아 미션결과를 조회한다.")
+    @DisplayName("미션상태를 받아 미션결과를 조회하는 API")
     @Test
     @WithMockUser(roles = "USER")
     void getMissionDetailListForStatus() throws Exception {

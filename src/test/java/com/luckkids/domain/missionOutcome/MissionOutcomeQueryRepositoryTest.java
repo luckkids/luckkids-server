@@ -125,6 +125,56 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("미션 날짜를 받아서 성공한 미션 리스트를 조회한다.")
+    @Test
+    void findSuccessfulMissionsByDate() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
+        MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 26), SUCCEED);
+
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
+
+        // when
+        List<String> result =
+            missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 26));
+
+        // then
+        assertThat(result).hasSize(2)
+            .containsExactlyInAnyOrder("운동하기", "책읽기");
+    }
+
+    @DisplayName("미션 날짜를 받아서 성공한 미션 리스트를 조회한다. (결과값: 빈 리스트)")
+    @Test
+    void findSuccessfulMissionsIsEmpty() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
+        MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 26), SUCCEED);
+
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
+
+        // when
+        List<String> result =
+            missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 25));
+
+        // then
+        assertThat(result).hasSize(0).isEmpty();
+    }
+
+
     private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
