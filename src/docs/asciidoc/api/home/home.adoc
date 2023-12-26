@@ -12,7 +12,7 @@ include::{snippets}/home-calender/http-response.adoc[]
 include::{snippets}/home-calender/response-fields.adoc[]
 
 [[home-calender-detail]]
-=== 홈/캘린더_세부
+=== 홈/캘린더 세부
 
 ==== HTTP Request
 
