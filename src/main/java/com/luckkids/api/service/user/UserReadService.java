@@ -30,5 +30,4 @@ public class UserReadService {
     public UserFindSnsTypeResponse findEmail(UserFindEmailServiceRequest userFindEmailServiceRequest){
         return UserFindSnsTypeResponse.of(findByEmail(userFindEmailServiceRequest.getEmail()));
     }
-
 }
