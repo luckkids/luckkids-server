@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -48,5 +51,23 @@ public class ConfirmEmailRepositoryTest extends IntegrationTestSupport {
         assertThat(findConfirmEmail)
             .extracting("email", "authKey", "confirmStatus")
             .contains("test@test.com", "Asdasdasdasd", ConfirmStatus.COMPLETE);
+    }
+
+    @Test
+    @DisplayName("이메일로 이메일인증테이블 데이터를 모두 제거한다.")
+    void deleteAllByEmail(){
+        ConfirmEmail confirmEmail = ConfirmEmail.builder()
+            .email("test@test.com")
+            .authKey("Asdasdasdasd")
+            .confirmStatus(ConfirmStatus.COMPLETE)
+            .build();
+
+        confirmEmailRepository.save(confirmEmail);
+
+        confirmEmailRepository.deleteAllByEmail("test@test.com");
+
+        List<ConfirmEmail> confirmEmailList = confirmEmailRepository.findAll();
+
+        assertThat(confirmEmailList).hasSize(0);
     }
 }
