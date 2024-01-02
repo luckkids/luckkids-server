@@ -1,0 +1,12 @@
+[[withdrawReason-create]]
+=== 탈퇴사유 등록 API
+
+==== HTTP Request
+
+include::{snippets}/withdrawReason-create/http-request.adoc[]
+include::{snippets}/withdrawReason-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/withdrawReason-create/http-response.adoc[]
+include::{snippets}/withdrawReason-create/response-fields.adoc[]

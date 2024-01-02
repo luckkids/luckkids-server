@@ -9,6 +9,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -131,5 +132,23 @@ public class UserControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("패스워드는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("회원탈퇴를 한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void userWithDrawTest() throws Exception {
+
+        // when // then
+        mockMvc.perform(
+                delete("/api/v1/user/withdraw")
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
     }
 }

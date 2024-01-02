@@ -65,8 +65,13 @@ include::api/alertSetting/alertSetting.adoc[]
 
 include::api/home/home.adoc[]
 
-[[UserUpdate-API]]
-== UserUpdate API
+[[User-API]]
+== User API
 
 include::api/user/user.adoc[]
+
+[[WithdrawReason-API]]
+== WithdrawReason API
+
+include::api/withdrawReason/withdrawReason.adoc[]
 

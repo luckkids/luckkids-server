@@ -12,6 +12,7 @@ import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
+import com.luckkids.api.service.user.response.UserWithdrawResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -174,6 +174,38 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
                         .description("가입한 SNS형식. 가능한 값: "+ Arrays.toString(SnsType.values()))
+                )
+            ));
+    }
+    @DisplayName("회원탈퇴 API")
+    @Test
+    void withdraw() throws Exception {
+        given(userService.withdraw())
+            .willReturn(
+                UserWithdrawResponse.builder()
+                    .id(12)
+                    .build()
+            );
+        // when // then
+        mockMvc.perform(
+                delete("/api/v1/user/withdraw")
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("user-withdraw",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+                        .description("탈퇴완료된 id")
                 )
             ));
     }
