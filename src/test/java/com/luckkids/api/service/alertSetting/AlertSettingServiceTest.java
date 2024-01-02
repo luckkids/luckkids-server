@@ -1,6 +1,7 @@
 package com.luckkids.api.service.alertSetting;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static com.luckkids.domain.user.SnsType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -50,14 +52,14 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
             .willReturn(createUserInfo(user.getId()));
 
         AlertSettingUpdateServiceRequest alertSettingUpdateServiceRequest = AlertSettingUpdateServiceRequest.builder()
-            .alertStatus(AlertStatus.UNCHECKED)
+            .alertStatus(UNCHECKED)
             .alertType(AlertType.LUCK)
             .build();
 
         AlertSettingUpdateResponse alertSettingUpdateResponse = alertSettingService.updateAlertSetting(alertSettingUpdateServiceRequest);
 
         assertThat(alertSettingUpdateResponse).extracting("entire","mission","notice","luck")
-            .contains(CHECKED, CHECKED, CHECKED, AlertStatus.UNCHECKED);
+            .contains(CHECKED, CHECKED, CHECKED, UNCHECKED);
     }
 
     @DisplayName("사용자의 알림설정을 등록한다.")
@@ -68,10 +70,14 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentUserInfo())
             .willReturn(createUserInfo(user.getId()));
 
-        AlertSettingResponse alertSettingResponse = alertSettingService.createAlertSetting();
+        AlertSettingCreateServiceRequest alertSettingCreateServiceRequest = AlertSettingCreateServiceRequest.builder()
+            .alertStatus(UNCHECKED)
+            .build();
+
+        AlertSettingResponse alertSettingResponse = alertSettingService.createAlertSetting(alertSettingCreateServiceRequest);
 
         assertThat(alertSettingResponse).extracting("entire","mission","notice","luck")
-            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
+            .contains(UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED);
     }
 
     @DisplayName("사용자의 알림설정을 등록시 사용자가 없다면 예외가 발생한다.")
@@ -80,7 +86,11 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentUserInfo())
             .willReturn(createUserInfo(1));
 
-        assertThatThrownBy(() -> alertSettingService.createAlertSetting())
+        AlertSettingCreateServiceRequest alertSettingCreateServiceRequest = AlertSettingCreateServiceRequest.builder()
+            .alertStatus(UNCHECKED)
+            .build();
+
+        assertThatThrownBy(() -> alertSettingService.createAlertSetting(alertSettingCreateServiceRequest))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 유저는 없습니다. id = " + 1);
     }
