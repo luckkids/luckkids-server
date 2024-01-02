@@ -14,4 +14,6 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
     Optional<Mission> findByIdAndDeletedDateIsNull(int id);
 
     List<Mission> findAllByDeletedDateIsNull();
+
+    void deleteAllByUserId(int userId);
 }

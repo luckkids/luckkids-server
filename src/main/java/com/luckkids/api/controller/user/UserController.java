@@ -9,6 +9,7 @@ import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
+import com.luckkids.api.service.user.response.UserWithdrawResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,10 @@ public class UserController {
     @GetMapping("/findEmail")
     public ApiResponse<UserFindSnsTypeResponse> findEmail(@RequestBody @Valid UserFindEmailRequest userFindEmailRequest){
         return ApiResponse.ok(userReadService.findEmail(userFindEmailRequest.toServiceRequest()));
+    }
+
+    @DeleteMapping("/withdraw")
+    public ApiResponse<UserWithdrawResponse> withdraw(){
+        return ApiResponse.ok(userService.withdraw());
     }
 }

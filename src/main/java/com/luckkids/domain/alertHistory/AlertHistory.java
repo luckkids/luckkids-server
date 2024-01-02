@@ -4,6 +4,7 @@ import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,12 @@ public class AlertHistory extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private AlertHistoryStatus alertHistoryStatus;
+
+    @Builder
+    private AlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
+        this.user = user;
+        this.alertDescription = alertDescription;
+        this.alertHistoryStatus = alertHistoryStatus;
+    }
+
 }
