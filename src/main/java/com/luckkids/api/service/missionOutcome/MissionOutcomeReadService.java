@@ -48,10 +48,15 @@ public class MissionOutcomeReadService {
     public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {
         int userId = securityService.getCurrentUserInfo().getUserId();
 
-        LocalDate startDate = missionDate.withDayOfMonth(1);
+        LocalDate startDate = missionDate.withDayOfMonth(1).minusMonths(1);
         LocalDate endDate = startDate.plusMonths(2).minusDays(1);
 
         List<MissionOutcomeCalenderDto> result = missionOutcomeQueryRepository.findMissionOutcomeByDateRangeAndStatus(userId, startDate, endDate);
         return MissionOutcomeForCalendarResponse.of(startDate, endDate, result);
+    }
+
+    public List<String> getMissionOutcomeForCalendarDetail(LocalDate missionDate) {
+        int userId = securityService.getCurrentUserInfo().getUserId();
+        return missionOutcomeQueryRepository.findSuccessfulMissionsByDate(userId, missionDate);
     }
 }

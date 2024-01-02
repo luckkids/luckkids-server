@@ -138,7 +138,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         assertThat(count).isEqualTo(2);
     }
 
-    @DisplayName("오늘 날짜를 받아 그 달의 1일부터 다음달의 마지막날까지의 범위에 미션 성공 여부를 조회한다.")
+    @DisplayName("오늘 날짜를 받아 그 전 달의 1일부터 다음달의 마지막날까지의 범위에 미션 성공 여부를 조회한다.")
     @Test
     void getMissionOutcomeForCalendar() {
         // given
@@ -162,8 +162,8 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             = missionOutcomeReadService.getMissionOutcomeForCalendar(LocalDate.of(2023, 12, 22));
 
         // then
-        assertThat(missionOutcomeForCalendarResponses.getStartDate()).isEqualTo(LocalDate.of(2023, 12, 1));
-        assertThat(missionOutcomeForCalendarResponses.getEndDate()).isEqualTo(LocalDate.of(2024, 1, 31));
+        assertThat(missionOutcomeForCalendarResponses.getStartDate()).isEqualTo(LocalDate.of(2023, 11, 1));
+        assertThat(missionOutcomeForCalendarResponses.getEndDate()).isEqualTo(LocalDate.of(2023, 12, 31));
 
         assertThat(missionOutcomeForCalendarResponses.getCalender()).hasSize(2)
             .extracting("missionDate", "hasSucceed")
@@ -171,6 +171,34 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
                 tuple(LocalDate.of(2023, 12, 25), false),
                 tuple(LocalDate.of(2023, 12, 26), true)
             );
+    }
+
+    @DisplayName("조회하고 싶은 미션 날짜를 받아 그 날의 성공한 미션 내용을 조회한다.")
+    @Test
+    void getMissionOutcomeForCalendarDetail() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
+        MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 26), FAILED);
+
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
+
+        given(securityService.getCurrentUserInfo())
+            .willReturn(createUserInfo(user.getId()));
+
+        // when
+        List<String> result =
+            missionOutcomeReadService.getMissionOutcomeForCalendarDetail(LocalDate.of(2023, 12, 26));
+
+        // then
+        assertThat(result).hasSize(1)
+            .containsExactlyInAnyOrder("운동하기");
     }
 
     private User createUser(String email, String password, SnsType snsType) {

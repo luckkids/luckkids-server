@@ -64,4 +64,16 @@ public class MissionOutcomeQueryRepository {
             .orderBy(missionOutcome.missionDate.asc())
             .fetch();
     }
+
+    public List<String> findSuccessfulMissionsByDate(int userId, LocalDate missionDate) {
+
+        return jpaQueryFactory
+            .select(mission.missionDescription)
+            .from(missionOutcome)
+            .where(mission.user.id.eq(userId),
+                missionOutcome.missionDate.eq(missionDate),
+                missionOutcome.missionStatus.eq(MissionStatus.SUCCEED))
+            .join(missionOutcome.mission, mission)
+            .fetch();
+    }
 }
