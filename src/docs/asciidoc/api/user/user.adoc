@@ -36,3 +36,15 @@ include::{snippets}/user-findEmail/request-fields.adoc[]
 
 include::{snippets}/user-findEmail/http-response.adoc[]
 include::{snippets}/user-findEmail/response-fields.adoc[]
+
+[[user-withdraw]]
+=== 회원탈퇴 API
+
+==== HTTP Request
+
+include::{snippets}/user-withdraw/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-withdraw/http-response.adoc[]
+include::{snippets}/user-withdraw/response-fields.adoc[]

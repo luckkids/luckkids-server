@@ -95,6 +95,26 @@ class MissionRepositoryTest extends IntegrationTestSupport {
             .containsExactly(tuple("책읽기", CHECKED, LocalTime.of(22, 0), null));
     }
 
+    @DisplayName("사용자의 미션을 전부 삭제한다.")
+    @Test
+    void deleteAllByUserId() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission1 = createMission(user, "운동하기", CHECKED, LocalTime.of(19, 0), LocalDateTime.of(2023, 10, 31, 0, 0, 0));
+        Mission mission2 = createMission(user, "책읽기", CHECKED, LocalTime.of(22, 0), null);
+
+        userRepository.save(user);
+        missionRepository.saveAll(List.of(mission1, mission2));
+
+        // when
+        missionRepository.deleteAllByUserId(user.getId());
+
+        List<Mission> missions = missionRepository.findAll();
+
+        // then
+        assertThat(missions).hasSize(0);
+    }
+
     private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)

@@ -15,6 +15,7 @@ import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
+import com.luckkids.api.controller.withdrawReason.WithdrawReasonController;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
@@ -37,7 +38,9 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
+import com.luckkids.api.service.withdrawReason.WithdrawReasonService;
 import jakarta.persistence.EntityManager;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -58,7 +61,8 @@ import org.springframework.test.web.servlet.MockMvc;
     InitialSettingController.class,
     HomeController.class,
     UserController.class,
-    ConfirmEmailController.class
+    ConfirmEmailController.class,
+    WithdrawReasonController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -127,6 +131,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected ConfirmEmailService confirmEmailService;
+
+    @MockBean
+    protected WithdrawReasonService withdrawReasonService;
 
     @MockBean
     protected ErrorNotifier errorNotifier;

@@ -68,6 +68,21 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
             });
     }
 
+    @DisplayName("사용자의 알림설정을 삭제한다.")
+    @Test
+    void deleteAllByUserId(){
+        User user = createUser();
+        userRepository.save(user);
+
+        AlertSetting alertSetting = createAlertSetting(user);
+        AlertSetting savedAlertSetting = alertSettingRepository.save(alertSetting);
+        alertSettingRepository.deleteAllByUserId(user.getId());
+
+        Optional<AlertSetting> findAlertSetting = alertSettingRepository.findById(savedAlertSetting.getId());
+
+        assertThat(findAlertSetting.isEmpty()).isTrue();
+    }
+
     private User createUser(){
         return User.builder()
             .email("test@test.com")

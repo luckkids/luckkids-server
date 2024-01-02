@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface ConfirmEmailRepository extends JpaRepository<ConfirmEmail, Integer> {
     Optional<ConfirmEmail> findByEmail(String email);
     Optional<ConfirmEmail> findByEmailAndAuthKey(String email, String authkey);
+    void deleteAllByEmail(String email);
 }
