@@ -3,3 +3,9 @@
 GET localhost:8080/api/v1/home/calender
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
+
+### 홈/캘린더_세부 조회
+
+GET localhost:8080/api/v1/home/calender/2023-11-11
+Content-Type: application/json
+Authorization: Bearer JWT_TOKEN

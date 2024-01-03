@@ -10,3 +10,16 @@ include::{snippets}/home-calender/query-parameters.adoc[]
 
 include::{snippets}/home-calender/http-response.adoc[]
 include::{snippets}/home-calender/response-fields.adoc[]
+
+[[home-calender-detail]]
+=== 홈/캘린더 세부
+
+==== HTTP Request
+
+include::{snippets}/home-calender-detail/http-request.adoc[]
+include::{snippets}/home-calender-detail/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/home-calender-detail/http-response.adoc[]
+include::{snippets}/home-calender-detail/response-fields.adoc[]

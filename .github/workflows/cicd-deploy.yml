@@ -40,6 +40,7 @@ jobs:
 
       - name: 🍀 Gradle 빌드
         env:
+          DEPLOY_CHECK: ok
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}

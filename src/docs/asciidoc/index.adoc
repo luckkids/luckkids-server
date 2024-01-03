@@ -60,6 +60,10 @@ include::api/version/version.adoc[]
 
 include::api/alertSetting/alertSetting.adoc[]
 
+[[InitialSetting-API]]
+== InitialSetting API
+include::api/initialSetting/initialSetting.adoc[]
+
 [[Home-API]]
 == Home API
 

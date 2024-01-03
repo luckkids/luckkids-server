@@ -55,13 +55,13 @@ public class AlertSetting extends BaseTimeEntity {
         }
     }
 
-    public static AlertSetting of(User user){
+    public static AlertSetting of(User user, AlertStatus alertStatus){
         return AlertSetting.builder()
             .user(user)
-            .entire(AlertStatus.CHECKED)
-            .mission(AlertStatus.CHECKED)
-            .luck(AlertStatus.CHECKED)
-            .notice(AlertStatus.CHECKED)
+            .entire(alertStatus)
+            .mission(alertStatus)
+            .luck(alertStatus)
+            .notice(alertStatus)
             .build();
     }
 }

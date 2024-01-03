@@ -33,7 +33,7 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         UserCharacter userCharacter = UserCharacter.builder()
-            .characterName("test")
+            .characterNickname("test")
             .fileName("test.json")
             .level(1)
             .user(user)

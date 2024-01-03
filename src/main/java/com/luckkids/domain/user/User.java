@@ -109,6 +109,9 @@ public class User extends BaseTimeEntity {
         this.luckPhrases = luckPhrases;
     }
 
+    public void changeSettingStatus(SettingStatus settingStatus) {
+        this.settingStatus = settingStatus;
+    }
     public void updatePassword(String password){
         this.password = password;
     }
