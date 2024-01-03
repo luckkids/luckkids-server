@@ -3,12 +3,15 @@ package com.luckkids.api.service.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.refreshToken.RefreshToken;
+import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.UserInfo;
@@ -24,10 +27,10 @@ import java.util.Optional;
 @Transactional
 public class LoginService {
 
-    private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
@@ -50,5 +53,12 @@ public class LoginService {
         user.checkPushKey(pushKey, deviceId);
 
         return LoginResponse.of(user, jwtToken);
+    }
+
+    public LoginGenerateTokenResponse generateAccessToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest){
+        User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
+        RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));
+        return LoginGenerateTokenResponse.of(jwtTokenGenerator.generateAccessToken(refreshToken.getRefreshToken()));
     }
 }

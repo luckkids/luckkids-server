@@ -17,8 +17,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenGenerator {
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 12;       // 12시간 -> 테스트 용이하게 12시간
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;      // 24시간 -> 테스트 용이하게 24시간
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 12;             // 12시간
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 30;      // 30일
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -57,7 +57,6 @@ public class JwtTokenGenerator {
         } catch (JwtException | IllegalArgumentException e) {
             throw new LuckKidsException(ErrorCode.JWT_UNKNOWN, e);
         }
-
         return JwtToken.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
 }

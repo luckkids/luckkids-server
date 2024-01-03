@@ -2,10 +2,14 @@ package com.luckkids.api.controller.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.ApiResponse;
+import com.luckkids.api.controller.login.request.LoginGenerateTokenRequest;
 import com.luckkids.api.controller.login.request.LoginOauthRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
 import com.luckkids.api.service.login.LoginService;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.jwt.JwtTokenGenerator;
+import com.luckkids.jwt.dto.JwtToken;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +29,8 @@ public class LoginController {
 		return ApiResponse.ok(loginService.normalLogin(loginRequest.toServiceRequest()));
 	}
 
-	@PostMapping("/oauth/login")
-	public void oauthLogin(@RequestBody LoginOauthRequest loginOauthRequest){
-
+	@PostMapping("/refresh")
+	public ApiResponse<LoginGenerateTokenResponse> refreshToken(@Valid @RequestBody LoginGenerateTokenRequest loginGenerateTokenRequest) {
+		return ApiResponse.ok(loginService.generateAccessToken(loginGenerateTokenRequest.toServiceRequest()));
 	}
-
 }

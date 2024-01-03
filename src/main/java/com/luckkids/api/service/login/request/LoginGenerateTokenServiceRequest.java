@@ -6,17 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LoginServiceRequest {
+public class LoginGenerateTokenServiceRequest {
+    private String refreshToken;
     private String email;
-    private String password;
     private String deviceId;
-    private String pushKey;
 
     @Builder
-    private LoginServiceRequest(String email, String password, String deviceId, String pushKey) {
+    private LoginGenerateTokenServiceRequest(String refreshToken, String email, String deviceId) {
+        this.refreshToken = refreshToken;
         this.email = email;
-        this.password = password;
         this.deviceId = deviceId;
-        this.pushKey = pushKey;
     }
 }
