@@ -1,6 +1,7 @@
 package com.luckkids.api.controller.login;
 
 import com.luckkids.ControllerTestSupport;
+import com.luckkids.api.controller.login.request.LoginGenerateTokenRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -139,6 +140,103 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("푸시토큰은 필수입니다."));
+    }
+
+    @DisplayName("엑세스토큰을 재생성한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void generateAccessToken() throws Exception {
+        // given
+        LoginGenerateTokenRequest loginGenerateTokenRequest = LoginGenerateTokenRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .deviceId("testDeviceId")
+            .refreshToken("testRefreshToken")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/refresh")
+                    .content(objectMapper.writeValueAsString(loginGenerateTokenRequest))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
+
+    @DisplayName("엑세스토큰을 재생성시 이메일은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void generateAccessTokenWithoutEmail() throws Exception {
+        // given
+        LoginGenerateTokenRequest loginGenerateTokenRequest = LoginGenerateTokenRequest.builder()
+            .deviceId("testDeviceId")
+            .refreshToken("testRefreshToken")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/refresh")
+                    .content(objectMapper.writeValueAsString(loginGenerateTokenRequest))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("이메일은 필수입니다."));
+    }
+
+    @DisplayName("엑세스토큰을 재생성할시 디바이스ID는 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void generateAccessTokenWithoutDeviceId() throws Exception {
+        // given
+        LoginGenerateTokenRequest loginGenerateTokenRequest = LoginGenerateTokenRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .refreshToken("testRefreshToken")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/refresh")
+                    .content(objectMapper.writeValueAsString(loginGenerateTokenRequest))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."));
+    }
+
+    @DisplayName("엑세스토큰을 재생성할 시 리플래시토큰은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void generateAccessTokenWithoutRefreshToken() throws Exception {
+        // given
+        LoginGenerateTokenRequest loginGenerateTokenRequest = LoginGenerateTokenRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .deviceId("testDeviceId")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/refresh")
+                    .content(objectMapper.writeValueAsString(loginGenerateTokenRequest))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("리플래시토큰은 필수입니다."));
     }
 
 }

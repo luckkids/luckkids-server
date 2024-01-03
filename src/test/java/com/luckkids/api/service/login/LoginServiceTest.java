@@ -3,7 +3,9 @@ package com.luckkids.api.service.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
@@ -13,6 +15,10 @@ import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.jwt.JwtTokenGenerator;
+import com.luckkids.jwt.dto.JwtToken;
+import com.luckkids.jwt.dto.UserInfo;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,27 +29,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LoginServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private LoginService loginService;
-
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PushRepository pushRepository;
-
     @Autowired
     private UserReadService userReadService;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private JwtTokenGenerator jwtTokenGenerator;
 
     @AfterEach
     void tearDown() {
@@ -217,11 +221,94 @@ public class LoginServiceTest extends IntegrationTestSupport {
             );
     }
 
+    @Test
+    @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급한다.")
+    void generateAccessToken() throws JsonProcessingException, InterruptedException {
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+
+        UserInfo userInfo = UserInfo.builder()
+            .userId(savedUser.getId())
+            .email(savedUser.getEmail())
+            .build();
+
+        JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
+
+        refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
+
+        LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
+            .email(savedUser.getEmail())
+            .deviceId("testDeviceId")
+            .refreshToken(jwtToken.getRefreshToken())
+            .build();
+
+        LoginGenerateTokenResponse loginGenerateTokenResponse = loginService.generateAccessToken(loginGenerateTokenServiceRequest);
+
+        assertThat(loginGenerateTokenResponse.getAccessToken()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급할시 해당 deviceId가 존재하지않을시 예외가 발생한다.")
+    void generateAccessTokenNotExistDeviceId() throws JsonProcessingException {
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+
+        UserInfo userInfo = UserInfo.builder()
+            .userId(savedUser.getId())
+            .email(savedUser.getEmail())
+            .build();
+
+        JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
+
+        refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
+
+        LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
+            .email(savedUser.getEmail())
+            .deviceId("testDeviceId2")
+            .refreshToken(jwtToken.getRefreshToken())
+            .build();
+
+        assertThatThrownBy(() -> loginService.generateAccessToken(loginGenerateTokenServiceRequest))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("리플래시 토큰이 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급할시 해당 이메일이 존재하지않을시 예외가 발생한다.")
+    void generateAccessTokenNotExistUser() throws JsonProcessingException {
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+
+        UserInfo userInfo = UserInfo.builder()
+            .userId(savedUser.getId())
+            .email(savedUser.getEmail())
+            .build();
+
+        JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
+
+        refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
+
+        LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
+            .email("test@test.com")
+            .deviceId("testDeviceId")
+            .refreshToken(jwtToken.getRefreshToken())
+            .build();
+
+        assertThatThrownBy(() -> loginService.generateAccessToken(loginGenerateTokenServiceRequest))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
+    }
+
     User createUser(String email, String password, SnsType snsType){
         return User.builder()
             .email(email)
             .password(bCryptPasswordEncoder.encode(password))
             .snsType(snsType)
+            .build();
+    }
+
+    RefreshToken createRefreshToken(User user, String refreshToken){
+        return RefreshToken.builder()
+            .user(user)
+            .deviceId("testDeviceId")
+            .refreshToken(refreshToken)
             .build();
     }
 }
