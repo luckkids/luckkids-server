@@ -3,8 +3,14 @@ package com.luckkids.api.service.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.feign.google.response.GoogleUserInfoResponse;
+import com.luckkids.api.feign.kakao.response.KakaoUserInfoResponse;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
+import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
+import com.luckkids.api.service.login.response.OAuthLoginResponse;
+import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
+import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
@@ -24,6 +30,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 public class LoginServiceTest extends IntegrationTestSupport {
 
@@ -215,6 +223,68 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 "testdeviceId"
             );
+    }
+
+    @DisplayName("카카오 로그인을 한다.")
+    @Test
+    @Transactional
+    void oauthKakaoLoginTest() throws JsonProcessingException {
+        // given
+        User user = createUser("test@test.com", "1234", SnsType.KAKAO);
+
+        userRepository.save(user);
+
+        given(kakaoApiFeignCall.getUserInfo(any(String.class)))
+            .willReturn(
+                KakaoUserInfoResponse.builder()
+                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                        .email("test@test.com")
+                        .build())
+                    .build()
+            );
+
+        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
+            .accessToken("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .deviceId("testDeviceId")
+            .pushKey("testPushKey")
+            .snsType(SnsType.KAKAO)
+            .build();
+
+        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
+    }
+
+    @DisplayName("구글 로그인을 한다.")
+    @Test
+    @Transactional
+    void oauthGoogleLoginTest() throws JsonProcessingException {
+        // given
+        User user = createUser("test@test.com", "1234", SnsType.GOOGLE);
+
+        userRepository.save(user);
+
+        given(googleApiFeignCall.getUserInfo(any(String.class)))
+            .willReturn(
+                GoogleUserInfoResponse.builder()
+                    .email("test@test.com")
+                    .build()
+            );
+
+        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
+            .accessToken("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .deviceId("testDeviceId")
+            .pushKey("testPushKey")
+            .snsType(SnsType.GOOGLE)
+            .build();
+
+        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
     User createUser(String email, String password, SnsType snsType){
