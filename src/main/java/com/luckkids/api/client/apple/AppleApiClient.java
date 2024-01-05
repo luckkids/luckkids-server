@@ -26,24 +26,6 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class AppleApiClient implements OAuthApiClient {
-    private static final String GRANT_TYPE = "authorization_code";
-
-    @Value("${oauth.apple.client-id}")
-    private String clientId;
-
-    @Value("${oauth.apple.key-id}")
-    private String keyId;
-
-    @Value("${oauth.apple.team-id}")
-    private String teamId;
-
-    @Value("${oauth.apple.audience}")
-    private String audience;
-
-    @Value("${oauth.apple.private-key}")
-    private String privateKey;
-
-    private final AppleAuthFeignCall appleAuthFeignCall;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -52,48 +34,8 @@ public class AppleApiClient implements OAuthApiClient {
     }
 
     @Override
-    public String getToken(String code) {
-        AppleGetTokenRequest appleGetTokenRequest = AppleGetTokenRequest.builder()
-            .client_id(clientId)
-            .client_secret(generateClientSecret())
-            .code(code)
-            .grant_type(GRANT_TYPE)
-            .build();
-
-        return appleAuthFeignCall.getToken(appleGetTokenRequest).getIdToken();
-    }
-
-    @Override
-    public String getEmail(String code){
-        return decodePayload(getToken(code), AppleIdTokenPayload.class).getEmail();
-    }
-
-    private String generateClientSecret() {
-        LocalDateTime expiration = LocalDateTime.now().plusMinutes(5);
-
-        return Jwts.builder()
-            .setHeaderParam(JwsHeader.KEY_ID, keyId)
-            .setIssuer(teamId)
-            .setAudience(audience)
-            .setSubject(clientId)
-            .setExpiration(Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant()))
-            .setIssuedAt(new Date())
-            .signWith(getPrivateKey(), SignatureAlgorithm.ES256)
-            .compact();
-    }
-
-    private PrivateKey getPrivateKey() {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
-
-        try {
-            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKey);
-
-            PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKeyBytes);
-            return converter.getPrivateKey(privateKeyInfo);
-        } catch (Exception e) {
-            throw new RuntimeException("Error converting private key from String", e);
-        }
+    public String getEmail(String idToken){
+        return decodePayload(idToken, AppleIdTokenPayload.class).getEmail();
     }
 
     private <T> T decodePayload(String token, Class<T> targetClass) {

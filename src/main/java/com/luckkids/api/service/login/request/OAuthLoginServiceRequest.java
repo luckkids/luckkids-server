@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class OAuthLoginServiceRequest {
-    private String code;
+    private String accessToken;
     private SnsType snsType;
     private String deviceId;
     private String pushKey;
 
     @Builder
-    private OAuthLoginServiceRequest(String code, SnsType snsType, String deviceId, String pushKey) {
-        this.code = code;
+    private OAuthLoginServiceRequest(String accessToken, SnsType snsType, String deviceId, String pushKey) {
+        this.accessToken = accessToken;
         this.snsType = snsType;
         this.deviceId = deviceId;
         this.pushKey = pushKey;

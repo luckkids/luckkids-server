@@ -61,7 +61,7 @@ public class LoginService {
         OAuthApiClient client = clients.get(snsType);
         Optional.ofNullable(client).orElseThrow(() -> new LuckKidsException(ErrorCode.OAUTH_UNKNOWN));
 
-        String email = client.getEmail(oAuthLoginServiceRequest.getCode());
+        String email = client.getEmail(oAuthLoginServiceRequest.getAccessToken());
 
         User user = userRepository.findByEmail(email)
             .orElseGet(() -> userRepository.save(

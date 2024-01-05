@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginOauthRequest {
 
-    @NotNull(message = "authorizaion-code는 필수입니다.")
-    private String code;
+    @NotNull(message = "accessToken은 필수입니다.")
+    private String accessToken;
     @NotNull(message = "인증타입은 필수입니다.")
     private SnsType snsType;
     @NotNull(message = "디바이스ID는 필수입니다.")
@@ -22,7 +22,7 @@ public class LoginOauthRequest {
 
     public OAuthLoginServiceRequest toServiceRequest(){
         return OAuthLoginServiceRequest.builder()
-            .code(code)
+            .accessToken(accessToken)
             .snsType(snsType)
             .deviceId(deviceId)
             .pushKey(pushKey)

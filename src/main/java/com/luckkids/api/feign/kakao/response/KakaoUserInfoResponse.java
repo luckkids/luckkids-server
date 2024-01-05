@@ -2,6 +2,7 @@ package com.luckkids.api.feign.kakao.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +15,18 @@ public class KakaoUserInfoResponse {
 
     @Getter
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    static class KakaoAccount {
+    public static class KakaoAccount {
         private String email;
+
+        @Builder
+        public KakaoAccount(String email) {
+            this.email = email;
+        }
+    }
+
+    @Builder
+    public KakaoUserInfoResponse(KakaoAccount kakaoAccount) {
+        this.kakaoAccount = kakaoAccount;
     }
 
     public String getEmail() {

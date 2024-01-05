@@ -16,18 +16,6 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class GoogleApiClient implements OAuthApiClient {
 
-    private static final String GRANT_TYPE = "authorization_code";
-
-    @Value("${oauth.google.client-id}")
-    private String clientId;
-
-    @Value("${oauth.google.client-secret}")
-    private String clientSecret;
-
-    @Value("${oauth.google.redirect-uri}")
-    private String redirect_uri;
-
-    private final GoogleAuthFeignCall googleAuthFeignCall;
     private final GoogleApiFeignCall googleApiFeignCall;
 
     @Override
@@ -36,20 +24,7 @@ public class GoogleApiClient implements OAuthApiClient {
     }
 
     @Override
-    public String getToken(String code) {
-        GoogleGetTokenRequest googleGetTokenRequest = GoogleGetTokenRequest.builder()
-            .client_id(clientId)
-            .client_secret(clientSecret)
-            .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
-            .grant_type(GRANT_TYPE)
-            .redirect_uri(redirect_uri)
-            .build();
-
-        return googleAuthFeignCall.getToken(googleGetTokenRequest).getAccessToken();
-    }
-
-    @Override
-    public String getEmail(String code){
-        return googleApiFeignCall.getUserInfo("Bearer " + getToken(code)).getEmail();
+    public String getEmail(String accessToken){
+        return googleApiFeignCall.getUserInfo("Bearer " + accessToken).getEmail();
     }
 }
