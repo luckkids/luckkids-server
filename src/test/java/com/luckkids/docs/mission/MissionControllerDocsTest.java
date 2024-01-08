@@ -10,6 +10,7 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.misson.MissionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
 import static java.time.LocalDateTime.now;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -55,6 +57,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     void createMission() throws Exception {
         // given
         MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
@@ -62,7 +65,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 
         given(missionService.createMission(any(MissionCreateServiceRequest.class)))
             .willReturn(
-                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
+                createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -77,6 +80,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
+                    fieldWithPath("missionType").type(JsonFieldType.STRING)
+                        .description("미션 타입. 가능한 값: " + Arrays.toString(MissionType.values())),
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
@@ -95,6 +100,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("미션 ID"),
+                    fieldWithPath("data.missionType").type(JsonFieldType.STRING)
+                        .description("미션 타입"),
                     fieldWithPath("data.missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)
@@ -118,7 +125,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 
         given(missionService.updateMission(anyInt(), any(MissionUpdateServiceRequest.class)))
             .willReturn(
-                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
+                createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -176,8 +183,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
         given(missionReadService.getMission())
             .willReturn(
                 List.of(
-                    createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0)),
-                    createMissionResponse(2, "책 읽기", UNCHECKED, LocalTime.of(20, 0))
+                    createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0)),
+                    createMissionResponse(2, HEALTH, "책 읽기", UNCHECKED, LocalTime.of(20, 0))
                 )
             );
 
@@ -243,9 +250,10 @@ public class MissionControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    private MissionResponse createMissionResponse(int id, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionResponse createMissionResponse(int id, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return MissionResponse.builder()
             .id(id)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
