@@ -9,8 +9,6 @@ import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
-import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthCodeResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
@@ -244,7 +242,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .accessToken("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
             .deviceId("testDeviceId")
             .pushKey("testPushKey")
             .snsType(SnsType.KAKAO)
@@ -274,10 +272,33 @@ public class LoginServiceTest extends IntegrationTestSupport {
             );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .accessToken("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
             .deviceId("testDeviceId")
             .pushKey("testPushKey")
             .snsType(SnsType.GOOGLE)
+            .build();
+
+        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
+    }
+
+    @DisplayName("애플 로그인을 한다.")
+    @Test
+    @Transactional
+    void oauthAppleLoginTest() throws JsonProcessingException {
+        // given
+        User user = createUser("test@test.com", "1234", SnsType.APPLE);
+
+        userRepository.save(user);
+
+        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
+            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .deviceId("testDeviceId")
+            .pushKey("testPushKey")
+            .snsType(SnsType.APPLE)
             .build();
 
         OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);

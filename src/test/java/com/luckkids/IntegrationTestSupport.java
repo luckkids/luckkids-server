@@ -1,6 +1,7 @@
 package com.luckkids;
 
 import com.luckkids.api.client.OAuthApiClient;
+import com.luckkids.api.client.apple.AppleApiClient;
 import com.luckkids.api.client.kakao.KakaoApiClient;
 import com.luckkids.api.feign.google.GoogleApiFeignCall;
 import com.luckkids.api.feign.kakao.KakaoApiFeignCall;
