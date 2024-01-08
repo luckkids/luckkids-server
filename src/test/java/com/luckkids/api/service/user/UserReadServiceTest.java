@@ -47,7 +47,6 @@ class UserReadServiceTest extends IntegrationTestSupport {
         assertThat(result)
         .extracting("email", "password", "snsType")
         .contains("user@daum.net", user.getPassword() , SnsType.KAKAO);
-
     }
 
     @DisplayName("유저의 id값을 받아서 유저가 있는지 검색했을 때 없는 유저의 예외상황이 발생한다.")

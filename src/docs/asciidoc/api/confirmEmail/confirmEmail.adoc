@@ -1,0 +1,12 @@
+[[confirmEmail-check]]
+=== 이메일인증완료여부 체크 API
+
+==== HTTP Request
+
+include::{snippets}/confirmEmail-check/http-request.adoc[]
+include::{snippets}/check-email/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/confirmEmail-check/http-response.adoc[]
+include::{snippets}/confirmEmail-check/response-fields.adoc[]

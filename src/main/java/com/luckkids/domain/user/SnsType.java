@@ -22,7 +22,7 @@ public enum SnsType {
             .filter(type -> type.getText().equals(text))
             .findFirst();
         snsType.ifPresent(type -> {
-            throw new LuckKidsException(text+"로그인으로 이미 가입된 이메일입니다.");
+            throw new LuckKidsException(type.name());
         });
     }
 }

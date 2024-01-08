@@ -31,7 +31,6 @@ class UserRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser.getEmail()).isEqualTo(email);
-
     }
 
     private User createUser(String email, String password, SnsType snsType) {

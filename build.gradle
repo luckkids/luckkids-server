@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -135,12 +136,15 @@ tasks.register('copySecret', Copy) {
 }
 
 processResources {
-    filesMatching('**/application.yml') {
-        expand([
-                'MAIL_PASSWORD'   : System.getenv('MAIL_PASSWORD'),
-                'JWT_SECRET_KEY'  : System.getenv('JWT_SECRET_KEY'),
-                'DEV_DB_PASSWORD' : System.getenv('DEV_DB_PASSWORD'),
-                'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD')
-        ])
+    if (System.getenv('DEPLOY_CHECK') == "ok") {
+        filesMatching('**/application.yml') {
+            expand([
+                    'MAIL_PASSWORD'   : System.getenv('MAIL_PASSWORD'),
+                    'JWT_SECRET_KEY'  : System.getenv('JWT_SECRET_KEY'),
+                    'DEV_DB_PASSWORD' : System.getenv('DEV_DB_PASSWORD'),
+                    'PROD_DB_PASSWORD': System.getenv('PROD_DB_PASSWORD'),
+                    'AES_KEY'         : System.getenv('AES_KEY')
+            ])
+        }
     }
 }

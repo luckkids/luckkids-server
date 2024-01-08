@@ -1,6 +1,7 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.domain.BaseTimeEntity;
+import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.userCharacter.UserCharacter;
@@ -108,7 +109,11 @@ public class User extends BaseTimeEntity {
         this.luckPhrases = luckPhrases;
     }
 
+    public void changeSettingStatus(SettingStatus settingStatus) {
+        this.settingStatus = settingStatus;
+    }
     public void updatePassword(String password){
         this.password = password;
     }
+
 }

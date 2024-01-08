@@ -7,6 +7,7 @@ import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.luckkids.domain.user.SettingStatus.COMPLETE;
+import static com.luckkids.domain.user.SettingStatus.INCOMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -138,7 +141,7 @@ public class UserTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("같은 deviceid로 저장되어있는 refreshToken가 없을 시 저장한다.")
+    @DisplayName("같은 deviceid로 저장되어있는 refreshToken가 없을 시 수정한다.")
     @Test
     void checkRefreshTokenAndSave() {
         // given
@@ -208,10 +211,15 @@ public class UserTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // when
-        savedUser.updateLuckPhrases("행운입니다!!");
+        User findUser = userReadService.findByOne(savedUser.getId());
+        findUser.changeSettingStatus(COMPLETE);
 
         // then
+        assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
+        savedUser.updateLuckPhrases("행운입니다!!");
+        savedUser.changeSettingStatus(INCOMPLETE);
 
+        // then
         assertThat(savedUser)
             .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
             .contains(

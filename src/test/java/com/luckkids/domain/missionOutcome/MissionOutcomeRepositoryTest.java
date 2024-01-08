@@ -95,6 +95,39 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         assertThat(count).isEqualTo(2);
     }
 
+    @DisplayName("사용자의 미션이력을 전부 삭제한다.")
+    @Test
+    void deleteAllByMissionUserId() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27), FAILED);
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
+
+        User user2 = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission2 = createMission(user2, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
+        MissionOutcome missionOutcome5 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 26), SUCCEED);
+        MissionOutcome missionOutcome6 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 27), FAILED);
+
+        userRepository.save(user2);
+        missionRepository.save(mission2);
+        missionOutcomeRepository.saveAll(List.of(missionOutcome4, missionOutcome5, missionOutcome6));
+
+        // when
+        missionOutcomeRepository.deleteAllByMissionUserId(user.getId());
+
+        List<MissionOutcome> missionOutcomeList = missionOutcomeRepository.findAll();
+
+        // then
+        assertThat(missionOutcomeList).hasSize(3);
+    }
+
     private User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)

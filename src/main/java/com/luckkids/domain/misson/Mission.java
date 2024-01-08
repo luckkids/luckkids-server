@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "mission", indexes = @Index(name = "IDXAlertStatus", columnList = "alertStatus"))
 public class Mission extends BaseTimeEntity {
 
     @Id

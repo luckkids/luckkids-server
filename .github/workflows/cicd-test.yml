@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GIT_TOKEN }}
-          submodules: true
+          submodules: 'recursive'
 
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
@@ -43,10 +43,12 @@ jobs:
 
       - name: 🍀 테스트 진행
         env:
+          DEPLOY_CHECK: ok
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          AES_KEY: ${{ secrets.AES_KEY }}
         run: ./gradlew test --parallel
 
       - name: 🍀 테스트 결과 Report
