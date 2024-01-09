@@ -4,6 +4,7 @@ Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
 {
+  "missionType": "HEALTH",
   "missionDescription": "운동하기",
   "alertStatus": "CHECKED",
   "alertTime": "18:30"
@@ -15,6 +16,7 @@ Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
 {
+  "missionType": "SELF_DEVELOPMENT",
   "missionDescription": "책읽기",
   "alertTime": "10:30"
 }

@@ -81,7 +81,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("missionType").type(JsonFieldType.STRING)
-                        .description("미션 타입. 가능한 값: " + Arrays.toString(MissionType.values())),
+                        .description("미션 종류. 가능한 값: " + Arrays.toString(MissionType.values())),
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
@@ -101,7 +101,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("미션 ID"),
                     fieldWithPath("data.missionType").type(JsonFieldType.STRING)
-                        .description("미션 타입"),
+                        .description("미션 종류"),
                     fieldWithPath("data.missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)
@@ -118,6 +118,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     void updateMission() throws Exception {
         // given
         MissionUpdateRequest request = MissionUpdateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
@@ -144,6 +145,9 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("미션 ID")
                 ),
                 requestFields(
+                    fieldWithPath("missionType").type(JsonFieldType.STRING)
+                        .description("미션 종류. 가능한 값: " + Arrays.toString(MissionType.values()))
+                        .optional(),
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용")
                         .optional(),
@@ -165,6 +169,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                         .description("미션 ID"),
+                    fieldWithPath("data.missionType").type(JsonFieldType.STRING)
+                        .description("미션 종류"),
                     fieldWithPath("data.missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)

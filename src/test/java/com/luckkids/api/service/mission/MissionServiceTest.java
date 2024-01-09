@@ -28,6 +28,7 @@ import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -100,7 +101,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .willReturn(createUserInfo(userId));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
-            .missionType(HEALTH)
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -127,7 +128,7 @@ class MissionServiceTest extends IntegrationTestSupport {
             .willReturn(createUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
-            .missionType(HEALTH)
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -159,6 +160,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         int missionId = savedMission.getId();
 
         MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -169,14 +171,14 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionResponse)
-            .extracting("missionDescription", "alertStatus", "alertTime")
-            .contains("책 읽기", CHECKED, LocalTime.of(23, 30));
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .contains(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30));
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
+                tuple(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30))
             );
     }
 
@@ -200,14 +202,14 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionResponse)
-            .extracting("missionDescription", "alertStatus", "alertTime")
-            .contains("책 읽기", UNCHECKED, LocalTime.of(0, 0));
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .contains(HEALTH, "책 읽기", UNCHECKED, LocalTime.of(0, 0));
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("책 읽기", UNCHECKED, LocalTime.of(0, 0))
+                tuple(HEALTH, "책 읽기", UNCHECKED, LocalTime.of(0, 0))
             );
     }
 

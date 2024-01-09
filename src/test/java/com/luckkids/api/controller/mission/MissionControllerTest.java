@@ -129,7 +129,8 @@ class MissionControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void createMissionWithoutAlertTime() throws Exception {
         // given
-        MissionUpdateRequest request = MissionUpdateRequest.builder()
+        MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("T")
             .alertStatus(CHECKED)
             .build();
@@ -155,6 +156,7 @@ class MissionControllerTest extends ControllerTestSupport {
     void updateMission() throws Exception {
         // given
         MissionUpdateRequest request = MissionUpdateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))

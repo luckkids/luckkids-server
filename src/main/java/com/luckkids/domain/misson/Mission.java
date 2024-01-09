@@ -52,7 +52,8 @@ public class Mission extends BaseTimeEntity {
         this.push_date = push_date;
     }
 
-    public Mission update(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    public Mission update(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+        updateIfNonNull(missionType, it -> this.missionType = it);
         updateIfNonNull(missionDescription, it -> this.missionDescription = it);
         updateIfNonNull(alertStatus, it -> this.alertStatus = it);
         updateIfNonNull(alertTime, it -> this.alertTime = it);
