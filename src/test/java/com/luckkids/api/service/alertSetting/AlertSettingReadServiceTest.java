@@ -1,18 +1,15 @@
 package com.luckkids.api.service.alertSetting;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,24 +40,24 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("AlertSetting Entity를 조회한다.")
     @Test
-    void findOneByUserId(){
+    void findOneByUserId() {
         User user = createUser(1);
         createAlertSetting(user);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSetting alertSetting = alertSettingReadService.findOneByUserId();
 
-        assertThat(alertSetting).extracting("entire","mission","notice","luck")
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "luck")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
     @Test
-    void findOneByUserIdWithNoUser(){
+    void findOneByUserIdWithNoUser() {
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(1));
+            .willReturn(createLoginUserInfo(1));
 
         assertThatThrownBy(() -> alertSettingReadService.findOneByUserId())
             .isInstanceOf(LuckKidsException.class)
@@ -69,24 +66,24 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("userId와 deviceId로 AlertSetting Entity를 조회한다.")
     @Test
-    void findOneByUserIdAndDeviceId(){
+    void findOneByUserIdAndDeviceId() {
         User user = createUser(1);
         createAlertSetting(user);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSetting alertSetting = alertSettingReadService.findOneByUserIdAndDeviceId("testDeviceId");
 
-        assertThat(alertSetting).extracting("entire","mission","notice","luck")
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "luck")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("userId와 deviceId로 AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
     @Test
-    void findOneByUserIdAndDeviceIdWithNoUser(){
+    void findOneByUserIdAndDeviceIdWithNoUser() {
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(1));
+            .willReturn(createLoginUserInfo(1));
 
         assertThatThrownBy(() -> alertSettingReadService.findOneByUserIdAndDeviceId("testDeviceId"))
             .isInstanceOf(LuckKidsException.class)
@@ -95,7 +92,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 알림세팅을 조회한다.")
     @Test
-    void getAlertSetting(){
+    void getAlertSetting() {
         User user = createUser(1);
         createAlertSetting(user);
 
@@ -104,17 +101,17 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSettingResponse alertSettingResponse = alertSettingReadService.getAlertSetting(request);
 
-        assertThat(alertSettingResponse).extracting("entire","mission","notice","luck")
+        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("사용자의 기기가 아닌 DeviceId로 알림세팅을 조회시 예외가 발생한다.")
     @Test
-    void getAlertSettingAnotherDeviceId(){
+    void getAlertSettingAnotherDeviceId() {
         User user = createUser(1);
         createAlertSetting(user);
 
@@ -123,7 +120,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         assertThatThrownBy(() -> alertSettingReadService.getAlertSetting(request))
             .isInstanceOf(LuckKidsException.class)
@@ -132,13 +129,13 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 알림세팅이 존재하지 않을 시 예외가 발생한다.")
     @Test
-    void getAlertSettingWithNoSetting (){
+    void getAlertSettingWithNoSetting() {
         AlertSettingServiceRequest request = AlertSettingServiceRequest.builder()
             .deviceId("testDeviceId")
             .build();
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(2));
+            .willReturn(createLoginUserInfo(2));
 
         assertThatThrownBy(() -> alertSettingReadService.getAlertSetting(request))
             .isInstanceOf(LuckKidsException.class)
@@ -148,13 +145,13 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
     private User createUser(int i) {
         return userRepository.save(
             User.builder()
-            .email("test"+i)
-            .password("password")
-            .snsType(NORMAL)
-            .build());
+                .email("test" + i)
+                .password("password")
+                .snsType(NORMAL)
+                .build());
     }
 
-    private void createAlertSetting(User user){
+    private void createAlertSetting(User user) {
         AlertSetting alertSetting = AlertSetting.builder()
             .user(user)
             .deviceId("testDeviceId")
@@ -167,10 +164,9 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         alertSettingRepository.save(alertSetting);
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 

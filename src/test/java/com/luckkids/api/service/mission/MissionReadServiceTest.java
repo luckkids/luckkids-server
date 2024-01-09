@@ -8,7 +8,7 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user1.getId()));
+            .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
         List<MissionResponse> missions = missionReadService.getMission();
@@ -80,7 +80,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user2.getId()));
+            .willReturn(createLoginUserInfo(user2.getId()));
 
         // when
         List<MissionResponse> missions = missionReadService.getMission();
@@ -142,10 +142,9 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

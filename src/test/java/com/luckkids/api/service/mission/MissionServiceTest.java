@@ -13,7 +13,7 @@ import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         missionRepository.save(mission);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionType(HEALTH)
@@ -98,7 +98,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         int userId = 1;
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(userId));
+            .willReturn(createLoginUserInfo(userId));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionType(SELF_DEVELOPMENT)
@@ -125,7 +125,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         missionRepository.save(mission);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
             .missionType(SELF_DEVELOPMENT)
@@ -254,10 +254,9 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.luckkids.api.service.security;
 
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SecurityService {
 
             byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().withoutPadding().encodeToString(encrypted);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("암호화 처리중 에러가 발생했습니다.");
         }
     }
@@ -45,16 +45,16 @@ public class SecurityService {
             byte[] decodedBytes = Base64.getDecoder().decode(cipherText);
             byte[] decrypted = cipher.doFinal(decodedBytes);
             return new String(decrypted, StandardCharsets.UTF_8);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("복호화 처리중 에러가 발생했습니다.");
         }
     }
 
-    public UserInfo getCurrentUserInfo() {
+    public LoginUserInfo getCurrentUserInfo() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof UserInfo) {
-            return (UserInfo) principal;
+        if (principal instanceof LoginUserInfo) {
+            return (LoginUserInfo) principal;
         }
 
         throw new RuntimeException("Unknown principal type: " + principal.getClass().getName());

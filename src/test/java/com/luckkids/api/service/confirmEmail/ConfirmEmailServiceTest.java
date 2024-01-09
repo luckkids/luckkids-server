@@ -13,22 +13,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 
-@ActiveProfiles("test")
-@SpringBootTest
-public class ConfirmEmailServiceTest {
+public class ConfirmEmailServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ConfirmEmailService confirmEmailService;
+
     @Autowired
     private ConfirmEmailRepository confirmEmailRepository;
+
     @Autowired
     private ConfirmEmailReadService confirmEmailReadService;
+
     @Autowired
     private SecurityService securityService;
 
@@ -39,10 +39,10 @@ public class ConfirmEmailServiceTest {
 
     @DisplayName("이메일 인증여부를 확인한다.")
     @Test
-    void checkEmail(){
+    void checkEmail() {
         ConfirmEmail confirmEmail = createConfirmEmail("test@test.com", "testtesttest", ConfirmStatus.COMPLETE);
 
-        ConfirmEmail savedConfirmEmail =  confirmEmailRepository.save(confirmEmail);
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
 
         ConfirmEmailCheckServiceRequest confirmEmailCheckServiceRequest = ConfirmEmailCheckServiceRequest.builder()
             .email(savedConfirmEmail.getEmail())
@@ -56,10 +56,10 @@ public class ConfirmEmailServiceTest {
 
     @DisplayName("이메일 인증여부를 확인할 시 인증이 완료되지 않았을 시 예외를 던진다.")
     @Test
-    void checkEmailThrowExecption(){
+    void checkEmailThrowException() {
         ConfirmEmail confirmEmail = createConfirmEmail("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
 
-        ConfirmEmail savedConfirmEmail =  confirmEmailRepository.save(confirmEmail);
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
 
         ConfirmEmailCheckServiceRequest confirmEmailCheckServiceRequest = ConfirmEmailCheckServiceRequest.builder()
             .email(savedConfirmEmail.getEmail())
@@ -73,21 +73,30 @@ public class ConfirmEmailServiceTest {
 
     @DisplayName("이메일 인증을 처리한다.")
     @Test
-    void confirmEmail(){
+    void confirmEmail() {
+        // given
         ConfirmEmail confirmEmail = createConfirmEmail("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
 
-        ConfirmEmail savedConfirmEmail =  confirmEmailRepository.save(confirmEmail);
+        ConfirmEmail savedConfirmEmail = confirmEmailRepository.save(confirmEmail);
 
-        confirmEmailService.confirmEmail(securityService.encrypt(savedConfirmEmail.getEmail()+"/"+savedConfirmEmail.getAuthKey()));
+        String inputForEncryption = savedConfirmEmail.getEmail() + "/" + savedConfirmEmail.getAuthKey();
+        String expectedEncryptedOutput = "encryptedString";
 
+        given(securityService.encrypt(inputForEncryption)).willReturn(expectedEncryptedOutput);
+        given(securityService.decrypt(expectedEncryptedOutput)).willReturn(inputForEncryption);
+
+        confirmEmailService.confirmEmail(securityService.encrypt(inputForEncryption));
+
+        // when
         ConfirmEmail findConfirmEmail = confirmEmailReadService.findByEmailAndAuthKey(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
 
+        // then
         assertThat(findConfirmEmail.getConfirmStatus()).isEqualTo(ConfirmStatus.COMPLETE);
     }
 
     @DisplayName("이메일인증값을 저장한다.")
     @Test
-    void createConfirmEmail(){
+    void createConfirmEmail() {
         CreateConfrimEmailServiceRequest createConfrimEmailServiceRequest = CreateConfrimEmailServiceRequest.builder()
             .email("test@test.com")
             .authKey("testtesttest")
@@ -102,7 +111,7 @@ public class ConfirmEmailServiceTest {
             .contains("test@test.com", "testtesttest", ConfirmStatus.INCOMPLETE);
     }
 
-    private ConfirmEmail createConfirmEmail(String email, String authKey, ConfirmStatus confirmStatus){
+    private ConfirmEmail createConfirmEmail(String email, String authKey, ConfirmStatus confirmStatus) {
         return ConfirmEmail.builder()
             .email(email)
             .authKey(authKey)

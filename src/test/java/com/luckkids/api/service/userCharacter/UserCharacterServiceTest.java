@@ -8,7 +8,7 @@ import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,14 +36,14 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자가 선택한 캐릭터를 저장한다.")
     @Test
-    void createTest(){
+    void createTest() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
 
         userRepository.save(user);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         UserCharacterCreateServiceRequest userCharacterCreateServiceRequest = UserCharacterCreateServiceRequest.builder()
             .fileName("test.json")
@@ -75,10 +75,9 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

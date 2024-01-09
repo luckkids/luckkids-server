@@ -10,7 +10,7 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,7 +89,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         MissionOutcome savedMissionOutcome = missionOutcomeRepository.save(missionOutcome);
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         // when
         missionOutcomeService.updateMissionOutcome(savedMissionOutcome.getId(), SUCCEED);
@@ -119,7 +119,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
         given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+            .willReturn(createLoginUserInfo(user.getId()));
 
         // when
         int count1 = missionOutcomeService.updateMissionOutcome(missionOutcome1.getId(), SUCCEED);
@@ -188,10 +188,9 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

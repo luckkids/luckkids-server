@@ -6,20 +6,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserInfo {
+public class LoginUserInfo {
     private int userId;
-    private String email;
 
     @Builder
-    private UserInfo(int userId, String email) {
+    private LoginUserInfo(int userId) {
         this.userId = userId;
-        this.email = email;
     }
 
-    public static UserInfo of(int userId, String email){
-        return UserInfo.builder()
+    public static LoginUserInfo of(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email(email)
             .build();
     }
 }
