@@ -14,7 +14,7 @@ import java.util.Base64;
 @Service
 public class SecurityService {
 
-    public static final String alg = "AES/CBC/PKCS5Padding";
+    private static final String ALG = "AES/CBC/PKCS5Padding";
     private final String iv;
 
     public SecurityService(@Value("${aes.key-value}") String keyValue) {
@@ -23,7 +23,7 @@ public class SecurityService {
 
     public String encrypt(String text) {
         try {
-            Cipher cipher = Cipher.getInstance(alg);
+            Cipher cipher = Cipher.getInstance(ALG);
             SecretKeySpec keySpec = new SecretKeySpec(iv.getBytes(), "AES");
             IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
@@ -37,7 +37,7 @@ public class SecurityService {
 
     public String decrypt(String cipherText) {
         try {
-            Cipher cipher = Cipher.getInstance(alg);
+            Cipher cipher = Cipher.getInstance(ALG);
             SecretKeySpec keySpec = new SecretKeySpec(iv.getBytes(), "AES");
             IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
