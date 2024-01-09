@@ -2,13 +2,19 @@ package com.luckkids.api.service.friend;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.friend.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.friend.response.FriendListReadResponse;
 import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.friendCode.FriendCode;
+import com.luckkids.domain.friendCode.FriendCodeRepository;
 import com.luckkids.domain.friends.FriendRepository;
 import com.luckkids.domain.friends.projection.FriendListDto;
+import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,4 +46,6 @@ public class FriendReadService {
         return Optional.ofNullable(friendRepository.readProfile(friendId))
             .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN)).toServiceResponse();
     }
+
+
 }
