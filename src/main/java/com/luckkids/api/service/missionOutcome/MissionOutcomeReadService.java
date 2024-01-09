@@ -33,7 +33,7 @@ public class MissionOutcomeReadService {
     }
 
     public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId, missionDate)
             .stream()
             .map(MissionOutcomeDetailDto::toMissionOutcomeResponse)
@@ -41,12 +41,12 @@ public class MissionOutcomeReadService {
     }
 
     public int countUserSuccessfulMissions() {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeRepository.countSuccessfulMissionsByUserId(userId);
     }
 
     public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
 
         LocalDate startDate = missionDate.withDayOfMonth(1).minusMonths(1);
         LocalDate endDate = startDate.plusMonths(2).minusDays(1);
@@ -56,7 +56,7 @@ public class MissionOutcomeReadService {
     }
 
     public List<String> getMissionOutcomeForCalendarDetail(LocalDate missionDate) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeQueryRepository.findSuccessfulMissionsByDate(userId, missionDate);
     }
 }

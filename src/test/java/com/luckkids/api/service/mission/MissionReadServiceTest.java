@@ -52,7 +52,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
@@ -79,7 +79,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user2.getId()));
 
         // when

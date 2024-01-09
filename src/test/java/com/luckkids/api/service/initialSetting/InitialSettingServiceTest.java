@@ -69,7 +69,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         //given
         User user = createUser(1);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()

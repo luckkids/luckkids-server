@@ -85,12 +85,11 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
         given(securityService.encrypt(inputForEncryption)).willReturn(expectedEncryptedOutput);
         given(securityService.decrypt(expectedEncryptedOutput)).willReturn(inputForEncryption);
 
+        // when
         confirmEmailService.confirmEmail(securityService.encrypt(inputForEncryption));
 
-        // when
-        ConfirmEmail findConfirmEmail = confirmEmailReadService.findByEmailAndAuthKey(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
-
         // then
+        ConfirmEmail findConfirmEmail = confirmEmailReadService.findByEmailAndAuthKey(savedConfirmEmail.getEmail(), savedConfirmEmail.getAuthKey());
         assertThat(findConfirmEmail.getConfirmStatus()).isEqualTo(ConfirmStatus.COMPLETE);
     }
 

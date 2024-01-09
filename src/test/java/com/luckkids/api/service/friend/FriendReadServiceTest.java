@@ -144,7 +144,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(users.get(0).getId()));
 
         // when
@@ -196,7 +196,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(users.get(3).getId()));
 
         // when
@@ -245,7 +245,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
@@ -307,7 +307,7 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user1.getId()));
 
         // when

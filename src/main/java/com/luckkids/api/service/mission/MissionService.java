@@ -31,7 +31,7 @@ public class MissionService {
     private final ApplicationEventPublisher eventPublisher;
 
     public MissionResponse createMission(MissionCreateServiceRequest request) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
 
         Mission mission = request.toEntity(user);

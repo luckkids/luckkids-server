@@ -26,7 +26,7 @@ public class MissionReadService {
     }
 
     public List<MissionResponse> getMission() {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNull(userId);
 
         return missions.stream().map(MissionResponse::of).collect(Collectors.toList());

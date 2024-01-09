@@ -46,7 +46,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         User user = createUser();
         createAlertSetting(user);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSettingUpdateServiceRequest alertSettingUpdateServiceRequest = AlertSettingUpdateServiceRequest.builder()
@@ -65,7 +65,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
     void createAlertSettingTest() {
         User user = createUser();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSettingCreateServiceRequest alertSettingCreateServiceRequest = AlertSettingCreateServiceRequest.builder()
@@ -81,7 +81,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 알림설정을 등록시 사용자가 없다면 예외가 발생한다.")
     @Test
     void createAlertSettingWithNoUser() {
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(1));
 
         AlertSettingCreateServiceRequest alertSettingCreateServiceRequest = AlertSettingCreateServiceRequest.builder()

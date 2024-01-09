@@ -44,7 +44,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         User user = createUser(1);
         createAlertSetting(user);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSetting alertSetting = alertSettingReadService.findOneByUserId();
@@ -56,7 +56,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
     @DisplayName("AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
     @Test
     void findOneByUserIdWithNoUser() {
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(1));
 
         assertThatThrownBy(() -> alertSettingReadService.findOneByUserId())
@@ -70,7 +70,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         User user = createUser(1);
         createAlertSetting(user);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSetting alertSetting = alertSettingReadService.findOneByUserIdAndDeviceId("testDeviceId");
@@ -82,7 +82,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
     @DisplayName("userId와 deviceId로 AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
     @Test
     void findOneByUserIdAndDeviceIdWithNoUser() {
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(1));
 
         assertThatThrownBy(() -> alertSettingReadService.findOneByUserIdAndDeviceId("testDeviceId"))
@@ -100,7 +100,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .deviceId("testDeviceId")
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSettingResponse alertSettingResponse = alertSettingReadService.getAlertSetting(request);
@@ -119,7 +119,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .deviceId("testDevice")
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         assertThatThrownBy(() -> alertSettingReadService.getAlertSetting(request))
@@ -134,7 +134,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .deviceId("testDeviceId")
             .build();
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(2));
 
         assertThatThrownBy(() -> alertSettingReadService.getAlertSetting(request))

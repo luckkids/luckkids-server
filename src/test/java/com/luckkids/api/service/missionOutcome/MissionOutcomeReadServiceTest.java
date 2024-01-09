@@ -99,7 +99,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
@@ -128,7 +128,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
@@ -154,7 +154,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
@@ -189,7 +189,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
         missionRepository.saveAll(List.of(mission1, mission2));
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when

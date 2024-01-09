@@ -113,7 +113,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     void updatePhraseTest() {
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         userRepository.save(user);
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest = UserLuckPhrasesServiceRequest.builder()
@@ -148,7 +148,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         userRepository.save(user2);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         //given alertHistory

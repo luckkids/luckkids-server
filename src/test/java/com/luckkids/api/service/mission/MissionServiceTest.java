@@ -64,7 +64,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         missionRepository.save(mission);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
@@ -97,7 +97,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         int userId = 1;
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(userId));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
@@ -124,7 +124,7 @@ class MissionServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         missionRepository.save(mission);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()

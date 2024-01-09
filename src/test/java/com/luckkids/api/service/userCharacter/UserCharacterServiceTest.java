@@ -42,7 +42,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
         userRepository.save(user);
 
-        given(securityService.getCurrentUserInfo())
+        given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         UserCharacterCreateServiceRequest userCharacterCreateServiceRequest = UserCharacterCreateServiceRequest.builder()
