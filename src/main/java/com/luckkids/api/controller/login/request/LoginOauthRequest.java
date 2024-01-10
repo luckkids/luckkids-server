@@ -3,6 +3,7 @@ package com.luckkids.api.controller.login.request;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.domain.user.SnsType;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,13 @@ public class LoginOauthRequest {
     @NotNull(message = "푸시토큰은 필수입니다.")
     private String pushKey;
 
+    @Builder
+    private LoginOauthRequest(String token, SnsType snsType, String deviceId, String pushKey) {
+        this.token = token;
+        this.snsType = snsType;
+        this.deviceId = deviceId;
+        this.pushKey = pushKey;
+    }
 
     public OAuthLoginServiceRequest toServiceRequest(){
         return OAuthLoginServiceRequest.builder()
