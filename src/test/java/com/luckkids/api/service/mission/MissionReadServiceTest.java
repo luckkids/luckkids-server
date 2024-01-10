@@ -5,6 +5,7 @@ import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -16,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -45,9 +49,9 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         // given
         User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO);
         User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1_1 = createMission(user1, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
-        Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
+        Mission mission1_1 = createMission(user1, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2_1 = createMission(user2, SELF_DEVELOPMENT, "책읽기", CHECKED, LocalTime.of(13, 0));
+        Mission mission2_2 = createMission(user2, SELF_DEVELOPMENT, "공부하기", UNCHECKED, LocalTime.of(23, 0));
 
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
@@ -56,14 +60,13 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
-        List<MissionResponse> missions = missionReadService.getMission();
+        Map<MissionType, List<MissionResponse>> missions = missionReadService.getMission();
 
         // then
-        assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
+        assertThat(missions.get(HEALTH)).extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("운동하기", UNCHECKED, LocalTime.of(19, 0))
+                tuple(HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0))
             );
-
     }
 
     @DisplayName("로그인 된 유저(유저2)의 미션들을 가져온다.")
@@ -72,9 +75,9 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         // given
         User user1 = createUser("user1@daum.net", "user1234!", SnsType.KAKAO);
         User user2 = createUser("user2@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1_1 = createMission(user1, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2_1 = createMission(user2, "책읽기", CHECKED, LocalTime.of(13, 0));
-        Mission mission2_2 = createMission(user2, "공부하기", UNCHECKED, LocalTime.of(23, 0));
+        Mission mission1_1 = createMission(user1, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2_1 = createMission(user2, SELF_DEVELOPMENT, "책읽기", CHECKED, LocalTime.of(13, 0));
+        Mission mission2_2 = createMission(user2, SELF_DEVELOPMENT, "공부하기", UNCHECKED, LocalTime.of(23, 0));
 
         userRepository.saveAll(List.of(user1, user2));
         missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
@@ -83,13 +86,13 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .willReturn(createLoginUserInfo(user2.getId()));
 
         // when
-        List<MissionResponse> missions = missionReadService.getMission();
+        Map<MissionType, List<MissionResponse>> missions = missionReadService.getMission();
 
         // then
-        assertThat(missions).extracting("missionDescription", "alertStatus", "alertTime")
+        assertThat(missions.get(SELF_DEVELOPMENT)).extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("책읽기", CHECKED, LocalTime.of(13, 0)),
-                tuple("공부하기", UNCHECKED, LocalTime.of(23, 0))
+                tuple(SELF_DEVELOPMENT, "책읽기", CHECKED, LocalTime.of(13, 0)),
+                tuple(SELF_DEVELOPMENT, "공부하기", UNCHECKED, LocalTime.of(23, 0))
             );
 
     }
@@ -99,7 +102,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
     void findByOne() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
 
         userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
@@ -108,8 +111,8 @@ class MissionReadServiceTest extends IntegrationTestSupport {
         Mission result = missionReadService.findByOne(savedMission.getId());
 
         // then
-        assertThat(result).extracting("missionDescription", "alertStatus", "alertTime")
-            .containsExactly("운동하기", UNCHECKED, LocalTime.of(19, 0));
+        assertThat(result).extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .containsExactly(HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
 
     }
 
@@ -133,9 +136,10 @@ class MissionReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private Mission createMission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private Mission createMission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return Mission.builder()
             .user(user)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
