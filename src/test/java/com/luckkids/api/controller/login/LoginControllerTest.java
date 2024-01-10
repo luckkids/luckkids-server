@@ -1,7 +1,9 @@
 package com.luckkids.api.controller.login;
 
 import com.luckkids.ControllerTestSupport;
+import com.luckkids.api.controller.login.request.LoginOauthRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
+import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -18,7 +20,7 @@ public class LoginControllerTest extends ControllerTestSupport {
     @DisplayName("일반 로그인을 한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createMission() throws Exception {
+    void normalLogin() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -44,7 +46,7 @@ public class LoginControllerTest extends ControllerTestSupport {
     @DisplayName("일반 로그인을 할 시 이메일은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createMissionWithoutEmail() throws Exception {
+    void normalLoginWithoutEmail() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .password("1234")
@@ -69,7 +71,7 @@ public class LoginControllerTest extends ControllerTestSupport {
     @DisplayName("일반 로그인을 할 시 비밀번호는 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createMissionWithoutPassword() throws Exception {
+    void normalLoginWithoutPassword() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -94,7 +96,7 @@ public class LoginControllerTest extends ControllerTestSupport {
     @DisplayName("일반 로그인을 할 시 디바이스ID는 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createMissionWithoutDeviceId() throws Exception {
+    void normalLoginWithoutDeviceId() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -119,7 +121,7 @@ public class LoginControllerTest extends ControllerTestSupport {
     @DisplayName("일반 로그인을 할 시 푸시토큰은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createMissionWithoutPushToken() throws Exception {
+    void normalLoginWithoutPushToken() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
             .email("tkdrl8908@naver.com")
@@ -139,6 +141,132 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("푸시토큰은 필수입니다."));
+    }
+
+    @DisplayName("OAuth로그인을 한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void OauthLoginTest() throws Exception {
+        // given
+        LoginOauthRequest request = LoginOauthRequest.builder()
+            .token("testToken")
+            .snsType(SnsType.APPLE)
+            .pushKey("testPushKey")
+            .deviceId("testdeviceId")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/oauth/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
+
+    @DisplayName("OAuth로그인을 할 시 snsType값은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void OauthLoginWithoutTokenTest() throws Exception {
+        // given
+        LoginOauthRequest request = LoginOauthRequest.builder()
+            .token("testToken")
+            .pushKey("testPushKey")
+            .deviceId("testdeviceId")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/oauth/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("인증타입은 필수입니다."));
+    }
+
+    @DisplayName("OAuth로그인을 할 시 token값은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void OauthLoginWithoutSnsTypeTest() throws Exception {
+        // given
+        LoginOauthRequest request = LoginOauthRequest.builder()
+            .snsType(SnsType.APPLE)
+            .pushKey("testPushKey")
+            .deviceId("testdeviceId")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/oauth/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("Token은 필수입니다."));
+    }
+
+    @DisplayName("OAuth로그인을 할 시 token값은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void OauthLoginWithoutPushKeyTest() throws Exception {
+        // given
+        LoginOauthRequest request = LoginOauthRequest.builder()
+            .token("testToken")
+            .snsType(SnsType.APPLE)
+            .deviceId("testdeviceId")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/oauth/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("푸시토큰은 필수입니다."));
+    }
+
+    @DisplayName("OAuth로그인을 할 시 DeviceId값은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void OauthLoginWithoutDeviceIdTest() throws Exception {
+        // given
+        LoginOauthRequest request = LoginOauthRequest.builder()
+            .token("testToken")
+            .snsType(SnsType.APPLE)
+            .pushKey("testPushKey")
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/oauth/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."));
     }
 
 }

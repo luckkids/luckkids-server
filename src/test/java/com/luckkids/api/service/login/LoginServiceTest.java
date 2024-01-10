@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -290,18 +291,78 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void oauthAppleLoginTest() throws JsonProcessingException {
         // given
-        User user = createUser("test@test.com", "1234", SnsType.APPLE);
+        User user = createUser("koyrkr@gmail.com", "1234", SnsType.APPLE);
 
         userRepository.save(user);
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .token("eyJraWQiOiJXNldjT0tCIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmFwcC5sdWNrLWtpZHMiLCJleHAiOjE3MDQ4NzAwNjUsImlhdCI6MTcwNDc4MzY2NSwic3ViIjoiMDAwMjQ0LmExMjZmMmJmMGEwODQxZmZhNzlmYmRiN2JjNTE0ZjA2LjE1NDkiLCJub25jZSI6IjU4NGFiYmQzN2FlZGI1MmRjOTdjMGM1YzY4YmYwMDc3Njc3ZGYwYzVmOTcwODdjYWUwZGFiNWUwM2ZlMzY3YjAiLCJjX2hhc2giOiJaR1VsbWlnRXpORXE4RVNDZXJTSGVBIiwiZW1haWwiOiJrb3lya3JAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNzA0NzgzNjY1LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.WNUth8x-erECYqVJCu_KcldR_aPOlcYhY1-_BWNbPMGjtFxTYCF_blz49j71gu_qzfz-HMLfH9isxemHyDJIiiHS7jLkQucKSj_i0EDHv_37grmJODygiUg2X-vjNRhBKt0LBC7YeAoD9NR-_TOxg7TknSDW4keeNGx-PB43jVtZgvrudca7bSdZRfTh2VsJTqLCTDAeOfbNnP15Gcdq0TgTaWHQCUWfqBZ1i0hxxJ2jVrlGqRbvRwocRYKtc5D_OULz5eBGJ41A0r0kPDJWhoU0UMM-Vzwkqt4CdM777cnrWeu6qwk6Nwk5Ae1g2yI2GpSH_y_400eCTWRCfQvUJg")
             .deviceId("testDeviceId")
             .pushKey("testPushKey")
             .snsType(SnsType.APPLE)
             .build();
 
         OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("koyrkr@gmail.com");
+    }
+
+    @DisplayName("카카오 로그인을 할 시 이미 등록되어있는 이메일이라면 예외가 발생한다.")
+    @Test
+    @Transactional
+    void oauthKakaoLoginExistTest(){
+        // given
+        User user = createUser("test@test.com", "1234", SnsType.GOOGLE);
+
+        userRepository.save(user);
+
+        given(kakaoApiFeignCall.getUserInfo(any(String.class)))
+            .willReturn(
+                KakaoUserInfoResponse.builder()
+                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                        .email("test@test.com")
+                        .build())
+                    .build()
+            );
+
+        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
+            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .deviceId("testDeviceId")
+            .pushKey("testPushKey")
+            .snsType(SnsType.KAKAO)
+            .build();
+
+        assertThatThrownBy(() -> loginService.oauthLogin(oAuthLoginServiceRequest))
+            .isInstanceOf(LuckKidsException.class)
+            .hasMessage("GOOGLE");
+    }
+
+    @DisplayName("카카오 로그인을 할 시 저장된 사용자가 없으면 회원가입한다.")
+    @Test
+    @Transactional
+    void oauthKakaoJoinTest() throws JsonProcessingException {
+        // given
+        given(kakaoApiFeignCall.getUserInfo(any(String.class)))
+            .willReturn(
+                KakaoUserInfoResponse.builder()
+                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                        .email("test@test.com")
+                        .build())
+                    .build()
+            );
+
+        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
+            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+            .deviceId("testDeviceId")
+            .pushKey("testPushKey")
+            .snsType(SnsType.KAKAO)
+            .build();
+
+        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+
+        User user = userReadService.findByEmail("test@test.com");
 
         assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
         assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
