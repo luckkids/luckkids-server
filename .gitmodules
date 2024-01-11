@@ -1,3 +1,3 @@
-[submodule "luck-kids-server-submodule-config"]
-	path = luck-kids-server-submodule-config
-	url = https://github.com/luck-kids/luck-kids-server-submodule-config.git
+[submodule "luckkids-server-submodule-config"]
+	path = luckkids-server-submodule-config
+	url = https://github.com/luckkids/luckkids-server-submodule-config.git
