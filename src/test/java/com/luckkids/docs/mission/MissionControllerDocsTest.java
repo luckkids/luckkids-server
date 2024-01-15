@@ -10,17 +10,22 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.misson.MissionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static java.time.LocalDateTime.now;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -55,6 +60,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     void createMission() throws Exception {
         // given
         MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
@@ -62,7 +68,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 
         given(missionService.createMission(any(MissionCreateServiceRequest.class)))
             .willReturn(
-                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
+                createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -77,6 +83,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
+                    fieldWithPath("missionType").type(JsonFieldType.STRING)
+                        .description("미션 종류. 가능한 값: " + Arrays.toString(MissionType.values())),
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용"),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
@@ -92,16 +100,9 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
-                        .description("미션 ID"),
-                    fieldWithPath("data.missionDescription").type(JsonFieldType.STRING)
-                        .description("미션 내용"),
-                    fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)
-                        .description("알림 여부"),
-                    fieldWithPath("data.alertTime").type(JsonFieldType.STRING)
-                        .description("알림 시간")
+                        .description("응답 데이터")
                 )
+                    .andWithPrefix("data.", missionResponseFields())
             ));
     }
 
@@ -111,6 +112,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     void updateMission() throws Exception {
         // given
         MissionUpdateRequest request = MissionUpdateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
@@ -118,7 +120,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 
         given(missionService.updateMission(anyInt(), any(MissionUpdateServiceRequest.class)))
             .willReturn(
-                createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0))
+                createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0))
             );
 
         // when // then
@@ -137,6 +139,9 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("미션 ID")
                 ),
                 requestFields(
+                    fieldWithPath("missionType").type(JsonFieldType.STRING)
+                        .description("미션 종류. 가능한 값: " + Arrays.toString(MissionType.values()))
+                        .optional(),
                     fieldWithPath("missionDescription").type(JsonFieldType.STRING)
                         .description("미션 내용")
                         .optional(),
@@ -155,16 +160,9 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
-                        .description("미션 ID"),
-                    fieldWithPath("data.missionDescription").type(JsonFieldType.STRING)
-                        .description("미션 내용"),
-                    fieldWithPath("data.alertStatus").type(JsonFieldType.STRING)
-                        .description("알림 여부"),
-                    fieldWithPath("data.alertTime").type(JsonFieldType.STRING)
-                        .description("알림 시간")
+                        .description("응답 데이터")
                 )
+                    .andWithPrefix("data.", missionResponseFields())
             ));
     }
 
@@ -175,9 +173,15 @@ public class MissionControllerDocsTest extends RestDocsSupport {
         // given
         given(missionReadService.getMission())
             .willReturn(
-                List.of(
-                    createMissionResponse(1, "운동하기", CHECKED, LocalTime.of(18, 0)),
-                    createMissionResponse(2, "책 읽기", UNCHECKED, LocalTime.of(20, 0))
+                Map.of(
+                    HEALTH, List.of(
+                        createMissionResponse(1, HEALTH, "운동하기", CHECKED, LocalTime.of(18, 0)),
+                        createMissionResponse(2, HEALTH, "물 마시기", UNCHECKED, LocalTime.of(20, 0))
+                    ),
+                    SELF_DEVELOPMENT, List.of(
+                        createMissionResponse(3, SELF_DEVELOPMENT, "공부하기", CHECKED, LocalTime.of(21, 0)),
+                        createMissionResponse(4, SELF_DEVELOPMENT, "책 읽기", UNCHECKED, LocalTime.of(22, 0))
+                    )
                 )
             );
 
@@ -190,23 +194,14 @@ public class MissionControllerDocsTest extends RestDocsSupport {
             .andDo(document("mission-get",
                 preprocessResponse(prettyPrint()),
                 responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
-                        .description("응답 데이터"),
-                    fieldWithPath("data[].id").type(JsonFieldType.NUMBER)
-                        .description("미션 ID"),
-                    fieldWithPath("data[].missionDescription").type(JsonFieldType.STRING)
-                        .description("미션 내용"),
-                    fieldWithPath("data[].alertStatus").type(JsonFieldType.STRING)
-                        .description("알림 여부"),
-                    fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
-                        .description("알림 시간")
-                )
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                    fieldWithPath("data.HEALTH[]").type(JsonFieldType.ARRAY).description("건강 관련 미션"),
+                    fieldWithPath("data.SELF_DEVELOPMENT[]").type(JsonFieldType.ARRAY).description("자기 계발 관련 미션")
+                ).andWithPrefix("data.HEALTH[].", missionResponseFields())
+                    .andWithPrefix("data.SELF_DEVELOPMENT[].", missionResponseFields())
             ));
     }
 
@@ -243,12 +238,23 @@ public class MissionControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    private MissionResponse createMissionResponse(int id, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionResponse createMissionResponse(int id, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return MissionResponse.builder()
             .id(id)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
             .build();
+    }
+
+    private FieldDescriptor[] missionResponseFields() {
+        return new FieldDescriptor[]{
+            fieldWithPath("id").type(JsonFieldType.NUMBER).description("미션 ID"),
+            fieldWithPath("missionType").type(JsonFieldType.STRING).description("미션 타입"),
+            fieldWithPath("missionDescription").type(JsonFieldType.STRING).description("미션 내용"),
+            fieldWithPath("alertStatus").type(JsonFieldType.STRING).description("알림 여부"),
+            fieldWithPath("alertTime").type(JsonFieldType.STRING).description("알림 시간")
+        };
     }
 }

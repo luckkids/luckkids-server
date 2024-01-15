@@ -8,10 +8,9 @@ import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,6 @@ import java.util.Optional;
 @Transactional
 public class LoginService {
 
-    private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -32,16 +30,16 @@ public class LoginService {
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
 
-        Optional.ofNullable(user).orElseThrow(()->new LuckKidsException(ErrorCode.USER_UNKNOWN));
+        Optional.ofNullable(user).orElseThrow(() -> new LuckKidsException(ErrorCode.USER_UNKNOWN));
 
         user.loginCheckSnsType(SnsType.NORMAL);                                     //2. SNS가입여부확인
 
-        if(!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())){
+        if (!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())) {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         } //3. 비밀번호 체크
 
-        UserInfo userInfo = UserInfo.of(user.getId(), user.getEmail());
-        JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);                   //4. JWT토큰생성
+        LoginUserInfo loginUserInfo = LoginUserInfo.of(user.getId());
+        JwtToken jwtToken = jwtTokenGenerator.generate(loginUserInfo);                   //4. JWT토큰생성
 
         String deviceId = loginServiceRequest.getDeviceId();                        //5. deviceId로 기존 refreshToken 조회 후 수정 혹은 등록
         user.checkRefreshToken(jwtToken, deviceId);

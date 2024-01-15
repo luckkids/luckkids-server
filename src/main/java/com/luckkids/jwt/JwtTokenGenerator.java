@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.jwt.dto.JwtToken;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -25,31 +25,31 @@ public class JwtTokenGenerator {
     private final ObjectMapper objectMapper;
 
     /*
-    * accessToken 발급
-    * */
-    public JwtToken generate(UserInfo userInfo) throws JsonProcessingException {
-        String subject = objectMapper.writeValueAsString(userInfo);
+     * accessToken 발급
+     * */
+    public JwtToken generate(LoginUserInfo loginUserInfo) throws JsonProcessingException {
+        String subject = objectMapper.writeValueAsString(loginUserInfo);
         long now = (new Date()).getTime();
-        Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);				//AccessToken 유효기간 지정
-        Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);				//RefreshToken 유효기간 지정
+        Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);                //AccessToken 유효기간 지정
+        Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);                //RefreshToken 유효기간 지정
 
-        String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);		//AccessToken 생성
-        String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);	    //RefreshToken 생성
+        String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);        //AccessToken 생성
+        String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);        //RefreshToken 생성
 
         return JwtToken.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
 
     /*
-    * refreshtoken으로 access-token재발급
-    * */
+     * refreshtoken으로 access-token재발급
+     * */
     public JwtToken generateAccessToken(String refreshToken) {
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = "";
 
         try {
-            if (refreshToken != null && jwtTokenProvider.extractSubject(refreshToken)) {	//RefreshToken 유효여부 체크
-                String subject = jwtTokenProvider.getUserPk(refreshToken);					//Subject 복호화 후 AccessToken으로 생성
+            if (refreshToken != null && jwtTokenProvider.extractSubject(refreshToken)) {    //RefreshToken 유효여부 체크
+                String subject = jwtTokenProvider.getUserPk(refreshToken);                    //Subject 복호화 후 AccessToken으로 생성
                 accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);
             }
         } catch (ExpiredJwtException e) {

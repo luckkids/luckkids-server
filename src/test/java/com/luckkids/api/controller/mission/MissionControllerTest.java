@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalTime;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,6 +26,7 @@ class MissionControllerTest extends ControllerTestSupport {
     void createMission() throws Exception {
         // given
         MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))
@@ -44,12 +46,39 @@ class MissionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("CREATED"));
     }
 
+    @DisplayName("신규 미션을 등록할 때 미션 타입은 필수다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void createMissionWithoutMissionType() throws Exception {
+        // given
+        MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionDescription("T")
+            .alertStatus(CHECKED)
+            .alertTime(LocalTime.of(0, 0))
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/missions/new")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("미션 타입은 필수입니다."))
+            .andExpect(jsonPath("$.data").isEmpty());
+    }
+
     @DisplayName("신규 미션을 등록할 때 미션 내용은 필수다.")
     @Test
     @WithMockUser(roles = "USER")
     void createMissionWithoutMissionDescription() throws Exception {
         // given
         MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(0, 0))
             .build();
@@ -75,6 +104,7 @@ class MissionControllerTest extends ControllerTestSupport {
     void createMissionWithoutAlertStatus() throws Exception {
         // given
         MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("T")
             .alertTime(LocalTime.of(0, 0))
             .build();
@@ -99,7 +129,8 @@ class MissionControllerTest extends ControllerTestSupport {
     @WithMockUser(roles = "USER")
     void createMissionWithoutAlertTime() throws Exception {
         // given
-        MissionUpdateRequest request = MissionUpdateRequest.builder()
+        MissionCreateRequest request = MissionCreateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("T")
             .alertStatus(CHECKED)
             .build();
@@ -125,6 +156,7 @@ class MissionControllerTest extends ControllerTestSupport {
     void updateMission() throws Exception {
         // given
         MissionUpdateRequest request = MissionUpdateRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("운동하기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(18, 30))

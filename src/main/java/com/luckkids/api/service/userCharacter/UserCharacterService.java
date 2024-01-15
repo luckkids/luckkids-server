@@ -20,8 +20,8 @@ public class UserCharacterService {
     private final UserReadService userReadService;
     private final SecurityService securityService;
 
-    public UserCharacterCreateResponse createUserCharacter(UserCharacterCreateServiceRequest request){
-        int userId = securityService.getCurrentUserInfo().getUserId();
+    public UserCharacterCreateResponse createUserCharacter(UserCharacterCreateServiceRequest request) {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
 
         UserCharacter userCharacter = request.toEntity(user);
