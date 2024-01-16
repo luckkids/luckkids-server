@@ -79,7 +79,7 @@ public class JoinServiceTest extends IntegrationTestSupport {
     void JoinTest() {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
-            .password("1234")
+            .password("test1234")
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);

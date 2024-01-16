@@ -22,3 +22,16 @@ include::{snippets}/user-tokenRefresh/request-fields.adoc[]
 
 include::{snippets}/user-tokenRefresh/http-response.adoc[]
 include::{snippets}/user-tokenRefresh/response-fields.adoc[]
+
+[[user-oauthLogin]]
+=== OAuth 로그인
+
+==== HTTP Request
+
+include::{snippets}/user-oauthLogin/http-request.adoc[]
+include::{snippets}/user-oauthLogin/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-oauthLogin/http-response.adoc[]
+include::{snippets}/user-oauthLogin/response-fields.adoc[]

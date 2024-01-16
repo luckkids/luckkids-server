@@ -74,6 +74,7 @@ dependencies {
 
     // slack
     implementation 'com.slack.api:slack-api-client:1.30.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3'
 }
 
 tasks.named('test') {
@@ -129,7 +130,7 @@ bootJar {
 
 // submodule
 tasks.register('copySecret', Copy) {
-    from './luck-kids-server-submodule-config'
+    from './luckkids-server-submodule-config'
     include "application*.yml"
     into 'src/main/resources'
 }

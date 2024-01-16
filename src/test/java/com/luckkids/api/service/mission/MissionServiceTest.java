@@ -9,10 +9,11 @@ import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,8 @@ import java.util.List;
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -56,15 +59,16 @@ class MissionServiceTest extends IntegrationTestSupport {
     void createMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
         missionRepository.save(mission);
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionType(HEALTH)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -75,15 +79,15 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionResponse)
-            .extracting("missionDescription", "alertStatus", "alertTime")
-            .contains("책 읽기", CHECKED, LocalTime.of(23, 30));
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .contains(HEALTH, "책 읽기", CHECKED, LocalTime.of(23, 30));
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(2)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
+                tuple(HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(HEALTH, "책 읽기", CHECKED, LocalTime.of(23, 30))
             );
     }
 
@@ -93,10 +97,11 @@ class MissionServiceTest extends IntegrationTestSupport {
         // given
         int userId = 1;
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(userId));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(userId));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -114,15 +119,16 @@ class MissionServiceTest extends IntegrationTestSupport {
     void createMissionWithEventPublication() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
         missionRepository.save(mission);
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
 
         MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -147,13 +153,14 @@ class MissionServiceTest extends IntegrationTestSupport {
     void updateMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", CHECKED, LocalTime.of(0, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
         int missionId = savedMission.getId();
 
         MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+            .missionType(SELF_DEVELOPMENT)
             .missionDescription("책 읽기")
             .alertStatus(CHECKED)
             .alertTime(LocalTime.of(23, 30))
@@ -164,14 +171,14 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionResponse)
-            .extracting("missionDescription", "alertStatus", "alertTime")
-            .contains("책 읽기", CHECKED, LocalTime.of(23, 30));
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .contains(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30));
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("책 읽기", CHECKED, LocalTime.of(23, 30))
+                tuple(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30))
             );
     }
 
@@ -180,7 +187,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     void updateOneMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(0, 0));
 
         userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
@@ -195,14 +202,14 @@ class MissionServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(missionResponse)
-            .extracting("missionDescription", "alertStatus", "alertTime")
-            .contains("책 읽기", UNCHECKED, LocalTime.of(0, 0));
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+            .contains(HEALTH, "책 읽기", UNCHECKED, LocalTime.of(0, 0));
 
         List<Mission> missions = missionRepository.findAll();
         assertThat(missions).hasSize(1)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("책 읽기", UNCHECKED, LocalTime.of(0, 0))
+                tuple(HEALTH, "책 읽기", UNCHECKED, LocalTime.of(0, 0))
             );
     }
 
@@ -211,7 +218,7 @@ class MissionServiceTest extends IntegrationTestSupport {
     void deleteMission() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(0, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(0, 0));
         userRepository.save(user);
         Mission savedMission = missionRepository.save(mission);
         int missionId = savedMission.getId();
@@ -237,19 +244,19 @@ class MissionServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private Mission createMission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private Mission createMission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return Mission.builder()
             .user(user)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

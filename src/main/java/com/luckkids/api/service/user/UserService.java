@@ -33,17 +33,17 @@ public class UserService {
         return UserUpdatePasswordResponse.of(user);
     }
 
-    public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest){
-        int userId = securityService.getCurrentUserInfo().getUserId();
+    public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest) {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
         user.updateLuckPhrases(userLuckPhrasesServiceRequest.getLuckPhrases());
         return UserLuckPhrasesResponse.of(user);
     }
 
-    public UserWithdrawResponse withdraw(){
-        int userId = securityService.getCurrentUserInfo().getUserId();
+    public UserWithdrawResponse withdraw() {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        for(UserDeleteService userDeleteService : userDeleteServices){
+        for (UserDeleteService userDeleteService : userDeleteServices) {
             userDeleteService.deleteAllByUserId(user.getId());
         }
         userRepository.deleteById(userId);
