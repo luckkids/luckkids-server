@@ -2,6 +2,7 @@ package com.luckkids.api.controller.mission.request;
 
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.misson.MissionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,6 +16,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class MissionCreateRequest {
 
+    @NotNull(message = "미션 타입은 필수입니다.")
+    private MissionType missionType;
+
     @NotBlank(message = "미션 내용은 필수입니다.")
     private String missionDescription;
 
@@ -26,7 +30,8 @@ public class MissionCreateRequest {
     private LocalTime alertTime;
 
     @Builder
-    private MissionCreateRequest(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionCreateRequest(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+        this.missionType = missionType;
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
@@ -34,6 +39,7 @@ public class MissionCreateRequest {
 
     public MissionCreateServiceRequest toServiceRequest() {
         return MissionCreateServiceRequest.builder()
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)

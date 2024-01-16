@@ -1,13 +1,10 @@
 package com.luckkids.api.controller.friend;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.request.PageInfoRequest;
-import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,7 +42,7 @@ public class FriendControllerTest extends ControllerTestSupport {
         // given
         // when // then
         mockMvc.perform(
-                get("/api/v1/friend/profile/{friendId}",1)
+                get("/api/v1/friend/profile/{friendId}", 1)
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .with(csrf())
@@ -56,12 +53,4 @@ public class FriendControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("OK"))
             .andExpect(jsonPath("$.message").value("OK"));
     }
-
-    private UserInfo createUserInfo() {
-        return UserInfo.builder()
-            .userId(1)
-            .email("")
-            .build();
-    }
-
 }

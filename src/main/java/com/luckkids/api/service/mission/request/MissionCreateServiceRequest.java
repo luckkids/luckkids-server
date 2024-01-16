@@ -2,6 +2,7 @@ package com.luckkids.api.service.mission.request;
 
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,13 +14,15 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class MissionCreateServiceRequest {
 
+    private MissionType missionType;
     private String missionDescription;
     private AlertStatus alertStatus;
     private LocalTime alertTime;
 
     @Builder
-    private MissionCreateServiceRequest(String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private MissionCreateServiceRequest(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         this.missionDescription = missionDescription;
+        this.missionType = missionType;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
     }
@@ -27,6 +30,7 @@ public class MissionCreateServiceRequest {
     public Mission toEntity(User user) {
         return Mission.builder()
             .user(user)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
