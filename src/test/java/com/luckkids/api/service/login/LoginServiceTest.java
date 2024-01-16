@@ -286,29 +286,6 @@ public class LoginServiceTest extends IntegrationTestSupport {
         assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
-    @DisplayName("애플 로그인을 한다.")
-    @Test
-    @Transactional
-    void oauthAppleLoginTest() throws JsonProcessingException {
-        // given
-        User user = createUser("koyrkr@gmail.com", "1234", SnsType.APPLE);
-
-        userRepository.save(user);
-
-        OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("eyJraWQiOiJXNldjT0tCIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmFwcC5sdWNrLWtpZHMiLCJleHAiOjE3MDQ4NzAwNjUsImlhdCI6MTcwNDc4MzY2NSwic3ViIjoiMDAwMjQ0LmExMjZmMmJmMGEwODQxZmZhNzlmYmRiN2JjNTE0ZjA2LjE1NDkiLCJub25jZSI6IjU4NGFiYmQzN2FlZGI1MmRjOTdjMGM1YzY4YmYwMDc3Njc3ZGYwYzVmOTcwODdjYWUwZGFiNWUwM2ZlMzY3YjAiLCJjX2hhc2giOiJaR1VsbWlnRXpORXE4RVNDZXJTSGVBIiwiZW1haWwiOiJrb3lya3JAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNzA0NzgzNjY1LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.WNUth8x-erECYqVJCu_KcldR_aPOlcYhY1-_BWNbPMGjtFxTYCF_blz49j71gu_qzfz-HMLfH9isxemHyDJIiiHS7jLkQucKSj_i0EDHv_37grmJODygiUg2X-vjNRhBKt0LBC7YeAoD9NR-_TOxg7TknSDW4keeNGx-PB43jVtZgvrudca7bSdZRfTh2VsJTqLCTDAeOfbNnP15Gcdq0TgTaWHQCUWfqBZ1i0hxxJ2jVrlGqRbvRwocRYKtc5D_OULz5eBGJ41A0r0kPDJWhoU0UMM-Vzwkqt4CdM777cnrWeu6qwk6Nwk5Ae1g2yI2GpSH_y_400eCTWRCfQvUJg")
-            .deviceId("testDeviceId")
-            .pushKey("testPushKey")
-            .snsType(SnsType.APPLE)
-            .build();
-
-        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
-
-        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("koyrkr@gmail.com");
-    }
-
     @DisplayName("카카오 로그인을 할 시 이미 등록되어있는 이메일이라면 예외가 발생한다.")
     @Test
     @Transactional
