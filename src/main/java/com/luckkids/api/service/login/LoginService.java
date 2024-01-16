@@ -9,8 +9,7 @@ import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.domain.user.SnsType;
-import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.*;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.LoginUserInfo;
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class LoginService {
 
+    private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -80,7 +80,7 @@ public class LoginService {
     }
 
     private JwtToken setJwtTokenPushKey(User user, String deviceId, String pushKey) throws JsonProcessingException {
-        UserInfo userInfo = UserInfo.of(user.getId(), user.getEmail());
+        LoginUserInfo userInfo = LoginUserInfo.of(user.getId());
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);                   //JWT토큰생성
         user.checkRefreshToken(jwtToken, deviceId);                                 //deviceId로 기존 refreshToken 조회 후 수정 혹은 등록
         user.checkPushKey(pushKey, deviceId);                                       //deviceId로 기존 push 조회 후 수정 혹은 등록
