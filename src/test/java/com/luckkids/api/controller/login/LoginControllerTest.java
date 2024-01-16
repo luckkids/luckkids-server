@@ -239,7 +239,7 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("이메일은 필수입니다."));
+            .andExpect(jsonPath("$.message").value("인증타입은 필수입니다."));
     }
 
     @DisplayName("엑세스토큰을 재생성할시 디바이스ID는 필수이다.")
@@ -262,7 +262,7 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("인증타입은 필수입니다."));
+            .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."));
     }
 
     @DisplayName("OAuth로그인을 할 시 token값은 필수이다.")

@@ -93,10 +93,12 @@ public class LoginService {
         return jwtToken;
     }
 
-    public LoginGenerateTokenResponse generateAccessToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest){
+    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest){
         User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
         RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
             .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));
-        return LoginGenerateTokenResponse.of(jwtTokenGenerator.generateAccessToken(refreshToken.getRefreshToken()));
+        JwtToken jwtToken = jwtTokenGenerator.generateJwtToken(refreshToken.getRefreshToken());
+        refreshToken.updateRefreshToken(jwtToken.getRefreshToken());
+        return LoginGenerateTokenResponse.of(jwtToken);
     }
 }

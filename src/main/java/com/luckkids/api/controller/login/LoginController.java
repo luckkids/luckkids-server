@@ -28,13 +28,13 @@ public class LoginController {
 		return ApiResponse.ok(loginService.normalLogin(loginRequest.toServiceRequest()));
 	}
 
-	@PostMapping("/refresh")
-	public ApiResponse<LoginGenerateTokenResponse> refreshToken(@Valid @RequestBody LoginGenerateTokenRequest loginGenerateTokenRequest) {
-		return ApiResponse.ok(loginService.generateAccessToken(loginGenerateTokenRequest.toServiceRequest()));
-	}
-
 	@PostMapping("/oauth/login")
 	public ApiResponse<OAuthLoginResponse> oauthLogin(@Valid @RequestBody LoginOauthRequest loginOauthRequest) throws JsonProcessingException {
 		return ApiResponse.ok(loginService.oauthLogin(loginOauthRequest.toServiceRequest()));
+	}
+
+	@PostMapping("/refresh")
+	public ApiResponse<LoginGenerateTokenResponse> refreshJwtToken(@Valid @RequestBody LoginGenerateTokenRequest loginGenerateTokenRequest) {
+		return ApiResponse.ok(loginService.refreshJwtToken(loginGenerateTokenRequest.toServiceRequest()));
 	}
 }

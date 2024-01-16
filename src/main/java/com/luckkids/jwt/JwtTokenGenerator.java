@@ -42,15 +42,17 @@ public class JwtTokenGenerator {
     /*
      * refreshtoken으로 access-token재발급
      * */
-    public JwtToken generateAccessToken(String refreshToken) {
+    public JwtToken generateJwtToken(String refreshToken) {
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
         String accessToken = "";
 
         try {
             if (refreshToken != null && jwtTokenProvider.extractSubject(refreshToken)) {    //RefreshToken 유효여부 체크
                 String subject = jwtTokenProvider.getUserPk(refreshToken);                    //Subject 복호화 후 AccessToken으로 생성
                 accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);
+                refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);
             }
         } catch (ExpiredJwtException e) {
             throw new LuckKidsException(ErrorCode.JWT_EXPIRED, e);
