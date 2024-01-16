@@ -14,6 +14,7 @@ import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -112,7 +113,7 @@ public class LoginControllerDocsTest extends RestDocsSupport {
             .refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzY5MTYzfQ.DJwKVuZxw3zTK8RdnnwS45JM0V_3DJ0kpCDMaf3wnyv5GwLtwwKtVNhfeJmhcGYJZ3gvu534kAZGtAoZb_dgWw")
             .build();
 
-        given(loginService.generateAccessToken(any(LoginGenerateTokenServiceRequest.class)))
+        given(loginService.refreshJwtToken(any(LoginGenerateTokenServiceRequest.class)))
             .willReturn(LoginGenerateTokenResponse.builder()
                 .accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzI1OTYzfQ.StpNeN7Mrcm9n3niSPU8ItRMBZqy__gS8AjRkqlIZ2dWtLaciMQF6EGPY4JaagoFkP-GfhUr8pMYfRewEZ-BYg")
                 .refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzY5MTYzfQ.DJwKVuZxw3zTK8RdnnwS45JM0V_3DJ0kpCDMaf3wnyv5GwLtwwKtVNhfeJmhcGYJZ3gvu534kAZGtAoZb_dgWw")
@@ -184,16 +185,18 @@ public class LoginControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("user-tokenRefresh",
+            .andDo(document("user-oauthLogin",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    fieldWithPath("email").type(JsonFieldType.STRING)
-                        .description("이메일"),
+                    fieldWithPath("token").type(JsonFieldType.STRING)
+                        .description("토큰값" ),
+                    fieldWithPath("snsType").type(JsonFieldType.STRING)
+                        .description("인증타입 가능한 값: "+ Arrays.toString(SnsType.values())),
                     fieldWithPath("deviceId").type(JsonFieldType.STRING)
                         .description("디바이스ID"),
-                    fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                        .description("리플래시토큰")
+                    fieldWithPath("pushKey").type(JsonFieldType.STRING)
+                        .description("푸시토큰")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -204,10 +207,6 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
-                        .description("Access-Token"),
-                    fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
-                        .description("Refresh-Token"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일"),
                     fieldWithPath("data.accessToken").type(JsonFieldType.STRING)

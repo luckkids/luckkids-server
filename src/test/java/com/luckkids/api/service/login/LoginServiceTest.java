@@ -30,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -228,7 +229,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급한다.")
-    void generateAccessToken() throws JsonProcessingException, InterruptedException {
+    void generateJwtToken() throws JsonProcessingException {
         User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
@@ -245,9 +246,11 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .refreshToken(jwtToken.getRefreshToken())
             .build();
 
-        LoginGenerateTokenResponse loginGenerateTokenResponse = loginService.generateAccessToken(loginGenerateTokenServiceRequest);
+        LoginGenerateTokenResponse loginGenerateTokenResponse = loginService.refreshJwtToken(loginGenerateTokenServiceRequest);
 
-        assertThat(loginGenerateTokenResponse.getAccessToken()).isNotNull();
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(savedUser.getId(), "testDeviceId", loginGenerateTokenResponse.getRefreshToken());
+
+        assertThat(refreshToken.isEmpty()).isFalse();
     }
 
     @Test
@@ -269,7 +272,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .refreshToken(jwtToken.getRefreshToken())
             .build();
 
-        assertThatThrownBy(() -> loginService.generateAccessToken(loginGenerateTokenServiceRequest))
+        assertThatThrownBy(() -> loginService.refreshJwtToken(loginGenerateTokenServiceRequest))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("리플래시 토큰이 존재하지 않습니다.");
     }
@@ -293,7 +296,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .refreshToken(jwtToken.getRefreshToken())
             .build();
 
-        assertThatThrownBy(() -> loginService.generateAccessToken(loginGenerateTokenServiceRequest))
+        assertThatThrownBy(() -> loginService.refreshJwtToken(loginGenerateTokenServiceRequest))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
     }
