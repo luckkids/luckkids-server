@@ -6,12 +6,14 @@ import com.luckkids.api.controller.mission.request.MissionUpdateRequest;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
 import com.luckkids.api.service.mission.response.MissionResponse;
+import com.luckkids.domain.misson.MissionType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.time.LocalDateTime.now;
 
@@ -35,7 +37,7 @@ public class MissionController {
     }
 
     @GetMapping("/api/v1/missions")
-    public ApiResponse<List<MissionResponse>> getMission() {
+    public ApiResponse<Map<MissionType, List<MissionResponse>>> getMission() {
         return ApiResponse.ok(missionReadService.getMission());
     }
 

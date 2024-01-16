@@ -23,11 +23,10 @@ import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
-import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,7 +77,7 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
-    void changePasswordTest(){
+    void changePasswordTest() {
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         userRepository.save(user);
 
@@ -111,11 +110,11 @@ public class UserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 행운문구를 수정한다.")
     @Test
     @Transactional
-    void updatePhraseTest(){
-        User user = createUser("test@email.com","1234",SnsType.NORMAL);
+    void updatePhraseTest() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         userRepository.save(user);
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
 
         UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest = UserLuckPhrasesServiceRequest.builder()
             .luckPhrases("행운입니다.")
@@ -125,14 +124,14 @@ public class UserServiceTest extends IntegrationTestSupport {
 
         User savedUser = userReadService.findByOne(user.getId());
 
-        assertThat(savedUser).extracting("email","snsType","luckPhrases")
-                .contains("test@email.com",  SnsType.NORMAL, "행운입니다.");
+        assertThat(savedUser).extracting("email", "snsType", "luckPhrases")
+            .contains("test@email.com", SnsType.NORMAL, "행운입니다.");
     }
 
     @DisplayName("사용자의 모든 데이터를 삭제한다.")
     @Test
     @Transactional
-    void withdrawUser(){
+    void withdrawUser() {
         //given user
         User user = User.builder()
             .email("test@email.com")
@@ -149,8 +148,8 @@ public class UserServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
         userRepository.save(user2);
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
 
         //given alertHistory
         AlertHistory alertHistory = AlertHistory.builder()
@@ -159,7 +158,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             .alertHistoryStatus(AlertHistoryStatus.CHECKED)
             .build();
 
-        AlertHistory savedAlertHistory =  alertHistoryRepository.save(alertHistory);
+        AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 
         //given alertSetting
         AlertSetting alertSetting = AlertSetting.builder()
@@ -205,7 +204,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             .user(user)
             .build();
 
-        Push savedPush =  pushRepository.save(push);
+        Push savedPush = pushRepository.save(push);
 
         //given refreshToken
         RefreshToken token = RefreshToken.builder()
@@ -214,7 +213,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             .user(user)
             .build();
 
-        RefreshToken savedToken =  refreshTokenRepository.save(token);
+        RefreshToken savedToken = refreshTokenRepository.save(token);
 
         //when
         userService.withdraw();
@@ -245,10 +244,9 @@ public class UserServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 

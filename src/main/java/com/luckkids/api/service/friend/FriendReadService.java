@@ -26,7 +26,7 @@ public class FriendReadService {
     private final SecurityService securityService;
 
     public PageCustom<FriendListReadResponse> readListFriend(PageInfoServiceRequest pageRequest) {
-        int userId = securityService.getCurrentUserInfo().getUserId();
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
         Pageable pageable = pageRequest.toPageable();
 
         Page<FriendListDto> friendPage = friendRepository.getFriendsList(userId, pageable);

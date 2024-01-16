@@ -9,10 +9,11 @@ import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.domain.user.*;
+import com.luckkids.domain.user.SnsType;
+import com.luckkids.domain.user.User;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class LoginService {
 
-    private final UserRepository userRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -48,7 +48,7 @@ public class LoginService {
 
         user.loginCheckSnsType(SnsType.NORMAL);                                     //SNS가입여부확인
 
-        if(!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())){
+        if (!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())) {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         } //3. 비밀번호 체크
 
