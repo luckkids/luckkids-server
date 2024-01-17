@@ -25,6 +25,7 @@ public class JoinServiceRequest {
         return User.builder()
             .email(email)
             .password(encryptPassword())
+            .missionCount(0)
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .settingStatus(SettingStatus.INCOMPLETE)
