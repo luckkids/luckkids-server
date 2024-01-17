@@ -1,4 +1,4 @@
-package com.luckkids.api.service.response;
+package com.luckkids.api.page.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,21 +9,21 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 public class PageableCustom {
     private int currentPage;
-    private int totalPages;
-    private long totalElements;
+    private int totalPage;
+    private long totalElement;
 
     @Builder
-    private PageableCustom(int currentPage, int totalPages, long totalElements) {
+    private PageableCustom(int currentPage, int totalPage, long totalElement) {
         this.currentPage = currentPage;
-        this.totalPages = totalPages;
-        this.totalElements = totalElements;
+        this.totalPage = totalPage;
+        this.totalElement = totalElement;
     }
 
     public static <T> PageableCustom of(Page<T> page) {
         return PageableCustom.builder()
             .currentPage(page.getNumber() + 1)
-            .totalPages(page.getTotalPages())
-            .totalElements(page.getTotalElements())
+            .totalPage(page.getTotalPages())
+            .totalElement(page.getTotalElements())
             .build();
     }
 }

@@ -1,43 +1,36 @@
 package com.luckkids.api.service.friend;
 
-import com.luckkids.api.exception.ErrorCode;
-import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
-import com.luckkids.api.service.request.PageInfoServiceRequest;
-import com.luckkids.api.service.response.PageCustom;
+import com.luckkids.api.page.request.PageInfoServiceRequest;
+import com.luckkids.api.page.response.PageCustom;
+import com.luckkids.api.service.friend.response.FriendListResponse;
 import com.luckkids.api.service.security.SecurityService;
-import com.luckkids.domain.friends.FriendRepository;
-import com.luckkids.domain.friends.projection.FriendListDto;
+import com.luckkids.domain.friend.FriendQueryRepository;
+import com.luckkids.domain.friend.projection.FriendProfileDto;
+import com.luckkids.domain.user.UserQueryRepository;
+import com.luckkids.domain.user.projection.MyProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FriendReadService {
 
-    private final FriendRepository friendRepository;
+    private final FriendQueryRepository friendQueryRepository;
+    private final UserQueryRepository userQueryRepository;
+
     private final SecurityService securityService;
 
-    public PageCustom<FriendListReadResponse> readListFriend(PageInfoServiceRequest pageRequest) {
+    public FriendListResponse getFriendList(PageInfoServiceRequest pageRequest) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         Pageable pageable = pageRequest.toPageable();
 
-        Page<FriendListDto> friendPage = friendRepository.getFriendsList(userId, pageable);
+        MyProfileDto myProfile = userQueryRepository.getMyProfile(userId);
+        Page<FriendProfileDto> friendPagingList = friendQueryRepository.getFriendList(userId, pageable);
 
-        Page<FriendListReadResponse> responsePage = friendPage.map(FriendListDto::toServiceResponse);
-
-        return PageCustom.of(responsePage);
-    }
-
-    public FriendProfileReadResponse readProfile(int friendId) {
-        return Optional.ofNullable(friendRepository.readProfile(friendId))
-            .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_UNKNOWN)).toServiceResponse();
+        return FriendListResponse.of(myProfile, PageCustom.of(friendPagingList));
     }
 }

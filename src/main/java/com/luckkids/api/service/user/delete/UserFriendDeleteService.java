@@ -1,6 +1,6 @@
 package com.luckkids.api.service.user.delete;
 
-import com.luckkids.domain.friends.FriendRepository;
+import com.luckkids.domain.friend.FriendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

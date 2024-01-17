@@ -23,7 +23,7 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자의 캐릭터를 삭제한다.")
-    void deleteTest(){
+    void deleteAllByUserId() {
         User user = User.builder()
             .email("test@email.com")
             .password("1234")
@@ -33,13 +33,12 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         UserCharacter userCharacter = UserCharacter.builder()
-            .characterNickname("test")
             .fileName("test.json")
             .level(1)
             .user(user)
             .build();
 
-        UserCharacter savedUserCharacter =  userCharacterRepository.save(userCharacter);
+        UserCharacter savedUserCharacter = userCharacterRepository.save(userCharacter);
         userCharacterRepository.deleteAllByUserId(user.getId());
 
         Optional<UserCharacter> findUserCharacter = userCharacterRepository.findById(savedUserCharacter.getId());
