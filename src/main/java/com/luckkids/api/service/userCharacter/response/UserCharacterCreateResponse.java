@@ -23,15 +23,15 @@ public class UserCharacterCreateResponse {
         this.characterNickname = characterNickname;
     }
 
-    public static UserCharacterCreateResponse of(UserCharacter userCharacter){
+    public static UserCharacterCreateResponse of(UserCharacter userCharacter) {
         return UserCharacterCreateResponse.builder()
             .id(userCharacter.getId())
-            .fileName(userCharacter.getFileName())
+            .fileName(userCharacter.getFile())
             .characterNickname(userCharacter.getCharacterNickname())
             .build();
     }
 
-    public InitialSettingCharacterResponse toInitialSettingResponse(){
+    public InitialSettingCharacterResponse toInitialSettingResponse() {
         return InitialSettingCharacterResponse.builder()
             .fileName(fileName)
             .characterNickname(characterNickname)

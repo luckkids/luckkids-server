@@ -28,7 +28,7 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
             .select(Projections.constructor(FriendListDto.class,
                 friend.receiver.id,
                 userCharacter.characterNickname,
-                userCharacter.fileName,
+                userCharacter.file,
                 user.missionCount
             ))
             .from(friend)
@@ -53,7 +53,7 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
         return queryFactory
             .select(Projections.constructor(FriendProfileReadDto.class,
                 user.luckPhrases.as("phraseDescription"),
-                userCharacter.fileName.as("fileUrl"),
+                userCharacter.file.as("fileUrl"),
                 userCharacter.characterNickname.as("characterNickname"),
                 userCharacter.level.as("level")
             ))

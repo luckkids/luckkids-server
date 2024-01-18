@@ -1,4 +1,4 @@
-package com.luckkids.domain.luckMission;
+package com.luckkids.domain.luckkidsMission;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class LuckMission {
+public class LuckkidsMission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class LuckMission {
     private LocalTime alertTime;
 
     @Builder
-    private LuckMission(int id, String description, LocalTime alertTime) {
+    private LuckkidsMission(int id, String description, LocalTime alertTime) {
         this.id = id;
         this.description = description;
         this.alertTime = alertTime;

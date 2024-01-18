@@ -1,8 +1,8 @@
 package com.luckkids.api.service.luckMission;
 
 import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
-import com.luckkids.domain.luckMission.LuckMission;
-import com.luckkids.domain.luckMission.LuckMissionRespository;
+import com.luckkids.domain.luckkidsMission.LuckkidsMission;
+import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LuckMissionReadService {
 
-    private final LuckMissionRespository luckMissionRespository;
+    private final LuckkidsMissionRepository luckkidsMissionRepository;
 
-    public List<LuckMissionResponse> getLuckMissions(){
-        List<LuckMission> luckMission = luckMissionRespository.findAll();
+    public List<LuckMissionResponse> getLuckMissions() {
+        List<LuckkidsMission> luckMission = luckkidsMissionRepository.findAll();
         return luckMission.stream().map(LuckMissionResponse::of).collect(Collectors.toList());
     }
 }

@@ -19,11 +19,11 @@ public class InitialCharacterRandResponse {
         this.fileUrl = fileUrl;
     }
 
-    public static InitialCharacterRandResponse of(LuckkidsCharacter character, String cloudFrontUrl){
+    public static InitialCharacterRandResponse of(LuckkidsCharacter character, String cloudFrontUrl) {
         return InitialCharacterRandResponse.builder()
             .characterName(character.getCharacterId().getCharacterName())
-            .fileName(character.getFileName())
-            .fileUrl(cloudFrontUrl+character.getFileName())
+            .fileName(character.getFile())
+            .fileUrl(cloudFrontUrl + character.getFile())
             .build();
     }
 }

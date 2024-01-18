@@ -17,6 +17,7 @@ public class Version extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     private String versionNum;
 
     @Builder
