@@ -1,7 +1,7 @@
 ifndef::snippets[]
 :snippets: ../../build/generated-snippets
 endif::[]
-= Luck-Kids REST API 문서
+= LuckKids REST API 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -62,6 +62,7 @@ include::api/alertSetting/alertSetting.adoc[]
 
 [[InitialSetting-API]]
 == InitialSetting API
+
 include::api/initialSetting/initialSetting.adoc[]
 
 [[Home-API]]

@@ -17,7 +17,7 @@ import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -144,8 +144,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(users.get(0).getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(users.get(0).getId()));
 
         // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
@@ -196,8 +196,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(users.get(3).getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(users.get(3).getId()));
 
         // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
@@ -245,8 +245,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user1.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
@@ -307,8 +307,8 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .size(10)
             .build();
 
-        given(securityService.getCurrentUserInfo())
-            .willReturn(createUserInfo(user1.getId()));
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user1.getId()));
 
         // when
         PageCustom<FriendListReadResponse> response = friendReadService.readListFriend(pageDto);
@@ -359,10 +359,9 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private UserInfo createUserInfo(int userId) {
-        return UserInfo.builder()
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
             .userId(userId)
-            .email("")
             .build();
     }
 }

@@ -9,7 +9,6 @@ import com.luckkids.api.service.request.PageInfoServiceRequest;
 import com.luckkids.api.service.response.PageCustom;
 import com.luckkids.api.service.response.PageableCustom;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.jwt.dto.UserInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -170,12 +169,5 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("친구 레벨")
                 )
             ));
-    }
-
-    private UserInfo createUserInfo() {
-        return UserInfo.builder()
-            .userId(1)
-            .email("")
-            .build();
     }
 }

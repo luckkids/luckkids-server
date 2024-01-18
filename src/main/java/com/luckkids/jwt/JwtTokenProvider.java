@@ -3,7 +3,7 @@ package com.luckkids.jwt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.domain.user.Role;
-import com.luckkids.jwt.dto.UserInfo;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -78,7 +78,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) throws JsonProcessingException {
-        UserInfo userInfo = objectMapper.readValue(this.getUserPk(token), UserInfo.class);
-        return new UsernamePasswordAuthenticationToken(userInfo, "", Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
+        LoginUserInfo loginUserInfo = objectMapper.readValue(this.getUserPk(token), LoginUserInfo.class);
+        return new UsernamePasswordAuthenticationToken(loginUserInfo, "", Collections.singletonList(new SimpleGrantedAuthority(Role.USER.name())));
     }
 }
