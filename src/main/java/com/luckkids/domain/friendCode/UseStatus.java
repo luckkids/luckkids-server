@@ -1,14 +1,13 @@
-package com.luckkids.domain.friends;
+package com.luckkids.domain.friendCode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum FriendStatus {
-
-    REQUESTED("요청됨"),
-    ACCEPTED("수락됨");
+public enum UseStatus {
+    USED("사용"),
+    UNUSED("미사용");
 
     private final String text;
 }

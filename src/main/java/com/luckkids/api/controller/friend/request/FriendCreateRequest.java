@@ -1,7 +1,6 @@
 package com.luckkids.api.controller.friend.request;
 
-import com.luckkids.api.service.friend.request.FriendCreateServiceRequest;
-import com.luckkids.api.service.friend.response.FriendInviteCodeResponse;
+import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

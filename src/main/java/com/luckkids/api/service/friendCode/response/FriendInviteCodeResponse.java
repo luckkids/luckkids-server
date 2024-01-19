@@ -1,4 +1,4 @@
-package com.luckkids.api.service.friend.response;
+package com.luckkids.api.service.friendCode.response;
 
 import lombok.Builder;
 import lombok.Getter;

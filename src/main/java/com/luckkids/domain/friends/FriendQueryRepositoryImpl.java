@@ -35,7 +35,6 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
             .join(friend.receiver, user)
             .leftJoin(user.userCharacter, userCharacter)
             .where(
-                isFriendStatusAccepted(),
                 isRequesterIdEqualTo(userId)
             )
             .orderBy(user.missionCount.desc())
@@ -69,15 +68,10 @@ public class FriendQueryRepositoryImpl implements FriendQueryRepository {
                 .select(friend.count())
                 .from(friend)
                 .where(
-                    isFriendStatusAccepted(),
                     isRequesterIdEqualTo(userId)
                 )
                 .fetchOne()
         ).orElse(0L);
-    }
-
-    private BooleanExpression isFriendStatusAccepted() {
-        return friend.friendStatus.eq(FriendStatus.ACCEPTED);
     }
 
     private BooleanExpression isRequesterIdEqualTo(int userId) {

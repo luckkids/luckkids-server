@@ -39,7 +39,8 @@ public enum ErrorCode {
 
     LUCKKIDS_CHARACTER_UNKNOWN("럭키즈 캐릭터가 존재하지않습니다."),
 
-    FRIEND_CODE_UNKNOWN("유효하지 않은 친구코드입니다.");
+    FRIEND_CODE_UNKNOWN("유효하지 않은 친구코드입니다."),
+    FRIEND_CODE_USED("이미 사용된 친구코드입니다.");
 
     private final String message;
 
