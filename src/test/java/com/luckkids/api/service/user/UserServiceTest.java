@@ -12,7 +12,6 @@ import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.friends.Friend;
 import com.luckkids.domain.friends.FriendRepository;
-import com.luckkids.domain.friends.FriendStatus;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
@@ -176,13 +175,11 @@ public class UserServiceTest extends IntegrationTestSupport {
         Friend friend = Friend.builder()
             .requester(user)
             .receiver(user2)
-            .friendStatus(FriendStatus.ACCEPTED)
             .build();
 
         Friend friend2 = Friend.builder()
             .requester(user2)
             .receiver(user)
-            .friendStatus(FriendStatus.REQUESTED)
             .build();
 
         friendRepository.save(friend);

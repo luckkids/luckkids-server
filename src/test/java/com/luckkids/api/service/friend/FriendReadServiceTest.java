@@ -10,7 +10,6 @@ import com.luckkids.api.service.response.PageableCustom;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.friends.Friend;
 import com.luckkids.domain.friends.FriendRepository;
-import com.luckkids.domain.friends.FriendStatus;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -355,7 +354,6 @@ public class FriendReadServiceTest extends IntegrationTestSupport {
         return Friend.builder()
             .requester(requester)
             .receiver(receiver)
-            .friendStatus(FriendStatus.ACCEPTED)
             .build();
     }
 

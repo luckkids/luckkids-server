@@ -2,7 +2,6 @@ package com.luckkids.docs.friend;
 
 import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.FriendService;
 import com.luckkids.api.service.friend.response.FriendListReadResponse;
 import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
 import com.luckkids.api.service.request.PageInfoServiceRequest;
@@ -34,11 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendControllerDocsTest extends RestDocsSupport {
 
     private final FriendReadService friendReadService = mock(FriendReadService.class);
-    private final FriendService friendService = mock(FriendService.class);
 
     @Override
     protected Object initController() {
-        return new FriendController(friendReadService, friendService);
+        return new FriendController(friendReadService);
     }
 
     @DisplayName("친구랭킹목록 API")

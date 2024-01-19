@@ -3,9 +3,6 @@ package com.luckkids.domain.friend;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.friends.Friend;
 import com.luckkids.domain.friends.FriendRepository;
-import com.luckkids.domain.friends.FriendStatus;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -15,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,13 +43,11 @@ public class FriendRepositoryTest extends IntegrationTestSupport {
         Friend friend = Friend.builder()
             .requester(user)
             .receiver(user2)
-            .friendStatus(FriendStatus.ACCEPTED)
             .build();
 
         Friend friend2 = Friend.builder()
             .requester(user2)
             .receiver(user)
-            .friendStatus(FriendStatus.REQUESTED)
             .build();
 
         friendRepository.save(friend);
