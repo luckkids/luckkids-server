@@ -1,6 +1,5 @@
-package com.luckkids.api.service.request;
+package com.luckkids.api.page.request;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class PageInfoServiceRequest {
         this.size = size;
     }
 
-    public Pageable toPageable(){
+    public Pageable toPageable() {
         return PageRequest.of(page - 1, size);
     }
 }

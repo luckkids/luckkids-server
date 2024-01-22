@@ -42,7 +42,7 @@ public class InitialSettingService {
 
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        user.changeSettingStatus(COMPLETE);
+        user.updateSettingStatus(COMPLETE);
 
         return InitialSettingResponse.of(initialSettingAlertResponse, initialSettingCharacterResponse, initialSettingMissionResponses);
     }

@@ -1,23 +1,23 @@
 package com.luckkids.docs.friend;
 
 import com.luckkids.api.controller.friend.FriendController;
+import com.luckkids.api.page.request.PageInfoRequest;
+import com.luckkids.api.page.request.PageInfoServiceRequest;
+import com.luckkids.api.page.response.PageCustom;
+import com.luckkids.api.page.response.PageableCustom;
 import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
-import com.luckkids.api.service.request.PageInfoServiceRequest;
-import com.luckkids.api.service.response.PageCustom;
-import com.luckkids.api.service.response.PageableCustom;
+import com.luckkids.api.service.friend.response.FriendListResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.friend.projection.FriendProfileDto;
+import com.luckkids.domain.user.projection.MyProfileDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -26,7 +26,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,55 +40,59 @@ public class FriendControllerDocsTest extends RestDocsSupport {
         return new FriendController(friendReadService);
     }
 
-    @DisplayName("친구랭킹목록 API")
+    @DisplayName("친구 목록 조회 API")
     @Test
     @WithMockUser(roles = "USER")
     void readFriend() throws Exception {
         // given
-        List<FriendListReadResponse> friendList = Arrays.asList(
-            FriendListReadResponse.builder()
-                .friendId(1)
-                .characterName("캐릭터이름1")
-                .fileUrl("http://example.com/file1")
-                .missionCount(10)
-                .build(),
-            FriendListReadResponse.builder()
-                .friendId(2)
-                .characterName("캐릭터이름2")
-                .fileUrl("http://example.com/file2")
-                .missionCount(20)
-                .build()
+        PageInfoRequest request = PageInfoRequest.builder()
+            .page(1)
+            .size(12)
+            .build();
+
+        MyProfileDto myProfile = new MyProfileDto(1, "럭키즈", "행운문구", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 1);
+
+        List<FriendProfileDto> friendProfileList = List.of(
+            new FriendProfileDto(2, "럭키즈 친구 2", "행운 문구 2", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 1),
+            new FriendProfileDto(3, "럭키즈 친구 3", "행운 문구 3", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 2)
         );
 
-        PageableCustom pageableCustom = PageableCustom.builder()
-            .totalElements(10)
-            .totalPages(1)
+        PageableCustom pageInfo = PageableCustom.builder()
             .currentPage(1)
+            .totalPage(1)
+            .totalElement(10)
             .build();
 
-        PageCustom<FriendListReadResponse> pageCustom = PageCustom.<FriendListReadResponse>builder()
-            .content(friendList)
-            .pageInfo(pageableCustom)
+        PageCustom<FriendProfileDto> friendList = PageCustom.<FriendProfileDto>builder()
+            .content(friendProfileList)
+            .pageInfo(pageInfo)
             .build();
 
-        given(friendReadService.readListFriend(any(PageInfoServiceRequest.class)))
-            .willReturn(pageCustom);
+        FriendListResponse response = FriendListResponse.builder()
+            .myProfile(myProfile)
+            .friendList(friendList)
+            .build();
+
+        given(friendReadService.getFriendList(any(PageInfoServiceRequest.class)))
+            .willReturn(response);
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/friend/list")
+                get("/api/v1/friends")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("read-friend",
+            .andDo(document("friend-get",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(
                     parameterWithName("page")
-                        .description("페이지 기본값(1)")
+                        .description("페이지. 기본값: 1")
                         .optional(),
                     parameterWithName("size")
-                        .description("페이지 사이즈 기본값(10)")
+                        .description("페이지 사이즈. 기본값: 12")
                         .optional()
                 ),
                 responseFields(
@@ -99,73 +104,40 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.content[]").type(JsonFieldType.ARRAY)
-                        .description("친구 랭킹 리스트"),
-                    fieldWithPath("data.content[].friendId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.myProfile").type(JsonFieldType.OBJECT)
+                        .description("내 프로필 정보"),
+                    fieldWithPath("data.myProfile.myId").type(JsonFieldType.NUMBER)
+                        .description("내 ID"),
+                    fieldWithPath("data.myProfile.nickname").type(JsonFieldType.STRING)
+                        .description("내 닉네임"),
+                    fieldWithPath("data.myProfile.luckPhrases").type(JsonFieldType.STRING)
+                        .description("내 행운 문구"),
+                    fieldWithPath("data.myProfile.fileUrl").type(JsonFieldType.STRING)
+                        .description("내 캐릭터 URL"),
+                    fieldWithPath("data.myProfile.characterCount").type(JsonFieldType.NUMBER)
+                        .description("내 캐릭터 개수"),
+                    fieldWithPath("data.friendList").type(JsonFieldType.OBJECT)
+                        .description("친구 목록"),
+                    fieldWithPath("data.friendList.content[]").type(JsonFieldType.ARRAY)
+                        .description("친구 프로필 리스트"),
+                    fieldWithPath("data.friendList.content[].friendId").type(JsonFieldType.NUMBER)
                         .description("친구 ID"),
-                    fieldWithPath("data.content[].characterName").type(JsonFieldType.STRING)
-                        .description("캐릭터이름"),
-                    fieldWithPath("data.content[].fileUrl").type(JsonFieldType.STRING)
-                        .description("캐릭터 파일"),
-                    fieldWithPath("data.content[].missionCount").type(JsonFieldType.NUMBER)
-                        .description("미션갯수"),
-                    fieldWithPath("data.pageInfo.currentPage").type(JsonFieldType.NUMBER)
-                        .description("현재페이지"),
-                    fieldWithPath("data.pageInfo.totalPages").type(JsonFieldType.NUMBER)
-                        .description("총페이지수"),
-                    fieldWithPath("data.pageInfo.totalElements").type(JsonFieldType.NUMBER)
-                        .description("총 리스트개수")
-                )
-            ));
-    }
-
-    @DisplayName("친구 프로필 조회 API")
-    @Test
-    @WithMockUser(roles = "USER")
-    void readFriendProfile() throws Exception {
-        // given
-        given(friendReadService.readProfile(anyInt()))
-            .willReturn(FriendProfileReadResponse.builder()
-                .phraseDescription("행운문구!!")
-                .characterName("캐릭터이름")
-                .level(10)
-                .fileUrl("https://test.com/file")
-                .build()
-            );
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/friend/profile/{friendId}", 1)
-                    .contentType(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("friend-profile",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                pathParameters(
-                    parameterWithName("friendId")
-                        .description("친구 ID")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.phraseDescription").type(JsonFieldType.STRING)
-                        .description("친구 행운문구"),
-                    fieldWithPath("data.fileUrl").type(JsonFieldType.STRING)
-                        .description("친구 캐릭터 파일URL"),
-                    fieldWithPath("data.characterName").type(JsonFieldType.STRING)
-                        .description("친구 캐릭터 명"),
-                    fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-                        .description("친구 레벨")
-                )
-            ));
+                    fieldWithPath("data.friendList.content[].nickname").type(JsonFieldType.STRING)
+                        .description("친구 닉네임"),
+                    fieldWithPath("data.friendList.content[].luckPhrases").type(JsonFieldType.STRING)
+                        .description("친구의 행운 문구"),
+                    fieldWithPath("data.friendList.content[].fileUrl").type(JsonFieldType.STRING)
+                        .description("친구의 캐릭터 URL"),
+                    fieldWithPath("data.friendList.content[].characterCount").type(JsonFieldType.NUMBER)
+                        .description("친구의 캐릭터 개수"),
+                    fieldWithPath("data.friendList.pageInfo").type(JsonFieldType.OBJECT)
+                        .description("페이징 정보"),
+                    fieldWithPath("data.friendList.pageInfo.currentPage").type(JsonFieldType.NUMBER)
+                        .description("현재 페이지"),
+                    fieldWithPath("data.friendList.pageInfo.totalPage").type(JsonFieldType.NUMBER)
+                        .description("총 페이지 수"),
+                    fieldWithPath("data.friendList.pageInfo.totalElement").type(JsonFieldType.NUMBER)
+                        .description("총 요소 개수")
+                )));
     }
 }
