@@ -3,13 +3,11 @@ package com.luckkids.domain.alertSetting;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.push.Push;
-import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,15 +17,20 @@ public class AlertSetting extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "device_id")
     private Push push;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus entire;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus mission;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus luck;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus notice;
 
@@ -40,7 +43,7 @@ public class AlertSetting extends BaseTimeEntity {
         this.notice = notice;
     }
 
-    public void update(AlertType alertType, AlertStatus alertStatus){
+    public void update(AlertType alertType, AlertStatus alertStatus) {
         switch (alertType) {
             case ENTIRE:
                 this.entire = alertStatus;

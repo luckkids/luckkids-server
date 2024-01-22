@@ -19,8 +19,11 @@ public class ConfirmEmail extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String email;
+
     private String authKey;
+
     @Enumerated(EnumType.STRING)
     private ConfirmStatus confirmStatus;
 
@@ -31,19 +34,19 @@ public class ConfirmEmail extends BaseTimeEntity {
         this.confirmStatus = confirmStatus;
     }
 
-    public void confirm(){
+    public void confirm() {
         checkTime();
         this.confirmStatus = ConfirmStatus.COMPLETE;
     }
 
-    public void checkEmail(){
+    public void checkEmail() {
         checkTime();
         Optional.of(confirmStatus)
             .filter(status -> status.equals(ConfirmStatus.COMPLETE))
             .orElseThrow(() -> new LuckKidsException(ErrorCode.EMAIL_INCOMPLETE));
     }
 
-    private void checkTime(){
+    private void checkTime() {
         LocalDateTime currentTime = LocalDateTime.now();
         Duration duration = Duration.between(getCreatedDate(), currentTime);
         if (duration.toMinutes() > 3) {

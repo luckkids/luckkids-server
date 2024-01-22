@@ -19,10 +19,10 @@ public class UserCharacterCreateServiceRequest {
         this.fileName = fileName;
     }
 
-    public UserCharacter toEntity(User user){
+    public UserCharacter toEntity(User user) {
         return UserCharacter.builder()
             .user(user)
-            .fileName(fileName)
+            .file(fileName)
             .characterNickname(characterNickname)
             .level(1)
             .build();
