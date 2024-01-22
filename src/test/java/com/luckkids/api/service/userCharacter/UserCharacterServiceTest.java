@@ -59,7 +59,6 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         assertThat(userCharacter)
             .isPresent()
             .hasValueSatisfying(character -> {
-                assertThat(character.getCharacterNickname()).isEqualTo("럭키즈");
                 assertThat(character.getFile()).isEqualTo("test.json");
             });
     }

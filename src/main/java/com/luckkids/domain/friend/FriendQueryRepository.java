@@ -27,9 +27,10 @@ public class FriendQueryRepository {
         List<FriendProfileDto> content = queryFactory
             .select(Projections.constructor(FriendProfileDto.class,
                 friend.receiver.id,
-                userCharacter.characterNickname,
+                friend.receiver.nickname,
+                friend.receiver.luckPhrases,
                 userCharacter.file,
-                user.missionCount
+                user.characterCount
             ))
             .from(friend)
             .join(friend.receiver, user)

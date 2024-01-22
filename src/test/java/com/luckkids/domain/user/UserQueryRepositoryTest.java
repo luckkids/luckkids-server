@@ -62,7 +62,7 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
         return UserCharacter.builder()
             .user(user)
             .level(level)
-            .fileName(fileName)
+            .file(fileName)
             .build();
     }
 }
