@@ -23,7 +23,7 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자의 캐릭터를 삭제한다.")
-    void deleteTest() {
+    void deleteAllByUserId() {
         User user = User.builder()
             .email("test@email.com")
             .password("1234")

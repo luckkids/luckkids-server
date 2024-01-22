@@ -1,4 +1,4 @@
-package com.luckkids.domain.friends;
+package com.luckkids.domain.friend;
 
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.user.User;
@@ -23,13 +23,9 @@ public class Friend extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User receiver;
 
-    @Enumerated(EnumType.STRING)
-    private FriendStatus friendStatus;
-
     @Builder
-    private Friend(User requester, User receiver, FriendStatus friendStatus) {
+    private Friend(User requester, User receiver) {
         this.requester = requester;
         this.receiver = receiver;
-        this.friendStatus = friendStatus;
     }
 }

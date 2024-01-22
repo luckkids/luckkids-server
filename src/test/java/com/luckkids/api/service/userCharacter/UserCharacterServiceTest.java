@@ -36,7 +36,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자가 선택한 캐릭터를 저장한다.")
     @Test
-    void createTest() {
+    void createUserCharacter() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
 
@@ -47,15 +47,12 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
         UserCharacterCreateServiceRequest userCharacterCreateServiceRequest = UserCharacterCreateServiceRequest.builder()
             .fileName("test.json")
-            .characterNickname("럭키즈")
             .build();
 
         UserCharacterCreateResponse userCharacterCreateResponse = userCharacterService.createUserCharacter(userCharacterCreateServiceRequest);
 
         // then
-        assertThat(userCharacterCreateResponse)
-            .extracting("characterNickname", "fileName")
-            .contains("럭키즈", "test.json");
+        assertThat(userCharacterCreateResponse.getFileName()).isEqualTo("test.json");
 
         Optional<UserCharacter> userCharacter = userCharacterRepository.findById(userCharacterCreateResponse.getId());
 

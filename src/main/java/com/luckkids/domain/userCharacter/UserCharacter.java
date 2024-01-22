@@ -15,12 +15,12 @@ public class UserCharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private int level;
 
-    private String characterNickname;
+    private String characterNickname;   // ⭐️ 삭제 해야함 !!!
 
     private String file;
 

@@ -15,10 +15,11 @@ import java.util.List;
 public class InitialCharacterService {
 
     private final LuckkidsCharacterRepository luckkidsCharacterRepository;
+
     @Value("${cloudfront.s3-url}")
     private String cloudFrontUrl;
 
-    public List<InitialCharacterRandResponse> findAllByCharacterIdLevel1(){
+    public List<InitialCharacterRandResponse> findAllByCharacterIdLevel1() {
         return luckkidsCharacterRepository.findAllByCharacterIdLevel(1)
             .stream()
             .map(character -> InitialCharacterRandResponse.of(character, cloudFrontUrl))
