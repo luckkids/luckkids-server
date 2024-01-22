@@ -40,7 +40,7 @@ public class PushRepositoryTest extends IntegrationTestSupport {
         Push savedPush =  pushRepository.save(push);
         pushRepository.deleteAllByUserId(user.getId());
 
-        Optional<Push> findPush = pushRepository.findById(savedPush.getId());
+        Optional<Push> findPush = pushRepository.findById(savedPush.getDeviceId());
 
         assertThat(findPush.isEmpty()).isTrue();
     }

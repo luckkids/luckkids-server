@@ -1,12 +1,14 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.push.PushReadService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class UserTest extends IntegrationTestSupport {
     @Autowired
     private UserReadService userReadService;
 
+    @Autowired
+    private PushReadService pushReadService;
+
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
     void checkPushAndUpdate() {
@@ -50,10 +55,9 @@ public class UserTest extends IntegrationTestSupport {
 
         Push push = Push.builder()
             .pushToken("testPushKey")
+            .user(savedUser)
             .deviceId("testDeviceId")
             .build();
-
-        push.setUser(savedUser);
 
         Push savedPush = pushRepository.save(push);
 
@@ -61,11 +65,9 @@ public class UserTest extends IntegrationTestSupport {
         savedUser.checkPushKey("testPushKey2", "testDeviceId");
 
         // then
-        Push getPush = pushRepository.findById(savedPush.getId()).get();
-
-        assertThat(getPush)
+        assertThat(savedUser.getPushes().get(0))
             .extracting("pushToken", "deviceId")
-            .containsExactlyInAnyOrder(
+             .containsExactlyInAnyOrder(
                 "testPushKey2", "testDeviceId"
             );
     }

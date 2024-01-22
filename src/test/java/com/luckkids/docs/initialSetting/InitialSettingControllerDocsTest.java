@@ -73,6 +73,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
         });
 
         InitialSettingAlertServiceRequest initialSettingAlertServiceRequest = InitialSettingAlertServiceRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -129,6 +130,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                 requestFields(
                     fieldWithPath("alertSetting").type(JsonFieldType.OBJECT)
                         .description("알람설정 요청 데이터"),
+                    fieldWithPath("alertSetting.deviceId").type(JsonFieldType.STRING)
+                        .description("디바이스ID"),
                     fieldWithPath("alertSetting.alertStatus").type(JsonFieldType.STRING)
                         .description("알림상태. 가능한값: "+Arrays.toString(AlertStatus.values())),
                     fieldWithPath("character").type(JsonFieldType.OBJECT)
