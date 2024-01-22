@@ -22,14 +22,14 @@ public class UserCharacter {
 
     private String characterNickname;   // ⭐️ 삭제 해야함 !!!
 
-    private String fileName;
+    private String file;
 
     @Builder
-    private UserCharacter(User user, int level, String characterNickname, String fileName) {
+    private UserCharacter(User user, int level, String characterNickname, String file) {
         this.user = user;
         this.level = level;
         this.characterNickname = characterNickname;
-        this.fileName = fileName;
+        this.file = file;
     }
 
     public void changeUser(User user) {

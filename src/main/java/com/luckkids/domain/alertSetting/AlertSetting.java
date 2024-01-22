@@ -13,18 +13,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class AlertSetting extends BaseTimeEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+
     private String deviceId;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus entire;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus mission;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus luck;
+
     @Enumerated(EnumType.STRING)
     private AlertStatus notice;
 
@@ -38,7 +45,7 @@ public class AlertSetting extends BaseTimeEntity {
         this.notice = notice;
     }
 
-    public void update(AlertType alertType, AlertStatus alertStatus){
+    public void update(AlertType alertType, AlertStatus alertStatus) {
         switch (alertType) {
             case ENTIRE:
                 this.entire = alertStatus;
@@ -55,7 +62,7 @@ public class AlertSetting extends BaseTimeEntity {
         }
     }
 
-    public static AlertSetting of(User user, AlertStatus alertStatus){
+    public static AlertSetting of(User user, AlertStatus alertStatus) {
         return AlertSetting.builder()
             .user(user)
             .entire(alertStatus)
