@@ -1,6 +1,7 @@
 package com.luckkids.api.controller.friend;
 
 import com.luckkids.ControllerTestSupport;
+import com.luckkids.api.page.request.PageInfoRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -14,35 +15,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class FriendControllerTest extends ControllerTestSupport {
 
-    @DisplayName("친구 랭킹 리스트 조회")
+    @DisplayName("친구 리스트 조회한다.")
     @Test
     @WithMockUser("USER")
-    void readList() throws Exception {
+    void getFriendList() throws Exception {
         // given
+        PageInfoRequest request = PageInfoRequest.builder()
+            .build();
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/friend/list")
-                    .contentType(APPLICATION_JSON)
-                    .accept(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode").value("200"))
-            .andExpect(jsonPath("$.httpStatus").value("OK"))
-            .andExpect(jsonPath("$.message").value("OK"));
-    }
-
-
-    @DisplayName("친구 프로필 조회를 한다.")
-    @Test
-    @WithMockUser("USER")
-    void readProfile() throws Exception {
-        // given
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/friend/profile/{friendId}", 1)
+                get("/api/v1/friends")
+                    .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .with(csrf())

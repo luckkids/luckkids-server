@@ -1,7 +1,6 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.userCharacter.UserCharacter;
@@ -32,7 +31,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
 
-    private int missionCount;
+    private String nickname;
 
     private String luckPhrases;
 
@@ -42,28 +41,30 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SettingStatus settingStatus;
 
+    private int missionCount;
+
+    private int characterCount;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Push> pushes = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private UserCharacter userCharacter;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserCharacter> userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, int missionCount, String luckPhrases, Role role, SettingStatus settingStatus) {
+    private User(String email, String password, SnsType snsType, String nickname, String luckPhrases, Role role, SettingStatus settingStatus, int missionCount, int characterCount) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
-        this.missionCount = missionCount;
+        this.nickname = nickname;
         this.luckPhrases = luckPhrases;
         this.role = role;
         this.settingStatus = settingStatus;
-    }
-
-    public void checkSnsType() {
-        snsType.checkSnsType();
+        this.missionCount = missionCount;
+        this.characterCount = characterCount;
     }
 
     public void loginCheckSnsType(SnsType snsType) {
@@ -105,14 +106,15 @@ public class User extends BaseTimeEntity {
         }
     }
 
-    public void updateLuckPhrases(String luckPhrases){
+    public void updateLuckPhrases(String luckPhrases) {
         this.luckPhrases = luckPhrases;
     }
 
-    public void changeSettingStatus(SettingStatus settingStatus) {
+    public void updateSettingStatus(SettingStatus settingStatus) {
         this.settingStatus = settingStatus;
     }
-    public void updatePassword(String password){
+
+    public void updatePassword(String password) {
         this.password = password;
     }
 
