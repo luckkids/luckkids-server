@@ -1,7 +1,7 @@
 package com.luckkids.domain.alertHistory;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.user.User;
+import com.luckkids.domain.push.Push;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +18,8 @@ public class AlertHistory extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @JoinColumn(name = "device_id")
+    private Push push;
 
     private String alertDescription;
 
@@ -26,8 +27,8 @@ public class AlertHistory extends BaseTimeEntity {
     private AlertHistoryStatus alertHistoryStatus;
 
     @Builder
-    private AlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
-        this.user = user;
+    private AlertHistory(Push push, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
+        this.push = push;
         this.alertDescription = alertDescription;
         this.alertHistoryStatus = alertHistoryStatus;
     }

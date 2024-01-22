@@ -2,23 +2,26 @@ package com.luckkids.domain.alertSetting;
 
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.push.Push;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class AlertSetting extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @OneToOne(fetch = FetchType.LAZY)
-    private User user;
-    private String deviceId;
+    private Long id;
+    @OneToOne
+    @JoinColumn(name = "device_id")
+    private Push push;
     @Enumerated(EnumType.STRING)
     private AlertStatus entire;
     @Enumerated(EnumType.STRING)
@@ -29,9 +32,8 @@ public class AlertSetting extends BaseTimeEntity {
     private AlertStatus notice;
 
     @Builder
-    private AlertSetting(User user, String deviceId, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
-        this.user = user;
-        this.deviceId = deviceId;
+    private AlertSetting(Push push, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+        this.push = push;
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
@@ -55,9 +57,9 @@ public class AlertSetting extends BaseTimeEntity {
         }
     }
 
-    public static AlertSetting of(User user, AlertStatus alertStatus){
+    public static AlertSetting of(Push push, AlertStatus alertStatus){
         return AlertSetting.builder()
-            .user(user)
+            .push(push)
             .entire(alertStatus)
             .mission(alertStatus)
             .luck(alertStatus)

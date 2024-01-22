@@ -11,15 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlertSettingResponse {
 
-    private int id;
     private AlertStatus entire;
     private AlertStatus mission;
     private AlertStatus luck;
     private AlertStatus notice;
 
     @Builder
-    private AlertSettingResponse(int id, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
-        this.id = id;
+    private AlertSettingResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
@@ -28,7 +26,6 @@ public class AlertSettingResponse {
 
     public static AlertSettingResponse of(AlertSetting alertSetting){
         return AlertSettingResponse.builder()
-            .id(alertSetting.getId())
             .entire(alertSetting.getEntire())
             .mission(alertSetting.getMission())
             .luck(alertSetting.getLuck())

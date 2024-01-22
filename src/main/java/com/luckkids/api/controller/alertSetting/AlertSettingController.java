@@ -20,7 +20,7 @@ public class AlertSettingController {
     private final AlertSettingReadService alertSettingReadService;
     private final AlertSettingService alertSettingService;
 
-    @GetMapping("/")
+    @GetMapping
     public ApiResponse<AlertSettingResponse> getAlertSetting(@RequestBody @Valid AlertSettingRequest alertSettingRequest){
         return ApiResponse.ok(alertSettingReadService.getAlertSetting(alertSettingRequest.toServiceRequest()));
     }
