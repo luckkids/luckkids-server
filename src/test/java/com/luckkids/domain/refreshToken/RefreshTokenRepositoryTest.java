@@ -24,11 +24,7 @@ public class RefreshTokenRepositoryTest extends IntegrationTestSupport {
     @Test
     @DisplayName("사용자의 refreshToken 데이터를 모두 제거한다.")
     void deleteByUserIdTest(){
-        User user = User.builder()
-            .email("test@email.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
+        User user = createUser();
 
         userRepository.save(user);
 
@@ -46,11 +42,30 @@ public class RefreshTokenRepositoryTest extends IntegrationTestSupport {
         assertThat(findToken.isEmpty()).isTrue();
     }
 
-    private User createUser(String email, String password, SnsType snsType) {
+    @Test
+    @DisplayName("사용자의 refreshToken 데이터를 조회한다.")
+    void findByUserIdAndDeviceIdAndRefreshToken(){
+        User user = createUser();
+
+        userRepository.save(user);
+
+        RefreshToken token = RefreshToken.builder()
+            .deviceId("testDevice")
+            .refreshToken("testRefreshToken")
+            .user(user)
+            .build();
+
+        refreshTokenRepository.save(token);
+        Optional<RefreshToken> findToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), "testDevice", "testRefreshToken");
+
+        assertThat(findToken.isEmpty()).isFalse();
+    }
+
+    private User createUser() {
         return User.builder()
-            .email(email)
-            .password(password)
-            .snsType(snsType)
+            .email("test@email.com")
+            .password("1234")
+            .snsType(SnsType.NORMAL)
             .build();
     }
 }

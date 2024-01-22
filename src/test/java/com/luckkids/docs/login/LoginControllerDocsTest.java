@@ -1,16 +1,20 @@
 package com.luckkids.docs.login;
 
 import com.luckkids.api.controller.login.LoginController;
+import com.luckkids.api.controller.login.request.LoginGenerateTokenRequest;
 import com.luckkids.api.controller.login.request.LoginOauthRequest;
 import com.luckkids.api.controller.login.request.LoginRequest;
 import com.luckkids.api.service.login.LoginService;
+import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -24,7 +28,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -100,6 +103,60 @@ public class LoginControllerDocsTest extends RestDocsSupport {
             ));
     }
 
+    @DisplayName("엑세스토큰 재생성 API")
+    @Test
+    void generateAccessToken() throws Exception {
+        // given
+        LoginGenerateTokenRequest request = LoginGenerateTokenRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .deviceId("testDeviceId")
+            .refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzY5MTYzfQ.DJwKVuZxw3zTK8RdnnwS45JM0V_3DJ0kpCDMaf3wnyv5GwLtwwKtVNhfeJmhcGYJZ3gvu534kAZGtAoZb_dgWw")
+            .build();
+
+        given(loginService.refreshJwtToken(any(LoginGenerateTokenServiceRequest.class)))
+            .willReturn(LoginGenerateTokenResponse.builder()
+                .accessToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzI1OTYzfQ.StpNeN7Mrcm9n3niSPU8ItRMBZqy__gS8AjRkqlIZ2dWtLaciMQF6EGPY4JaagoFkP-GfhUr8pMYfRewEZ-BYg")
+                .refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0a2RybDg5MDhAbmF2ZXIuY29tIiwiZXhwIjoxNjk3NzY5MTYzfQ.DJwKVuZxw3zTK8RdnnwS45JM0V_3DJ0kpCDMaf3wnyv5GwLtwwKtVNhfeJmhcGYJZ3gvu534kAZGtAoZb_dgWw")
+                .build()
+            );
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/auth/refresh")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("user-tokenRefresh",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일"),
+                    fieldWithPath("deviceId").type(JsonFieldType.STRING)
+                        .description("디바이스ID"),
+                    fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                        .description("리플래시토큰")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
+                        .description("Access-Token"),
+                    fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                        .description("Refresh-Token")
+                )
+            ));
+
+    }
+
     @DisplayName("OAuth 로그인 API")
     @Test
     void oauthLogin() throws Exception {
@@ -133,13 +190,13 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("token").type(JsonFieldType.STRING)
-                        .description("KAKAO, GOOGLE: access-token, APPLE: idToken"),
+                        .description("토큰값" ),
                     fieldWithPath("snsType").type(JsonFieldType.STRING)
-                        .description("로그일 할 SNSTYPE. 가능한 값: "+ Arrays.toString(SnsType.values())),
+                        .description("인증타입 가능한 값: "+ Arrays.toString(SnsType.values())),
                     fieldWithPath("deviceId").type(JsonFieldType.STRING)
                         .description("디바이스ID"),
                     fieldWithPath("pushKey").type(JsonFieldType.STRING)
-                        .description("푸시키")
+                        .description("푸시토큰")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
