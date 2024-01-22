@@ -59,7 +59,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         assertThat(userCharacter)
             .isPresent()
             .hasValueSatisfying(character -> {
-                assertThat(character.getFileName()).isEqualTo("test.json");
+                assertThat(character.getFile()).isEqualTo("test.json");
             });
     }
 
