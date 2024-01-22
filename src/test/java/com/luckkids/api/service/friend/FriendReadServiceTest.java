@@ -78,7 +78,7 @@ class FriendReadServiceTest extends IntegrationTestSupport {
         // then
         MyProfileDto myProfile = response.getMyProfile();
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrases", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
             .containsExactlyInAnyOrder(
                 user1.getId(), "테스트1", "테스트1의 행운문구", "캐릭터1.json", 0
             );
@@ -87,7 +87,7 @@ class FriendReadServiceTest extends IntegrationTestSupport {
 
         List<FriendProfileDto> friendList = friendPagingList.getContent();
         assertThat(friendList)
-            .extracting("friendId", "nickname", "luckPhrases", "fileUrl", "characterCount")
+            .extracting("friendId", "nickname", "luckPhrase", "fileUrl", "characterCount")
             .containsExactlyInAnyOrder(
                 tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0),
                 tuple(user3.getId(), "테스트3", "테스트3의 행운문구", "캐릭터2.json", 0)
@@ -133,7 +133,7 @@ class FriendReadServiceTest extends IntegrationTestSupport {
         // then
         MyProfileDto myProfile = response.getMyProfile();
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrases", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
             .contains(
                 user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0
             );
@@ -151,13 +151,13 @@ class FriendReadServiceTest extends IntegrationTestSupport {
             );
     }
 
-    private User createUser(String email, String password, String nickname, String luckPhrases) {
+    private User createUser(String email, String password, String nickname, String luckPhrase) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(SnsType.NORMAL)
             .nickname(nickname)
-            .luckPhrases(luckPhrases)
+            .luckPhrase(luckPhrase)
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
             .missionCount(0)

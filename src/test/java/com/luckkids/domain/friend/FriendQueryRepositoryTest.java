@@ -60,19 +60,19 @@ class FriendQueryRepositoryTest extends IntegrationTestSupport {
         // then
         List<FriendProfileDto> friendList = friendPagingList.getContent();
         assertThat(friendList)
-            .extracting("friendId", "nickname", "luckPhrases", "fileUrl", "characterCount")
+            .extracting("friendId", "nickname", "luckPhrase", "fileUrl", "characterCount")
             .contains(
                 tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0)
             );
     }
 
-    private User createUser(String email, String password, String nickname, String luckPhrases) {
+    private User createUser(String email, String password, String nickname, String luckPhrase) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(SnsType.NORMAL)
             .nickname(nickname)
-            .luckPhrases(luckPhrases)
+            .luckPhrase(luckPhrase)
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
             .missionCount(0)

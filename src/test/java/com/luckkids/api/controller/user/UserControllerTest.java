@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.user;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.user.request.UserLuckPhrasesRequest;
+import com.luckkids.api.controller.user.request.UserLuckPhraseRequest;
 import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +19,10 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("사용자 행운문구를 수정한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updateUserLuckPhrases() throws Exception {
+    void updateUserLuckPhrase() throws Exception {
         // given
-        UserLuckPhrasesRequest request = UserLuckPhrasesRequest.builder()
-            .luckPhrases("행운입니다.")
+        UserLuckPhraseRequest request = UserLuckPhraseRequest.builder()
+            .luckPhrase("행운입니다.")
             .build();
 
         // when // then
@@ -42,9 +42,9 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("사용자 행운문구를 수정할시 행운문구는 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updateUserLuckPhrasesWithoutLuckPhrases() throws Exception {
+    void updateUserLuckPhraseWithoutLuckPhrase() throws Exception {
         // given
-        UserLuckPhrasesRequest request = UserLuckPhrasesRequest.builder()
+        UserLuckPhraseRequest request = UserLuckPhraseRequest.builder()
             .build();
 
         // when // then

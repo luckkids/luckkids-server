@@ -110,7 +110,7 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("내 ID"),
                     fieldWithPath("data.myProfile.nickname").type(JsonFieldType.STRING)
                         .description("내 닉네임"),
-                    fieldWithPath("data.myProfile.luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("data.myProfile.luckPhrase").type(JsonFieldType.STRING)
                         .description("내 행운 문구"),
                     fieldWithPath("data.myProfile.fileUrl").type(JsonFieldType.STRING)
                         .description("내 캐릭터 URL"),
@@ -124,7 +124,7 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("친구 ID"),
                     fieldWithPath("data.friendList.content[].nickname").type(JsonFieldType.STRING)
                         .description("친구 닉네임"),
-                    fieldWithPath("data.friendList.content[].luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("data.friendList.content[].luckPhrase").type(JsonFieldType.STRING)
                         .description("친구의 행운 문구"),
                     fieldWithPath("data.friendList.content[].fileUrl").type(JsonFieldType.STRING)
                         .description("친구의 캐릭터 URL"),

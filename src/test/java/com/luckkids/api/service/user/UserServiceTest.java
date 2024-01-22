@@ -2,7 +2,7 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.domain.alertHistory.AlertHistory;
@@ -115,15 +115,15 @@ public class UserServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest = UserLuckPhrasesServiceRequest.builder()
-            .luckPhrases("행운입니다.")
+        UserLuckPhraseServiceRequest userLuckPhraseServiceRequest = UserLuckPhraseServiceRequest.builder()
+            .luckPhrase("행운입니다.")
             .build();
 
-        userService.updatePhrase(userLuckPhrasesServiceRequest);
+        userService.updatePhrase(userLuckPhraseServiceRequest);
 
         User savedUser = userReadService.findByOne(user.getId());
 
-        assertThat(savedUser).extracting("email", "snsType", "luckPhrases")
+        assertThat(savedUser).extracting("email", "snsType", "luckPhrase")
             .contains("test@email.com", SnsType.NORMAL, "행운입니다.");
     }
 
@@ -202,7 +202,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         List<Friend> friendList = friendRepository.findAll();
         Optional<Mission> findMission = missionRepository.findById(savedMission.getId());
         List<MissionOutcome> missionOutcomeList = missionOutcomeRepository.findAll();
-        Optional<Push> findPush = pushRepository.findById(savedPush.getId());
+        Optional<Push> findPush = pushRepository.findById((long) savedPush.getId());
         Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(savedToken.getId());
 
         assertThat(findAlertHistory.isEmpty()).isTrue();

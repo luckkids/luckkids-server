@@ -38,19 +38,19 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrases", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
             .contains(
                 user.getId(), "테스트1", "테스트1의 행운문구", "캐릭터1.json", 0
             );
     }
 
-    private User createUser(String email, String password, String nickname, String luckPhrases) {
+    private User createUser(String email, String password, String nickname, String luckPhrase) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(SnsType.NORMAL)
             .nickname(nickname)
-            .luckPhrases(luckPhrases)
+            .luckPhrase(luckPhrase)
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
             .missionCount(0)

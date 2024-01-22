@@ -26,7 +26,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
 
     @DisplayName("사용자ID로 사용자의 알림설정을 조회한다.")
     @Test
-    void findByUserIdTest(){
+    void findByUserIdTest() {
         User user = createUser();
         userRepository.save(user);
 
@@ -48,7 +48,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
 
     @DisplayName("사용자ID와 DeviceID로 사용자의 알림설정을 조회한다.")
     @Test
-    void findByUserIdAndDeviceId(){
+    void findByUserIdAndDeviceId() {
         User user = createUser();
         userRepository.save(user);
 
@@ -70,7 +70,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 알림설정을 삭제한다.")
     @Test
-    void deleteAllByUserId(){
+    void deleteAllByUserId() {
         User user = createUser();
         userRepository.save(user);
 
@@ -83,7 +83,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
         assertThat(findAlertSetting.isEmpty()).isTrue();
     }
 
-    private User createUser(){
+    private User createUser() {
         return User.builder()
             .email("test@test.com")
             .password("1234")
@@ -91,11 +91,11 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
             .settingStatus(COMPLETE)
             .missionCount(0)
             .role(USER)
-            .luckPhrases("행운입니다.")
+            .luckPhrase("행운입니다.")
             .build();
     }
 
-    private AlertSetting createAlertSetting(User user){
+    private AlertSetting createAlertSetting(User user) {
         return AlertSetting.builder()
             .user(user)
             .deviceId("testDevice")

@@ -61,7 +61,7 @@ public class UserTest extends IntegrationTestSupport {
         savedUser.checkPushKey("testPushKey2", "testDeviceId");
 
         // then
-        Push getPush = pushRepository.findById(savedPush.getId()).get();
+        Push getPush = pushRepository.findById((long) savedPush.getId()).get();
 
         assertThat(getPush)
             .extracting("pushToken", "deviceId")
@@ -197,7 +197,7 @@ public class UserTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 행운문구를 수정한다.")
     @Test
-    void updateLuckPhrasesTest() {
+    void updateLuckPhraseTest() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -215,12 +215,12 @@ public class UserTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
-        savedUser.updateLuckPhrases("행운입니다!!");
+        savedUser.updateLuckPhrase("행운입니다!!");
         savedUser.updateSettingStatus(INCOMPLETE);
 
         // then
         assertThat(savedUser)
-            .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
+            .extracting("email", "luckPhrase", "role", "snsType", "settingStatus")
             .contains(
                 "tkdrl8908@naver.com", "행운입니다!!", Role.USER, SnsType.NORMAL, SettingStatus.INCOMPLETE
             );
