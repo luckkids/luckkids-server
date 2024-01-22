@@ -2,11 +2,12 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.delete.UserDeleteService;
-import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
-import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
+import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
+import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,11 @@ public class UserService {
         return UserUpdatePasswordResponse.of(user);
     }
 
-    public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest) {
+    public UserLuckPhraseResponse updatePhrase(UserLuckPhraseServiceRequest userLuckPhraseServiceRequest) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        user.updateLuckPhrases(userLuckPhrasesServiceRequest.getLuckPhrases());
-        return UserLuckPhrasesResponse.of(user);
+        user.updateLuckPhrase(userLuckPhraseServiceRequest.getLuckPhrase());
+        return UserLuckPhraseResponse.of(user);
     }
 
     public UserWithdrawResponse withdraw() {
@@ -48,5 +49,12 @@ public class UserService {
         }
         userRepository.deleteById(userId);
         return UserWithdrawResponse.of(userId);
+    }
+
+    public void updateMissionCount(MissionStatus missionStatus) {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        User user = userReadService.findByOne(userId);
+
+        user.updateMissionCount(missionStatus.getValue());
     }
 }

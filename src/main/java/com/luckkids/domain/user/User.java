@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
 
     private String nickname;
 
-    private String luckPhrases;
+    private String luckPhrase;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -55,12 +55,12 @@ public class User extends BaseTimeEntity {
     private List<UserCharacter> userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, String nickname, String luckPhrases, Role role, SettingStatus settingStatus, int missionCount, int characterCount) {
+    private User(String email, String password, SnsType snsType, String nickname, String luckPhrase, Role role, SettingStatus settingStatus, int missionCount, int characterCount) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
         this.nickname = nickname;
-        this.luckPhrases = luckPhrases;
+        this.luckPhrase = luckPhrase;
         this.role = role;
         this.settingStatus = settingStatus;
         this.missionCount = missionCount;
@@ -106,8 +106,12 @@ public class User extends BaseTimeEntity {
         }
     }
 
-    public void updateLuckPhrases(String luckPhrases) {
-        this.luckPhrases = luckPhrases;
+    public void updateMissionCount(int count) {
+        missionCount += count;
+    }
+
+    public void updateLuckPhrase(String luckPhrase) {
+        this.luckPhrase = luckPhrase;
     }
 
     public void updateSettingStatus(SettingStatus settingStatus) {
