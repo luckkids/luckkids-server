@@ -1,6 +1,6 @@
 package com.luckkids.api.service.luckMission.response;
 
-import com.luckkids.domain.luckMission.LuckMission;
+import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +14,12 @@ public class LuckMissionResponse {
     private LocalTime alertTime;
 
     @Builder
-    private LuckMissionResponse( String description, LocalTime alertTime) {
+    private LuckMissionResponse(String description, LocalTime alertTime) {
         this.description = description;
         this.alertTime = alertTime;
     }
 
-    public static LuckMissionResponse of(LuckMission luckMission){
+    public static LuckMissionResponse of(LuckkidsMission luckMission) {
         return LuckMissionResponse.builder()
             .description(luckMission.getDescription())
             .alertTime(luckMission.getAlertTime())

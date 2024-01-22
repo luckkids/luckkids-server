@@ -1,6 +1,5 @@
 package com.luckkids.domain.notice;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.luckkids.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +16,9 @@ public class Notice extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String title;
+
     private String noticeDescription;
 
     @Builder

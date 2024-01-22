@@ -7,7 +7,6 @@ import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +177,7 @@ public class UserTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     @Transactional
-    void updatePasswordTest(){
+    void updatePasswordTest() {
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         String beforePassword = user.getPassword();
         User savedUser = userRepository.save(user);
@@ -212,18 +211,18 @@ public class UserTest extends IntegrationTestSupport {
 
         // when
         User findUser = userReadService.findByOne(savedUser.getId());
-        findUser.changeSettingStatus(COMPLETE);
+        findUser.updateSettingStatus(COMPLETE);
 
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
         savedUser.updateLuckPhrases("행운입니다!!");
-        savedUser.changeSettingStatus(INCOMPLETE);
+        savedUser.updateSettingStatus(INCOMPLETE);
 
         // then
         assertThat(savedUser)
             .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
             .contains(
-                "tkdrl8908@naver.com", "행운입니다!!",Role.USER,SnsType.NORMAL,SettingStatus.INCOMPLETE
+                "tkdrl8908@naver.com", "행운입니다!!", Role.USER, SnsType.NORMAL, SettingStatus.INCOMPLETE
             );
     }
 }

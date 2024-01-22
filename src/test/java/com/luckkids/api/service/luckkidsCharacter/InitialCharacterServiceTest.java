@@ -26,7 +26,7 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
     private LuckkidsCharacterRepository luckkidsCharacterRepository;
 
     @BeforeEach
-    void settingCharacter(){
+    void settingCharacter() {
         IntStream.rangeClosed(1, 4).forEach(i -> {
             LuckkidsCharacter luckkidsCharacter = createCharacter(i);
             luckkidsCharacterRepository.save(luckkidsCharacter);
@@ -45,7 +45,7 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("초기캐릭터 파일정보를 모두 조회한다.")
-    void findAll(){
+    void findAll() {
         List<InitialCharacterRandResponse> initialCharacterRandResponses = initialCharacterService.findAllByCharacterIdLevel1();
 
         assertThat(initialCharacterRandResponses).hasSize(4)
@@ -58,25 +58,25 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
             );
     }
 
-    LuckkidsCharacter createCharacter(int i){
+    LuckkidsCharacter createCharacter(int i) {
         return LuckkidsCharacter.builder()
-            .fileName("test"+i+".json")
+            .file("test" + i + ".json")
             .characterId(
                 CharacterId.builder()
                     .level(1)
-                    .characterName("테스트"+i)
+                    .characterName("테스트" + i)
                     .build()
             )
             .build();
     }
 
-    LuckkidsCharacter createCharacterlevel2(int i){
+    LuckkidsCharacter createCharacterlevel2(int i) {
         return LuckkidsCharacter.builder()
-            .fileName("테스트2"+i+".json")
+            .file("테스트2" + i + ".json")
             .characterId(
                 CharacterId.builder()
                     .level(2)
-                    .characterName("테스트2"+i)
+                    .characterName("테스트2" + i)
                     .build()
             )
             .build();
