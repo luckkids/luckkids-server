@@ -1,6 +1,7 @@
 package com.luckkids.api.service.missionOutcome;
 
 import com.luckkids.api.event.user.UserMissionCountUpdateEvent;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
@@ -30,6 +31,10 @@ public class MissionOutcomeService {
 
     public int updateMissionOutcome(Long missionOutcomeId, MissionStatus missionStatus) {
         MissionOutcome missionOutcome = missionOutcomeReadService.findByOne(missionOutcomeId);
+        
+        if (missionOutcome.getMissionStatus().equals(missionStatus)) {
+            throw new LuckKidsException("같은 미션 상태입니다.");
+        }
         missionOutcome.updateMissionStatus(missionStatus);
 
         eventPublisher.publishEvent(new UserMissionCountUpdateEvent(this, missionStatus));
