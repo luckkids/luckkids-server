@@ -15,7 +15,7 @@ public class UserAlertDeleteService implements UserDeleteService{
 
     @Override
     public void deleteAllByUserId(int userId) {
-        alertHistoryRepository.deleteAllByUserId(userId);
-        alertSettingRepository.deleteAllByUserId(userId);
+        alertHistoryRepository.deleteByPushUserId(userId);
+        alertSettingRepository.deleteByPushUserId(userId);
     }
 }

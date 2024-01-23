@@ -9,10 +9,13 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
+import com.luckkids.api.service.push.PushReadService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.push.Push;
+import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
@@ -40,18 +43,27 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private InitialSettingService initialSettingService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserReadService userReadService;
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private MissionRepository missionRepository;
+
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
+
     @Autowired
     private UserCharacterRepository userCharacterRepository;
+
+    @Autowired
+    private PushRepository pushRepository;
 
     @AfterEach
     void tearDown() {
@@ -59,6 +71,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         missionOutcomeRepository.deleteAllInBatch();
         missionRepository.deleteAllInBatch();
         alertSettingRepository.deleteAllInBatch();
+        pushRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
@@ -68,6 +81,8 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     void createTest() {
         //given
         User user = createUser(1);
+        Push push = createPush(user);
+        pushRepository.save(push);
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
@@ -90,6 +105,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         });
 
         InitialSettingAlertServiceRequest initialSettingAlertServiceRequest = InitialSettingAlertServiceRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -101,7 +117,6 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
         //when
         InitialSettingResponse initialSettingResponse = initialSettingService.initialSetting(initialSettingServiceRequest);
-
 
         //then
         InitialSettingCharacterResponse initialSettingCharacterResponse = initialSettingResponse.getCharacter();
@@ -142,6 +157,14 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
                 .snsType(NORMAL)
                 .settingStatus(INCOMPLETE)
                 .build());
+    }
+
+    private Push createPush(User user){
+        return Push.builder()
+            .deviceId("testDeviceId")
+            .user(user)
+            .pushToken("testPushToken")
+            .build();
     }
 
     private LoginUserInfo createLoginUserInfo(int userId) {
