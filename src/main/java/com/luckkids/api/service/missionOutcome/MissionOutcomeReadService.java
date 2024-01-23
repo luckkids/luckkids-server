@@ -40,11 +40,6 @@ public class MissionOutcomeReadService {
             .toList();
     }
 
-    public int countUserSuccessfulMissions() {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        return missionOutcomeRepository.countSuccessfulMissionsByUserId(userId);
-    }
-
     public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
 

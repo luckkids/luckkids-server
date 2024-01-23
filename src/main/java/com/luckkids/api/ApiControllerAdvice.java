@@ -75,8 +75,7 @@ public class ApiControllerAdvice {
     }
 
     /**
-     * 존재하지 않는 id Exception
-     * (메서드에 전달된 인자가 부적절할 때 발생하는 예외)
+     * 메서드에 전달된 인자가 부적절할 때 발생하는 예외
      **/
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)

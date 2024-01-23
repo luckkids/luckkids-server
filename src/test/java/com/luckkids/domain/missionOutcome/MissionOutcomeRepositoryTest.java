@@ -74,27 +74,6 @@ class MissionOutcomeRepositoryTest extends IntegrationTestSupport {
         assertThat(missionOutcomeRepository.findAll()).hasSize(0).isEmpty();
     }
 
-    @DisplayName("해당 유저의 성공한 미션의 수를 조회한다.")
-    @Test
-    void countSuccessfulMissionsByUserId() {
-        // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
-        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
-        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27), FAILED);
-
-        userRepository.save(user);
-        missionRepository.save(mission);
-        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
-
-        // when
-        int count = missionOutcomeRepository.countSuccessfulMissionsByUserId(user.getId());
-
-        // then
-        assertThat(count).isEqualTo(2);
-    }
-
     @DisplayName("사용자의 미션이력을 전부 삭제한다.")
     @Test
     void deleteAllByMissionUserId() {

@@ -4,6 +4,7 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
+import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -132,7 +133,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트 할 때 id가 없으면 예외가 발생한다.")
     @Test
-    void updateMissionOutcomeWithException() {
+    void updateMissionOutcomeWithExceptionId() {
         // given
         Long missionOutcomeId = 1L;
 
@@ -140,6 +141,26 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> missionOutcomeService.updateMissionOutcome(missionOutcomeId, SUCCEED))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 미션결과는 없습니다. id = " + missionOutcomeId);
+    }
+
+    @DisplayName("업데이트할 missionStatus를 받아서 미션결과 상태를 업데이트 할 때 기존 상태와 같으면 예외가 발생한다.")
+    @Test
+    void updateMissionOutcomeWithExceptionMissionStatus() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.save(missionOutcome);
+
+        MissionStatus missionStatus = FAILED;
+
+        // when // then
+        assertThatThrownBy(() -> missionOutcomeService.updateMissionOutcome(missionOutcome.getId(), missionStatus))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("미션 상태가 기존과 같습니다.");
     }
 
     @DisplayName("삭제할 id를 받아서 미션결과를 삭제한다.")

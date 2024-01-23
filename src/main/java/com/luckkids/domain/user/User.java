@@ -101,13 +101,14 @@ public class User extends BaseTimeEntity {
         if (existPush.isPresent()) {
             existPush.get().updatePushToken(pushToken);
         } else {// deviceId와 일치하는 Push가 없는 경우, 새로운 Push 생성 후Push리스트에 add
-            Push push = Push.of(deviceId,this, pushToken);
+            Push push = Push.of(deviceId, this, pushToken);
             push.setUser(this);
         }
     }
 
-    public void updateMissionCount(int count) {
+    public int updateMissionCount(int count) {
         missionCount += count;
+        return missionCount;
     }
 
     public void updateLuckPhrase(String luckPhrase) {

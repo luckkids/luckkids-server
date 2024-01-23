@@ -51,10 +51,10 @@ public class UserService {
         return UserWithdrawResponse.of(userId);
     }
 
-    public void updateMissionCount(MissionStatus missionStatus) {
+    public int updateMissionCount(MissionStatus missionStatus) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
 
-        user.updateMissionCount(missionStatus.getValue());
+        return user.updateMissionCount(missionStatus.getValue());
     }
 }

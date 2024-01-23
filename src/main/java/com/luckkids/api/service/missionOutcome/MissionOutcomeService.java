@@ -1,13 +1,11 @@
 package com.luckkids.api.service.missionOutcome;
 
-import com.luckkids.api.event.user.UserMissionCountUpdateEvent;
-import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
+import com.luckkids.api.service.user.UserService;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +19,7 @@ public class MissionOutcomeService {
     private final MissionOutcomeRepository missionOutcomeRepository;
 
     private final MissionOutcomeReadService missionOutcomeReadService;
-
-    private final ApplicationEventPublisher eventPublisher;
+    private final UserService userService;
 
     public void createMissionOutcome(MissionOutcomeCreateServiceRequest request) {
         MissionOutcome missionOutcome = request.toEntity();
@@ -31,15 +28,12 @@ public class MissionOutcomeService {
 
     public int updateMissionOutcome(Long missionOutcomeId, MissionStatus missionStatus) {
         MissionOutcome missionOutcome = missionOutcomeReadService.findByOne(missionOutcomeId);
-        
         if (missionOutcome.getMissionStatus().equals(missionStatus)) {
-            throw new LuckKidsException("같은 미션 상태입니다.");
+            throw new IllegalArgumentException("미션 상태가 기존과 같습니다.");
         }
         missionOutcome.updateMissionStatus(missionStatus);
 
-        eventPublisher.publishEvent(new UserMissionCountUpdateEvent(this, missionStatus));
-
-        return missionOutcomeReadService.countUserSuccessfulMissions();
+        return userService.updateMissionCount(missionStatus);
     }
 
     public void deleteMissionOutcome(int missionId, LocalDate missionDate) {

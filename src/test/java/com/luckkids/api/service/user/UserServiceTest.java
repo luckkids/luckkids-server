@@ -26,7 +26,6 @@ import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -149,7 +148,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        Push push = createPush("testdeviceId", "testPushToken" , user);
+        Push push = createPush("testdeviceId", "testPushToken", user);
         //given push
         Push savedPush = pushRepository.save(push);
 
@@ -216,6 +215,24 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(missionOutcomeList).hasSize(0);
         assertThat(findPush.isEmpty()).isTrue();
         assertThat(findRefreshToken.isEmpty()).isTrue();
+    }
+
+    @DisplayName("미션 실패_성공 카운트를 업데이트 한다.")
+    @Test
+    void updateMissionCount() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        userRepository.save(user);
+
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
+
+        // when
+        userService.updateMissionCount(SUCCEED);
+
+        // then
+        User getUser = userRepository.findById(user.getId()).get();
+        assertThat(getUser.getMissionCount()).isEqualTo(1);
     }
 
     private User createUser(String email, String password, SnsType snsType) {
