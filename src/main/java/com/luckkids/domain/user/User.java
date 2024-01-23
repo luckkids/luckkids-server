@@ -66,7 +66,7 @@ public class User extends BaseTimeEntity {
         this.characterCount = characterCount;
     }
 
-    public void CheckSnsTypeForLogin(SnsType snsType) {
+    public void CheckSnsType(SnsType snsType) {
         if (!this.snsType.equals(snsType)) {
             this.snsType.checkSnsType();
         }
