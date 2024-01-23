@@ -23,7 +23,7 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserReadService userReadService;
+    private PushRepository pushRepository;
 
     @Test
     @DisplayName("사용자의 알림목록을 삭제한다.")
@@ -36,18 +36,26 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 
         userRepository.save(user);
 
-        AlertHistory alertHistory = AlertHistory.builder()
+        Push push = Push.builder()
             .user(user)
+            .deviceId("testdeviceId")
+            .pushToken("testPushToken")
+            .build();
+
+        AlertHistory alertHistory = AlertHistory.builder()
+            .push(push)
             .alertDescription("test")
             .alertHistoryStatus(AlertHistoryStatus.CHECKED)
             .build();
 
+        pushRepository.save(push);
         AlertHistory savedAlertHistory =  alertHistoryRepository.save(alertHistory);
 
-        alertHistoryRepository.deleteAllByUserId(user.getId());
+        alertHistoryRepository.deleteByPushUserId(user.getId());
 
         Optional<AlertHistory> findAlertHistory = alertHistoryRepository.findById(savedAlertHistory.getId());
 
         assertThat(findAlertHistory.isEmpty()).isTrue();
     }
+
 }

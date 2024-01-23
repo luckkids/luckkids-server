@@ -52,7 +52,6 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
         given(alertSettingReadService.getAlertSetting(any(AlertSettingServiceRequest.class)))
             .willReturn(
                 AlertSettingResponse.builder()
-                    .id(1)
                     .luck(AlertStatus.CHECKED)
                     .mission(AlertStatus.CHECKED)
                     .notice(AlertStatus.CHECKED)
@@ -62,7 +61,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/alertSetting/")
+                get("/api/v1/alertSetting")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
@@ -80,8 +79,6 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
-                        .description("알림설정ID"),
                     fieldWithPath("data.entire").type(JsonFieldType.STRING)
                         .description("전체알람설정"),
                     fieldWithPath("data.mission").type(JsonFieldType.STRING)
