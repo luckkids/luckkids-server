@@ -6,11 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface AlertSettingRepository extends JpaRepository<AlertSetting, Long> {
+public interface AlertSettingRepository extends JpaRepository<AlertSetting, Integer> {
 
     Optional<AlertSetting> findByPushDeviceId(String deviceId);
 
-//    @Query("delete from AlertSetting a where a.push.user.id = :userId")
     void deleteByPushUserId(int userId);
 
 }

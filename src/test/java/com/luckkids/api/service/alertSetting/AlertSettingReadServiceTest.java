@@ -27,12 +27,16 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private AlertSettingReadService alertSettingReadService;
+
     @Autowired
     private SecurityService securityService;
+
     @Autowired
     private PushRepository pushRepository;
 

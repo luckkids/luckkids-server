@@ -14,6 +14,7 @@ public class InitialSettingAlertRequest {
 
     @NotNull(message = "알림상태는 필수입니다.")
     private AlertStatus alertStatus;
+
     @NotNull(message = "deviceId는 필수입니다.")
     private String deviceId;
 

@@ -23,8 +23,10 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserCharacterRepository userCharacterRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserCharacterService userCharacterService;
 

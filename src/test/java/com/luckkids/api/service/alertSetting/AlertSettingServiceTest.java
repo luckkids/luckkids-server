@@ -27,14 +27,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 public class AlertSettingServiceTest extends IntegrationTestSupport {
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private AlertSettingService alertSettingService;
+
     @Autowired
     private SecurityService securityService;
+
     @Autowired
     private PushRepository pushRepository;
 

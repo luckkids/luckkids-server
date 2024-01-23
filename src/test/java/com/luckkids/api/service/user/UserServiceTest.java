@@ -51,26 +51,33 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserReadService userReadService;
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private FriendRepository friendRepository;
+
     @Autowired
     private AlertHistoryRepository alertHistoryRepository;
+
     @Autowired
     private MissionRepository missionRepository;
+
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
+
     @Autowired
     private PushRepository pushRepository;
+
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private EntityManager entityManager;
 
     @AfterEach
     void tearDown() {

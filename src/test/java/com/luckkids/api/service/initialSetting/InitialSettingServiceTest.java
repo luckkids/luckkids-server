@@ -43,18 +43,25 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private InitialSettingService initialSettingService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserReadService userReadService;
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private MissionRepository missionRepository;
+
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
+
     @Autowired
     private UserCharacterRepository userCharacterRepository;
+
     @Autowired
     private PushRepository pushRepository;
 

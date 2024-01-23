@@ -21,6 +21,8 @@ public class Push extends BaseTimeEntity {
 	@Id
 	private String deviceId;
 
+	private String pushToken;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
@@ -29,8 +31,6 @@ public class Push extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "push", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<AlertHistory> alertHistory = new ArrayList<>();
-
-	private String pushToken;
 
 	@Builder
 	private Push(String deviceId, User user, String pushToken) {
