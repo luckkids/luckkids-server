@@ -9,6 +9,8 @@ import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.alertSetting.AlertType;
+import com.luckkids.domain.push.Push;
+import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
@@ -25,18 +27,26 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 public class AlertSettingServiceTest extends IntegrationTestSupport {
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private AlertSettingService alertSettingService;
+
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private PushRepository pushRepository;
 
     @AfterEach
     void tearDown() {
         alertSettingRepository.deleteAllInBatch();
+        pushRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
@@ -44,7 +54,11 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
     @Test
     void updateAlertSettingTest() {
         User user = createUser();
-        createAlertSetting(user);
+        Push push = createPush(user);
+
+        pushRepository.save(push);
+
+        createAlertSetting(push);
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
@@ -52,6 +66,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingUpdateServiceRequest alertSettingUpdateServiceRequest = AlertSettingUpdateServiceRequest.builder()
             .alertStatus(UNCHECKED)
             .alertType(AlertType.LUCK)
+            .deviceId("testDeviceId")
             .build();
 
         AlertSettingUpdateResponse alertSettingUpdateResponse = alertSettingService.updateAlertSetting(alertSettingUpdateServiceRequest);
@@ -64,11 +79,15 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
     @Test
     void createAlertSettingTest() {
         User user = createUser();
+        Push push = createPush(user);
+
+        pushRepository.save(push);
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         AlertSettingCreateServiceRequest alertSettingCreateServiceRequest = AlertSettingCreateServiceRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(UNCHECKED)
             .build();
 
@@ -90,7 +109,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
 
         assertThatThrownBy(() -> alertSettingService.createAlertSetting(alertSettingCreateServiceRequest))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("해당 유저는 없습니다. id = " + 1);
+            .hasMessage("Push가 존재하지 않습니다.");
     }
 
     private User createUser() {
@@ -102,9 +121,17 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
                 .build());
     }
 
-    private void createAlertSetting(User user) {
-        AlertSetting alertSetting = AlertSetting.builder()
+    private Push createPush(User user){
+        return Push.builder()
+            .deviceId("testDeviceId")
+            .pushToken("testPushToken")
             .user(user)
+            .build();
+    }
+
+    private void createAlertSetting(Push push) {
+        AlertSetting alertSetting = AlertSetting.builder()
+            .push(push)
             .entire(CHECKED)
             .mission(CHECKED)
             .notice(CHECKED)

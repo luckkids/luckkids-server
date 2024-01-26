@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.client.OAuthApiClient;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.refreshToken.RefreshToken;
+import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.*;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
@@ -28,13 +32,15 @@ import java.util.stream.Collectors;
 public class LoginService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Map<SnsType, OAuthApiClient> clients;
 
-    public LoginService(UserRepository userRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients) {
+    public LoginService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients) {
         this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.userReadService = userReadService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -85,5 +91,14 @@ public class LoginService {
         user.checkRefreshToken(jwtToken, deviceId);                                 //deviceId로 기존 refreshToken 조회 후 수정 혹은 등록
         user.checkPushKey(pushKey, deviceId);                                       //deviceId로 기존 push 조회 후 수정 혹은 등록
         return jwtToken;
+    }
+
+    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest){
+        User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
+        RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
+            .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));
+        JwtToken jwtToken = jwtTokenGenerator.generateJwtToken(refreshToken.getRefreshToken());
+        refreshToken.updateRefreshToken(jwtToken.getRefreshToken());
+        return LoginGenerateTokenResponse.of(jwtToken);
     }
 }

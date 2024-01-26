@@ -11,6 +11,18 @@ include::{snippets}/user-login/request-fields.adoc[]
 include::{snippets}/user-login/http-response.adoc[]
 include::{snippets}/user-login/response-fields.adoc[]
 
+=== 엑세스토큰 재발급
+
+==== HTTP Request
+
+include::{snippets}/user-tokenRefresh/http-request.adoc[]
+include::{snippets}/user-tokenRefresh/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-tokenRefresh/http-response.adoc[]
+include::{snippets}/user-tokenRefresh/response-fields.adoc[]
+
 [[user-oauthLogin]]
 === OAuth 로그인
 
@@ -23,4 +35,3 @@ include::{snippets}/user-oauthLogin/request-fields.adoc[]
 
 include::{snippets}/user-oauthLogin/http-response.adoc[]
 include::{snippets}/user-oauthLogin/response-fields.adoc[]
-

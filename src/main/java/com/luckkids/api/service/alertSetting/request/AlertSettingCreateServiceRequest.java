@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlertSettingCreateServiceRequest {
 
+    private String deviceId;
     private AlertStatus alertStatus;
 
     @Builder
-    private AlertSettingCreateServiceRequest(AlertStatus alertStatus) {
+    private AlertSettingCreateServiceRequest(String deviceId, AlertStatus alertStatus) {
+        this.deviceId = deviceId;
         this.alertStatus = alertStatus;
     }
 
