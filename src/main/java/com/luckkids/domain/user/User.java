@@ -28,15 +28,15 @@ public class User extends BaseTimeEntity {
 
     private String password;
 
+    private String nickname;
+
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
 
-    private String nickname;
-
-    private String luckPhrases;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String luckPhrases;
 
     @Enumerated(EnumType.STRING)
     private SettingStatus settingStatus;

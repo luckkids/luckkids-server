@@ -133,12 +133,12 @@ public class UserTest extends IntegrationTestSupport {
         savedUser.checkRefreshToken(jwtToken, "testDeviceId");
 
         // then
-        RefreshToken getToken = refreshTokenRepository.findById(savedToken.getId()).get();
+        List<RefreshToken> getToken = savedUser.getRefreshTokens();
 
         assertThat(getToken)
             .extracting("refreshToken", "deviceId")
             .containsExactlyInAnyOrder(
-                "testRefreshToken2", "testDeviceId"
+                tuple("testRefreshToken2", "testDeviceId")
             );
     }
 
