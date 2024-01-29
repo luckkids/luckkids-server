@@ -1,31 +1,18 @@
 package com.luckkids.docs.friendCode;
 
-import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.controller.friend.request.FriendCreateRequest;
 import com.luckkids.api.controller.friendCode.FriendCodeController;
-import com.luckkids.api.service.friend.FriendReadService;
-import com.luckkids.api.service.friend.response.FriendListReadResponse;
-import com.luckkids.api.service.friend.response.FriendProfileReadResponse;
-import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
-import com.luckkids.api.service.request.PageInfoServiceRequest;
-import com.luckkids.api.service.response.PageCustom;
-import com.luckkids.api.service.response.PageableCustom;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -34,7 +21,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

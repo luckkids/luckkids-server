@@ -1,16 +1,15 @@
 package com.luckkids.api.service.friendCode;
 
-import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.friend.Friend;
+import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
 import com.luckkids.domain.friendCode.UseStatus;
-import com.luckkids.domain.friends.Friend;
-import com.luckkids.domain.friends.FriendRepository;
 import com.luckkids.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
