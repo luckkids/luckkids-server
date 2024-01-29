@@ -30,7 +30,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("")
+    @DisplayName("FriendCode Entity를 조회한다.")
     @Test
     void findByCode(){
         User user = createUser(1);

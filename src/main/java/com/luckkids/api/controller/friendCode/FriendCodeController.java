@@ -17,7 +17,7 @@ public class FriendCodeController {
 
     private final FriendCodeService friendCodeService;
 
-    @GetMapping("")
+    @GetMapping
     public ApiResponse<FriendInviteCodeResponse> inviteCode() {
         return ApiResponse.ok(friendCodeService.inviteCode());
     }

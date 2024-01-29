@@ -5,6 +5,7 @@ import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
 import com.luckkids.api.controller.friend.FriendController;
+import com.luckkids.api.controller.friendCode.FriendCodeController;
 import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
@@ -21,6 +22,8 @@ import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
 import com.luckkids.api.service.friend.FriendReadService;
+import com.luckkids.api.service.friendCode.FriendCodeReadService;
+import com.luckkids.api.service.friendCode.FriendCodeService;
 import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
@@ -56,6 +59,7 @@ import org.springframework.test.web.servlet.MockMvc;
     VersionController.class,
     NoticeController.class,
     FriendController.class,
+    FriendCodeController.class,
     AlertSettingController.class,
     InitialSettingController.class,
     HomeController.class,
@@ -145,5 +149,11 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected InitialCharacterService initialCharacterService;
+
+    @MockBean
+    protected FriendCodeService friendCodeService;
+
+    @MockBean
+    protected FriendCodeReadService friendCodeReadService;
 }
 
