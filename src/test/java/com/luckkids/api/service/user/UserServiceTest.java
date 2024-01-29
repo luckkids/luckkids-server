@@ -10,8 +10,8 @@ import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
-import com.luckkids.domain.friends.Friend;
-import com.luckkids.domain.friends.FriendRepository;
+import com.luckkids.domain.friend.Friend;
+import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
@@ -26,6 +26,7 @@ import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,22 +51,31 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserReadService userReadService;
+
     @Autowired
     private AlertSettingRepository alertSettingRepository;
+
     @Autowired
     private FriendRepository friendRepository;
+
     @Autowired
     private AlertHistoryRepository alertHistoryRepository;
+
     @Autowired
     private MissionRepository missionRepository;
+
     @Autowired
     private MissionOutcomeRepository missionOutcomeRepository;
+
     @Autowired
     private PushRepository pushRepository;
+
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
@@ -132,27 +142,20 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Transactional
     void withdrawUser() {
         //given user
-        User user = User.builder()
-            .email("test@email.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
-
-        User user2 = User.builder()
-            .email("test2@email.com")
-            .password("12345")
-            .snsType(SnsType.NORMAL)
-            .build();
-
-        userRepository.save(user);
-        userRepository.save(user2);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL);
+        userRepository.saveAll(List.of(user, user2));
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
+        Push push = createPush("testdeviceId", "testPushToken" , user);
+        //given push
+        Push savedPush = pushRepository.save(push);
+
         //given alertHistory
         AlertHistory alertHistory = AlertHistory.builder()
-            .user(user)
+            .push(savedPush)
             .alertDescription("test")
             .alertHistoryStatus(AlertHistoryStatus.CHECKED)
             .build();
@@ -161,8 +164,7 @@ public class UserServiceTest extends IntegrationTestSupport {
 
         //given alertSetting
         AlertSetting alertSetting = AlertSetting.builder()
-            .user(user)
-            .deviceId("testDevice")
+            .push(savedPush)
             .entire(CHECKED)
             .mission(CHECKED)
             .luck(CHECKED)
@@ -172,18 +174,10 @@ public class UserServiceTest extends IntegrationTestSupport {
         AlertSetting savedAlertSetting = alertSettingRepository.save(alertSetting);
 
         //given friend
-        Friend friend = Friend.builder()
-            .requester(user)
-            .receiver(user2)
-            .build();
+        Friend friend = createFriend(user, user2);
+        Friend friend2 = createFriend(user2, user);
 
-        Friend friend2 = Friend.builder()
-            .requester(user2)
-            .receiver(user)
-            .build();
-
-        friendRepository.save(friend);
-        friendRepository.save(friend2);
+        friendRepository.saveAll(List.of(friend, friend2));
 
         //given mission
         Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
@@ -193,15 +187,6 @@ public class UserServiceTest extends IntegrationTestSupport {
 
         Mission savedMission = missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
-
-        //given push
-        Push push = Push.builder()
-            .deviceId("testDevice")
-            .pushToken("testPushToken")
-            .user(user)
-            .build();
-
-        Push savedPush = pushRepository.save(push);
 
         //given refreshToken
         RefreshToken token = RefreshToken.builder()
@@ -221,7 +206,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         List<Friend> friendList = friendRepository.findAll();
         Optional<Mission> findMission = missionRepository.findById(savedMission.getId());
         List<MissionOutcome> missionOutcomeList = missionOutcomeRepository.findAll();
-        Optional<Push> findPush = pushRepository.findById(savedPush.getId());
+        Optional<Push> findPush = pushRepository.findById(savedPush.getDeviceId());
         Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(savedToken.getId());
 
         assertThat(findAlertHistory.isEmpty()).isTrue();
@@ -238,6 +223,21 @@ public class UserServiceTest extends IntegrationTestSupport {
             .email(email)
             .password(password)
             .snsType(snsType)
+            .build();
+    }
+
+    private Push createPush(String deviceId, String pushToken, User user) {
+        return Push.builder()
+            .deviceId(deviceId)
+            .pushToken(pushToken)
+            .user(user)
+            .build();
+    }
+
+    private Friend createFriend(User requester, User receiver) {
+        return Friend.builder()
+            .requester(requester)
+            .receiver(receiver)
             .build();
     }
 

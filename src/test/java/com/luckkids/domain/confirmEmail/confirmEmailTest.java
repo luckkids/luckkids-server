@@ -5,10 +5,12 @@ import com.luckkids.api.exception.LuckKidsException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Transactional
 public class confirmEmailTest extends IntegrationTestSupport {
 
     @Autowired
@@ -16,7 +18,7 @@ public class confirmEmailTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("이메일의 인증완료 여부를 체크한다.")
-    void checkEmail(){
+    void checkEmail() {
         ConfirmEmail confirmEmail = ConfirmEmail.builder()
             .email("test@test.com")
             .authKey("testesttest")
@@ -32,7 +34,7 @@ public class confirmEmailTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("이메일의 인증완료 여부를 체크한다.")
-    void emailConfirm(){
+    void emailConfirm() {
         ConfirmEmail confirmEmail = ConfirmEmail.builder()
             .email("test@test.com")
             .authKey("testesttest")

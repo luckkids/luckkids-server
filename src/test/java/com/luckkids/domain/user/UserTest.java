@@ -1,6 +1,7 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.push.PushReadService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
@@ -35,6 +36,9 @@ public class UserTest extends IntegrationTestSupport {
     @Autowired
     private UserReadService userReadService;
 
+    @Autowired
+    private PushReadService pushReadService;
+
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
     void checkPushAndUpdate() {
@@ -51,10 +55,9 @@ public class UserTest extends IntegrationTestSupport {
 
         Push push = Push.builder()
             .pushToken("testPushKey")
+            .user(savedUser)
             .deviceId("testDeviceId")
             .build();
-
-        push.setUser(savedUser);
 
         Push savedPush = pushRepository.save(push);
 
@@ -62,11 +65,9 @@ public class UserTest extends IntegrationTestSupport {
         savedUser.checkPushKey("testPushKey2", "testDeviceId");
 
         // then
-        Push getPush = pushRepository.findById(savedPush.getId()).get();
-
-        assertThat(getPush)
+        assertThat(savedUser.getPushes().get(0))
             .extracting("pushToken", "deviceId")
-            .containsExactlyInAnyOrder(
+             .containsExactlyInAnyOrder(
                 "testPushKey2", "testDeviceId"
             );
     }
@@ -178,7 +179,7 @@ public class UserTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     @Transactional
-    void updatePasswordTest(){
+    void updatePasswordTest() {
         User user = createUser("test@email.com", "1234", SnsType.NORMAL);
         String beforePassword = user.getPassword();
         User savedUser = userRepository.save(user);
@@ -212,18 +213,18 @@ public class UserTest extends IntegrationTestSupport {
 
         // when
         User findUser = userReadService.findByOne(savedUser.getId());
-        findUser.changeSettingStatus(COMPLETE);
+        findUser.updateSettingStatus(COMPLETE);
 
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
         savedUser.updateLuckPhrases("행운입니다!!");
-        savedUser.changeSettingStatus(INCOMPLETE);
+        savedUser.updateSettingStatus(INCOMPLETE);
 
         // then
         assertThat(savedUser)
             .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
             .contains(
-                "tkdrl8908@naver.com", "행운입니다!!",Role.USER,SnsType.NORMAL,SettingStatus.INCOMPLETE
+                "tkdrl8908@naver.com", "행운입니다!!", Role.USER, SnsType.NORMAL, SettingStatus.INCOMPLETE
             );
     }
 }

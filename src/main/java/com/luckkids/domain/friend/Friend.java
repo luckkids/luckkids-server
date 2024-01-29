@@ -1,4 +1,4 @@
-package com.luckkids.domain.friends;
+package com.luckkids.domain.friend;
 
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.user.User;

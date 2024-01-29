@@ -1,6 +1,8 @@
 package com.luckkids.domain.alertSetting;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.domain.push.Push;
+import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +25,8 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
     private AlertSettingRepository alertSettingRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PushRepository pushRepository;
 
     @DisplayName("사용자ID로 사용자의 알림설정을 조회한다.")
     @Test
@@ -30,15 +34,18 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
         User user = createUser();
         userRepository.save(user);
 
-        AlertSetting alertSetting = createAlertSetting(user);
+        Push push = createPush(user);
+        pushRepository.save(push);
+
+        AlertSetting alertSetting = createAlertSetting(push);
         alertSettingRepository.save(alertSetting);
 
-        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByUserId(user.getId());
+        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByPushDeviceId("testDeviceId");
 
         assertThat(savedAlertSetting)
             .isPresent()
             .hasValueSatisfying(a -> {
-                assertThat(a.getDeviceId()).isEqualTo("testDevice");
+                assertThat(a.getPush().getDeviceId()).isEqualTo("testDeviceId");
                 assertThat(a.getEntire()).isEqualTo(CHECKED);
                 assertThat(a.getMission()).isEqualTo(CHECKED);
                 assertThat(a.getLuck()).isEqualTo(CHECKED);
@@ -52,15 +59,18 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
         User user = createUser();
         userRepository.save(user);
 
-        AlertSetting alertSetting = createAlertSetting(user);
+        Push push = createPush(user);
+        pushRepository.save(push);
+
+        AlertSetting alertSetting = createAlertSetting(push);
         alertSettingRepository.save(alertSetting);
 
-        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByUserIdAndDeviceId(user.getId(), "testDevice");
+        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByPushDeviceId("testDeviceId");
 
         assertThat(savedAlertSetting)
             .isPresent()
             .hasValueSatisfying(a -> {
-                assertThat(a.getDeviceId()).isEqualTo("testDevice");
+                assertThat(a.getPush().getDeviceId()).isEqualTo("testDeviceId");
                 assertThat(a.getEntire()).isEqualTo(CHECKED);
                 assertThat(a.getMission()).isEqualTo(CHECKED);
                 assertThat(a.getLuck()).isEqualTo(CHECKED);
@@ -74,9 +84,12 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
         User user = createUser();
         userRepository.save(user);
 
-        AlertSetting alertSetting = createAlertSetting(user);
+        Push push = createPush(user);
+        pushRepository.save(push);
+
+        AlertSetting alertSetting = createAlertSetting(push);
         AlertSetting savedAlertSetting = alertSettingRepository.save(alertSetting);
-        alertSettingRepository.deleteAllByUserId(user.getId());
+        alertSettingRepository.deleteByPushUserId(user.getId());
 
         Optional<AlertSetting> findAlertSetting = alertSettingRepository.findById(savedAlertSetting.getId());
 
@@ -95,10 +108,17 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
             .build();
     }
 
-    private AlertSetting createAlertSetting(User user){
-        return AlertSetting.builder()
+    private Push createPush(User user){
+        return Push.builder()
+            .deviceId("testDeviceId")
+            .pushToken("testPushToken")
             .user(user)
-            .deviceId("testDevice")
+            .build();
+    }
+
+    private AlertSetting createAlertSetting(Push push){
+        return AlertSetting.builder()
+            .push(push)
             .entire(CHECKED)
             .mission(CHECKED)
             .luck(CHECKED)

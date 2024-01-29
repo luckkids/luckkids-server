@@ -48,6 +48,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -93,6 +94,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -139,6 +141,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -181,6 +184,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -226,6 +230,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -309,6 +314,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
             .build();
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .alertStatus(CHECKED)
             .build();
 
@@ -355,6 +361,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         });
 
         InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
             .build();
 
         InitialSettingRequest request = InitialSettingRequest.builder()

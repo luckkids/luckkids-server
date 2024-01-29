@@ -16,6 +16,7 @@ public class WithdrawReasonServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private WithdrawReasonRepository withdrawReasonRepository;
+
     @Autowired
     private WithdrawReasonService withdrawReasonService;
 

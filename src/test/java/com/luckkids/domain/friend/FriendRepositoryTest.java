@@ -1,8 +1,6 @@
 package com.luckkids.domain.friend;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.domain.friends.Friend;
-import com.luckkids.domain.friends.FriendRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -17,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 public class FriendRepositoryTest extends IntegrationTestSupport {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -24,34 +23,17 @@ public class FriendRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자의 푸시목록을 삭제한다.")
-    void deleteTest(){
-        User user = User.builder()
-            .email("test@email.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
-
-        User user2 = User.builder()
-            .email("test2@email.com")
-            .password("12345")
-            .snsType(SnsType.NORMAL)
-            .build();
+    void deleteAllById() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL);
+        userRepository.saveAll(List.of(user, user2));
 
         userRepository.save(user);
         userRepository.save(user2);
 
-        Friend friend = Friend.builder()
-            .requester(user)
-            .receiver(user2)
-            .build();
-
-        Friend friend2 = Friend.builder()
-            .requester(user2)
-            .receiver(user)
-            .build();
-
-        friendRepository.save(friend);
-        friendRepository.save(friend2);
+        Friend friend = createFriend(user, user2);
+        Friend friend2 = createFriend(user2, user);
+        friendRepository.saveAll(List.of(friend, friend2));
 
         friendRepository.deleteAllByRequesterId(user.getId());
         friendRepository.deleteAllByReceiverId(user.getId());
@@ -59,5 +41,20 @@ public class FriendRepositoryTest extends IntegrationTestSupport {
         List<Friend> list = friendRepository.findAll();
 
         assertThat(list).hasSize(0);
+    }
+
+    private User createUser(String email, String password, SnsType snsType) {
+        return User.builder()
+            .email(email)
+            .password(password)
+            .snsType(snsType)
+            .build();
+    }
+
+    private Friend createFriend(User requester, User receiver) {
+        return Friend.builder()
+            .requester(requester)
+            .receiver(receiver)
+            .build();
     }
 }

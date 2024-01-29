@@ -1,4 +1,4 @@
-package com.luckkids.api.service.response;
+package com.luckkids.api.page.response;
 
 import lombok.Builder;
 import lombok.Getter;

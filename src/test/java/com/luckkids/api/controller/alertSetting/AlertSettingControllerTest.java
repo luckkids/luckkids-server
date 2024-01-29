@@ -30,7 +30,7 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/alertSetting/")
+                get("/api/v1/alertSetting")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
@@ -52,7 +52,7 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/alertSetting/")
+                get("/api/v1/alertSetting")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
