@@ -1,4 +1,4 @@
-package com.luckkids.api.service.luckMission.response;
+package com.luckkids.api.service.LuckkidsMission.response;
 
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.misson.MissionType;
@@ -10,21 +10,21 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class LuckMissionResponse {
+public class LuckkidsMissionResponse {
 
     private MissionType missionType;
     private String description;
     private LocalTime alertTime;
 
     @Builder
-    private LuckMissionResponse(MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMissionResponse(MissionType missionType, String description, LocalTime alertTime) {
         this.missionType = missionType;
         this.description = description;
         this.alertTime = alertTime;
     }
 
-    public static LuckMissionResponse of(LuckkidsMission luckMission) {
-        return LuckMissionResponse.builder()
+    public static LuckkidsMissionResponse of(LuckkidsMission luckMission) {
+        return LuckkidsMissionResponse.builder()
             .missionType(luckMission.getMissionType())
             .description(luckMission.getDescription())
             .alertTime(luckMission.getAlertTime())

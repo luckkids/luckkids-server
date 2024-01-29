@@ -16,6 +16,7 @@ import com.luckkids.api.controller.notice.NoticeController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.controller.withdrawReason.WithdrawReasonController;
+import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
@@ -26,7 +27,6 @@ import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
-import com.luckkids.api.service.luckMission.LuckMissionReadService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
@@ -40,7 +40,6 @@ import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import com.luckkids.api.service.withdrawReason.WithdrawReasonService;
 import jakarta.persistence.EntityManager;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -142,7 +141,7 @@ public abstract class ControllerTestSupport {
     protected InitialSettingService initialSettingService;
 
     @MockBean
-    protected LuckMissionReadService luckMissionReadService;
+    protected LuckkidsMissionReadService luckkidsMissionReadService;
 
     @MockBean
     protected InitialCharacterService initialCharacterService;

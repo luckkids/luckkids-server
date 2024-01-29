@@ -1,7 +1,7 @@
-package com.luckkids.api.service.luckMission;
+package com.luckkids.api.service.LuckkidsMission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import com.luckkids.domain.misson.MissionType;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.tuple;
 public class LuckMissionReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private LuckMissionReadService luckMissionReadService;
+    private LuckkidsMissionReadService luckkidsMissionReadService;
     @Autowired
     private LuckkidsMissionRepository luckkidsMissionRepository;
 
@@ -33,12 +33,12 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
     @Test
     void getLuckMissions() {
         IntStream.rangeClosed(1, 10).forEach(i -> {
-            luckkidsMissionRepository.save(createLuckMission("테스트미션" + i, LocalTime.of(i, 0)));
+            luckkidsMissionRepository.save(createLuckkidsMission("테스트미션" + i, LocalTime.of(i, 0)));
         });
 
-        List<LuckMissionResponse> luckMissionResponses = luckMissionReadService.getLuckMissions();
+        List<LuckkidsMissionResponse> luckkidsMissionResponses = luckkidsMissionReadService.getLuckMissions();
 
-        assertThat(luckMissionResponses).hasSize(10)
+        assertThat(luckkidsMissionResponses).hasSize(10)
             .extracting("missionType", "description", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple(MissionType.HEALTH, "테스트미션1", LocalTime.of(1, 0)),
@@ -54,7 +54,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
             );
     }
 
-    private LuckkidsMission createLuckMission(String description, LocalTime alertTime) {
+    private LuckkidsMission createLuckkidsMission(String description, LocalTime alertTime) {
         return LuckkidsMission.builder()
             .missionType(MissionType.HEALTH)
             .description(description)

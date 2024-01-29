@@ -1,6 +1,8 @@
 package com.luckkids.docs.initialSetting;
 
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
+import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
 import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
@@ -12,8 +14,6 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.luckMission.LuckMissionReadService;
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.MissionType;
@@ -44,11 +44,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InitialSettingControllerDocsTest extends RestDocsSupport {
     private final InitialSettingService initialSettingService = mock(InitialSettingService.class);
     private final InitialCharacterService initialCharacterService = mock(InitialCharacterService.class);
-    private final LuckMissionReadService luckMissionReadService = mock(LuckMissionReadService.class);
+    private final LuckkidsMissionReadService luckkidsMissionReadService = mock(LuckkidsMissionReadService.class);
 
     @Override
     protected Object initController() {
-        return new InitialSettingController(initialSettingService, initialCharacterService, luckMissionReadService);
+        return new InitialSettingController(initialSettingService, initialCharacterService, luckkidsMissionReadService);
     }
 
     @DisplayName("사용자 초기세팅 API")
@@ -249,7 +249,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void getLuckMission() throws Exception {
         // given
-        given(luckMissionReadService.getLuckMissions())
+        given(luckkidsMissionReadService.getLuckMissions())
             .willReturn(
                 List.of(
                     createMissionResponse(MissionType.HEALTH, "일찍일어나기", LocalTime.of(1, 0)),
@@ -285,8 +285,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    private LuckMissionResponse createMissionResponse(MissionType missionType, String description, LocalTime alertTime){
-        return LuckMissionResponse.builder()
+    private LuckkidsMissionResponse createMissionResponse(MissionType missionType, String description, LocalTime alertTime){
+        return LuckkidsMissionResponse.builder()
             .missionType(missionType)
             .description(description)
             .alertTime(alertTime)
