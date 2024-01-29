@@ -45,6 +45,11 @@ include::api/mail/mail.adoc[]
 
 include::api/friend/friend.adoc[]
 
+[[FriendCode-API]]
+== FriendCode API
+
+include::api/friendCode/friendCode.adoc[]
+
 [[Notice-API]]
 == Notice API
 
