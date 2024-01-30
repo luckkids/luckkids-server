@@ -3,6 +3,7 @@ package com.luckkids.domain.user;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
+import com.luckkids.domain.userCharacter.Level;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.jwt.dto.JwtToken;
 import jakarta.persistence.*;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Entity
 @Getter
@@ -42,8 +45,6 @@ public class User extends BaseTimeEntity {
 
     private int missionCount;
 
-    private int characterCount;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
@@ -54,7 +55,7 @@ public class User extends BaseTimeEntity {
     private List<UserCharacter> userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, String nickname, String luckPhrase, Role role, SettingStatus settingStatus, int missionCount, int characterCount) {
+    private User(String email, String password, SnsType snsType, String nickname, String luckPhrase, Role role, SettingStatus settingStatus, int missionCount) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
@@ -63,7 +64,6 @@ public class User extends BaseTimeEntity {
         this.role = role;
         this.settingStatus = settingStatus;
         this.missionCount = missionCount;
-        this.characterCount = characterCount;
     }
 
     public void CheckSnsType(SnsType snsType) {
@@ -98,9 +98,21 @@ public class User extends BaseTimeEntity {
             );
     }
 
-    public int updateMissionCount(int count) {
+    public int calculateLevelBasedOnRemainingMissions() {
+        int count = this.calculateRemainingMissions();
+        return Level.getLevelByScore(count);
+    }
+
+    public int calculateRemainingMissions() {
+        if (missionCount <= 0) {
+            throw new RuntimeException("missionCount가 0이거나 음수입니다.");
+        }
+        int remainder = missionCount % LEVEL_MAX.getScoreThreshold();
+        return remainder == 0 ? LEVEL_MAX.getScoreThreshold() : remainder;
+    }
+
+    public void updateMissionCount(int count) {
         missionCount += count;
-        return missionCount;
     }
 
     public void updateLuckPhrase(String luckPhrase) {

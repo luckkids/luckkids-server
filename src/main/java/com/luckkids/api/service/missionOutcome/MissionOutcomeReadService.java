@@ -17,9 +17,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MissionOutcomeReadService {
 
     private final MissionOutcomeRepository missionOutcomeRepository;

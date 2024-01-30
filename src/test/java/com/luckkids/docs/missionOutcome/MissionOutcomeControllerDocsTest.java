@@ -5,6 +5,7 @@ import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRe
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -42,17 +43,19 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
         return new MissionOutcomeController(missionOutcomeService, missionOutcomeReadService);
     }
 
-    @DisplayName("등록되어있는 미션결과를 수정하는 API")
+    @DisplayName("등록되어있는 미션결과를 수정하는 API (레벨업 O)")
     @Test
     @WithMockUser(roles = "USER")
-    void updateMissionOutcome() throws Exception {
+    void updateMissionOutcomeWithLevelUp_O() throws Exception {
         // given
         MissionOutcomeUpdateRequest request = MissionOutcomeUpdateRequest.builder()
             .missionStatus(SUCCEED)
             .build();
 
         given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
-            .willReturn(100);
+            .willReturn(
+                MissionOutcomeUpdateResponse.of(true, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png")
+            );
 
         // when // then
         mockMvc.perform(
@@ -62,7 +65,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("missionOutcome-update",
+            .andDo(document("missionOutcome-update-levelUp_O",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 pathParameters(
@@ -80,8 +83,66 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.NUMBER)
-                        .description("지금까지 성공한 미션의 개수")
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
+                        .description("레벨업 여부"),
+                    fieldWithPath("data.lottieFile").type(JsonFieldType.STRING)
+                        .description("레벨업한 캐릭터 로티 파일"),
+                    fieldWithPath("data.imageFile").type(JsonFieldType.STRING)
+                        .description("레벨업한 캐릭터 이미지 파일")
+                )
+            ));
+    }
+
+    @DisplayName("등록되어있는 미션결과를 수정하는 API (레벨업 X)")
+    @Test
+    @WithMockUser(roles = "USER")
+    void updateMissionOutcomeWithLevelUp_X() throws Exception {
+        // given
+        MissionOutcomeUpdateRequest request = MissionOutcomeUpdateRequest.builder()
+            .missionStatus(SUCCEED)
+            .build();
+
+        given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
+            .willReturn(
+                MissionOutcomeUpdateResponse.of(false, null, null)
+            );
+
+        // when // then
+        mockMvc.perform(
+                patch("/api/v1/missionOutcomes/{missionOutcomeId}", 1L)
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("missionOutcome-update-levelUp_X",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("missionOutcomeId")
+                        .description("미션결과 ID")
+                ),
+                requestFields(
+                    fieldWithPath("missionStatus").type(JsonFieldType.STRING)
+                        .description("미션 성공 여부. 가능한 값: " + Arrays.toString(MissionStatus.values()))
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
+                        .description("레벨업 여부"),
+                    fieldWithPath("data.lottieFile").type(JsonFieldType.NULL)
+                        .description("레벨업한 캐릭터 로티 파일"),
+                    fieldWithPath("data.imageFile").type(JsonFieldType.NULL)
+                        .description("레벨업한 캐릭터 이미지 파일")
                 )
             ));
     }

@@ -1,23 +1,37 @@
 package com.luckkids.domain.luckkidsCharacter;
 
 import com.luckkids.domain.BaseTimeEntity;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"character_type", "level"}))
 public class LuckkidsCharacter extends BaseTimeEntity {
 
-    @EmbeddedId
-    private CharacterId characterId;
-    private String file;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "character_type")
+    private CharacterType characterType;
+
+    private int level;
+
+    private String lottieFile;
+
+    private String imageFile;
 
     @Builder
-    private LuckkidsCharacter(String file, CharacterId characterId) {
-        this.file = file;
-        this.characterId = characterId;
+    public LuckkidsCharacter(CharacterType characterType, int level, String lottieFile, String imageFile) {
+        this.characterType = characterType;
+        this.level = level;
+        this.lottieFile = lottieFile;
+        this.imageFile = imageFile;
     }
 }

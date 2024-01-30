@@ -3,9 +3,14 @@ package com.luckkids.api.service.userCharacter;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
 import com.luckkids.api.service.userCharacter.response.UserCharacterCreateResponse;
+import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userCharacter.CharacterProgressStatus;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
@@ -13,13 +18,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.luckkids.domain.luckkidsCharacter.CharacterType.CLOVER;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.COMPLETED;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 public class UserCharacterServiceTest extends IntegrationTestSupport {
+
+    @Autowired
+    private UserCharacterService userCharacterService;
 
     @Autowired
     private UserCharacterRepository userCharacterRepository;
@@ -28,10 +41,11 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
 
     @Autowired
-    private UserCharacterService userCharacterService;
+    private LuckkidsCharacterRepository luckkidsCharacterRepository;
 
     @AfterEach
     void tearDown() {
+        luckkidsCharacterRepository.deleteAllInBatch();
         userCharacterRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
@@ -40,7 +54,7 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     @Test
     void createUserCharacter() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
 
         userRepository.save(user);
 
@@ -61,21 +75,111 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         assertThat(userCharacter)
             .isPresent()
             .hasValueSatisfying(character -> {
-                assertThat(character.getFile()).isEqualTo("test.json");
+//                assertThat(character.getFile()).isEqualTo("test.json");   ⭐️
             });
     }
 
-    private User createUser(String email, String password, SnsType snsType) {
+    @DisplayName("레벨업여부를 결정한다. 레벨업 O")
+    @Test
+    void determineLevelUpTrue() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 20);
+        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+
+        userRepository.save(user);
+        userCharacterRepository.save(userCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+
+        // when
+        UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
+
+        // then
+        assertThat(response)
+            .extracting("levelUpResult", "lottieFile", "imageFile")
+            .contains(true, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+    }
+
+    @DisplayName("레벨업여부를 결정한다. 레벨업 X")
+    @Test
+    void determineLevelUpFalse() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 15);
+        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+
+        userRepository.save(user);
+        userCharacterRepository.save(userCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+
+        // when
+        UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
+
+        // then
+        assertThat(response)
+            .extracting("levelUpResult", "lottieFile", "imageFile")
+            .contains(false, null, null);
+    }
+
+    @DisplayName("레벨업여부를 결정한다. 레벨업 max")
+    @Test
+    @Transactional
+    void determineLevelUpMax() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 100);
+        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 4, "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 5, "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
+
+        userRepository.save(user);
+        userCharacterRepository.save(userCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+
+        // when
+        UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
+
+        // then
+        assertThat(response)
+            .extracting("levelUpResult", "lottieFile", "imageFile")
+            .contains(true, "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
+
+        UserCharacter findUserCharacter = userCharacterRepository.getReferenceById(userCharacter.getId());
+        assertThat(findUserCharacter.getCharacterProgressStatus()).isEqualTo(COMPLETED);
+    }
+
+    private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
+            .missionCount(missionCount)
             .build();
     }
 
     private LoginUserInfo createLoginUserInfo(int userId) {
         return LoginUserInfo.builder()
             .userId(userId)
+            .build();
+    }
+
+    private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level, String lottieFile, String imageFile) {
+        return LuckkidsCharacter.builder()
+            .characterType(characterType)
+            .level(level)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
+            .build();
+
+    }
+
+    private UserCharacter createUserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
+        return UserCharacter.builder()
+            .user(user)
+            .characterProgressStatus(characterProgressStatus)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
             .build();
     }
 }

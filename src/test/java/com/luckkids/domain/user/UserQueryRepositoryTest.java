@@ -30,7 +30,7 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
         User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구");
         userRepository.save(user);
 
-        UserCharacter userCharacter = createUserCharacter(user, 1, "캐릭터1.json");
+        UserCharacter userCharacter = createUserCharacter(user, "https://test.cloudfront.net/캐릭터1.json", "https://test.cloudfront.net/캐릭터1.png");
         userCharacterRepository.save(userCharacter);
 
         // when
@@ -38,9 +38,9 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "imageFileUrl", "characterCount")
             .contains(
-                user.getId(), "테스트1", "테스트1의 행운문구", "캐릭터1.json", 0
+                user.getId(), "테스트1", "테스트1의 행운문구", "https://test.cloudfront.net/캐릭터1.png", 0
             );
     }
 
@@ -54,15 +54,14 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
             .missionCount(0)
-            .characterCount(0)
             .build();
     }
 
-    private UserCharacter createUserCharacter(User user, int level, String fileName) {
+    private UserCharacter createUserCharacter(User user, String lottieFile, String imageFile) {
         return UserCharacter.builder()
             .user(user)
-            .level(level)
-            .file(fileName)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
             .build();
     }
 }

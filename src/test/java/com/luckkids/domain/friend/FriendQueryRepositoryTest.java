@@ -41,8 +41,8 @@ class FriendQueryRepositoryTest extends IntegrationTestSupport {
         User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구");
         userRepository.saveAll(List.of(user1, user2));
 
-        UserCharacter userCharacter1 = createUserCharacter(user1, 1, "캐릭터1.json");
-        UserCharacter userCharacter2 = createUserCharacter(user2, 1, "캐릭터2.json");
+        UserCharacter userCharacter1 = createUserCharacter(user1, "https://test.cloudfront.net/캐릭터1.json", "https://test.cloudfront.net/캐릭터1.png");
+        UserCharacter userCharacter2 = createUserCharacter(user2, "https://test.cloudfront.net/캐릭터2.json", "https://test.cloudfront.net/캐릭터2.png");
         userCharacterRepository.saveAll(List.of(userCharacter1, userCharacter2));
 
         Friend friend = createFriend(user1, user2);
@@ -60,9 +60,9 @@ class FriendQueryRepositoryTest extends IntegrationTestSupport {
         // then
         List<FriendProfileDto> friendList = friendPagingList.getContent();
         assertThat(friendList)
-            .extracting("friendId", "nickname", "luckPhrase", "fileUrl", "characterCount")
+            .extracting("friendId", "nickname", "luckPhrase", "imageFileUrl", "characterCount")
             .contains(
-                tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0)
+                tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "https://test.cloudfront.net/캐릭터2.png", 0)
             );
     }
 
@@ -76,15 +76,14 @@ class FriendQueryRepositoryTest extends IntegrationTestSupport {
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
             .missionCount(0)
-            .characterCount(0)
             .build();
     }
 
-    private UserCharacter createUserCharacter(User user, int level, String fileName) {
+    private UserCharacter createUserCharacter(User user, String lottieFile, String imageFile) {
         return UserCharacter.builder()
             .user(user)
-            .level(level)
-            .file(fileName)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
             .build();
     }
 

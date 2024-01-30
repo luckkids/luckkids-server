@@ -18,6 +18,7 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserCharacterRepository userCharacterRepository;
 
@@ -33,10 +34,10 @@ public class UserCharacterRepositoryTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         UserCharacter userCharacter = UserCharacter.builder()
-            .characterNickname("test")
-            .file("test.json")
-            .level(1)
-            .user(user)
+//            .characterNickname("test")    ⭐️
+//            .file("https://test.cloudfront.net/test.json")
+//            .level(1)
+//            .user(user)
             .build();
 
         UserCharacter savedUserCharacter = userCharacterRepository.save(userCharacter);

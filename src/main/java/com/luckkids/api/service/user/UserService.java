@@ -22,11 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserRepository userRepository;
+
     private final UserReadService userReadService;
     private final SecurityService securityService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserRepository userRepository;
     private final List<UserDeleteService> userDeleteServices;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
@@ -51,10 +53,7 @@ public class UserService {
         return UserWithdrawResponse.of(userId);
     }
 
-    public int updateMissionCount(MissionStatus missionStatus) {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        User user = userReadService.findByOne(userId);
-
-        return user.updateMissionCount(missionStatus.getValue());
+    public void updateMissionCount(MissionStatus missionStatus, User user) {
+        user.updateMissionCount(missionStatus.getValue());
     }
 }

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LuckMissionReadService {
 
     private final LuckkidsMissionRepository luckkidsMissionRepository;
@@ -22,3 +22,4 @@ public class LuckMissionReadService {
         return luckMission.stream().map(LuckMissionResponse::of).collect(Collectors.toList());
     }
 }
+

@@ -21,9 +21,9 @@ public class InitialCharacterRandResponse {
 
     public static InitialCharacterRandResponse of(LuckkidsCharacter character, String cloudFrontUrl) {
         return InitialCharacterRandResponse.builder()
-            .characterName(character.getCharacterId().getCharacterName())
-            .fileName(character.getFile())
-            .fileUrl(cloudFrontUrl + character.getFile())
+//            .characterName(character.getCharacterId().getCharacterName()) ⭐️
+//            .fileName(character.getFile())
+//            .imageFileUrl(cloudFrontUrl + character.getFile())
             .build();
     }
 }

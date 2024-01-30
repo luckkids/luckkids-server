@@ -9,7 +9,6 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.push.PushReadService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
@@ -89,7 +88,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
             .characterNickname("럭키즈")
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .build();
 
         List<InitialSettingMissionServiceRequest> initialSettingMissionServiceRequests = new ArrayList<>();
@@ -128,7 +127,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         assertThat(savedUser.getSettingStatus()).isEqualTo(COMPLETE);
 
         assertThat(initialSettingCharacterResponse).extracting("characterNickname", "fileName")
-            .containsExactly("럭키즈", "test.json");
+            .containsExactly("럭키즈", "https://test.cloudfront.net/test.json");
 
         assertThat(initialSettingMissionResponse).hasSize(10)
             .extracting("missionDescription", "alertStatus", "alertTime")
@@ -159,7 +158,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
                 .build());
     }
 
-    private Push createPush(User user){
+    private Push createPush(User user) {
         return Push.builder()
             .deviceId("testDeviceId")
             .user(user)

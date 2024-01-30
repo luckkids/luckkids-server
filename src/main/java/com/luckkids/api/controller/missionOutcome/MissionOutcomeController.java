@@ -5,6 +5,7 @@ import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRe
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class MissionOutcomeController {
     private final MissionOutcomeReadService missionOutcomeReadService;
 
     @PatchMapping("/api/v1/missionOutcomes/{missionOutcomeId}")
-    public ApiResponse<Integer> updateMissionOutcome(@PathVariable Long missionOutcomeId,
-                                                     @Valid @RequestBody MissionOutcomeUpdateRequest request) {
+    public ApiResponse<MissionOutcomeUpdateResponse> updateMissionOutcome(@PathVariable Long missionOutcomeId,
+                                                                          @Valid @RequestBody MissionOutcomeUpdateRequest request) {
         return ApiResponse.ok(missionOutcomeService.updateMissionOutcome(missionOutcomeId, request.getMissionStatus()));
     }
 

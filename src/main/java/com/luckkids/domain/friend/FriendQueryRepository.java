@@ -29,8 +29,8 @@ public class FriendQueryRepository {
                 friend.receiver.id,
                 friend.receiver.nickname,
                 friend.receiver.luckPhrase,
-                userCharacter.file,
-                user.characterCount
+                userCharacter.imageFile,
+                user.missionCount
             ))
             .from(friend)
             .join(friend.receiver, user)

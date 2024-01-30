@@ -25,9 +25,9 @@ public class UserCharacterCreateResponse {
 
     public static UserCharacterCreateResponse of(UserCharacter userCharacter) {
         return UserCharacterCreateResponse.builder()
-            .id(userCharacter.getId())
-            .fileName(userCharacter.getFile())
-            .characterNickname(userCharacter.getCharacterNickname())
+//            .id(userCharacter.getId())    ⭐️
+//            .fileName(userCharacter.getFile())
+//            .characterNickname(userCharacter.getCharacterNickname())
             .build();
     }
 

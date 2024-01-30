@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class UserCharacter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,21 +19,27 @@ public class UserCharacter {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private int level;
+    @Enumerated(EnumType.STRING)
+    private CharacterProgressStatus characterProgressStatus;
 
-    private String characterNickname;   // ⭐️ 삭제 해야함 !!!
+    private String lottieFile;
 
-    private String file;
+    private String imageFile;
 
     @Builder
-    private UserCharacter(User user, int level, String characterNickname, String file) {
+    public UserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
         this.user = user;
-        this.level = level;
-        this.characterNickname = characterNickname;
-        this.file = file;
+        this.characterProgressStatus = characterProgressStatus;
+        this.lottieFile = lottieFile;
+        this.imageFile = imageFile;
     }
 
-    public void changeUser(User user) {
-        this.user = user;
+    public void completeCharacter() {
+        this.characterProgressStatus = CharacterProgressStatus.COMPLETED;
+    }
+
+    public void updateFiles(String lottieFile, String imageFile) {
+        this.lottieFile = lottieFile;
+        this.imageFile = imageFile;
     }
 }

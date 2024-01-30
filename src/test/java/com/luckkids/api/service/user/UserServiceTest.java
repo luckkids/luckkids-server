@@ -86,7 +86,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     void changePasswordTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
         userRepository.save(user);
 
         UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest = UserUpdatePasswordServiceRequest.builder()
@@ -119,7 +119,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Test
     @Transactional
     void updatePhraseTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
         userRepository.save(user);
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
@@ -141,8 +141,8 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Transactional
     void withdrawUser() {
         //given user
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
-        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
+        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL, 0);
         userRepository.saveAll(List.of(user, user2));
 
         given(securityService.getCurrentLoginUserInfo())
@@ -217,29 +217,12 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(findRefreshToken.isEmpty()).isTrue();
     }
 
-    @DisplayName("미션 실패_성공 카운트를 업데이트 한다.")
-    @Test
-    void updateMissionCount() {
-        // given
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
-        userRepository.save(user);
-
-        given(securityService.getCurrentLoginUserInfo())
-            .willReturn(createLoginUserInfo(user.getId()));
-
-        // when
-        userService.updateMissionCount(SUCCEED);
-
-        // then
-        User getUser = userRepository.findById(user.getId()).get();
-        assertThat(getUser.getMissionCount()).isEqualTo(1);
-    }
-
-    private User createUser(String email, String password, SnsType snsType) {
+    private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
+            .missionCount(missionCount)
             .build();
     }
 

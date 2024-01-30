@@ -49,14 +49,14 @@ class FriendReadServiceTest extends IntegrationTestSupport {
     @Test
     void getFriendList() {
         // given
-        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구");
-        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구");
-        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구");
+        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 100);
+        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 151);
+        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 200);
         userRepository.saveAll(List.of(user1, user2, user3));
 
-        UserCharacter userCharacter1 = createUserCharacter(user1, 1, "캐릭터1.json");
-        UserCharacter userCharacter2 = createUserCharacter(user2, 1, "캐릭터2.json");
-        UserCharacter userCharacter3 = createUserCharacter(user3, 1, "캐릭터2.json");
+        UserCharacter userCharacter1 = createUserCharacter(user1, "https://test.cloudfront.net/캐릭터1.json", "https://test.cloudfront.net/캐릭터1.png");
+        UserCharacter userCharacter2 = createUserCharacter(user2, "https://test.cloudfront.net/캐릭터2.json", "https://test.cloudfront.net/캐릭터2.png");
+        UserCharacter userCharacter3 = createUserCharacter(user3, "https://test.cloudfront.net/캐릭터2.json", "https://test.cloudfront.net/캐릭터2.png");
         userCharacterRepository.saveAll(List.of(userCharacter1, userCharacter2, userCharacter3));
 
         Friend friend1 = createFriend(user1, user2);
@@ -78,19 +78,19 @@ class FriendReadServiceTest extends IntegrationTestSupport {
         // then
         MyProfileDto myProfile = response.getMyProfile();
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "imageFileUrl", "characterCount")
             .containsExactlyInAnyOrder(
-                user1.getId(), "테스트1", "테스트1의 행운문구", "캐릭터1.json", 0
+                user1.getId(), "테스트1", "테스트1의 행운문구", "https://test.cloudfront.net/캐릭터1.png", 1
             );
 
         PageCustom<FriendProfileDto> friendPagingList = response.getFriendList();
 
         List<FriendProfileDto> friendList = friendPagingList.getContent();
         assertThat(friendList)
-            .extracting("friendId", "nickname", "luckPhrase", "fileUrl", "characterCount")
+            .extracting("friendId", "nickname", "luckPhrase", "imageFileUrl", "characterCount")
             .containsExactlyInAnyOrder(
-                tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0),
-                tuple(user3.getId(), "테스트3", "테스트3의 행운문구", "캐릭터2.json", 0)
+                tuple(user2.getId(), "테스트2", "테스트2의 행운문구", "https://test.cloudfront.net/캐릭터2.png", 1),
+                tuple(user3.getId(), "테스트3", "테스트3의 행운문구", "https://test.cloudfront.net/캐릭터2.png", 2)
             );
 
         PageableCustom pageInfo = friendPagingList.getPageInfo();
@@ -103,16 +103,16 @@ class FriendReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자의 친구가 없을 시 빈리스트를 반환한다.")
     @Test
-    void readListWithoutFriend() {
+    void getFriendListWithoutFriend() {
         // given
-        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구");
-        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구");
-        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구");
+        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
+        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 0);
         userRepository.saveAll(List.of(user1, user2, user3));
 
-        UserCharacter userCharacter1 = createUserCharacter(user1, 1, "캐릭터1.json");
-        UserCharacter userCharacter2 = createUserCharacter(user2, 1, "캐릭터2.json");
-        UserCharacter userCharacter3 = createUserCharacter(user3, 1, "캐릭터2.json");
+        UserCharacter userCharacter1 = createUserCharacter(user1, "https://test.cloudfront.net/캐릭터1.json", "https://test.cloudfront.net/캐릭터1.png");
+        UserCharacter userCharacter2 = createUserCharacter(user2, "https://test.cloudfront.net/캐릭터2.json", "https://test.cloudfront.net/캐릭터2.png");
+        UserCharacter userCharacter3 = createUserCharacter(user3, "https://test.cloudfront.net/캐릭터2.json", "https://test.cloudfront.net/캐릭터3.png");
         userCharacterRepository.saveAll(List.of(userCharacter1, userCharacter2, userCharacter3));
 
         Friend friend1 = createFriend(user1, user2);
@@ -133,9 +133,9 @@ class FriendReadServiceTest extends IntegrationTestSupport {
         // then
         MyProfileDto myProfile = response.getMyProfile();
         assertThat(myProfile)
-            .extracting("myId", "nickname", "luckPhrase", "fileUrl", "characterCount")
+            .extracting("myId", "nickname", "luckPhrase", "imageFileUrl", "characterCount")
             .contains(
-                user2.getId(), "테스트2", "테스트2의 행운문구", "캐릭터2.json", 0
+                user2.getId(), "테스트2", "테스트2의 행운문구", "https://test.cloudfront.net/캐릭터2.png", 0
             );
 
         PageCustom<FriendProfileDto> friendPagingList = response.getFriendList();
@@ -151,7 +151,7 @@ class FriendReadServiceTest extends IntegrationTestSupport {
             );
     }
 
-    private User createUser(String email, String password, String nickname, String luckPhrase) {
+    private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
@@ -160,16 +160,15 @@ class FriendReadServiceTest extends IntegrationTestSupport {
             .luckPhrase(luckPhrase)
             .role(Role.USER)
             .settingStatus(SettingStatus.COMPLETE)
-            .missionCount(0)
-            .characterCount(0)
+            .missionCount(missionCount)
             .build();
     }
 
-    private UserCharacter createUserCharacter(User user, int level, String fileName) {
+    private UserCharacter createUserCharacter(User user, String lottieFile, String imageFile) {
         return UserCharacter.builder()
             .user(user)
-            .level(level)
-            .file(fileName)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
             .build();
     }
 

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import static com.luckkids.domain.missionOutcome.SuccessChecked.FIRST_CHECKED;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -26,16 +28,24 @@ public class MissionOutcome extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MissionStatus missionStatus;
 
+    @Enumerated(EnumType.STRING)
+    private SuccessChecked successChecked;
+
     private LocalDate missionDate;
 
     @Builder
-    private MissionOutcome(Mission mission, MissionStatus missionStatus, LocalDate missionDate) {
+    private MissionOutcome(Mission mission, MissionStatus missionStatus, SuccessChecked successChecked, LocalDate missionDate) {
         this.mission = mission;
         this.missionStatus = missionStatus;
+        this.successChecked = successChecked;
         this.missionDate = missionDate;
     }
 
     public void updateMissionStatus(MissionStatus missionStatus) {
         this.missionStatus = missionStatus;
+    }
+
+    public void updateSuccessChecked() {
+        successChecked = FIRST_CHECKED;
     }
 }

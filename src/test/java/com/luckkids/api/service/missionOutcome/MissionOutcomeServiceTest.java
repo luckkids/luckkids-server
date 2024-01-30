@@ -2,6 +2,10 @@ package com.luckkids.api.service.missionOutcome;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
@@ -11,6 +15,9 @@ import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userCharacter.CharacterProgressStatus;
+import com.luckkids.domain.userCharacter.UserCharacter;
+import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,9 +29,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static com.luckkids.domain.luckkidsCharacter.CharacterType.CLOVER;
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.missionOutcome.SuccessChecked.UNCHECKED;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -42,11 +51,19 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserCharacterRepository userCharacterRepository;
+
+    @Autowired
+    private LuckkidsCharacterRepository luckkidsCharacterRepository;
+
     @AfterEach
     void tearDown() {
         missionOutcomeRepository.deleteAllInBatch();
+        userCharacterRepository.deleteAllInBatch();
         missionRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
+        luckkidsCharacterRepository.deleteAllInBatch();
     }
 
     @DisplayName("mission을 받아 미션결과 데이터를 생성한다.")
@@ -54,8 +71,8 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Transactional
     void createMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
 
         userRepository.save(user);
         missionRepository.save(mission);
@@ -81,8 +98,8 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void updateMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
         userRepository.save(user);
@@ -105,31 +122,72 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트하고 결과를 확인한다.")
+    @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트하고 결과를 확인한다. (레벨업 O)")
     @Test
-    void updateMissionOutcomeStatusByIdAndVerifyResult() {
+    void updateMissionOutcomeStatusByIdAndVerifyResult_O() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 19);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
         MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
+
+        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
 
         userRepository.save(user);
         missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
+        userCharacterRepository.save(userCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
-        int count1 = missionOutcomeService.updateMissionOutcome(missionOutcome1.getId(), SUCCEED);
-        int count2 = missionOutcomeService.updateMissionOutcome(missionOutcome2.getId(), SUCCEED);
+        MissionOutcomeUpdateResponse response = missionOutcomeService.updateMissionOutcome(missionOutcome1.getId(), SUCCEED);
 
         // then
-        assertThat(count1).isEqualTo(1);
-        assertThat(count2).isEqualTo(2);
+        assertThat(response)
+            .extracting("levelUpResult", "lottieFile", "imageFile")
+            .contains(true, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
     }
+
+    @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트하고 결과를 확인한다. (레벨업 X)")
+    @Test
+    void updateMissionOutcomeStatusByIdAndVerifyResult_X() {
+        // given
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
+        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
+        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
+        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
+
+        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+
+        userRepository.save(user);
+        missionRepository.save(mission);
+        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
+
+        userCharacterRepository.save(userCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
+
+        // when
+        MissionOutcomeUpdateResponse response = missionOutcomeService.updateMissionOutcome(missionOutcome1.getId(), SUCCEED);
+
+        // then
+        assertThat(response)
+            .extracting("levelUpResult", "lottieFile", "imageFile")
+            .contains(false, null, null);
+    }
+
 
     @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트 할 때 id가 없으면 예외가 발생한다.")
     @Test
@@ -147,8 +205,8 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void updateMissionOutcomeWithExceptionMissionStatus() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
         userRepository.save(user);
@@ -167,8 +225,8 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void deleteMissionOutcome() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
+        Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
 
         userRepository.save(user);
@@ -184,11 +242,12 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
     }
 
-    private User createUser(String email, String password, SnsType snsType) {
+    private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
+            .missionCount(missionCount)
             .build();
     }
 
@@ -206,12 +265,32 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
             .mission(mission)
             .missionDate(missionDate)
             .missionStatus(FAILED)
+            .successChecked(UNCHECKED)
             .build();
     }
 
     private LoginUserInfo createLoginUserInfo(int userId) {
         return LoginUserInfo.builder()
             .userId(userId)
+            .build();
+    }
+
+    private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level, String lottieFile, String imageFile) {
+        return LuckkidsCharacter.builder()
+            .characterType(characterType)
+            .level(level)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
+            .build();
+
+    }
+
+    private UserCharacter createUserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
+        return UserCharacter.builder()
+            .user(user)
+            .characterProgressStatus(characterProgressStatus)
+            .lottieFile(lottieFile)
+            .imageFile(imageFile)
             .build();
     }
 }
