@@ -32,7 +32,7 @@ public class MissionOutcomeReadService {
             .orElseThrow(() -> new IllegalArgumentException("해당 미션결과는 없습니다. id = " + id));
     }
 
-    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
+    public List<MissionOutcomeResponse> getMissionOutcomeDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId, missionDate)
             .stream()

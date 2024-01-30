@@ -32,7 +32,7 @@ public class MissionOutcomeController {
     @GetMapping("/api/v1/missionOutcomes")
     public ApiResponse<List<MissionOutcomeResponse>> getMissionDetailListForStatus(@RequestParam(required = false) MissionStatus missionStatus) {
 
-        return ApiResponse.ok(missionOutcomeReadService.getMissionDetailListForStatus(ofNullable(missionStatus), now()));
+        return ApiResponse.ok(missionOutcomeReadService.getMissionOutcomeDetailListForStatus(ofNullable(missionStatus), now()));
     }
 
 }

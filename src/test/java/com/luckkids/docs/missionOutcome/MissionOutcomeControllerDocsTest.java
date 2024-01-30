@@ -152,7 +152,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void getMissionDetailListForStatus() throws Exception {
         // given
-        given(missionOutcomeReadService.getMissionDetailListForStatus(empty(), now()))
+        given(missionOutcomeReadService.getMissionOutcomeDetailListForStatus(empty(), now()))
             .willReturn(
                 List.of(
                     createMissionOutcomeResponse(1L, "운동하기", LocalTime.of(19, 0), SUCCEED),

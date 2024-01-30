@@ -103,7 +103,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
-        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionDetailListForStatus(empty(), LocalDate.of(2023, 10, 25));
+        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionOutcomeDetailListForStatus(empty(), LocalDate.of(2023, 10, 25));
 
         // then
         assertThat(missionOutcomeResponses).hasSize(2)
