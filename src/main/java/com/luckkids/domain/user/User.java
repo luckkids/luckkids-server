@@ -66,7 +66,7 @@ public class User extends BaseTimeEntity {
         this.missionCount = missionCount;
     }
 
-    public void CheckSnsType(SnsType snsType) {
+    public void checkSnsType(SnsType snsType) {
         if (!this.snsType.equals(snsType)) {
             this.snsType.checkSnsType();
         }
@@ -93,7 +93,7 @@ public class User extends BaseTimeEntity {
                 existPush -> existPush.updatePushToken(pushToken),
                 () -> {
                     Push push = Push.of(deviceId, this, pushToken);
-                    push.setUser(this);
+                    push.updateUser(this);
                 }
             );
     }

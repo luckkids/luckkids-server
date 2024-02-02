@@ -52,7 +52,7 @@ public class LoginService {
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
 
-        user.CheckSnsType(SnsType.NORMAL);                                     //SNS가입여부확인
+        user.checkSnsType(SnsType.NORMAL);                                     //SNS가입여부확인
 
         if (!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())) {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
@@ -80,7 +80,7 @@ public class LoginService {
                     .build()
             ));
 
-        user.CheckSnsType(snsType);              //SNS가입여부확인
+        user.checkSnsType(snsType);              //SNS가입여부확인
 
         return OAuthLoginResponse.of(user, setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey()));
     }
