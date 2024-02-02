@@ -29,7 +29,7 @@ public class FriendQueryRepository {
                 friend.receiver.id,
                 friend.receiver.nickname,
                 friend.receiver.luckPhrase,
-                userCharacter.imageFile,
+                userCharacter.luckkidsCharacter.imageFile,
                 user.missionCount
             ))
             .from(friend)

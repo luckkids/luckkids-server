@@ -24,7 +24,7 @@ class NoticeReadServiceTest extends IntegrationTestSupport {
     private NoticeReadService noticeReadService;
 
     @Autowired
-    private NoticeService noticeService;
+    private NoticeService noticeService; // ⭐️ 이 부분은 테스트 코드 분리하는 게 좋을 것 같습니다 !
 
     @Autowired
     private NoticeRepository noticeRepository;

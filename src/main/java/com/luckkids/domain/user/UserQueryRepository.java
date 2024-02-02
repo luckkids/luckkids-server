@@ -21,7 +21,7 @@ public class UserQueryRepository {
                 user.id,
                 user.nickname,
                 user.luckPhrase,
-                userCharacter.imageFile,
+                userCharacter.luckkidsCharacter.imageFile,
                 user.missionCount
             ))
             .from(user)

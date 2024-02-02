@@ -5,6 +5,7 @@ import com.luckkids.api.service.withdrawReason.request.WithdrawReasonCreateServi
 import com.luckkids.api.service.withdrawReason.response.WithdrawReasonCreateResponse;
 import com.luckkids.domain.withdrawReason.WithdrawReason;
 import com.luckkids.domain.withdrawReason.WithdrawReasonRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WithdrawReasonServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private WithdrawReasonRepository withdrawReasonRepository;
+    private WithdrawReasonService withdrawReasonService;
 
     @Autowired
-    private WithdrawReasonService withdrawReasonService;
+    private WithdrawReasonRepository withdrawReasonRepository;
+
+    @AfterEach
+    void tearDown() {
+        withdrawReasonRepository.deleteAllInBatch();
+    }
 
     @Test
     @DisplayName("탈퇴사유를 저장한다.")

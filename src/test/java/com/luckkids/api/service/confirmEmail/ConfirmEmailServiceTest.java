@@ -5,7 +5,6 @@ import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
 import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
 import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
-import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.confirmEmail.ConfirmEmail;
 import com.luckkids.domain.confirmEmail.ConfirmEmailRepository;
 import com.luckkids.domain.confirmEmail.ConfirmStatus;
@@ -24,13 +23,10 @@ public class ConfirmEmailServiceTest extends IntegrationTestSupport {
     private ConfirmEmailService confirmEmailService;
 
     @Autowired
+    private ConfirmEmailReadService confirmEmailReadService;    // ⭐️ 이 부분은 테스트 코드 (Read) 분리하는 게 좋을 것 같습니다 !
+
+    @Autowired
     private ConfirmEmailRepository confirmEmailRepository;
-
-    @Autowired
-    private ConfirmEmailReadService confirmEmailReadService;
-
-    @Autowired
-    private SecurityService securityService;
 
     @AfterEach
     void tearDown() {

@@ -7,7 +7,6 @@ import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
-import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,9 +50,5 @@ public class UserService {
         }
         userRepository.deleteById(userId);
         return UserWithdrawResponse.of(userId);
-    }
-
-    public void updateMissionCount(MissionStatus missionStatus, User user) {
-        user.updateMissionCount(missionStatus.getValue());
     }
 }

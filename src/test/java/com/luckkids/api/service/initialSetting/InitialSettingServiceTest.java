@@ -44,10 +44,10 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     private InitialSettingService initialSettingService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserReadService userReadService;
 
     @Autowired
-    private UserReadService userReadService;
+    private UserRepository userRepository;
 
     @Autowired
     private AlertSettingRepository alertSettingRepository;

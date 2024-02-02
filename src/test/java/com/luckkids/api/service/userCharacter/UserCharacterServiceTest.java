@@ -45,8 +45,8 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
-        luckkidsCharacterRepository.deleteAllInBatch();
         userCharacterRepository.deleteAllInBatch();
+        luckkidsCharacterRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
@@ -84,13 +84,13 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpTrue() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 20);
-        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
         LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
         LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
-        userCharacterRepository.save(userCharacter);
         luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+        userCharacterRepository.save(userCharacter);
 
         // when
         UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
@@ -106,13 +106,13 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpFalse() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 15);
-        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
         LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
         LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
-        userCharacterRepository.save(userCharacter);
         luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+        userCharacterRepository.save(userCharacter);
 
         // when
         UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
@@ -129,13 +129,13 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpMax() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 100);
-        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
         LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 4, "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
         LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 5, "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
-        userCharacterRepository.save(userCharacter);
         luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+        userCharacterRepository.save(userCharacter);
 
         // when
         UserCharacterLevelUpResponse response = userCharacterService.determineLevelUp(user);
@@ -174,12 +174,11 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     }
 
-    private UserCharacter createUserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
+    private UserCharacter createUserCharacter(User user, LuckkidsCharacter luckkidsCharacter, CharacterProgressStatus characterProgressStatus) {
         return UserCharacter.builder()
             .user(user)
+            .luckkidsCharacter(luckkidsCharacter)
             .characterProgressStatus(characterProgressStatus)
-            .lottieFile(lottieFile)
-            .imageFile(imageFile)
             .build();
     }
 }

@@ -3,12 +3,12 @@ package com.luckkids.api.service.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
-import com.luckkids.api.service.login.request.LoginServiceRequest;
-import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.feign.google.response.GoogleUserInfoResponse;
 import com.luckkids.api.feign.kakao.response.KakaoUserInfoResponse;
+import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
+import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
+import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
@@ -42,16 +42,22 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private LoginService loginService;
+
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PushRepository pushRepository;
+
     @Autowired
     private UserReadService userReadService;
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     private JwtTokenGenerator jwtTokenGenerator;
 
@@ -326,7 +332,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .snsType(SnsType.KAKAO)
             .build();
 
-        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+        OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
         assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
         assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
@@ -356,7 +362,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .snsType(SnsType.GOOGLE)
             .build();
 
-        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+        OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
         assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
         assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
@@ -366,7 +372,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @DisplayName("카카오 로그인을 할 시 이미 등록되어있는 이메일이라면 예외가 발생한다.")
     @Test
     @Transactional
-    void oauthKakaoLoginExistTest(){
+    void oauthKakaoLoginExistTest() {
         // given
         User user = createUser("test@test.com", "1234", SnsType.GOOGLE);
 
@@ -414,7 +420,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .snsType(SnsType.KAKAO)
             .build();
 
-        OAuthLoginResponse oAuthLoginResponse =  loginService.oauthLogin(oAuthLoginServiceRequest);
+        OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
         User user = userReadService.findByEmail("test@test.com");
 
@@ -423,7 +429,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
         assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
-    User createUser(String email, String password, SnsType snsType){
+    User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
             .password(bCryptPasswordEncoder.encode(password))
@@ -431,7 +437,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    RefreshToken createRefreshToken(User user, String refreshToken){
+    RefreshToken createRefreshToken(User user, String refreshToken) {
         return RefreshToken.builder()
             .user(user)
             .deviceId("testDeviceId")

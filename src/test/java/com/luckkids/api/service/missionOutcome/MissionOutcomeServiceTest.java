@@ -60,10 +60,10 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @AfterEach
     void tearDown() {
         missionOutcomeRepository.deleteAllInBatch();
-        userCharacterRepository.deleteAllInBatch();
         missionRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
+        userCharacterRepository.deleteAllInBatch();
         luckkidsCharacterRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("mission을 받아 미션결과 데이터를 생성한다.")
@@ -132,16 +132,15 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
         MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
 
-        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter, IN_PROGRESS);
 
         userRepository.save(user);
         missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
+        luckkidsCharacterRepository.save(luckkidsCharacter);
         userCharacterRepository.save(userCharacter);
-        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
@@ -165,16 +164,15 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
         MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
 
-        UserCharacter userCharacter = createUserCharacter(user, IN_PROGRESS, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter, IN_PROGRESS);
 
         userRepository.save(user);
         missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
+        luckkidsCharacterRepository.save(luckkidsCharacter);
         userCharacterRepository.save(userCharacter);
-        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
@@ -285,12 +283,11 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
     }
 
-    private UserCharacter createUserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
+    private UserCharacter createUserCharacter(User user, LuckkidsCharacter luckkidsCharacter, CharacterProgressStatus characterProgressStatus) {
         return UserCharacter.builder()
             .user(user)
+            .luckkidsCharacter(luckkidsCharacter)
             .characterProgressStatus(characterProgressStatus)
-            .lottieFile(lottieFile)
-            .imageFile(imageFile)
             .build();
     }
 }

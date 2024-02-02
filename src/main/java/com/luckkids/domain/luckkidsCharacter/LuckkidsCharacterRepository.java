@@ -8,4 +8,5 @@ public interface LuckkidsCharacterRepository extends JpaRepository<LuckkidsChara
 
     List<LuckkidsCharacter> findAllByLevel(int level);
 
+    LuckkidsCharacter findByCharacterTypeAndLevel(CharacterType characterType, int level);
 }

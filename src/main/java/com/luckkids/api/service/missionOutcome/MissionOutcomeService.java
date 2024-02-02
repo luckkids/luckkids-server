@@ -4,7 +4,6 @@ import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServi
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
 import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
@@ -30,7 +29,6 @@ public class MissionOutcomeService {
     private final MissionOutcomeReadService missionOutcomeReadService;
     private final UserCharacterService userCharacterService;
     private final UserReadService userReadService;
-    private final UserService userService;
     private final SecurityService securityService;
 
     public void createMissionOutcome(MissionOutcomeCreateServiceRequest request) {
@@ -44,7 +42,7 @@ public class MissionOutcomeService {
 
         missionOutcome.updateMissionStatus(missionStatus);
         User user = getCurrentUser();
-        userService.updateMissionCount(missionStatus, user);
+        user.updateMissionCount(missionStatus.getValue());
 
         return updateMissionStatusAndCheckLevelUp(missionOutcome, missionStatus, user);
     }
@@ -66,7 +64,7 @@ public class MissionOutcomeService {
 
     private MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome, MissionStatus missionStatus, User user) {
         if (missionStatus == SUCCEED && missionOutcome.getSuccessChecked() == UNCHECKED) {
-            missionOutcome.updateSuccessChecked();
+            missionOutcome.updateFirstSuccessChecked();
             UserCharacterLevelUpResponse userCharacterLevelUpResponse = userCharacterService.determineLevelUp(user);
             return userCharacterLevelUpResponse.toMissionOutcomeUpdateResponse();
         }

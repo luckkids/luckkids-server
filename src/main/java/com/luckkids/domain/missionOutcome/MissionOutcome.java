@@ -45,7 +45,7 @@ public class MissionOutcome extends BaseTimeEntity {
         this.missionStatus = missionStatus;
     }
 
-    public void updateSuccessChecked() {
+    public void updateFirstSuccessChecked() {
         successChecked = FIRST_CHECKED;
     }
 }

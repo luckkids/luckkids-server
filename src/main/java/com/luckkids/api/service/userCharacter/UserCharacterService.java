@@ -5,8 +5,8 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
 import com.luckkids.api.service.userCharacter.response.UserCharacterCreateResponse;
 import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
-import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterQueryRepository;
-import com.luckkids.domain.luckkidsCharacter.projection.LuckkidsCharacterDto;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Service
@@ -22,7 +23,7 @@ import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 public class UserCharacterService {
 
     private final UserCharacterRepository userCharacterRepository;
-    private final LuckkidsCharacterQueryRepository luckkidsCharacterQueryRepository;
+    private final LuckkidsCharacterRepository luckkidsCharacterRepository;
 
     private final UserReadService userReadService;
     private final SecurityService securityService;
@@ -42,18 +43,20 @@ public class UserCharacterService {
             return UserCharacterLevelUpResponse.of(false, null, null);
         }
 
-        LuckkidsCharacterDto luckkidsCharacter = luckkidsCharacterQueryRepository.findCharacterByLevel(level, user.getId());
-        UserCharacter userCharacter = userCharacterRepository.getReferenceById(luckkidsCharacter.userCharacterId());
+        UserCharacter userCharacter = userCharacterRepository.findByCharacterProgressStatus(IN_PROGRESS);
+        LuckkidsCharacter LevelUpLuckkidsCharacter = luckkidsCharacterRepository.findByCharacterTypeAndLevel(
+            userCharacter.getLuckkidsCharacter().getCharacterType(), level
+        );
 
-        return handleCharacterLevelUp(userCharacter, luckkidsCharacter, level);
+        return handleCharacterLevelUpUserCharacter(userCharacter, LevelUpLuckkidsCharacter, level);
     }
 
-    private UserCharacterLevelUpResponse handleCharacterLevelUp(UserCharacter userCharacter, LuckkidsCharacterDto luckkidsCharacter, int level) {
+    private UserCharacterLevelUpResponse handleCharacterLevelUpUserCharacter(UserCharacter userCharacter, LuckkidsCharacter LevelUpLuckkidsCharacter, int level) {
         if (level == LEVEL_MAX.getLevel()) {
-            userCharacter.completeCharacter();
+            userCharacter.updateCompleteCharacter();
             // createRandomLevelOneCharacters(); // TODO: 추후 로직 추가 예정 create random 1_level 캐릭터들 로직 생성시 추가 ! ⭐️
         }
-        userCharacter.updateFiles(luckkidsCharacter.lottieFile(), luckkidsCharacter.imageFile());
-        return UserCharacterLevelUpResponse.of(true, luckkidsCharacter.lottieFile(), luckkidsCharacter.imageFile());
+        userCharacter.updateLuckkidsCharacter(LevelUpLuckkidsCharacter);
+        return UserCharacterLevelUpResponse.of(true, LevelUpLuckkidsCharacter.getLottieFile(), LevelUpLuckkidsCharacter.getImageFile());
     }
 }

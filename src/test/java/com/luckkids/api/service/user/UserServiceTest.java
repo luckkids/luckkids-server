@@ -52,7 +52,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserService userService;    // ⭐️ 이 부분은 테스트 코드 분리하는 게 좋을 것 같습니다 !
 
     @Autowired
     private UserReadService userReadService;
@@ -80,6 +80,13 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
+        alertSettingRepository.deleteAllInBatch();
+        alertHistoryRepository.deleteAllInBatch();
+        pushRepository.deleteAllInBatch();
+        friendRepository.deleteAllInBatch();
+        missionOutcomeRepository.deleteAllInBatch();
+        missionRepository.deleteAllInBatch();
+        refreshTokenRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 

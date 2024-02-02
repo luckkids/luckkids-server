@@ -1,5 +1,6 @@
 package com.luckkids.domain.userCharacter;
 
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,27 +20,24 @@ public class UserCharacter {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LuckkidsCharacter luckkidsCharacter;
+
     @Enumerated(EnumType.STRING)
     private CharacterProgressStatus characterProgressStatus;
 
-    private String lottieFile;
-
-    private String imageFile;
-
     @Builder
-    public UserCharacter(User user, CharacterProgressStatus characterProgressStatus, String lottieFile, String imageFile) {
+    public UserCharacter(User user, CharacterProgressStatus characterProgressStatus, LuckkidsCharacter luckkidsCharacter) {
         this.user = user;
         this.characterProgressStatus = characterProgressStatus;
-        this.lottieFile = lottieFile;
-        this.imageFile = imageFile;
+        this.luckkidsCharacter = luckkidsCharacter;
     }
 
-    public void completeCharacter() {
+    public void updateCompleteCharacter() {
         this.characterProgressStatus = CharacterProgressStatus.COMPLETED;
     }
 
-    public void updateFiles(String lottieFile, String imageFile) {
-        this.lottieFile = lottieFile;
-        this.imageFile = imageFile;
+    public void updateLuckkidsCharacter(LuckkidsCharacter luckkidsCharacter) {
+        this.luckkidsCharacter = luckkidsCharacter;
     }
 }
