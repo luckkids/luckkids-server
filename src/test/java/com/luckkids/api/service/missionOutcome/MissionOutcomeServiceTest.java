@@ -126,20 +126,21 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
     @Test
     void updateMissionOutcomeStatusByIdAndVerifyResult_O() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 19);
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 24);
         Mission mission = createMission(user, "운동하기", AlertStatus.UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26));
         MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27));
         MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 28));
 
-        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
-        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter, IN_PROGRESS);
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
+        UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
         missionRepository.save(mission);
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
 
-        luckkidsCharacterRepository.save(luckkidsCharacter);
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
         userCharacterRepository.save(userCharacter);
 
         given(securityService.getCurrentLoginUserInfo())
@@ -151,7 +152,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
         // then
         assertThat(response)
             .extracting("levelUpResult", "lottieFile", "imageFile")
-            .contains(true, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+            .contains(true, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
     }
 
     @DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트하고 결과를 확인한다. (레벨업 X)")

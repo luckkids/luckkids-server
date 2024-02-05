@@ -83,9 +83,9 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     @Test
     void determineLevelUpTrue() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 20);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 25);
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
@@ -98,16 +98,16 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         // then
         assertThat(response)
             .extracting("levelUpResult", "lottieFile", "imageFile")
-            .contains(true, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+            .contains(true, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
     }
 
     @DisplayName("레벨업여부를 결정한다. 레벨업 X")
     @Test
     void determineLevelUpFalse() {
         // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 15);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 0, "https://test.cloudfront.net/test0.json", "https://test.cloudfront.net/test0.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 10);
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);

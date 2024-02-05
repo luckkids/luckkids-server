@@ -256,13 +256,13 @@ public class UserTest extends IntegrationTestSupport {
     @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산하여 레벨을 가져온다. 레벨있음.")
     @Test
     void calculateLevelBasedOnRemainingMissionsLevelUp_O() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 20);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 25);
 
         // when
         int level = user.calculateLevelBasedOnRemainingMissions();
 
         // then
-        assertThat(level).isEqualTo(1);
+        assertThat(level).isEqualTo(2);
     }
 
     @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산하여 레벨을 가져온다. 레벨없음.")

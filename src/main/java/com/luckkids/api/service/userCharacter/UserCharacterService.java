@@ -9,12 +9,13 @@ import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.userCharacter.UserCharacter;
+import com.luckkids.domain.userCharacter.UserCharacterQueryRepository;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
+import com.luckkids.domain.userCharacter.projection.UserInProgressCharacterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Service
@@ -23,6 +24,7 @@ import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 public class UserCharacterService {
 
     private final UserCharacterRepository userCharacterRepository;
+    private final UserCharacterQueryRepository userCharacterQueryRepository;
     private final LuckkidsCharacterRepository luckkidsCharacterRepository;
 
     private final UserReadService userReadService;
@@ -43,12 +45,12 @@ public class UserCharacterService {
             return UserCharacterLevelUpResponse.of(false, null, null);
         }
 
-        UserCharacter userCharacter = userCharacterRepository.findByCharacterProgressStatus(IN_PROGRESS);
+        UserInProgressCharacterDto inProgressCharacters = userCharacterQueryRepository.findInProgressCharacterByUserId(user.getId());
         LuckkidsCharacter LevelUpLuckkidsCharacter = luckkidsCharacterRepository.findByCharacterTypeAndLevel(
-            userCharacter.getLuckkidsCharacter().getCharacterType(), level
+            inProgressCharacters.luckkidsCharacter().getCharacterType(), level
         );
 
-        return handleCharacterLevelUpUserCharacter(userCharacter, LevelUpLuckkidsCharacter, level);
+        return handleCharacterLevelUpUserCharacter(inProgressCharacters.userCharacter(), LevelUpLuckkidsCharacter, level);
     }
 
     private UserCharacterLevelUpResponse handleCharacterLevelUpUserCharacter(UserCharacter userCharacter, LuckkidsCharacter LevelUpLuckkidsCharacter, int level) {
