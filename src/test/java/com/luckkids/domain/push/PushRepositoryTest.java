@@ -22,7 +22,7 @@ public class PushRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자의 푸시목록을 삭제한다.")
-    void deleteTest(){
+    void deleteTest() {
         User user = User.builder()
             .email("test@email.com")
             .password("1234")
@@ -37,7 +37,7 @@ public class PushRepositoryTest extends IntegrationTestSupport {
             .user(user)
             .build();
 
-        Push savedPush =  pushRepository.save(push);
+        Push savedPush = pushRepository.save(push);
         pushRepository.deleteAllByUserId(user.getId());
 
         Optional<Push> findPush = pushRepository.findById(savedPush.getDeviceId());

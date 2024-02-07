@@ -2,7 +2,6 @@ package com.luckkids.api.service.luckkidsCharacter;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
-import com.luckkids.domain.luckkidsCharacter.CharacterId;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -33,7 +32,7 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
         });
 
         IntStream.rangeClosed(1, 4).forEach(i -> {
-            LuckkidsCharacter luckkidsCharacter = createCharacterlevel2(i);
+            LuckkidsCharacter luckkidsCharacter = createCharacterLevel2(i);
             luckkidsCharacterRepository.save(luckkidsCharacter);
         });
     }
@@ -49,36 +48,36 @@ public class InitialCharacterServiceTest extends IntegrationTestSupport {
         List<InitialCharacterRandResponse> initialCharacterRandResponses = initialCharacterService.findAllByCharacterIdLevel1();
 
         assertThat(initialCharacterRandResponses).hasSize(4)
-            .extracting("characterName", "fileName", "fileUrl")
+            .extracting("characterName", "fileName", "imageFileUrl")
             .containsExactlyInAnyOrder(
-                tuple("테스트1", "test1.json", "https://d1i0as5mndfs61.cloudfront.net/test1.json"),
-                tuple("테스트2", "test2.json", "https://d1i0as5mndfs61.cloudfront.net/test2.json"),
-                tuple("테스트3", "test3.json", "https://d1i0as5mndfs61.cloudfront.net/test3.json"),
-                tuple("테스트4", "test4.json", "https://d1i0as5mndfs61.cloudfront.net/test4.json")
+                tuple("테스트1", "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.json"),
+                tuple("테스트2", "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.json"),
+                tuple("테스트3", "https://test.cloudfront.net/test3.json", "https://test.cloudfront.net/test3.json"),
+                tuple("테스트4", "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.json")
             );
     }
 
     LuckkidsCharacter createCharacter(int i) {
         return LuckkidsCharacter.builder()
-            .file("test" + i + ".json")
-            .characterId(
-                CharacterId.builder()
-                    .level(1)
-                    .characterName("테스트" + i)
-                    .build()
-            )
+//            .file("test" + i + ".json")   ⭐️
+//            .characterId(
+//                CharacterId.builder()
+//                    .level(1)
+//                    .characterName("테스트" + i)
+//                    .build()
+//            )
             .build();
     }
 
-    LuckkidsCharacter createCharacterlevel2(int i) {
+    LuckkidsCharacter createCharacterLevel2(int i) {
         return LuckkidsCharacter.builder()
-            .file("테스트2" + i + ".json")
-            .characterId(
-                CharacterId.builder()
-                    .level(2)
-                    .characterName("테스트2" + i)
-                    .build()
-            )
+//            .file("테스트2" + i + ".json")   ⭐️
+//            .characterId(
+//                CharacterId.builder()
+//                    .level(2)
+//                    .characterName("테스트2" + i)
+//                    .build()
+//            )
             .build();
     }
 

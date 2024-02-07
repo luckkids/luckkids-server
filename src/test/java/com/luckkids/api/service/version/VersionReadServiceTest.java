@@ -19,7 +19,7 @@ class VersionReadServiceTest extends IntegrationTestSupport {
     private VersionReadService versionReadService;
 
     @Autowired
-    private VersionService versionService;
+    private VersionService versionService;  // ⭐️ 이 부분은 테스트 코드 (Read) 분리하는 게 좋을 것 같습니다 !
 
     @Autowired
     private VersionRepository versionRepository;

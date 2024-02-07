@@ -20,9 +20,9 @@ public class InitialCharacterService {
     private String cloudFrontUrl;
 
     public List<InitialCharacterRandResponse> findAllByCharacterIdLevel1() {
-        return luckkidsCharacterRepository.findAllByCharacterIdLevel(1)
+        return luckkidsCharacterRepository.findAllByLevel(1)
             .stream()
-            .map(character -> InitialCharacterRandResponse.of(character, cloudFrontUrl))
+            .map(character -> InitialCharacterRandResponse.of(character, cloudFrontUrl)) // ⭐️ cloudFrontUrl 안 쓰게 수정필요 !
             .toList();
     }
 

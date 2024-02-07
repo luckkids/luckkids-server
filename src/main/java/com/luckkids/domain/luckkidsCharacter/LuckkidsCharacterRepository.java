@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LuckkidsCharacterRepository extends JpaRepository<LuckkidsCharacter, CharacterId> {
+public interface LuckkidsCharacterRepository extends JpaRepository<LuckkidsCharacter, Integer> {
 
-    List<LuckkidsCharacter> findAllByCharacterIdLevel(int level);
+    List<LuckkidsCharacter> findAllByLevel(int level);
 
+    LuckkidsCharacter findByCharacterTypeAndLevel(CharacterType characterType, int level);
 }

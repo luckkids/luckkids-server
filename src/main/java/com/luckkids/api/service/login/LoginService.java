@@ -52,7 +52,7 @@ public class LoginService {
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
         User user = userReadService.findByEmail(loginServiceRequest.getEmail());     //1. 회원조회
 
-        user.loginCheckSnsType(SnsType.NORMAL);                                     //SNS가입여부확인
+        user.checkSnsType(SnsType.NORMAL);                                     //SNS가입여부확인
 
         if (!bCryptPasswordEncoder.matches(loginServiceRequest.getPassword(), user.getPassword())) {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
@@ -80,7 +80,7 @@ public class LoginService {
                     .build()
             ));
 
-        user.loginCheckSnsType(snsType);              //SNS가입여부확인
+        user.checkSnsType(snsType);              //SNS가입여부확인
 
         return OAuthLoginResponse.of(user, setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey()));
     }
@@ -93,7 +93,7 @@ public class LoginService {
         return jwtToken;
     }
 
-    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest){
+    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest) {
         User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
         RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
             .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));

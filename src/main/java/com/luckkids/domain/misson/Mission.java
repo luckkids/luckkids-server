@@ -37,19 +37,20 @@ public class Mission extends BaseTimeEntity {
 
     private LocalTime alertTime;
 
-    private LocalDateTime deletedDate;
-
     private LocalDate push_date;
 
+    private LocalDateTime deletedDate;
+
+
     @Builder
-    private Mission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime deletedDate, LocalDate push_date) {
+    private Mission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDate push_date, LocalDateTime deletedDate) {
         this.user = user;
         this.missionType = missionType;
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
         this.alertTime = alertTime;
-        this.deletedDate = deletedDate;
         this.push_date = push_date;
+        this.deletedDate = deletedDate;
     }
 
     public Mission update(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {

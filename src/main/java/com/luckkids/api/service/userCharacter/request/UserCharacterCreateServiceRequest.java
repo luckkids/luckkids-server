@@ -21,10 +21,10 @@ public class UserCharacterCreateServiceRequest {
 
     public UserCharacter toEntity(User user) {
         return UserCharacter.builder()
-            .user(user)
-            .file(fileName)
-            .characterNickname(characterNickname)
-            .level(1)
+//            .user(user)   ⭐️
+//            .file(fileName)
+//            .characterNickname(characterNickname)
+//            .level(1)
             .build();
     }
 }

@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WithdrawReasonCreateResponse {
 
-    private Long id;
+    private int id;
 
     @Builder
-    private WithdrawReasonCreateResponse(Long id) {
+    private WithdrawReasonCreateResponse(int id) {
         this.id = id;
     }
 
-    public static WithdrawReasonCreateResponse of(WithdrawReason withdrawReason){
+    public static WithdrawReasonCreateResponse of(WithdrawReason withdrawReason) {
         return WithdrawReasonCreateResponse.builder()
             .id(withdrawReason.getId())
             .build();

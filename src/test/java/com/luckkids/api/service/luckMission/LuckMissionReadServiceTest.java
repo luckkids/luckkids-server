@@ -20,6 +20,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private LuckMissionReadService luckMissionReadService;
+    
     @Autowired
     private LuckkidsMissionRepository luckkidsMissionRepository;
 

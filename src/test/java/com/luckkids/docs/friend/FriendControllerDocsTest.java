@@ -50,11 +50,11 @@ public class FriendControllerDocsTest extends RestDocsSupport {
             .size(12)
             .build();
 
-        MyProfileDto myProfile = new MyProfileDto(1, "럭키즈", "행운문구", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 1);
+        MyProfileDto myProfile = new MyProfileDto(1, "럭키즈", "행운문구", "https://test.cloudfront.net/example.png", 1);
 
         List<FriendProfileDto> friendProfileList = List.of(
-            new FriendProfileDto(2, "럭키즈 친구 2", "행운 문구 2", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 1),
-            new FriendProfileDto(3, "럭키즈 친구 3", "행운 문구 3", "https://d1i0as5mndfs61.cloudfront.net/lottie-sample.json", 2)
+            new FriendProfileDto(2, "럭키즈 친구 2", "행운 문구 2", "https://test.cloudfront.net/example.png", 1),
+            new FriendProfileDto(3, "럭키즈 친구 3", "행운 문구 3", "https://test.cloudfront.net/example.png", 2)
         );
 
         PageableCustom pageInfo = PageableCustom.builder()
@@ -110,9 +110,9 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("내 ID"),
                     fieldWithPath("data.myProfile.nickname").type(JsonFieldType.STRING)
                         .description("내 닉네임"),
-                    fieldWithPath("data.myProfile.luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("data.myProfile.luckPhrase").type(JsonFieldType.STRING)
                         .description("내 행운 문구"),
-                    fieldWithPath("data.myProfile.fileUrl").type(JsonFieldType.STRING)
+                    fieldWithPath("data.myProfile.imageFileUrl").type(JsonFieldType.STRING)
                         .description("내 캐릭터 URL"),
                     fieldWithPath("data.myProfile.characterCount").type(JsonFieldType.NUMBER)
                         .description("내 캐릭터 개수"),
@@ -124,9 +124,9 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                         .description("친구 ID"),
                     fieldWithPath("data.friendList.content[].nickname").type(JsonFieldType.STRING)
                         .description("친구 닉네임"),
-                    fieldWithPath("data.friendList.content[].luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("data.friendList.content[].luckPhrase").type(JsonFieldType.STRING)
                         .description("친구의 행운 문구"),
-                    fieldWithPath("data.friendList.content[].fileUrl").type(JsonFieldType.STRING)
+                    fieldWithPath("data.friendList.content[].imageFileUrl").type(JsonFieldType.STRING)
                         .description("친구의 캐릭터 URL"),
                     fieldWithPath("data.friendList.content[].characterCount").type(JsonFieldType.NUMBER)
                         .description("친구의 캐릭터 개수"),

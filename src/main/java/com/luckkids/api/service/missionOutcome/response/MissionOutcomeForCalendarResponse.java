@@ -24,6 +24,10 @@ public class MissionOutcomeForCalendarResponse {
     }
 
     public static MissionOutcomeForCalendarResponse of(LocalDate startDate, LocalDate endDate, List<MissionOutcomeCalenderDto> calender) {
-        return new MissionOutcomeForCalendarResponse(startDate, endDate, calender);
+        return MissionOutcomeForCalendarResponse.builder()
+            .startDate(startDate)
+            .endDate(endDate)
+            .calender(calender)
+            .build();
     }
 }

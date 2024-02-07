@@ -18,49 +18,41 @@ import java.util.List;
 @Entity
 public class Push extends BaseTimeEntity {
 
-	@Id
-	private String deviceId;
+    @Id
+    private String deviceId;
 
-	private String pushToken;
+    private String pushToken;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	private AlertSetting alertSetting;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private AlertSetting alertSetting;
 
-	@OneToMany(mappedBy = "push", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	private List<AlertHistory> alertHistory = new ArrayList<>();
+    @OneToMany(mappedBy = "push", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<AlertHistory> alertHistory = new ArrayList<>();
 
-	@Builder
-	private Push(String deviceId, User user, String pushToken) {
-		this.deviceId = deviceId;
-		this.user = user;
-		this.pushToken = pushToken;
-	}
+    @Builder
+    private Push(String deviceId, User user, String pushToken) {
+        this.deviceId = deviceId;
+        this.user = user;
+        this.pushToken = pushToken;
+    }
 
-	public static Push of(String deviceId, User user, String pushToken){
-		return Push.builder()
-			.deviceId(deviceId)
-			.user(user)
-			.pushToken(pushToken)
-			.build();
-	}
+    public static Push of(String deviceId, User user, String pushToken) {
+        return Push.builder()
+            .deviceId(deviceId)
+            .user(user)
+            .pushToken(pushToken)
+            .build();
+    }
 
-	public void updatePushToken(String pushToken){
-		this.pushToken = pushToken;
-	}
+    public void updatePushToken(String pushToken) {
+        this.pushToken = pushToken;
+    }
 
-	public void setUser(User user){
-		this.user = user;
-		user.getPushes().add(this);
-	}
-
-	public void setAlertSetting(AlertSetting alertSetting){
-		this.alertSetting = alertSetting;
-	}
-
-	public void setAlertHistory(AlertHistory alertHistory){
-		this.alertHistory.add(alertHistory);
-	}
+    public void updateUser(User user) {
+        this.user = user;
+        user.getPushes().add(this);
+    }
 }

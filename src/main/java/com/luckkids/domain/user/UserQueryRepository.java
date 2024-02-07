@@ -20,8 +20,8 @@ public class UserQueryRepository {
             .select(Projections.constructor(MyProfileDto.class,
                 user.id,
                 user.nickname,
-                user.luckPhrases,
-                userCharacter.file,
+                user.luckPhrase,
+                userCharacter.luckkidsCharacter.imageFile,
                 user.missionCount
             ))
             .from(user)

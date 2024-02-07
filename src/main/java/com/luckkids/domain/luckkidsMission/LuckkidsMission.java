@@ -19,7 +19,9 @@ public class LuckkidsMission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String description;
+
     private LocalTime alertTime;
 
     @Builder

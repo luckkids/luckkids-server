@@ -2,15 +2,15 @@ package com.luckkids.docs.user;
 
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.user.request.UserFindEmailRequest;
-import com.luckkids.api.controller.user.request.UserLuckPhrasesRequest;
+import com.luckkids.api.controller.user.request.UserLuckPhraseRequest;
 import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserFindEmailServiceRequest;
-import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
-import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
+import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -46,13 +46,13 @@ public class UserControllerDocsTest extends RestDocsSupport {
     @Test
     void createMission() throws Exception {
         // given
-        UserLuckPhrasesRequest request = UserLuckPhrasesRequest.builder()
-            .luckPhrases("행운입니다.!")
+        UserLuckPhraseRequest request = UserLuckPhraseRequest.builder()
+            .luckPhrase("행운입니다.!")
             .build();
 
-        given(userService.updatePhrase(any(UserLuckPhrasesServiceRequest.class)))
-            .willReturn(UserLuckPhrasesResponse.builder()
-                .luckPhrases("행운입니다.!")
+        given(userService.updatePhrase(any(UserLuckPhraseServiceRequest.class)))
+            .willReturn(UserLuckPhraseResponse.builder()
+                .luckPhrase("행운입니다.!")
                 .build()
             );
 
@@ -68,7 +68,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    fieldWithPath("luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("luckPhrase").type(JsonFieldType.STRING)
                         .description("행운문구")
                 ),
                 responseFields(
@@ -80,7 +80,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.luckPhrases").type(JsonFieldType.STRING)
+                    fieldWithPath("data.luckPhrase").type(JsonFieldType.STRING)
                         .description("행운문구")
                 )
             ));
@@ -133,6 +133,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 )
             ));
     }
+
     @DisplayName("이메일 SNS타입 확인 API")
     @Test
     void findSnsType() throws Exception {
@@ -173,10 +174,11 @@ public class UserControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
-                        .description("가입한 SNS형식. 가능한 값: "+ Arrays.toString(SnsType.values()))
+                        .description("가입한 SNS형식. 가능한 값: " + Arrays.toString(SnsType.values()))
                 )
             ));
     }
+
     @DisplayName("회원탈퇴 API")
     @Test
     void withdraw() throws Exception {

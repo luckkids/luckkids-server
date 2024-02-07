@@ -33,7 +33,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
             .characterNickname("럭키즈")
-            .fileName("test.json")
+            .fileName("initialSettingControllerTest")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -41,8 +41,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -79,7 +79,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutCharacterName() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .build();
 
         List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
@@ -87,8 +87,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -134,8 +134,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -177,8 +177,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -215,7 +215,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutMissionDescription() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .characterNickname("럭키즈")
             .build();
 
@@ -224,7 +224,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .alertTime(LocalTime.of(0,0))
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -263,7 +263,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutMissionAlertTime() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .characterNickname("럭키즈")
             .build();
 
@@ -272,7 +272,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
+                    .missionDescription(i + "시에 운동하기")
                     .build()
             );
         });
@@ -309,7 +309,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutMissionRequest() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .characterNickname("럭키즈")
             .build();
 
@@ -345,7 +345,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutAlertStatus() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .characterNickname("럭키즈")
             .build();
 
@@ -354,8 +354,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -392,7 +392,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
     void createInitialSettingWithoutAlertRequest() throws Exception {
         // given
         InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
-            .fileName("test.json")
+            .fileName("https://test.cloudfront.net/test.json")
             .characterNickname("럭키즈")
             .build();
 
@@ -401,8 +401,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
-                    .missionDescription(i+"시에 운동하기")
-                    .alertTime(LocalTime.of(0,0))
+                    .missionDescription(i + "시에 운동하기")
+                    .alertTime(LocalTime.of(0, 0))
                     .build()
             );
         });
@@ -438,8 +438,8 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialCharacterRandResponses.add(
                 InitialCharacterRandResponse.builder()
-                    .characterName("테스트"+i)
-                    .fileName("test"+i+".json")
+                    .characterName("테스트" + i)
+                    .fileName("https://test.cloudfront.net/test" + i + ".json")
                     .build()
             );
         });
