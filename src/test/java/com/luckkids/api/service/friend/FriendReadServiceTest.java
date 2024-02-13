@@ -1,6 +1,10 @@
 package com.luckkids.api.service.friend;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.domain.user.Role;
+import com.luckkids.domain.user.SnsType;
+import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.api.page.response.PageCustom;
 import com.luckkids.api.page.response.PageableCustom;

@@ -28,6 +28,8 @@ public class FriendRepositoryTest extends IntegrationTestSupport {
         User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL);
         userRepository.saveAll(List.of(user, user2));
 
+        userRepository.save(user);
+        userRepository.save(user2);
 
         Friend friend = createFriend(user, user2);
         Friend friend2 = createFriend(user2, user);
