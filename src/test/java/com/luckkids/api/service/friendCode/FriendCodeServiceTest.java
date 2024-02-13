@@ -53,6 +53,7 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     @DisplayName("친구코드를 생성한다.")
     @Test
     void inviteCodeTest() {
+        //given
         List<User> users = new ArrayList<>();
 
         IntStream.rangeClosed(1, 2).forEach(i -> {
@@ -65,17 +66,21 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createUserInfo(users.get(0).getId()));
 
+        //when
         FriendInviteCodeResponse friendInviteCodeResponse = friendCodeService.inviteCode();
 
+        //then
         assertThat(friendInviteCodeResponse.getCode().length()).isEqualTo(8);
     }
 
     @DisplayName("친구코드를 생성시 존재하지 않는 사용자일시 에러가 발생한다.")
     @Test
     void inviteCodeWithoutUserTest() {
+        //given
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createUserInfo(1));
 
+        //when, then
         assertThatThrownBy(() -> friendCodeService.inviteCode())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("해당 유저는 없습니다. id = 1");
@@ -84,6 +89,7 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     @DisplayName("친구코드를 입력하여 친구를 등록한다.")
     @Test
     void useFriendCode() {
+        //given
         User user1 = userRepository.save(createUser(1));
         User user2 = userRepository.save(createUser(2));
         given(securityService.getCurrentLoginUserInfo())
@@ -98,8 +104,10 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
             .code(friendInviteCodeResponse.getCode())
             .build();
 
+        //when
         FriendCreateResponse friendCreateResponse = friendCodeService.create(friendCreateServiceRequest);
 
+        //then
         assertThat(friendCreateResponse)
             .extracting("requester", "receiver")
             .contains("test1", "test2");
@@ -109,6 +117,7 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     @Test
     @Transactional
     void useFriendCodAlreadyUsed() {
+        //given
         User user1 = userRepository.save(createUser(1));
         User user2 = userRepository.save(createUser(2));
         given(securityService.getCurrentLoginUserInfo())
@@ -126,6 +135,7 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
             .code(friendInviteCodeResponse.getCode())
             .build();
 
+        //when, then
         assertThatThrownBy(() -> friendCodeService.create(friendCreateServiceRequest))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("이미 사용된 친구코드입니다.");
