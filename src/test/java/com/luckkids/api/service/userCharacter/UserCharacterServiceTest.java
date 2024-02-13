@@ -1,6 +1,7 @@
 package com.luckkids.api.service.userCharacter;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
 import com.luckkids.api.service.userCharacter.response.UserCharacterCreateResponse;
 import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
@@ -14,7 +15,9 @@ import com.luckkids.domain.userCharacter.CharacterProgressStatus;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,9 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     @Autowired
     private LuckkidsCharacterRepository luckkidsCharacterRepository;
 
+    @Autowired
+    private LuckkidsCharacterReadService luckkidsCharacterReadService;
+
     @AfterEach
     void tearDown() {
         userCharacterRepository.deleteAllInBatch();
@@ -52,31 +58,33 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     @DisplayName("사용자가 선택한 캐릭터를 저장한다.")
     @Test
+    @Transactional
     void createUserCharacter() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 0);
-
         userRepository.save(user);
+
+        LuckkidsCharacter luckkidsCharacter = createCharacter(CharacterType.SUN);
+        luckkidsCharacterRepository.save(luckkidsCharacter);
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         UserCharacterCreateServiceRequest userCharacterCreateServiceRequest = UserCharacterCreateServiceRequest.builder()
-            .fileName("test.json")
+            .id(luckkidsCharacter.getId())
+            .nickName("럭키즈!")
             .build();
 
         UserCharacterCreateResponse userCharacterCreateResponse = userCharacterService.createUserCharacter(userCharacterCreateServiceRequest);
 
         // then
-        assertThat(userCharacterCreateResponse.getFileName()).isEqualTo("test.json");
+        assertThat(userCharacterCreateResponse.getNickName()).isEqualTo("럭키즈!");
 
-        Optional<UserCharacter> userCharacter = userCharacterRepository.findById(userCharacterCreateResponse.getId());
+        LuckkidsCharacter findLuckkidsCharacter = luckkidsCharacterReadService.findById(luckkidsCharacter.getId());
+        UserCharacter userCharacter = userCharacterRepository.findById(userCharacterCreateResponse.getId()).get();
 
-        assertThat(userCharacter)
-            .isPresent()
-            .hasValueSatisfying(character -> {
-//                assertThat(character.getFile()).isEqualTo("test.json");   ⭐️
-            });
+        assertThat(userCharacter.getLuckkidsCharacter()).extracting("id", "characterType", "level", "lottieFile", "imageFile")
+            .contains(findLuckkidsCharacter.getId(), findLuckkidsCharacter.getCharacterType(), findLuckkidsCharacter.getLevel(), findLuckkidsCharacter.getLottieFile(), findLuckkidsCharacter.getImageFile());
     }
 
     @DisplayName("레벨업여부를 결정한다. 레벨업 O")
@@ -181,4 +189,14 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
             .characterProgressStatus(characterProgressStatus)
             .build();
     }
+
+    private LuckkidsCharacter createCharacter(CharacterType characterType) {
+        return LuckkidsCharacter.builder()
+            .characterType(characterType)
+            .level(1)
+            .lottieFile("test.json")
+            .imageFile("test.png")
+            .build();
+    }
+
 }

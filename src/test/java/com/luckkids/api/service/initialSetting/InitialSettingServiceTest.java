@@ -11,6 +11,9 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingMissionRes
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.push.Push;
@@ -20,6 +23,7 @@ import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +68,9 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     @Autowired
     private PushRepository pushRepository;
 
+    @Autowired
+    private LuckkidsCharacterRepository luckkidsCharacterRepository;
+
     @AfterEach
     void tearDown() {
         userCharacterRepository.deleteAllInBatch();
@@ -73,7 +80,6 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         pushRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
-
     @DisplayName("사용자의 초기세팅 데이터를 저장한다.")
     @Test
     @Transactional
@@ -83,12 +89,14 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         Push push = createPush(user);
         pushRepository.save(push);
 
+        LuckkidsCharacter luckkidsCharacter = luckkidsCharacterRepository.save(createCharacter(CharacterType.SUN));
+
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
-            .characterNickname("럭키즈")
-            .fileName("https://test.cloudfront.net/test.json")
+            .id(luckkidsCharacter.getId())
+            .nickName("럭키즈!!")
             .build();
 
         List<InitialSettingMissionServiceRequest> initialSettingMissionServiceRequests = new ArrayList<>();
@@ -126,8 +134,8 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
         assertThat(savedUser.getSettingStatus()).isEqualTo(COMPLETE);
 
-        assertThat(initialSettingCharacterResponse).extracting("characterNickname", "fileName")
-            .containsExactly("럭키즈", "https://test.cloudfront.net/test.json");
+        assertThat(initialSettingCharacterResponse).extracting("lottieFile", "nickName")
+            .containsExactly("test.json", "럭키즈!!");
 
         assertThat(initialSettingMissionResponse).hasSize(10)
             .extracting("missionDescription", "alertStatus", "alertTime")
@@ -169,6 +177,15 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
     private LoginUserInfo createLoginUserInfo(int userId) {
         return LoginUserInfo.builder()
             .userId(userId)
+            .build();
+    }
+
+    private LuckkidsCharacter createCharacter(CharacterType characterType) {
+        return LuckkidsCharacter.builder()
+            .characterType(characterType)
+            .level(1)
+            .lottieFile("test.json")
+            .imageFile("test.png")
             .build();
     }
 }

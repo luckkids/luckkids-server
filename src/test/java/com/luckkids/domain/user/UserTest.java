@@ -277,6 +277,20 @@ public class UserTest extends IntegrationTestSupport {
         assertThat(level).isEqualTo(0);
     }
 
+    @DisplayName("유저 닉네임을 수정한다.")
+    @Test
+    void updateNickName() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 15);
+        userRepository.save(user);
+        // when
+        user.updateNickName("럭키즈!!!!!");
+
+        User findUser = userReadService.findByOne(user.getId());
+
+        // then
+        assertThat(findUser.getNickname()).isEqualTo("럭키즈!!!!!");
+    }
+
     private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)

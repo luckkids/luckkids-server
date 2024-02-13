@@ -12,9 +12,10 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingMissionRes
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.luckMission.LuckMissionReadService;
 import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
-import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
-import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
+import com.luckkids.api.service.luckkidsCharacter.response.LuckCharacterRandResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,12 +43,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class InitialSettingControllerDocsTest extends RestDocsSupport {
     private final InitialSettingService initialSettingService = mock(InitialSettingService.class);
-    private final InitialCharacterService initialCharacterService = mock(InitialCharacterService.class);
+    private final LuckkidsCharacterReadService luckkidsCharacterReadService  = mock(LuckkidsCharacterReadService.class);
     private final LuckMissionReadService luckMissionReadService = mock(LuckMissionReadService.class);
 
     @Override
     protected Object initController() {
-        return new InitialSettingController(initialSettingService, initialCharacterService, luckMissionReadService);
+        return new InitialSettingController(initialSettingService, luckkidsCharacterReadService, luckMissionReadService);
     }
 
     @DisplayName("사용자 초기세팅 API")
@@ -56,8 +57,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
     void createInitialSetting() throws Exception {
         // given
         InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
-            .characterNickname("럭키즈")
-            .fileName("test.json")
+            .id(1)
+            .nickName("럭키즈!!")
             .build();
 
         List<InitialSettingMissionServiceRequest> initialSettingMissionServiceRequests = new ArrayList<>();
@@ -84,8 +85,9 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             .build();
 
         InitialSettingCharacterResponse initialSettingCharacterResponse = InitialSettingCharacterResponse.builder()
-            .characterNickname("럭키즈")
-            .fileName("test.json")
+            .id(1)
+            .lottieFile("test.json")
+            .nickName("럭키즈!")
             .build();
 
         List<InitialSettingMissionResponse> initialSettingMissionResponse = Arrays.asList(
@@ -136,10 +138,10 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("알림상태. 가능한값: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("character").type(JsonFieldType.OBJECT)
                         .description("캐릭터설정 요청 데이터"),
-                    fieldWithPath("character.characterNickname").type(JsonFieldType.STRING)
+                    fieldWithPath("character.id").type(JsonFieldType.NUMBER)
+                        .description("럭키즈 캐릭터 ID"),
+                    fieldWithPath("character.nickName").type(JsonFieldType.STRING)
                         .description("캐릭터 닉네임"),
-                    fieldWithPath("character.fileName").type(JsonFieldType.STRING)
-                        .description("캐릭터 파일명"),
                     fieldWithPath("missions[]").type(JsonFieldType.ARRAY)
                         .description("설정미션 요청 데이터"),
                     fieldWithPath("missions[].missionDescription").type(JsonFieldType.STRING)
@@ -170,10 +172,10 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("캐릭터설정 응답 데이터"),
                     fieldWithPath("data.character.id").type(JsonFieldType.NUMBER)
                         .description("캐릭터설정 ID"),
-                    fieldWithPath("data.character.characterNickname").type(JsonFieldType.STRING)
-                        .description("캐릭터 명"),
-                    fieldWithPath("data.character.fileName").type(JsonFieldType.STRING)
-                        .description("캐릭터 파일명"),
+                    fieldWithPath("data.character.lottieFile").type(JsonFieldType.STRING)
+                        .description("캐릭터 lottie 파일 "),
+                    fieldWithPath("data.character.nickName").type(JsonFieldType.STRING)
+                        .description("캐릭터 닉네임"),
                     fieldWithPath("data.missions[]").type(JsonFieldType.ARRAY)
                         .description("설정미션 응답 데이터"),
                     fieldWithPath("data.missions[].missionDescription").type(JsonFieldType.STRING)
@@ -186,27 +188,19 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("초기캐릭터 조회 API")
+    @DisplayName("초기캐릭터 랜덤조회 API")
     @Test
     @WithMockUser(roles = "USER")
     void findAllInitialChracter() throws Exception {
         // given
-
-        List<InitialCharacterRandResponse> initialCharacterRandResponses = Arrays.asList(
-            InitialCharacterRandResponse.builder()
-                .fileName("test1.json")
-                .characterName("테스트1")
-                .fileUrl("https://test.cloudfront.net/test1.json")
-                .build(),
-            InitialCharacterRandResponse.builder()
-                .fileName("test2.json")
-                .characterName("테스트2")
-                .fileUrl("https://test.cloudfront.net/test2.json")
-                .build()
-        );
-
-        given(initialCharacterService.findAllByCharacterIdLevel1())
-            .willReturn(initialCharacterRandResponses);
+        given(luckkidsCharacterReadService.findRandomCharacterLevel1())
+            .willReturn(LuckCharacterRandResponse.builder()
+                .id(1)
+                .characterType(CharacterType.SUN)
+                .level(1)
+                .lottieFile("test.json")
+                .imageFile("test.png")
+                .build());
 
         // when // then
         mockMvc.perform(
@@ -224,14 +218,18 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
-                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data[].characterName").type(JsonFieldType.STRING)
-                        .description("캐릭터명"),
-                    fieldWithPath("data[].fileName").type(JsonFieldType.STRING)
-                        .description("파일명"),
-                    fieldWithPath("data[].imageFileUrl").type(JsonFieldType.STRING)
-                        .description("파일URL")
+                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+                        .description("럭키즈 캐릭터 ID"),
+                    fieldWithPath("data.characterType").type(JsonFieldType.STRING)
+                        .description("럭키즈 캐릭터 종류 가능한값: " + Arrays.toString(CharacterType.values())),
+                    fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+                        .description("럭키즈 캐릭터 레벨"),
+                    fieldWithPath("data.lottieFile").type(JsonFieldType.STRING)
+                        .description("럭키즈 캐릭터 로티파일"),
+                    fieldWithPath("data.imageFile").type(JsonFieldType.STRING)
+                        .description("럭키즈 캐릭터 이미지파일")
                 )
             ));
     }

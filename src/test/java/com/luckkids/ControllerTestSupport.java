@@ -26,7 +26,7 @@ import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.luckMission.LuckMissionReadService;
-import com.luckkids.api.service.luckkidsCharacter.InitialCharacterService;
+import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
@@ -144,6 +144,6 @@ public abstract class ControllerTestSupport {
     protected LuckMissionReadService luckMissionReadService;
 
     @MockBean
-    protected InitialCharacterService initialCharacterService;
+    protected LuckkidsCharacterReadService luckkidsCharacterReadService;
 }
 
