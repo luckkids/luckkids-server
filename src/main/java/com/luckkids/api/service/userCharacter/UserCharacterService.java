@@ -1,5 +1,6 @@
 package com.luckkids.api.service.userCharacter;
 
+import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
@@ -26,7 +27,7 @@ public class UserCharacterService {
     private final UserCharacterRepository userCharacterRepository;
     private final UserCharacterQueryRepository userCharacterQueryRepository;
     private final LuckkidsCharacterRepository luckkidsCharacterRepository;
-
+    private final LuckkidsCharacterReadService luckkidsCharacterReadService;
     private final UserReadService userReadService;
     private final SecurityService securityService;
 
@@ -34,8 +35,12 @@ public class UserCharacterService {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
 
-        UserCharacter userCharacter = request.toEntity(user);
-        return UserCharacterCreateResponse.of(userCharacterRepository.save(userCharacter));
+        user.updateNickName(request.getNickName());
+
+        LuckkidsCharacter luckkidsCharacter = luckkidsCharacterReadService.findById(request.getId());
+
+        UserCharacter userCharacter = request.toEntity(user, luckkidsCharacter);
+        return UserCharacterCreateResponse.of(user, userCharacterRepository.save(userCharacter));
     }
 
     public UserCharacterLevelUpResponse determineLevelUp(User user) {

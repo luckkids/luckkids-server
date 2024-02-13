@@ -1,6 +1,7 @@
 package com.luckkids.api.service.userCharacter.response;
 
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
+import com.luckkids.domain.user.User;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,30 +12,29 @@ import lombok.NoArgsConstructor;
 public class UserCharacterCreateResponse {
 
     private int id;
-    private String fileName;
-    private String characterName;
-    private String characterNickname;
+    private String lottieFile;
+    private String nickName;
 
     @Builder
-    private UserCharacterCreateResponse(int id, String fileName, String characterName, String characterNickname) {
+    private UserCharacterCreateResponse(int id, String lottieFile, String nickName) {
         this.id = id;
-        this.fileName = fileName;
-        this.characterName = characterName;
-        this.characterNickname = characterNickname;
+        this.lottieFile = lottieFile;
+        this.nickName = nickName;
     }
 
-    public static UserCharacterCreateResponse of(UserCharacter userCharacter) {
+    public static UserCharacterCreateResponse of(User user, UserCharacter userCharacter) {
         return UserCharacterCreateResponse.builder()
-//            .id(userCharacter.getId())    ⭐️
-//            .fileName(userCharacter.getFile())
-//            .characterNickname(userCharacter.getCharacterNickname())
+            .id(userCharacter.getId())
+            .lottieFile(userCharacter.getLuckkidsCharacter().getLottieFile())
+            .nickName(user.getNickname())
             .build();
     }
 
     public InitialSettingCharacterResponse toInitialSettingResponse() {
         return InitialSettingCharacterResponse.builder()
-            .fileName(fileName)
-            .characterNickname(characterNickname)
+            .id(id)
+            .lottieFile(lottieFile)
+            .nickName(nickName)
             .build();
     }
 

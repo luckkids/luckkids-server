@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class InitialSettingCharacterResponse {
 
     private int id;
-    private String characterNickname;
-    private String fileName;
+    private String lottieFile;
+    private String nickName;
 
     @Builder
-    private InitialSettingCharacterResponse(int id, String characterNickname, String fileName) {
+    private InitialSettingCharacterResponse(int id, String lottieFile, String nickName) {
         this.id = id;
-        this.characterNickname = characterNickname;
-        this.fileName = fileName;
+        this.lottieFile = lottieFile;
+        this.nickName = nickName;
     }
 }
