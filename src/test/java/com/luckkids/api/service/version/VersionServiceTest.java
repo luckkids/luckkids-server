@@ -2,7 +2,6 @@ package com.luckkids.api.service.version;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.version.request.VersionSaveServiceRequest;
-import com.luckkids.api.service.version.response.VersionResponse;
 import com.luckkids.api.service.version.response.VersionSaveResponse;
 import com.luckkids.domain.version.Version;
 import com.luckkids.domain.version.VersionRepository;
@@ -13,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class VersionReadServiceTest extends IntegrationTestSupport {
+class VersionServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private VersionReadService versionReadService;
+    private VersionService versionService;
 
     @Autowired
     private VersionRepository versionRepository;
@@ -26,22 +25,17 @@ class VersionReadServiceTest extends IntegrationTestSupport {
         versionRepository.deleteAllInBatch();
     }
 
-    @DisplayName(value = "제일 최신버전을 가져온다.")
+    @DisplayName(value = "최신버전을 저장한다.")
     @Test
-    void getVersionTest() {
-        Version version1 = Version.builder()
+    void saveVersionTest() {
+        VersionSaveServiceRequest versionSaveServiceRequest = VersionSaveServiceRequest.builder()
             .versionNum("1.1.2")
             .build();
 
-        Version version2 = Version.builder()
-            .versionNum("1.1.3")
-            .build();
+        VersionSaveResponse versionSaveResponse = versionService.save(versionSaveServiceRequest);
 
-        versionRepository.save(version1);
-        versionRepository.save(version2);
+        Version version = versionRepository.findById(versionSaveResponse.getId()).get();
 
-        VersionResponse versionResponse = versionReadService.getVersion();
-
-        assertThat(versionResponse.getVersionNum()).isEqualTo("1.1.3");
+        assertThat(version.getVersionNum()).isEqualTo("1.1.2");
     }
 }

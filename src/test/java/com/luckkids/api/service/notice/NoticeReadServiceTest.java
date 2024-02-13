@@ -24,9 +24,6 @@ class NoticeReadServiceTest extends IntegrationTestSupport {
     private NoticeReadService noticeReadService;
 
     @Autowired
-    private NoticeService noticeService; // ⭐️ 이 부분은 테스트 코드 분리하는 게 좋을 것 같습니다 !
-
-    @Autowired
     private NoticeRepository noticeRepository;
 
     @AfterEach
@@ -70,22 +67,6 @@ class NoticeReadServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> noticeReadService.getNotice(1))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("존재하지 않는 공지사항입니다.");
-    }
-
-    @DisplayName(value = "공지사항을 저장한다.")
-    @Test
-    void saveNotice() {
-        NoticeSaveServiceRequest noticeSaveServiceRequest = NoticeSaveServiceRequest.builder()
-            .title("공지사항 타이틀")
-            .noticeDescription("공지사항입니다.")
-            .build();
-
-        NoticeSaveResponse savedNotice = noticeService.saveNotice(noticeSaveServiceRequest);
-
-        Notice notice = noticeRepository.findById(savedNotice.getId()).get();
-        assertThat(notice)
-            .extracting("title", "noticeDescription")
-            .contains("공지사항 타이틀", "공지사항입니다.");
     }
 
     Notice createNotice(int i) {

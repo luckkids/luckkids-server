@@ -20,60 +20,47 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
-public class JoinServiceTest extends IntegrationTestSupport {
-
-    @Autowired
-    private JoinService joinService;
+public class JoinReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private UserReadService userReadService;
+    private JoinReadService joinReadService;
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @AfterEach
     void tearDown() {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("회원가입 테스트")
+    @DisplayName("이메일이 이미 등록되었는지 체크한다.")
     @Test
-    void JoinTest() {
-        JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
+    void checkEmailTest() {
+        JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
             .email("tkdrl8908@naver.com")
-            .password("test1234")
             .build();
 
-        JoinResponse response = joinService.joinUser(joinServiceRequest);
+        JoinCheckEmailResponse response = joinReadService.checkEmail(joinCheckEmailServiceRequest);
 
-        assertThat(response)
-            .extracting(
-                "email",
-                "snsType"
-            )
-            .contains(
-                joinServiceRequest.getEmail(),
-                SnsType.NORMAL
-            );
+        assertThat(response.getEmail()).isEqualTo(joinCheckEmailServiceRequest.getEmail());
     }
 
-    @DisplayName("회원가입시 비밀번호가 단방향 암호화가 되었는지 체크한다.")
+    @DisplayName("사용자가 이미 존재 할 경우 예외를 던진다.")
     @Test
-    void JoinTestWithEncryptPassword() {
-        JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
+    void checkEmailIfExistUser() {
+        User user = User.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
+            .snsType(SnsType.NORMAL)
+            .role(Role.USER)
             .build();
 
-        JoinResponse response = joinService.joinUser(joinServiceRequest);
+        userRepository.save(user);
 
-        User user = userReadService.findByEmail(response.getEmail());
-        String password = user.getPassword();
+        JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
+            .email("tkdrl8908@naver.com")
+            .build();
 
-        assertThat(bCryptPasswordEncoder.matches("1234", password)).isTrue();
+        assertThrows(LuckKidsException.class, () -> joinReadService.checkEmail(joinCheckEmailServiceRequest));
     }
 }
