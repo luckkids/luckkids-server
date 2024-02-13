@@ -6,6 +6,7 @@ import com.luckkids.api.controller.initialSetting.request.InitialSettingCharacte
 import com.luckkids.api.controller.initialSetting.request.InitialSettingMissionRequest;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
 import com.luckkids.api.service.luckkidsCharacter.response.InitialCharacterRandResponse;
+import com.luckkids.domain.misson.MissionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -41,6 +42,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
@@ -87,6 +89,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
@@ -134,6 +137,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
@@ -177,6 +181,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
@@ -209,6 +214,54 @@ public class initialSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
+    @DisplayName("사용자의 초기세팅 데이터를 저장시 미션타입은 필수이다.")
+    @Test
+    @WithMockUser("USER")
+    void createInitialSettingWithoutMissionType() throws Exception {
+        // given
+        InitialSettingCharacterRequest initialSettingCharacterRequest = InitialSettingCharacterRequest.builder()
+            .fileName("test.json")
+            .characterNickname("럭키즈")
+            .build();
+
+        List<InitialSettingMissionRequest> initialSettingMissionRequests = new ArrayList<>();
+
+        IntStream.rangeClosed(1, 10).forEach(i -> {
+            initialSettingMissionRequests.add(
+                InitialSettingMissionRequest.builder()
+                    .missionDescription(i+"시에 운동하기")
+                    .alertTime(LocalTime.of(0,0))
+                    .build()
+            );
+        });
+
+        InitialSettingAlertRequest initialSettingAlertRequest = InitialSettingAlertRequest.builder()
+            .deviceId("testDeviceId")
+            .alertStatus(CHECKED)
+            .build();
+
+        InitialSettingRequest request = InitialSettingRequest.builder()
+            .character(initialSettingCharacterRequest)
+            .missions(initialSettingMissionRequests)
+            .alertSetting(initialSettingAlertRequest)
+            .build();
+
+        // when // then
+        mockMvc.perform(
+                post("/api/v1/initialSetting")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.statusCode").value("400"))
+            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("미션 타입은 필수입니다."))
+            .andExpect(jsonPath("$.data").isEmpty());
+    }
+
     @DisplayName("사용자의 초기세팅 데이터를 저장시 미션내용은 필수이다.")
     @Test
     @WithMockUser("USER")
@@ -224,6 +277,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .alertTime(LocalTime.of(0,0))
                     .build()
             );
@@ -272,6 +326,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .build()
             );
@@ -354,6 +409,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
@@ -401,6 +457,7 @@ public class initialSettingControllerTest extends ControllerTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionRequests.add(
                 InitialSettingMissionRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i+"시에 운동하기")
                     .alertTime(LocalTime.of(0,0))
                     .build()
