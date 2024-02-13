@@ -29,6 +29,7 @@ public class LuckCharacterRandResponse {
     public static LuckCharacterRandResponse of(LuckkidsCharacter character) {
         return LuckCharacterRandResponse.builder()
             .id(character.getId())
+            .level(character.getLevel())
             .characterType(character.getCharacterType())
             .lottieFile(character.getLottieFile())
             .imageFile(character.getImageFile())
