@@ -2,10 +2,10 @@ package com.luckkids.api.controller.initialSetting;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
+import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.luckMission.LuckMissionReadService;
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.luckkidsCharacter.response.LuckCharacterRandResponse;
 import jakarta.validation.Valid;
@@ -22,11 +22,11 @@ public class InitialSettingController {
 
     private final InitialSettingService initialSettingService;
     private final LuckkidsCharacterReadService luckkidsCharacterReadService;
-    private final LuckMissionReadService luckMissionReadService;
+    private final LuckkidsMissionReadService luckkidsMissionReadService;
 
     @GetMapping("/luckMission")
-    public ApiResponse<List<LuckMissionResponse>> getLuckMission() {
-        return ApiResponse.ok(luckMissionReadService.getLuckMissions());
+    public ApiResponse<List<LuckkidsMissionResponse>> getLuckMission() {
+        return ApiResponse.ok(luckkidsMissionReadService.getLuckMissions());
     }
 
     @GetMapping("/character")

@@ -19,4 +19,6 @@ public class FriendController {
     public ApiResponse<FriendListResponse> getFriendList(@ModelAttribute PageInfoRequest request) {
         return ApiResponse.ok(friendReadService.getFriendList(request.toServiceRequest()));
     }
+
+
 }

@@ -16,6 +16,7 @@ import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.User;
@@ -104,6 +105,7 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             initialSettingMissionServiceRequests.add(
                 InitialSettingMissionServiceRequest.builder()
+                    .missionType(MissionType.HEALTH)
                     .missionDescription(i + "시에 운동하기")
                     .alertStatus(CHECKED)
                     .alertTime(LocalTime.of(0, 0))
@@ -138,18 +140,18 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
             .containsExactly("test.json", "럭키즈!!");
 
         assertThat(initialSettingMissionResponse).hasSize(10)
-            .extracting("missionDescription", "alertStatus", "alertTime")
+            .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
             .containsExactlyInAnyOrder(
-                tuple("1시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("2시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("3시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("4시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("5시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("6시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("7시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("8시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("9시에 운동하기", CHECKED, LocalTime.of(0, 0)),
-                tuple("10시에 운동하기", CHECKED, LocalTime.of(0, 0))
+                tuple(MissionType.HEALTH, "1시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "2시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "3시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "4시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "5시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "6시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "7시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "8시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "9시에 운동하기", CHECKED, LocalTime.of(0, 0)),
+                tuple(MissionType.HEALTH, "10시에 운동하기", CHECKED, LocalTime.of(0, 0))
             );
 
         assertThat(initialSettingAlertResponse).extracting("entire", "mission", "luck", "notice")

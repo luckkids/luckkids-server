@@ -1,6 +1,8 @@
 package com.luckkids.docs.initialSetting;
 
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
+import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.request.InitialSettingAlertServiceRequest;
 import com.luckkids.api.service.initialSetting.request.InitialSettingCharacterServiceRequest;
@@ -10,13 +12,12 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.luckMission.LuckMissionReadService;
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.luckkidsCharacter.response.LuckCharacterRandResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.misson.MissionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -44,11 +45,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InitialSettingControllerDocsTest extends RestDocsSupport {
     private final InitialSettingService initialSettingService = mock(InitialSettingService.class);
     private final LuckkidsCharacterReadService luckkidsCharacterReadService  = mock(LuckkidsCharacterReadService.class);
-    private final LuckMissionReadService luckMissionReadService = mock(LuckMissionReadService.class);
+
+    private final LuckkidsMissionReadService luckkidsMissionReadService = mock(LuckkidsMissionReadService.class);
 
     @Override
     protected Object initController() {
-        return new InitialSettingController(initialSettingService, luckkidsCharacterReadService, luckMissionReadService);
+        return new InitialSettingController(initialSettingService, luckkidsCharacterReadService, luckkidsMissionReadService);
     }
 
     @DisplayName("사용자 초기세팅 API")
@@ -67,6 +69,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             initialSettingMissionServiceRequests.add(
                 InitialSettingMissionServiceRequest.builder()
                     .missionDescription(i + "시에 운동하기")
+                    .missionType(MissionType.HEALTH)
+                    .missionDescription(i+"시에 운동하기")
                     .alertStatus(CHECKED)
                     .alertTime(LocalTime.of(0, 0))
                     .build()
@@ -92,11 +96,13 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
 
         List<InitialSettingMissionResponse> initialSettingMissionResponse = Arrays.asList(
             InitialSettingMissionResponse.builder()
+                .missionType(MissionType.HEALTH)
                 .missionDescription("1시에 운동하기")
                 .alertStatus(CHECKED)
                 .alertTime(LocalTime.of(0, 0))
                 .build(),
             InitialSettingMissionResponse.builder()
+                .missionType(MissionType.HEALTH)
                 .missionDescription("2시에 운동하기")
                 .alertStatus(CHECKED)
                 .alertTime(LocalTime.of(0, 0))
@@ -144,6 +150,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("캐릭터 닉네임"),
                     fieldWithPath("missions[]").type(JsonFieldType.ARRAY)
                         .description("설정미션 요청 데이터"),
+                    fieldWithPath("missions[].missionType").type(JsonFieldType.STRING)
+                        .description("미션타입. 가능한값: "+Arrays.toString(MissionType.values())),
                     fieldWithPath("missions[].missionDescription").type(JsonFieldType.STRING)
                         .description("미션내용"),
                     fieldWithPath("missions[].alertTime").type(JsonFieldType.STRING)
@@ -178,6 +186,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("캐릭터 닉네임"),
                     fieldWithPath("data.missions[]").type(JsonFieldType.ARRAY)
                         .description("설정미션 응답 데이터"),
+                    fieldWithPath("data.missions[].missionType").type(JsonFieldType.STRING)
+                        .description("미션타입. 가능한값: "+Arrays.toString(MissionType.values())),
                     fieldWithPath("data.missions[].missionDescription").type(JsonFieldType.STRING)
                         .description("미션내용"),
                     fieldWithPath("data.missions[].alertStatus").type(JsonFieldType.STRING)
@@ -239,11 +249,11 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void getLuckMission() throws Exception {
         // given
-        given(luckMissionReadService.getLuckMissions())
+        given(luckkidsMissionReadService.getLuckMissions())
             .willReturn(
                 List.of(
-                    createMissionResponse("일찍일어나기", LocalTime.of(1, 0)),
-                    createMissionResponse("책읽기", LocalTime.of(2, 0))
+                    createMissionResponse(MissionType.HEALTH, "일찍일어나기", LocalTime.of(1, 0)),
+                    createMissionResponse(MissionType.MINDSET, "책읽기", LocalTime.of(2, 0))
                 )
             );
 
@@ -265,6 +275,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("메세지"),
                     fieldWithPath("data[]").type(JsonFieldType.ARRAY)
                         .description("응답 데이터"),
+                    fieldWithPath("data[].missionType").type(JsonFieldType.STRING)
+                        .description("미션타입. 가능한값: "+Arrays.toString(MissionType.values())),
                     fieldWithPath("data[].description").type(JsonFieldType.STRING)
                         .description("미션내용"),
                     fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
@@ -273,8 +285,9 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    private LuckMissionResponse createMissionResponse(String description, LocalTime alertTime) {
-        return LuckMissionResponse.builder()
+    private LuckkidsMissionResponse createMissionResponse(MissionType missionType, String description, LocalTime alertTime){
+        return LuckkidsMissionResponse.builder()
+            .missionType(missionType)
             .description(description)
             .alertTime(alertTime)
             .build();

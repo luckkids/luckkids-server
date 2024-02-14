@@ -14,15 +14,12 @@ import lombok.NoArgsConstructor;
 public class RefreshToken extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String deviceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private String refreshToken;
-
-    private String deviceId;
 
     @Builder
     private RefreshToken(User user, String refreshToken, String deviceId){
