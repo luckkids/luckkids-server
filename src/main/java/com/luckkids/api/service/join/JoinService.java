@@ -19,14 +19,14 @@ public class JoinService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public JoinResponse joinUser(JoinServiceRequest joinServiceRequest){
+    public JoinResponse joinUser(JoinServiceRequest joinServiceRequest) {
         try {
             User user = joinServiceRequest.toEntity();
             user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
 
             return JoinResponse.of(savedUser);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new LuckKidsException(ErrorCode.USER_NORMAL);
         }
     }
