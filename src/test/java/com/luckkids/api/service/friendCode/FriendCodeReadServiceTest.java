@@ -48,7 +48,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
             .email("test" + i)
             .password("1234")
             .missionCount(i)
-            .luckPhrases("행운입니다.")
+            .luckPhrase("행운입니다.")
             .snsType(SnsType.NORMAL)
             .role(Role.USER)
             .build();

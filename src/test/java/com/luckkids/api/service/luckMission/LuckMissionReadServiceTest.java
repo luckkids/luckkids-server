@@ -1,7 +1,8 @@
 package com.luckkids.api.service.luckMission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
+import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.tuple;
 public class LuckMissionReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private LuckMissionReadService luckMissionReadService;
+    private LuckkidsMissionReadService luckkidsMissionReadService;
     
     @Autowired
     private LuckkidsMissionRepository luckkidsMissionRepository;
@@ -36,7 +37,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
             luckkidsMissionRepository.save(createLuckMission("테스트미션" + i, LocalTime.of(i, 0)));
         });
 
-        List<LuckMissionResponse> luckMissionResponses = luckMissionReadService.getLuckMissions();
+        List<LuckkidsMissionResponse> luckMissionResponses = luckkidsMissionReadService.getLuckMissions();
 
         assertThat(luckMissionResponses).hasSize(10)
             .extracting("description", "alertTime")
