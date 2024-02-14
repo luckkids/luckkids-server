@@ -11,16 +11,30 @@ include::{snippets}/missionOutcome-get/query-parameters.adoc[]
 include::{snippets}/missionOutcome-get/http-response.adoc[]
 include::{snippets}/missionOutcome-get/response-fields.adoc[]
 
-[[missionOutcome-update]]
-=== 미션결과 수정
+[[missionOutcome-update-levelUp_O]]
+=== 미션결과 수정 레벨업_O
 
 ==== HTTP Request
 
-include::{snippets}/missionOutcome-update/http-request.adoc[]
-include::{snippets}/missionOutcome-update/path-parameters.adoc[]
-include::{snippets}/missionOutcome-update/request-fields.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_O/http-request.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_O/path-parameters.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_O/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/missionOutcome-update/http-response.adoc[]
-include::{snippets}/missionOutcome-update/response-fields.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_O/http-response.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_O/response-fields.adoc[]
+
+[[missionOutcome-update-levelUp_X]]
+=== 미션결과 수정 레벨업_X
+
+==== HTTP Request
+
+include::{snippets}/missionOutcome-update-levelUp_X/http-request.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_X/path-parameters.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_X/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/missionOutcome-update-levelUp_X/http-response.adoc[]
+include::{snippets}/missionOutcome-update-levelUp_X/response-fields.adoc[]

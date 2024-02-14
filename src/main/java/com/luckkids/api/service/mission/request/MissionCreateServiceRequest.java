@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
@@ -34,6 +35,7 @@ public class MissionCreateServiceRequest {
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
+            .push_date(LocalDate.of(2024, 1, 1))
             .build();
     }
 }

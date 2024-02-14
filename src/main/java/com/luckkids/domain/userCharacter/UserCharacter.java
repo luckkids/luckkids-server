@@ -1,5 +1,6 @@
 package com.luckkids.domain.userCharacter;
 
+import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class UserCharacter {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,21 +20,24 @@ public class UserCharacter {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private int level;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LuckkidsCharacter luckkidsCharacter;
 
-    private String characterNickname;   // ⭐️ 삭제 해야함 !!!
-
-    private String file;
+    @Enumerated(EnumType.STRING)
+    private CharacterProgressStatus characterProgressStatus;
 
     @Builder
-    private UserCharacter(User user, int level, String characterNickname, String file) {
+    public UserCharacter(User user, CharacterProgressStatus characterProgressStatus, LuckkidsCharacter luckkidsCharacter) {
         this.user = user;
-        this.level = level;
-        this.characterNickname = characterNickname;
-        this.file = file;
+        this.characterProgressStatus = characterProgressStatus;
+        this.luckkidsCharacter = luckkidsCharacter;
     }
 
-    public void changeUser(User user) {
-        this.user = user;
+    public void updateCompleteCharacter() {
+        this.characterProgressStatus = CharacterProgressStatus.COMPLETED;
+    }
+
+    public void updateLuckkidsCharacter(LuckkidsCharacter luckkidsCharacter) {
+        this.luckkidsCharacter = luckkidsCharacter;
     }
 }

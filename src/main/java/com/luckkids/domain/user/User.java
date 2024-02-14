@@ -3,6 +3,7 @@ package com.luckkids.domain.user;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
+import com.luckkids.domain.userCharacter.Level;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.jwt.dto.JwtToken;
 import jakarta.persistence.*;
@@ -12,7 +13,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Entity
 @Getter
@@ -33,6 +35,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SnsType snsType;
 
+    private String luckPhrase;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -42,8 +46,6 @@ public class User extends BaseTimeEntity {
     private SettingStatus settingStatus;
 
     private int missionCount;
-
-    private int characterCount;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
@@ -55,59 +57,68 @@ public class User extends BaseTimeEntity {
     private List<UserCharacter> userCharacter;
 
     @Builder
-    private User(String email, String password, SnsType snsType, String nickname, String luckPhrases, Role role, SettingStatus settingStatus, int missionCount, int characterCount) {
+    private User(String email, String password, SnsType snsType, String nickname, String luckPhrase, Role role, SettingStatus settingStatus, int missionCount) {
         this.email = email;
         this.password = password;
         this.snsType = snsType;
         this.nickname = nickname;
-        this.luckPhrases = luckPhrases;
+        this.luckPhrase = luckPhrase;
         this.role = role;
         this.settingStatus = settingStatus;
         this.missionCount = missionCount;
-        this.characterCount = characterCount;
     }
 
-    public void loginCheckSnsType(SnsType snsType) {
+    public void checkSnsType(SnsType snsType) {
         if (!this.snsType.equals(snsType)) {
             this.snsType.checkSnsType();
         }
     }
 
-    /*
-     * List<RefreshToken>에 요청값으로 받은 deviceId와 일치하는 기존 RefreshToken이 있는지 조회 후 수정 혹은 등록한다.
-     */
     public void checkRefreshToken(JwtToken jwtToken, String deviceId) {
-        // deviceId와 일치하는 RefreshToken 찾기
-        Optional<RefreshToken> existToken = refreshTokens.stream()
+        refreshTokens.stream()
             .filter(refreshToken -> deviceId.equals(refreshToken.getDeviceId()))
-            .findFirst();
-
-        // deviceId와 일치하는 RefreshToken이 이미 존재하는 경우, 해당 토큰 업데이트
-        if (existToken.isPresent()) {
-            existToken.get().updateRefreshToken(jwtToken.getRefreshToken());
-        } else { // deviceId와 일치하는 RefreshToken이 없는 경우, 새로운 RefreshToken 생성 후 새로운 RefreshToken을 저장
-            RefreshToken refreshToken = RefreshToken.of(this, jwtToken.getRefreshToken(), deviceId);
-            refreshToken.setUser(this);
-        }
+            .findFirst()
+            .ifPresentOrElse(
+                existToken -> existToken.updateRefreshToken(jwtToken.getRefreshToken()),
+                () -> {
+                    RefreshToken refreshToken = RefreshToken.of(this, jwtToken.getRefreshToken(), deviceId);
+                    refreshToken.setUser(this);
+                }
+            );
     }
 
     public void checkPushKey(String pushToken, String deviceId) {
-        // deviceId와 일치하는 Push 찾기
-        Optional<Push> existPush = pushes.stream()
+        pushes.stream()
             .filter(push -> deviceId.equals(push.getDeviceId()))
-            .findFirst();
-
-        // deviceId와 일치하는 Push가 이미 존재하는 경우, 해당 PushToken 업데이트
-        if (existPush.isPresent()) {
-            existPush.get().updatePushToken(pushToken);
-        } else {// deviceId와 일치하는 Push가 없는 경우, 새로운 Push 생성 후Push리스트에 add
-            Push push = Push.of(deviceId,this, pushToken);
-            push.setUser(this);
-        }
+            .findFirst()
+            .ifPresentOrElse(
+                existPush -> existPush.updatePushToken(pushToken),
+                () -> {
+                    Push push = Push.of(deviceId, this, pushToken);
+                    push.updateUser(this);
+                }
+            );
     }
 
-    public void updateLuckPhrases(String luckPhrases) {
-        this.luckPhrases = luckPhrases;
+    public int calculateLevelBasedOnRemainingMissions() {
+        int count = this.calculateRemainingMissions();
+        return Level.getLevelByScore(count);
+    }
+
+    public int calculateRemainingMissions() {
+        if (missionCount <= 0) {
+            throw new RuntimeException("missionCount가 0이거나 음수입니다.");
+        }
+        int remainder = missionCount % LEVEL_MAX.getScoreThreshold();
+        return remainder == 0 ? LEVEL_MAX.getScoreThreshold() : remainder;
+    }
+
+    public void updateMissionCount(int count) {
+        missionCount += count;
+    }
+
+    public void updateLuckPhrase(String luckPhrase) {
+        this.luckPhrase = luckPhrase;
     }
 
     public void updateSettingStatus(SettingStatus settingStatus) {
@@ -118,4 +129,7 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
+    public void updateNickName(String nickName){
+        this.nickname = nickName;
+    }
 }

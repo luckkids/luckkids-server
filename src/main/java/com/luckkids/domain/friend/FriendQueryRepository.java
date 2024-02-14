@@ -28,9 +28,9 @@ public class FriendQueryRepository {
             .select(Projections.constructor(FriendProfileDto.class,
                 friend.receiver.id,
                 friend.receiver.nickname,
-                friend.receiver.luckPhrases,
-                userCharacter.file,
-                user.characterCount
+                friend.receiver.luckPhrase,
+                userCharacter.luckkidsCharacter.imageFile,
+                user.missionCount
             ))
             .from(friend)
             .join(friend.receiver, user)

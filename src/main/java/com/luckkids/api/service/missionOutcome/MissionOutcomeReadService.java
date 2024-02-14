@@ -17,9 +17,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MissionOutcomeReadService {
 
     private final MissionOutcomeRepository missionOutcomeRepository;
@@ -32,17 +32,12 @@ public class MissionOutcomeReadService {
             .orElseThrow(() -> new IllegalArgumentException("해당 미션결과는 없습니다. id = " + id));
     }
 
-    public List<MissionOutcomeResponse> getMissionDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
+    public List<MissionOutcomeResponse> getMissionOutcomeDetailListForStatus(Optional<MissionStatus> missionStatus, LocalDate missionDate) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeQueryRepository.findMissionDetailsByStatus(missionStatus, userId, missionDate)
             .stream()
             .map(MissionOutcomeDetailDto::toMissionOutcomeResponse)
             .toList();
-    }
-
-    public int countUserSuccessfulMissions() {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        return missionOutcomeRepository.countSuccessfulMissionsByUserId(userId);
     }
 
     public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {

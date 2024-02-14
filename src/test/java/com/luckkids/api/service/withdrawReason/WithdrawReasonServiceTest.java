@@ -5,7 +5,7 @@ import com.luckkids.api.service.withdrawReason.request.WithdrawReasonCreateServi
 import com.luckkids.api.service.withdrawReason.response.WithdrawReasonCreateResponse;
 import com.luckkids.domain.withdrawReason.WithdrawReason;
 import com.luckkids.domain.withdrawReason.WithdrawReasonRepository;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +15,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WithdrawReasonServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private WithdrawReasonRepository withdrawReasonRepository;
+    private WithdrawReasonService withdrawReasonService;
 
     @Autowired
-    private WithdrawReasonService withdrawReasonService;
+    private WithdrawReasonRepository withdrawReasonRepository;
+
+    @AfterEach
+    void tearDown() {
+        withdrawReasonRepository.deleteAllInBatch();
+    }
 
     @Test
     @DisplayName("탈퇴사유를 저장한다.")
-    void withdrawReasonTest(){
+    void withdrawReasonTest() {
         WithdrawReasonCreateServiceRequest withdrawReasonCreateServiceRequest = WithdrawReasonCreateServiceRequest.builder()
             .reason("잘 사용하지 않는 앱이예요.")
             .build();
 
         WithdrawReasonCreateResponse withdrawReasonCreateResponse = withdrawReasonService.create(withdrawReasonCreateServiceRequest);
 
-        WithdrawReason savedWithdrawReason = withdrawReasonRepository.findById(withdrawReasonCreateResponse.getId()).get();
+        WithdrawReason savedWithdrawReason = withdrawReasonRepository.findById((long) withdrawReasonCreateResponse.getId()).get();
 
         assertThat(savedWithdrawReason.getReason()).isEqualTo("잘 사용하지 않는 앱이예요.");
 

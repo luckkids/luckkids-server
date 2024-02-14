@@ -103,7 +103,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
-        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionDetailListForStatus(empty(), LocalDate.of(2023, 10, 25));
+        List<MissionOutcomeResponse> missionOutcomeResponses = missionOutcomeReadService.getMissionOutcomeDetailListForStatus(empty(), LocalDate.of(2023, 10, 25));
 
         // then
         assertThat(missionOutcomeResponses).hasSize(2)
@@ -112,30 +112,6 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
                 tuple("운동하기", LocalTime.of(19, 0), FAILED),
                 tuple("책읽기", LocalTime.of(20, 0), SUCCEED)
             );
-    }
-
-    @DisplayName("로그인된 유저아이디로 지금까지 성공한 미션의 개수를 조회한다.")
-    @Test
-    void countUserSuccessfulMissions() {
-        // given
-        User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        MissionOutcome missionOutcome1 = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), SUCCEED);
-        MissionOutcome missionOutcome2 = createMissionOutcome(mission, LocalDate.of(2023, 10, 26), SUCCEED);
-        MissionOutcome missionOutcome3 = createMissionOutcome(mission, LocalDate.of(2023, 10, 27), FAILED);
-
-        userRepository.save(user);
-        missionRepository.save(mission);
-        missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3));
-
-        given(securityService.getCurrentLoginUserInfo())
-            .willReturn(createLoginUserInfo(user.getId()));
-
-        // when
-        int count = missionOutcomeReadService.countUserSuccessfulMissions();
-
-        // then
-        assertThat(count).isEqualTo(2);
     }
 
     @DisplayName("오늘 날짜를 받아 그 전 달의 1일부터 다음달의 마지막날까지의 범위에 미션 성공 여부를 조회한다.")

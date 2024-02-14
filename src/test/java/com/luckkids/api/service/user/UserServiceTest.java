@@ -2,7 +2,7 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.domain.alertHistory.AlertHistory;
@@ -26,7 +26,6 @@ import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserService userService;    // ⭐️ 이 부분은 테스트 코드 분리하는 게 좋을 것 같습니다 !
 
     @Autowired
     private UserReadService userReadService;
@@ -81,13 +80,20 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
+        alertSettingRepository.deleteAllInBatch();
+        alertHistoryRepository.deleteAllInBatch();
+        pushRepository.deleteAllInBatch();
+        friendRepository.deleteAllInBatch();
+        missionOutcomeRepository.deleteAllInBatch();
+        missionRepository.deleteAllInBatch();
+        refreshTokenRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     void changePasswordTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
         userRepository.save(user);
 
         UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest = UserUpdatePasswordServiceRequest.builder()
@@ -120,20 +126,20 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Test
     @Transactional
     void updatePhraseTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
         userRepository.save(user);
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest = UserLuckPhrasesServiceRequest.builder()
-            .luckPhrases("행운입니다.")
+        UserLuckPhraseServiceRequest userLuckPhraseServiceRequest = UserLuckPhraseServiceRequest.builder()
+            .luckPhrase("행운입니다.")
             .build();
 
-        userService.updatePhrase(userLuckPhrasesServiceRequest);
+        userService.updatePhrase(userLuckPhraseServiceRequest);
 
         User savedUser = userReadService.findByOne(user.getId());
 
-        assertThat(savedUser).extracting("email", "snsType", "luckPhrases")
+        assertThat(savedUser).extracting("email", "snsType", "luckPhrase")
             .contains("test@email.com", SnsType.NORMAL, "행운입니다.");
     }
 
@@ -142,14 +148,14 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Transactional
     void withdrawUser() {
         //given user
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
-        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
+        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL, 0);
         userRepository.saveAll(List.of(user, user2));
 
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        Push push = createPush("testdeviceId", "testPushToken" , user);
+        Push push = createPush("testdeviceId", "testPushToken", user);
         //given push
         Push savedPush = pushRepository.save(push);
 
@@ -218,11 +224,12 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(findRefreshToken.isEmpty()).isTrue();
     }
 
-    private User createUser(String email, String password, SnsType snsType) {
+    private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
+            .missionCount(missionCount)
             .build();
     }
 

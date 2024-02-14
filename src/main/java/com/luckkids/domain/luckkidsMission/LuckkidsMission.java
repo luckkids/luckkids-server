@@ -17,9 +17,12 @@ public class LuckkidsMission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Enumerated(EnumType.STRING)
     private MissionType missionType;
+
     private String description;
+
     private LocalTime alertTime;
 
     @Builder
