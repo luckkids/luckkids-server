@@ -1,14 +1,12 @@
 package com.luckkids.domain.user;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.push.PushReadService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +34,6 @@ public class UserTest extends IntegrationTestSupport {
     @Autowired
     private UserReadService userReadService;
 
-    @Autowired
-    private PushReadService pushReadService;
-
     @DisplayName("같은 deviceid로 저장되어있는 pushkey와 상이한 데이터가 들어올시 수정한다.")
     @Test
     void checkPushAndUpdate() {
@@ -64,10 +59,9 @@ public class UserTest extends IntegrationTestSupport {
         // when
         savedUser.checkPushKey("testPushKey2", "testDeviceId");
 
-        // then
         assertThat(savedUser.getPushes().get(0))
             .extracting("pushToken", "deviceId")
-             .containsExactlyInAnyOrder(
+            .containsExactlyInAnyOrder(
                 "testPushKey2", "testDeviceId"
             );
     }
@@ -133,12 +127,12 @@ public class UserTest extends IntegrationTestSupport {
         savedUser.checkRefreshToken(jwtToken, "testDeviceId");
 
         // then
-        RefreshToken getToken = refreshTokenRepository.findById(savedToken.getId()).get();
+        List<RefreshToken> getToken = savedUser.getRefreshTokens();
 
         assertThat(getToken)
             .extracting("refreshToken", "deviceId")
             .containsExactlyInAnyOrder(
-                "testRefreshToken2", "testDeviceId"
+                tuple("testRefreshToken2", "testDeviceId")
             );
     }
 
@@ -180,7 +174,7 @@ public class UserTest extends IntegrationTestSupport {
     @Test
     @Transactional
     void updatePasswordTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
         String beforePassword = user.getPassword();
         User savedUser = userRepository.save(user);
         savedUser.updatePassword("123456");
@@ -189,17 +183,9 @@ public class UserTest extends IntegrationTestSupport {
         assertThat(beforePassword).isNotEqualTo(afterPassword);
     }
 
-    private User createUser(String email, String password, SnsType snsType) {
-        return User.builder()
-            .email(email)
-            .password(password)
-            .snsType(snsType)
-            .build();
-    }
-
     @DisplayName("사용자의 행운문구를 수정한다.")
     @Test
-    void updateLuckPhrasesTest() {
+    void updateLuckPhraseTest() {
         // given
         User user = User.builder()
             .email("tkdrl8908@naver.com")
@@ -217,14 +203,100 @@ public class UserTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser.getSettingStatus()).isEqualTo(COMPLETE);
-        savedUser.updateLuckPhrases("행운입니다!!");
+        savedUser.updateLuckPhrase("행운입니다!!");
         savedUser.updateSettingStatus(INCOMPLETE);
 
         // then
         assertThat(savedUser)
-            .extracting("email", "luckPhrases", "role", "snsType", "settingStatus")
+            .extracting("email", "luckPhrase", "role", "snsType", "settingStatus")
             .contains(
                 "tkdrl8908@naver.com", "행운입니다!!", Role.USER, SnsType.NORMAL, SettingStatus.INCOMPLETE
             );
+    }
+
+    @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산한다.")
+    @Test
+    void calculateLevelUpCountWithCharacterCount0() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 20);
+
+        // when
+        int count = user.calculateRemainingMissions();
+
+        // then
+        assertThat(count).isEqualTo(20);
+    }
+
+    @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산한다.")
+    @Test
+    void calculateLevelUpCountWithCharacterCount1() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 100);
+
+        // when
+        int count = user.calculateRemainingMissions();
+
+        // then
+        assertThat(count).isEqualTo(100);
+    }
+
+    @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산한다.")
+    @Test
+    void calculateLevelUpCountWithCharacterCount2() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 101);
+
+        // when
+        int count = user.calculateRemainingMissions();
+
+        // then
+        assertThat(count).isEqualTo(1);
+    }
+
+    @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산하여 레벨을 가져온다. 레벨있음.")
+    @Test
+    void calculateLevelBasedOnRemainingMissionsLevelUp_O() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 25);
+
+        // when
+        int level = user.calculateLevelBasedOnRemainingMissions();
+
+        // then
+        assertThat(level).isEqualTo(2);
+    }
+
+    @DisplayName("유효한 missionCount 값으로 레벨업 카운트를 계산하여 레벨을 가져온다. 레벨없음.")
+    @Test
+    void calculateLevelBasedOnRemainingMissionsLevelUp_X() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 15);
+
+        // when
+        int level = user.calculateLevelBasedOnRemainingMissions();
+
+        // then
+        assertThat(level).isEqualTo(0);
+    }
+
+    @DisplayName("유저 닉네임을 수정한다.")
+    @Test
+    void updateNickName() {
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 15);
+        userRepository.save(user);
+        // when
+        user.updateNickName("럭키즈!!!!!");
+
+        User findUser = userReadService.findByOne(user.getId());
+
+        // then
+        assertThat(findUser.getNickname()).isEqualTo("럭키즈!!!!!");
+    }
+
+    private User createUser(String email, String password, SnsType snsType, int missionCount) {
+        return User.builder()
+            .email(email)
+            .password(password)
+            .snsType(snsType)
+            .missionCount(missionCount)
+            .build();
     }
 }

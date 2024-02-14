@@ -37,7 +37,7 @@ public class RefreshTokenRepositoryTest extends IntegrationTestSupport {
         RefreshToken savedToken =  refreshTokenRepository.save(token);
         refreshTokenRepository.deleteAllByUserId(user.getId());
 
-        Optional<RefreshToken> findToken = refreshTokenRepository.findById(savedToken.getId());
+        Optional<RefreshToken> findToken = refreshTokenRepository.findById(savedToken.getDeviceId());
 
         assertThat(findToken.isEmpty()).isTrue();
     }

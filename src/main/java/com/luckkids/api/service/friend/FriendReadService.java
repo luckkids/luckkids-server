@@ -33,4 +33,5 @@ public class FriendReadService {
 
         return FriendListResponse.of(myProfile, PageCustom.of(friendPagingList));
     }
+
 }

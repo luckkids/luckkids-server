@@ -39,6 +39,7 @@ public class MissionResponse {
 
     public InitialSettingMissionResponse toInitialSettingResponse() {
         return InitialSettingMissionResponse.builder()
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)

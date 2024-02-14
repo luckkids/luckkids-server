@@ -1,6 +1,6 @@
-package com.luckkids.api.service.luckMission;
+package com.luckkids.api.service.LuckkidsMission;
 
-import com.luckkids.api.service.luckMission.response.LuckMissionResponse;
+import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class LuckMissionReadService {
+@Transactional(readOnly = true)
+public class LuckkidsMissionReadService {
 
     private final LuckkidsMissionRepository luckkidsMissionRepository;
 
-    public List<LuckMissionResponse> getLuckMissions() {
+    public List<LuckkidsMissionResponse> getLuckMissions() {
         List<LuckkidsMission> luckMission = luckkidsMissionRepository.findAll();
-        return luckMission.stream().map(LuckMissionResponse::of).collect(Collectors.toList());
+        return luckMission.stream().map(LuckkidsMissionResponse::of).collect(Collectors.toList());
     }
 }
+

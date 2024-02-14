@@ -4,7 +4,6 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
-import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.push.Push;
@@ -26,16 +25,13 @@ import static org.mockito.BDDMockito.given;
 public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
     @Autowired
+    private AlertSettingReadService alertSettingReadService;
+
+    @Autowired
     private AlertSettingRepository alertSettingRepository;
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AlertSettingReadService alertSettingReadService;
-
-    @Autowired
-    private SecurityService securityService;
 
     @Autowired
     private PushRepository pushRepository;
@@ -170,7 +166,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
                 .build());
     }
 
-    private Push createPush(User user){
+    private Push createPush(User user) {
         return pushRepository.save(Push.builder()
             .deviceId("testDeviceId")
             .pushToken("testPushToken")

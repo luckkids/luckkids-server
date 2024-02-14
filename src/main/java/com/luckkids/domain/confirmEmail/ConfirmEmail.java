@@ -16,6 +16,7 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 public class ConfirmEmail extends BaseTimeEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

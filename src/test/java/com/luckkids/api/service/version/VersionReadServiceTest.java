@@ -19,9 +19,6 @@ class VersionReadServiceTest extends IntegrationTestSupport {
     private VersionReadService versionReadService;
 
     @Autowired
-    private VersionService versionService;
-
-    @Autowired
     private VersionRepository versionRepository;
 
     @AfterEach
@@ -46,19 +43,5 @@ class VersionReadServiceTest extends IntegrationTestSupport {
         VersionResponse versionResponse = versionReadService.getVersion();
 
         assertThat(versionResponse.getVersionNum()).isEqualTo("1.1.3");
-    }
-
-    @DisplayName(value = "최신버전을 저장한다.")
-    @Test
-    void saveVersionTest() {
-        VersionSaveServiceRequest versionSaveServiceRequest = VersionSaveServiceRequest.builder()
-            .versionNum("1.1.2")
-            .build();
-
-        VersionSaveResponse versionSaveResponse = versionService.save(versionSaveServiceRequest);
-
-        Version version = versionRepository.findById(versionSaveResponse.getId()).get();
-
-        assertThat(version.getVersionNum()).isEqualTo("1.1.2");
     }
 }

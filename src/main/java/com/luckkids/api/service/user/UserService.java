@@ -2,9 +2,9 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.delete.UserDeleteService;
-import com.luckkids.api.service.user.request.UserLuckPhrasesServiceRequest;
+import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
-import com.luckkids.api.service.user.response.UserLuckPhrasesResponse;
+import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
 import com.luckkids.domain.user.User;
@@ -21,11 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserRepository userRepository;
+
     private final UserReadService userReadService;
     private final SecurityService securityService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserRepository userRepository;
     private final List<UserDeleteService> userDeleteServices;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
@@ -33,11 +35,11 @@ public class UserService {
         return UserUpdatePasswordResponse.of(user);
     }
 
-    public UserLuckPhrasesResponse updatePhrase(UserLuckPhrasesServiceRequest userLuckPhrasesServiceRequest) {
+    public UserLuckPhraseResponse updatePhrase(UserLuckPhraseServiceRequest userLuckPhraseServiceRequest) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findByOne(userId);
-        user.updateLuckPhrases(userLuckPhrasesServiceRequest.getLuckPhrases());
-        return UserLuckPhrasesResponse.of(user);
+        user.updateLuckPhrase(userLuckPhraseServiceRequest.getLuckPhrase());
+        return UserLuckPhraseResponse.of(user);
     }
 
     public UserWithdrawResponse withdraw() {

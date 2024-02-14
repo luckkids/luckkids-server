@@ -38,13 +38,13 @@ public class WithdrawReasonControllerDocsTest extends RestDocsSupport {
         // given
 
         WithdrawReasonCreateRequest withdrawReasonCreateRequest = WithdrawReasonCreateRequest.builder()
-                .reason("앱을 잘 사용하지 않아요")
-                .build();
+            .reason("앱을 잘 사용하지 않아요")
+            .build();
 
         given(withdrawReasonService.create(any(WithdrawReasonCreateServiceRequest.class)))
             .willReturn(
                 WithdrawReasonCreateResponse.builder()
-                    .id(13L)
+                    .id(13)
                     .build()
             );
 

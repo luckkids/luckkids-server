@@ -27,13 +27,10 @@ public class JoinServiceTest extends IntegrationTestSupport {
     private JoinService joinService;
 
     @Autowired
-    private JoinReadService joinReadService;
+    private UserReadService userReadService;
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserReadService userReadService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -41,37 +38,6 @@ public class JoinServiceTest extends IntegrationTestSupport {
     @AfterEach
     void tearDown() {
         userRepository.deleteAllInBatch();
-    }
-
-    @DisplayName("이메일이 이미 등록되었는지 체크한다.")
-    @Test
-    void checkEmailTest() {
-        JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .build();
-
-        JoinCheckEmailResponse response = joinReadService.checkEmail(joinCheckEmailServiceRequest);
-
-        assertThat(response.getEmail()).isEqualTo(joinCheckEmailServiceRequest.getEmail());
-    }
-
-    @DisplayName("사용자가 이미 존재 할 경우 예외를 던진다.")
-    @Test
-    void checkEmailIfExistUser() {
-        User user = User.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .role(Role.USER)
-            .build();
-
-        userRepository.save(user);
-
-        JoinCheckEmailServiceRequest joinCheckEmailServiceRequest = JoinCheckEmailServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .build();
-
-        assertThrows(LuckKidsException.class, () -> joinReadService.checkEmail(joinCheckEmailServiceRequest));
     }
 
     @DisplayName("회원가입 테스트")

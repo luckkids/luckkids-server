@@ -8,19 +8,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class InitialSettingCharacterServiceRequest {
-    private String characterNickname;
-    private String fileName;
+
+    private int id;
+    private String nickName;
 
     @Builder
-    private InitialSettingCharacterServiceRequest(String characterNickname, String fileName) {
-        this.characterNickname = characterNickname;
-        this.fileName = fileName;
+    private InitialSettingCharacterServiceRequest(int id, String nickName) {
+        this.id = id;
+        this.nickName = nickName;
     }
 
     public UserCharacterCreateServiceRequest toCharacterServiceRequest(){
         return UserCharacterCreateServiceRequest.builder()
-            .characterNickname(characterNickname)
-            .fileName(fileName)
+            .id(id)
+            .nickName(nickName)
             .build();
     }
 }
