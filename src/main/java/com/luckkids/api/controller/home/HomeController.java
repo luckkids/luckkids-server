@@ -3,6 +3,7 @@ package com.luckkids.api.controller.home;
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class HomeController {
     }
 
     @GetMapping("/api/v1/home/calender/{missionDate}")
-    public ApiResponse<List<String>> getMissionOutcomeForCalendarDetail(
+    public ApiResponse<List<MissionOutcomeCalenderDetailDto>> getMissionOutcomeForCalendarDetail(
         @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate missionDate
     ) {
         return ApiResponse.ok(missionOutcomeReadService.getMissionOutcomeForCalendarDetail(missionDate));

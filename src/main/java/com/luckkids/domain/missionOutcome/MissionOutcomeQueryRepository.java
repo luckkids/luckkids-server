@@ -1,5 +1,6 @@
 package com.luckkids.domain.missionOutcome;
 
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.querydsl.core.types.Projections;
@@ -65,10 +66,12 @@ public class MissionOutcomeQueryRepository {
             .fetch();
     }
 
-    public List<String> findSuccessfulMissionsByDate(int userId, LocalDate missionDate) {
+    public List<MissionOutcomeCalenderDetailDto> findSuccessfulMissionsByDate(int userId, LocalDate missionDate) {
 
         return jpaQueryFactory
-            .select(mission.missionDescription)
+            .select(Projections.constructor(MissionOutcomeCalenderDetailDto.class,
+                mission.missionType,
+                mission.missionDescription))
             .from(missionOutcome)
             .where(mission.user.id.eq(userId),
                 missionOutcome.missionDate.eq(missionDate),
