@@ -40,8 +40,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String luckPhrases;
-
     @Enumerated(EnumType.STRING)
     private SettingStatus settingStatus;
 
