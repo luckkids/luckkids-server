@@ -6,9 +6,11 @@ import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -26,6 +28,8 @@ import java.util.List;
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -57,7 +61,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     void findByOne() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
         MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 10, 25), FAILED);
 
         userRepository.save(user);
@@ -90,8 +94,8 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     void getMissionDetailListForStatus() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
@@ -119,8 +123,8 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     void getMissionOutcomeForCalendar() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
@@ -154,8 +158,8 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
     void getMissionOutcomeForCalendarDetail() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
@@ -169,12 +173,15 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .willReturn(createLoginUserInfo(user.getId()));
 
         // when
-        List<String> result =
+        List<MissionOutcomeCalenderDetailDto> result =
             missionOutcomeReadService.getMissionOutcomeForCalendarDetail(LocalDate.of(2023, 12, 26));
 
         // then
         assertThat(result).hasSize(1)
-            .containsExactlyInAnyOrder("운동하기");
+            .extracting("missionType", "missionDescription")
+            .containsExactlyInAnyOrder(
+                tuple(HEALTH, "운동하기")
+            );
     }
 
     private User createUser(String email, String password, SnsType snsType) {
@@ -185,9 +192,10 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private Mission createMission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private Mission createMission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return Mission.builder()
             .user(user)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
