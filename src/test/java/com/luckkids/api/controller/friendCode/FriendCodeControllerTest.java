@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.friendCode;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.friend.request.FriendCreateRequest;
+import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;

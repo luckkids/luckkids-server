@@ -1,7 +1,7 @@
 package com.luckkids.docs.friendCode;
 
-import com.luckkids.api.controller.friend.request.FriendCreateRequest;
 import com.luckkids.api.controller.friendCode.FriendCodeController;
+import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import com.luckkids.api.service.friendCode.FriendCodeService;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
