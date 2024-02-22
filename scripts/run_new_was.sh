@@ -1,6 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app
+SCOUTER=/home/ec2-user/scouter
 # PINPOINT=/home/ec2-user/pinpoint
 
 CURRENT_PORT=$(cat /etc/nginx/conf.d/service-url.inc | grep -Po '[0-9]+' | tail -1)
@@ -35,7 +36,12 @@ echo "> 로그 파일이 존재하지 않으면 생성하고, 존재하면 내�
 touch $LOG_FILE
 
 echo "> $JAR_NAME 실행"
-nohup java -jar -Dserver.port=${TARGET_PORT} -Dspring.profiles.active=prod $JAR_NAME > $LOG_FILE 2>&1 &
+nohup java -javaagent:$SCOUTER/agent.java/scouter.agent.jar \
+          -Dscouter.config=$SCOUTER/agent.java/conf/scouter.conf \
+          -jar \
+          -Dserver.port=${TARGET_PORT} \
+          -Dspring.profiles.active=prod \
+          $JAR_NAME > $LOG_FILE 2>&1 &
 
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
