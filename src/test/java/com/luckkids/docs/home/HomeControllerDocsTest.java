@@ -4,6 +4,7 @@ import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -98,8 +101,10 @@ public class HomeControllerDocsTest extends RestDocsSupport {
     void getMissionOutcomeForCalendarDetail() throws Exception {
         // given
         given(missionOutcomeReadService.getMissionOutcomeForCalendarDetail(any(LocalDate.class)))
-            .willReturn(List.of("운동하기", "책읽기")
-            );
+            .willReturn(List.of(
+                new MissionOutcomeCalenderDetailDto(HEALTH, "운동하기"),
+                new MissionOutcomeCalenderDetailDto(SELF_DEVELOPMENT, "책 읽기")
+            ));
 
         // when // then
         mockMvc.perform(
@@ -122,7 +127,11 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
                     fieldWithPath("data[]").type(JsonFieldType.ARRAY)
-                        .description("미션 내용들")
+                        .description("미션 내용들"),
+                    fieldWithPath("data[].missionType").type(JsonFieldType.STRING)
+                        .description("미션 타입"),
+                    fieldWithPath("data[].missionDescription").type(JsonFieldType.STRING)
+                        .description("미션 내용")
                 )
             ));
     }
