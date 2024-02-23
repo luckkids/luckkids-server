@@ -1,0 +1,24 @@
+[[garden-list]]
+=== 가든/앨범,랭킹 리스트 조회
+
+==== HTTP Request
+
+include::{snippets}/garden-list/http-request.adoc[]
+include::{snippets}/garden-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/garden-list/http-response.adoc[]
+include::{snippets}/garden-list/response-fields.adoc[]
+
+[[garden-league]]
+=== 가든/리그 조회
+
+==== HTTP Request
+
+include::{snippets}/garden-league/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/garden-league/http-response.adoc[]
+include::{snippets}/garden-league/response-fields.adoc[]

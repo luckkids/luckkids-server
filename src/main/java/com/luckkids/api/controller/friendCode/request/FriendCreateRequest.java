@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.friend.request;
+package com.luckkids.api.controller.friendCode.request;
 
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +18,7 @@ public class FriendCreateRequest {
         this.code = code;
     }
 
-    public FriendCreateServiceRequest toServiceRequest(){
+    public FriendCreateServiceRequest toServiceRequest() {
         return FriendCreateServiceRequest.builder()
             .code(code)
             .build();
