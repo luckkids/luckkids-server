@@ -7,6 +7,7 @@ import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeQueryRepository;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class MissionOutcomeReadService {
         return MissionOutcomeForCalendarResponse.of(startDate, endDate, result);
     }
 
-    public List<String> getMissionOutcomeForCalendarDetail(LocalDate missionDate) {
+    public List<MissionOutcomeCalenderDetailDto> getMissionOutcomeForCalendarDetail(LocalDate missionDate) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         return missionOutcomeQueryRepository.findSuccessfulMissionsByDate(userId, missionDate);
     }
