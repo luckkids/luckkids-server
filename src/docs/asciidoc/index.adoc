@@ -1,13 +1,49 @@
 ifndef::snippets[]
 :snippets: ../../build/generated-snippets
 endif::[]
-= LuckKids REST API 문서
+= Luckkids REST API 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 2
 :sectlinks:
+
+[[Join-API]]
+== Join API
+
+include::api/join/checkEmail.adoc[]
+include::api/join/joinUser.adoc[]
+
+[[Mail-API]]
+== Mail API
+
+include::api/mail/mail.adoc[]
+
+[[confirmEmail-API]]
+== confirmEmail API
+
+include::api/confirmEmail/confirmEmail.adoc[]
+
+[[Login-API]]
+== Login API
+
+include::api/login/login.adoc[]
+
+[[InitialSetting-API]]
+== InitialSetting API
+
+include::api/initialSetting/initialSetting.adoc[]
+
+[[AlertSetting-API]]
+== AlertSetting API
+
+include::api/alertSetting/alertSetting.adoc[]
+
+[[Home-API]]
+== Home API
+
+include::api/home/home.adoc[]
 
 [[Mission-API]]
 == Mission API
@@ -19,31 +55,10 @@ include::api/mission/mission.adoc[]
 
 include::api/missionOutcome/missionOutcome.adoc[]
 
-[[Login-API]]
-== Login API
+[[Garden-API]]
+== Garden API
 
-include::api/login/login.adoc[]
-
-[[Join-API]]
-== Join API
-
-include::api/join/checkEmail.adoc[]
-include::api/join/joinUser.adoc[]
-
-[[confirmEmail-API]]
-== confirmEmail API
-
-include::api/confirmEmail/confirmEmail.adoc[]
-
-[[Mail-API]]
-== Mail API
-
-include::api/mail/mail.adoc[]
-
-[[Friend-API]]
-== Friend API
-
-include::api/friend/friend.adoc[]
+include::api/garden/garden.adoc[]
 
 [[FriendCode-API]]
 == FriendCode API
@@ -60,21 +75,6 @@ include::api/notice/notice.adoc[]
 
 include::api/version/version.adoc[]
 
-[[AlertSetting-API]]
-== AlertSetting API
-
-include::api/alertSetting/alertSetting.adoc[]
-
-[[InitialSetting-API]]
-== InitialSetting API
-
-include::api/initialSetting/initialSetting.adoc[]
-
-[[Home-API]]
-== Home API
-
-include::api/home/home.adoc[]
-
 [[User-API]]
 == User API
 
@@ -84,4 +84,3 @@ include::api/user/user.adoc[]
 == WithdrawReason API
 
 include::api/withdrawReason/withdrawReason.adoc[]
-
