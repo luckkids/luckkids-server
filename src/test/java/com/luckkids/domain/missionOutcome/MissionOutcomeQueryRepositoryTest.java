@@ -1,11 +1,13 @@
 package com.luckkids.domain.missionOutcome;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -22,6 +24,8 @@ import java.util.Optional;
 import static com.luckkids.domain.missionOutcome.MissionStatus.FAILED;
 import static com.luckkids.domain.missionOutcome.MissionStatus.SUCCEED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.HEALTH;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -45,8 +49,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     void findMissionDetailsByStatus1() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
@@ -72,8 +76,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     void findMissionDetailsByStatus2() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 10, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 10, 25), SUCCEED);
 
@@ -96,8 +100,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     void findMissionOutcomeByDateRangeAndStatus() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 11, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 11, 25), FAILED);
         MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 11, 26), SUCCEED);
@@ -130,8 +134,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     void findSuccessfulMissionsByDate() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
@@ -142,12 +146,16 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
         // when
-        List<String> result =
+        List<MissionOutcomeCalenderDetailDto> result =
             missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 26));
 
         // then
         assertThat(result).hasSize(2)
-            .containsExactlyInAnyOrder("운동하기", "책읽기");
+            .extracting("missionType", "missionDescription")
+            .containsExactlyInAnyOrder(
+                tuple(HEALTH, "운동하기"),
+                tuple(SELF_DEVELOPMENT, "책읽기")
+            );
     }
 
     @DisplayName("미션 날짜를 받아서 성공한 미션 리스트를 조회한다. (결과값: 빈 리스트)")
@@ -155,8 +163,8 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
     void findSuccessfulMissionsIsEmpty() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-        Mission mission1 = createMission(user, "운동하기", UNCHECKED, LocalTime.of(19, 0));
-        Mission mission2 = createMission(user, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+        Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+        Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
         MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
         MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
@@ -167,7 +175,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
         missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
         // when
-        List<String> result =
+        List<MissionOutcomeCalenderDetailDto> result =
             missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 25));
 
         // then
@@ -183,9 +191,10 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
             .build();
     }
 
-    private Mission createMission(User user, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private Mission createMission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
         return Mission.builder()
             .user(user)
+            .missionType(missionType)
             .missionDescription(missionDescription)
             .alertStatus(alertStatus)
             .alertTime(alertTime)
