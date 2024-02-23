@@ -1,12 +1,14 @@
-package com.luckkids.docs.friend;
+package com.luckkids.docs.garden;
 
-import com.luckkids.api.controller.friend.FriendController;
+import com.luckkids.api.controller.garden.GardenController;
 import com.luckkids.api.page.request.PageInfoRequest;
 import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.api.page.response.PageCustom;
 import com.luckkids.api.page.response.PageableCustom;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.friend.response.FriendListResponse;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.api.service.user.response.UserLeagueResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.friend.projection.FriendProfileDto;
 import com.luckkids.domain.user.projection.MyProfileDto;
@@ -31,19 +33,20 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class FriendControllerDocsTest extends RestDocsSupport {
+public class GardenControllerDocsTest extends RestDocsSupport {
 
     private final FriendReadService friendReadService = mock(FriendReadService.class);
+    private final UserReadService userReadService = mock(UserReadService.class);
 
     @Override
     protected Object initController() {
-        return new FriendController(friendReadService);
+        return new GardenController(friendReadService, userReadService);
     }
 
     @DisplayName("친구 목록 조회 API")
     @Test
     @WithMockUser(roles = "USER")
-    void readFriend() throws Exception {
+    void getFriendList() throws Exception {
         // given
         PageInfoRequest request = PageInfoRequest.builder()
             .page(1)
@@ -53,8 +56,9 @@ public class FriendControllerDocsTest extends RestDocsSupport {
         MyProfileDto myProfile = new MyProfileDto(1, "럭키즈", "행운문구", "https://test.cloudfront.net/example.png", 1);
 
         List<FriendProfileDto> friendProfileList = List.of(
-            new FriendProfileDto(2, "럭키즈 친구 2", "행운 문구 2", "https://test.cloudfront.net/example.png", 1),
-            new FriendProfileDto(3, "럭키즈 친구 3", "행운 문구 3", "https://test.cloudfront.net/example.png", 2)
+            new FriendProfileDto(2, "럭키즈 친구 2", "행운 문구 2", "https://test.cloudfront.net/example.png", 120),
+            new FriendProfileDto(3, "럭키즈 친구 3", "행운 문구 3", "https://test.cloudfront.net/example.png", 90),
+            new FriendProfileDto(4, "럭키즈 친구 4", "행운 문구 4", "https://test.cloudfront.net/example.png", 20)
         );
 
         PageableCustom pageInfo = PageableCustom.builder()
@@ -78,13 +82,13 @@ public class FriendControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/friends")
+                get("/api/v1/garden/list")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("friend-get",
+            .andDo(document("garden-list",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(
@@ -139,5 +143,51 @@ public class FriendControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.friendList.pageInfo.totalElement").type(JsonFieldType.NUMBER)
                         .description("총 요소 개수")
                 )));
+    }
+
+    @DisplayName("유저들의 1-3위까지 리그 정보를 조회 API")
+    @Test
+    @WithMockUser("USER")
+    void getUserLeagueTop3() throws Exception {
+        // given
+        UserLeagueResponse res1 = createUserLeagueResponse("테스트1", "https://test.cloudfront.net/캐릭터1.png", 3);
+        UserLeagueResponse res2 = createUserLeagueResponse("테스트4", "https://test.cloudfront.net/캐릭터3.png", 3);
+        UserLeagueResponse res3 = createUserLeagueResponse("테스트2", "https://test.cloudfront.net/캐릭터4.png", 2);
+
+        given(userReadService.getUserLeagueTop3())
+            .willReturn(List.of(res1, res2, res3));
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/garden/league")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("garden-league",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data[]").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].nickname").type(JsonFieldType.STRING)
+                        .description("닉네임"),
+                    fieldWithPath("data[].imageFileUrl").type(JsonFieldType.STRING)
+                        .description("이미지 URL"),
+                    fieldWithPath("data[].characterCount").type(JsonFieldType.NUMBER)
+                        .description("캐릭터 수")
+                )));
+    }
+
+    private UserLeagueResponse createUserLeagueResponse(String nickname, String imageFileUrl, int characterCount) {
+        return UserLeagueResponse.builder()
+            .nickname(nickname)
+            .imageFileUrl(imageFileUrl)
+            .characterCount(characterCount)
+            .build();
     }
 }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
-import com.luckkids.api.controller.friend.FriendController;
 import com.luckkids.api.controller.friendCode.FriendCodeController;
+import com.luckkids.api.controller.garden.GardenController;
 import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
@@ -58,7 +58,7 @@ import org.springframework.test.web.servlet.MockMvc;
     MissionOutcomeController.class,
     VersionController.class,
     NoticeController.class,
-    FriendController.class,
+    GardenController.class,
     FriendCodeController.class,
     AlertSettingController.class,
     InitialSettingController.class,

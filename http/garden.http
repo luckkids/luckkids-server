@@ -1,0 +1,11 @@
+### 가든/앨범,랭킹 리스트 조회
+
+GET localhost:8080/api/v1/garden/list
+Content-Type: application/json
+Authorization: Bearer JWT_TOKEN
+
+### 가든/리그 조회
+
+GET localhost:8080/api/v1/garden/league
+Content-Type: application/json
+Authorization: Bearer JWT_TOKEN
