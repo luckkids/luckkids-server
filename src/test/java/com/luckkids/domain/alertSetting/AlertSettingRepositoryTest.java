@@ -48,7 +48,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
                 assertThat(a.getPush().getDeviceId()).isEqualTo("testDeviceId");
                 assertThat(a.getEntire()).isEqualTo(CHECKED);
                 assertThat(a.getMission()).isEqualTo(CHECKED);
-                assertThat(a.getLuck()).isEqualTo(CHECKED);
+                assertThat(a.getLuckMessage()).isEqualTo(CHECKED);
                 assertThat(a.getNotice()).isEqualTo(CHECKED);
             });
     }
@@ -73,7 +73,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
                 assertThat(a.getPush().getDeviceId()).isEqualTo("testDeviceId");
                 assertThat(a.getEntire()).isEqualTo(CHECKED);
                 assertThat(a.getMission()).isEqualTo(CHECKED);
-                assertThat(a.getLuck()).isEqualTo(CHECKED);
+                assertThat(a.getLuckMessage()).isEqualTo(CHECKED);
                 assertThat(a.getNotice()).isEqualTo(CHECKED);
             });
     }
@@ -121,7 +121,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
             .push(push)
             .entire(CHECKED)
             .mission(CHECKED)
-            .luck(CHECKED)
+            .luckMessage(CHECKED)
             .notice(CHECKED)
             .build();
     }

@@ -28,7 +28,7 @@ public class AlertSettingResponse {
         return AlertSettingResponse.builder()
             .entire(alertSetting.getEntire())
             .mission(alertSetting.getMission())
-            .luck(alertSetting.getLuck())
+            .luck(alertSetting.getLuckMessage())
             .notice(alertSetting.getNotice())
             .build();
     }

@@ -29,17 +29,17 @@ public class AlertSetting extends BaseTimeEntity {
     private AlertStatus mission;
 
     @Enumerated(EnumType.STRING)
-    private AlertStatus luck;
+    private AlertStatus luckMessage;
 
     @Enumerated(EnumType.STRING)
     private AlertStatus notice;
 
     @Builder
-    private AlertSetting(Push push, AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+    private AlertSetting(Push push, AlertStatus entire, AlertStatus mission, AlertStatus luckMessage, AlertStatus notice) {
         this.push = push;
         this.entire = entire;
         this.mission = mission;
-        this.luck = luck;
+        this.luckMessage = luckMessage;
         this.notice = notice;
     }
 
@@ -52,7 +52,7 @@ public class AlertSetting extends BaseTimeEntity {
                 this.mission = alertStatus;
                 break;
             case LUCK:
-                this.luck = alertStatus;
+                this.luckMessage = alertStatus;
                 break;
             case NOTICE:
                 this.notice = alertStatus;
@@ -65,7 +65,7 @@ public class AlertSetting extends BaseTimeEntity {
             .push(push)
             .entire(alertStatus)
             .mission(alertStatus)
-            .luck(alertStatus)
+            .luckMessage(alertStatus)
             .notice(alertStatus)
             .build();
     }

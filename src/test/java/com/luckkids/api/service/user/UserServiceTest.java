@@ -173,7 +173,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             .push(savedPush)
             .entire(CHECKED)
             .mission(CHECKED)
-            .luck(CHECKED)
+            .luckMessage(CHECKED)
             .notice(CHECKED)
             .build();
 
