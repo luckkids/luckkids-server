@@ -131,7 +131,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
             .entire(CHECKED)
             .mission(CHECKED)
             .notice(CHECKED)
-            .luck(CHECKED)
+            .luckMessage(CHECKED)
             .build();
 
         alertSettingRepository.save(alertSetting);

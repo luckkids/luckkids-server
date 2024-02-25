@@ -55,7 +55,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
         AlertSetting alertSetting = alertSettingReadService.findOneByDeviceId("testDeviceId");
 
-        assertThat(alertSetting).extracting("entire", "mission", "notice", "luck")
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
@@ -85,7 +85,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
         AlertSetting alertSetting = alertSettingReadService.findOneByDeviceId("testDeviceId");
 
-        assertThat(alertSetting).extracting("entire", "mission", "notice", "luck")
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
@@ -180,7 +180,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .entire(CHECKED)
             .mission(CHECKED)
             .notice(CHECKED)
-            .luck(CHECKED)
+            .luckMessage(CHECKED)
             .build();
 
         alertSettingRepository.save(alertSetting);

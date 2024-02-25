@@ -19,7 +19,7 @@ public class AlertSettingTest extends IntegrationTestSupport {
     void updateTest() {
         AlertSetting alertSetting = AlertSetting.builder()
             .push(createPush())
-            .luck(AlertStatus.CHECKED)
+            .luckMessage(AlertStatus.CHECKED)
             .notice(AlertStatus.CHECKED)
             .mission(AlertStatus.CHECKED)
             .entire(AlertStatus.CHECKED)
@@ -27,7 +27,7 @@ public class AlertSettingTest extends IntegrationTestSupport {
 
         alertSetting.update(AlertType.LUCK, AlertStatus.UNCHECKED);
 
-        assertThat(alertSetting).extracting("luck", "notice", "mission", "entire")
+        assertThat(alertSetting).extracting("luckMessage", "notice", "mission", "entire")
             .contains(AlertStatus.UNCHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED, AlertStatus.CHECKED);
     }
 
