@@ -1,8 +1,8 @@
 package com.luckkids.api.service.notice.request;
 
-import com.luckkids.api.service.firebase.request.SendPushServiceRequest;
+import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.notice.Notice;
-import com.luckkids.domain.push.Push;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,11 +27,10 @@ public class NoticeSaveServiceRequest {
             .build();
     }
 
-    public SendPushServiceRequest toSendPushServiceRequest(Push push){
-        return SendPushServiceRequest.builder()
-            .title(title)
-            .body(noticeDescription)
-            .push(push)
+    public SendPushAlertTypeServiceRequest toSendPushAlertTypeRequest(AlertType alertType){
+        return SendPushAlertTypeServiceRequest.builder()
+            .alertType(alertType)
+            .body(title)
             .screenName("NOTICE")
             .build();
     }

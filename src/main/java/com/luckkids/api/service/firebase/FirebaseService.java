@@ -5,6 +5,7 @@ import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
 import com.luckkids.api.service.firebase.request.SendPushServiceRequest;
 import com.luckkids.domain.push.Push;
+import com.luckkids.domain.push.PushMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class FirebaseService {
                     .putCustomData("screen", sendPushServiceRequest.getScreenName())
                     .setSound(sendPushServiceRequest.getSound())
                     .setAlert(ApsAlert.builder()
-                        .setTitle(sendPushServiceRequest.getTitle())
+                        .setTitle(PushMessage.TITLE.getText())
                         .setBody(sendPushServiceRequest.getBody())
                         .build())
                     .build())

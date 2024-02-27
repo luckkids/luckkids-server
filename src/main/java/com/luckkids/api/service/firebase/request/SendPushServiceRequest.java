@@ -1,6 +1,7 @@
 package com.luckkids.api.service.firebase.request;
 
 import com.luckkids.domain.push.Push;
+import com.luckkids.domain.push.PushMessage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +11,13 @@ import lombok.NoArgsConstructor;
 public class SendPushServiceRequest {
     private Push push;
     private String sound;
-    private String title;
     private String body;
     private String screenName;
 
     @Builder
-    private SendPushServiceRequest(Push push, String sound, String title, String body, String screenName) {
+    private SendPushServiceRequest(Push push, String sound, String body, String screenName) {
         this.push = push;
         this.sound = sound;
-        this.title = title;
         this.body = body;
         this.screenName = screenName;
     }
