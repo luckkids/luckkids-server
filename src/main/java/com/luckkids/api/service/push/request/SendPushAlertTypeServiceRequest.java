@@ -31,11 +31,4 @@ public class SendPushAlertTypeServiceRequest {
             .build();
     }
 
-    public AlertHistoryServiceRequest toAlertHistoryServiceRequest(Push push){
-        return AlertHistoryServiceRequest.builder()
-            .push(push)
-            .alertDescription(body)
-            .build();
-    }
-
 }

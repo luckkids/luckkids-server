@@ -17,12 +17,10 @@ public class PushService {
     private final PushReadService pushReadService;
     private final FirebaseService firebaseService;
     private final SecurityService securityService;
-    private final AlertHistoryService alertHistoryService;
 
     public void sendPushAlertType(SendPushAlertTypeServiceRequest sendPushAlertTypeRequest){
         for(Push push : pushReadService.findAllByAlertType(sendPushAlertTypeRequest.getAlertType())){
             firebaseService.sendPushNotification(sendPushAlertTypeRequest.toSendPushServiceRequest(push));
-            alertHistoryService.createAlertHistory(sendPushAlertTypeRequest.toAlertHistoryServiceRequest(push));
         }
     }
 
