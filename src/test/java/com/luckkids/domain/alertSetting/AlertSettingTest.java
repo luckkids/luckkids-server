@@ -35,7 +35,7 @@ public class AlertSettingTest extends IntegrationTestSupport {
         return Push.builder()
             .deviceId("testDeviceId")
             .pushToken("testPushToken")
-            .user(new User())
+            .user(User.builder().build())
             .build();
     }
 }

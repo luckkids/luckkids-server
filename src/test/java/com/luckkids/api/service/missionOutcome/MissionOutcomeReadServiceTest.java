@@ -139,7 +139,11 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 
         // when
         MissionOutcomeForCalendarResponse missionOutcomeForCalendarResponses
-            = missionOutcomeReadService.getMissionOutcomeForCalendar(LocalDate.of(2023, 12, 22));
+            = missionOutcomeReadService.getMissionOutcomeForCalendar(
+            LocalDate.of(2023, 12, 22),
+            date -> date.withDayOfMonth(1).minusMonths(1),
+            date -> date.withDayOfMonth(1).plusMonths(1).minusDays(1)
+        );
 
         // then
         assertThat(missionOutcomeForCalendarResponses.getStartDate()).isEqualTo(LocalDate.of(2023, 11, 1));

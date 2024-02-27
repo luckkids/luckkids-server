@@ -1,10 +1,13 @@
 package com.luckkids.domain.userCharacter;
 
+import com.luckkids.domain.userCharacter.projection.UserCharacterSummaryDto;
 import com.luckkids.domain.userCharacter.projection.UserInProgressCharacterDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static com.luckkids.domain.luckkidsCharacter.QLuckkidsCharacter.luckkidsCharacter;
 import static com.luckkids.domain.user.QUser.user;
@@ -29,5 +32,18 @@ public class UserCharacterQueryRepository {
             .where(userCharacter.user.id.eq(userId)
                 .and(userCharacter.characterProgressStatus.eq(IN_PROGRESS)))
             .fetchOne();
+    }
+
+    public List<UserCharacterSummaryDto> findUserCharacterSummary(int userId) {
+        return jpaQueryFactory
+            .select(Projections.constructor(UserCharacterSummaryDto.class,
+                luckkidsCharacter.characterType,
+                luckkidsCharacter.level,
+                userCharacter.characterProgressStatus
+            ))
+            .from(userCharacter)
+            .join(userCharacter.luckkidsCharacter, luckkidsCharacter)
+            .where(userCharacter.user.id.eq(userId))
+            .fetch();
     }
 }

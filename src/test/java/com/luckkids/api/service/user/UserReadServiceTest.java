@@ -11,6 +11,7 @@ import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.user.*;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import java.util.List;
 import static com.luckkids.domain.luckkidsCharacter.CharacterType.CLOVER;
 import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 class UserReadServiceTest extends IntegrationTestSupport {
 
@@ -157,6 +159,23 @@ class UserReadServiceTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("현재 캐릭터 레벨업까지의 달성률을 가져온다.")
+    @Test
+    void getCharacterAchievementRate() {
+        // given
+        User user = createUser("test1@gmail.com", "test1234", SnsType.NORMAL, "테스트1", "테스트1의 행운문구", 20);
+        userRepository.save(user);
+
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
+
+        // when
+        double characterAchievementRate = userReadService.getCharacterAchievementRate();
+
+        // then
+        assertThat(characterAchievementRate).isEqualTo(0.8);
+    }
+
     private User createUser(String email, String password, SnsType snsType, String nickname, String luckPhrase, int missionCount) {
         return User.builder()
             .email(email)
@@ -185,6 +204,12 @@ class UserReadServiceTest extends IntegrationTestSupport {
             .user(user)
             .luckkidsCharacter(luckkidsCharacter)
             .characterProgressStatus(IN_PROGRESS)
+            .build();
+    }
+
+    private LoginUserInfo createLoginUserInfo(int userId) {
+        return LoginUserInfo.builder()
+            .userId(userId)
             .build();
     }
 }

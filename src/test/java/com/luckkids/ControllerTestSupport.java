@@ -39,6 +39,7 @@ import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
+import com.luckkids.api.service.userCharacter.UserCharacterService;
 import com.luckkids.api.service.version.VersionReadService;
 import com.luckkids.api.service.version.VersionService;
 import com.luckkids.api.service.withdrawReason.WithdrawReasonService;
@@ -155,5 +156,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected FriendCodeReadService friendCodeReadService;
+
+    @MockBean
+    protected UserCharacterService userCharacterService;
 }
 

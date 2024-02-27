@@ -53,4 +53,21 @@ class HomeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("OK"))
             .andExpect(jsonPath("$.message").value("OK"));
     }
+
+    @DisplayName("홈 화면의 메인 정보들을 조회한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getHomeMainInfo() throws Exception {
+        // given
+
+        // when // then
+        mockMvc.perform(
+                get("/api/v1/home/main")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
 }
