@@ -52,7 +52,7 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
                 .alertDescription("알림테스트 내용")
                 .build();
 
-        AlertHistory alertHistory = alertHistoryService.save(alertHistoryServiceRequest);
+        AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
         assertThat(alertHistory).extracting("push", "alertDescription", "alertHistoryStatus")
                 .contains(push, "알림테스트 내용", AlertHistoryStatus.UNCHECKED);
     }

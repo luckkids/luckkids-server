@@ -1,6 +1,7 @@
 package com.luckkids.api.service.alertHistory;
 
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
+import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ public class AlertHistoryService {
 
     private final AlertHistoryRepository alertHistoryRepository;
 
-    public void createAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest){
-        alertHistoryRepository.save(alertHistoryServiceRequest.toEntity());
+    public AlertHistory createAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest){
+        return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity());
     }
 }
