@@ -10,14 +10,16 @@ import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
+import com.luckkids.api.controller.luckkidsMission.LuckkidsMissionController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.push.PushController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.controller.withdrawReason.WithdrawReasonController;
-import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.luckkidsMission.LuckkidsMissionReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
@@ -30,6 +32,7 @@ import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
+import com.luckkids.api.service.luckkidsMission.LuckkidsMissionService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
@@ -37,6 +40,7 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
+import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.version.VersionReadService;
@@ -65,7 +69,9 @@ import org.springframework.test.web.servlet.MockMvc;
     HomeController.class,
     UserController.class,
     ConfirmEmailController.class,
-    WithdrawReasonController.class
+    WithdrawReasonController.class,
+    LuckkidsMissionController.class,
+    PushController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -155,5 +161,11 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected FriendCodeReadService friendCodeReadService;
+
+    @MockBean
+    protected LuckkidsMissionService luckkidsMissionService;
+
+    @MockBean
+    protected PushService pushService;
 }
 

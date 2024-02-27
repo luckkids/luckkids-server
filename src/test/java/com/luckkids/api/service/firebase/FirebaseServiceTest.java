@@ -38,7 +38,6 @@ public class FirebaseServiceTest extends IntegrationTestSupport {
         SendPushServiceRequest sendPushServiceRequest = SendPushServiceRequest.builder()
             .push(push)
             .body("테스트Body")
-            .title("테스트 title")
             .screenName("테스트 screenName")
             .sound("테스트 sound")
             .build();
