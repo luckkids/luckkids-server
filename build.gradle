@@ -131,8 +131,9 @@ bootJar {
 
 // submodule
 tasks.register('copySecret', Copy) {
-    from './luckkids-server-submodule-config'
-    include "application*.yml"
+    from(fileTree('./luckkids-server-submodule-config') {
+        include 'application*.yml', '*.json'
+    })
     into 'src/main/resources'
 }
 
