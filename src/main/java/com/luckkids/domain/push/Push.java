@@ -23,6 +23,8 @@ public class Push extends BaseTimeEntity {
 
     private String pushToken;
 
+    private String sound;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -30,10 +32,11 @@ public class Push extends BaseTimeEntity {
     private AlertSetting alertSetting;
 
     @Builder
-    private Push(String deviceId, User user, String pushToken) {
+    private Push(String deviceId, User user, String pushToken, String sound) {
         this.deviceId = deviceId;
         this.user = user;
         this.pushToken = pushToken;
+        this.sound = sound;
     }
 
     public static Push of(String deviceId, User user, String pushToken) {
@@ -41,6 +44,7 @@ public class Push extends BaseTimeEntity {
             .deviceId(deviceId)
             .user(user)
             .pushToken(pushToken)
+            .sound(PushMessage.DEFAULT_SOUND.getText())
             .build();
     }
 
@@ -51,5 +55,9 @@ public class Push extends BaseTimeEntity {
     public void updateUser(User user) {
         this.user = user;
         user.getPushes().add(this);
+    }
+
+    public void updateSound(String sound){
+        this.sound = sound;
     }
 }
