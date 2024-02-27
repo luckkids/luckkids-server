@@ -1,5 +1,6 @@
 package com.luckkids.api.service.push.request;
 
+import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
 import com.luckkids.api.service.firebase.request.SendPushServiceRequest;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.push.Push;
@@ -27,6 +28,13 @@ public class SendPushAlertTypeServiceRequest {
             .body(body)
             .push(push)
             .screenName(screenName)
+            .build();
+    }
+
+    public AlertHistoryServiceRequest toAlertHistoryServiceRequest(Push push){
+        return AlertHistoryServiceRequest.builder()
+            .push(push)
+            .alertDescription(body)
             .build();
     }
 

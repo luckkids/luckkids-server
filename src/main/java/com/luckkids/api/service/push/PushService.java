@@ -1,5 +1,6 @@
 package com.luckkids.api.service.push;
 
+import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.firebase.FirebaseService;
 import com.luckkids.api.service.push.request.PushSoundChangeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
@@ -16,10 +17,12 @@ public class PushService {
     private final PushReadService pushReadService;
     private final FirebaseService firebaseService;
     private final SecurityService securityService;
+    private final AlertHistoryService alertHistoryService;
 
     public void sendPushAlertType(SendPushAlertTypeServiceRequest sendPushAlertTypeRequest){
         for(Push push : pushReadService.findAllByAlertType(sendPushAlertTypeRequest.getAlertType())){
             firebaseService.sendPushNotification(sendPushAlertTypeRequest.toSendPushServiceRequest(push));
+            alertHistoryService.createAlertHistory(sendPushAlertTypeRequest.toAlertHistoryServiceRequest(push));
         }
     }
 
