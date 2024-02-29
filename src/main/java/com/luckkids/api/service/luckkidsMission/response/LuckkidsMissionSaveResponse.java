@@ -13,11 +13,8 @@ import java.time.LocalTime;
 public class LuckkidsMissionSaveResponse {
 
     private int id;
-
     private MissionType missionType;
-
     private String description;
-
     private LocalTime alertTime;
 
     @Builder

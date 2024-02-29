@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 public class PushSoundChangeResponse {
 
     private String deviceId;
-
     private String pushToken;
-
     private String sound;
 
     @Builder

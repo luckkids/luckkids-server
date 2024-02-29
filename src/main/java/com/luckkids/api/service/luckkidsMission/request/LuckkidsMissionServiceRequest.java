@@ -16,9 +16,7 @@ import java.time.LocalTime;
 public class LuckkidsMissionServiceRequest {
 
     private MissionType missionType;
-
     private String description;
-
     private LocalTime alertTime;
 
     @Builder
