@@ -15,6 +15,11 @@ public class AlertHistoryReadService {
 
     private final AlertHistoryRepository alertHistoryRepository;
 
+    public AlertHistory findByOne(Long id) {
+        return alertHistoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 알림 내역은 없습니다. id = " + id));
+    }
+
     public AlertHistoryResponse getAlertHistory(AlertHistoryDeviceIdServiceRequest request) {
         AlertHistory alertHistory = alertHistoryRepository.findByDeviceId(request.getDeviceId());
         return AlertHistoryResponse.of(alertHistory);

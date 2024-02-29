@@ -36,3 +36,16 @@ include::{snippets}/alertHistory-get/query-parameters.adoc[]
 
 include::{snippets}/alertHistory-get/http-response.adoc[]
 include::{snippets}/alertHistory-get/response-fields.adoc[]
+
+[[alertHistory-update]]
+=== 홈/알림 `읽음` 수정
+
+==== HTTP Request
+
+include::{snippets}/alertHistory-update/http-request.adoc[]
+include::{snippets}/alertHistory-update/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alertHistory-update/http-response.adoc[]
+include::{snippets}/alertHistory-update/response-fields.adoc[]

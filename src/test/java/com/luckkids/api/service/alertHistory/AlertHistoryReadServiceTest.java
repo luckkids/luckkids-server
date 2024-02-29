@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 
@@ -39,7 +40,40 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("알림 내역을 가져온다.")
+    @DisplayName("알림 내역 ID를 받아서 알림 내역을 가져온다.")
+    @Test
+    void findByOne() {
+        // given
+        User user = createUser();
+        userRepository.save(user);
+
+        Push push = createPush(user);
+        pushRepository.save(push);
+
+        AlertHistory alertHistory = createAlertHistory(push);
+        alertHistoryRepository.save(alertHistory);
+
+        // when
+        AlertHistory result = alertHistoryReadService.findByOne(alertHistory.getId());
+
+        // then
+        assertThat(result).extracting("id", "alertDescription", "alertHistoryStatus")
+            .contains(alertHistory.getId(), alertHistory.getAlertDescription(), alertHistory.getAlertHistoryStatus());
+    }
+
+    @DisplayName("알림 내역 ID를 받아서 알림 내역이 있는지 검색했을 때 ID가 없는 예외상황이 발생한다.")
+    @Test
+    void findByOneWithException() {
+        // given
+        Long id = 0L;
+
+        // when // then
+        assertThatThrownBy(() -> alertHistoryReadService.findByOne(id))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("해당 알림 내역은 없습니다. id = " + id);
+    }
+
+    @DisplayName("알림 내역들을 가져온다.")
     @Test
     void getAlertHistory() {
         // given
@@ -64,7 +98,6 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
         assertThat(result).extracting("id", "alertDescription", "alertHistoryStatus")
             .contains(response.getId(), response.getAlertDescription(), response.getAlertHistoryStatus());
     }
-
 
     private User createUser() {
         return User.builder()

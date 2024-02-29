@@ -6,7 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,5 +54,24 @@ class AlertHistoryControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("디바이스 ID는 필수입니다."));
+    }
+
+    @DisplayName("알림 내역 ID를 받아 알림 내역 상태를 업데이트한다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void updateAlertHistoryStatus() throws Exception {
+        // given
+        Long id = 1L;
+
+        // when // then
+        mockMvc.perform(
+                patch("/api/v1/alertHistories/{id}", id)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.statusCode").value("200"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
     }
 }

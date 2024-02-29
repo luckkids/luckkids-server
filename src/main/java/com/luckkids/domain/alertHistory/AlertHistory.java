@@ -33,4 +33,7 @@ public class AlertHistory extends BaseTimeEntity {
         this.alertHistoryStatus = alertHistoryStatus;
     }
 
+    public void updateAlertHistoryStatus(AlertHistoryStatus alertHistoryStatus) {
+        this.alertHistoryStatus = alertHistoryStatus;
+    }
 }
