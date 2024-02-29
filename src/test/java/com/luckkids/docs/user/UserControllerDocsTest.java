@@ -2,17 +2,16 @@ package com.luckkids.docs.user;
 
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.user.request.UserFindEmailRequest;
-import com.luckkids.api.controller.user.request.UserLuckPhraseRequest;
+import com.luckkids.api.controller.user.request.UserUpdateLuckPhraseRequest;
+import com.luckkids.api.controller.user.request.UserUpdateNicknameRequest;
 import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.request.UserFindEmailServiceRequest;
-import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateNicknameServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
-import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
-import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
-import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
-import com.luckkids.api.service.user.response.UserWithdrawResponse;
+import com.luckkids.api.service.user.response.*;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.SnsType;
 import org.junit.jupiter.api.DisplayName;
@@ -44,14 +43,14 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("사용자 프로필 행운문구 수정 API")
     @Test
-    void createMission() throws Exception {
+    void updatePhrase() throws Exception {
         // given
-        UserLuckPhraseRequest request = UserLuckPhraseRequest.builder()
+        UserUpdateLuckPhraseRequest request = UserUpdateLuckPhraseRequest.builder()
             .luckPhrase("행운입니다.!")
             .build();
 
-        given(userService.updatePhrase(any(UserLuckPhraseServiceRequest.class)))
-            .willReturn(UserLuckPhraseResponse.builder()
+        given(userService.updatePhrase(any(UserUpdateLuckPhraseServiceRequest.class)))
+            .willReturn(UserUpdateLuckPhraseResponse.builder()
                 .luckPhrase("행운입니다.!")
                 .build()
             );
@@ -88,7 +87,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("비밀번호 재설정 API")
     @Test
-    void changePassword() throws Exception {
+    void updatePassword() throws Exception {
         // given
         UserUpdatePasswordRequest request = UserUpdatePasswordRequest.builder()
             .email("test@email.com")
@@ -130,6 +129,49 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일")
+                )
+            ));
+    }
+
+    @DisplayName("사용자 프로필 닉네임 수정 API")
+    @Test
+    void updateNickname() throws Exception {
+        // given
+        String nickname = "테스트";
+
+        UserUpdateNicknameRequest request = UserUpdateNicknameRequest.builder()
+            .nickname(nickname)
+            .build();
+
+        given(userService.updateNickname(any(UserUpdateNicknameServiceRequest.class)))
+            .willReturn(UserUpdateNicknameResponse.of(nickname));
+
+        // when // then
+        mockMvc.perform(
+                patch("/api/v1/user/nickname")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("update-nickname",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("nickname").type(JsonFieldType.STRING)
+                        .description("닉네임")
+                ),
+                responseFields(
+                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메세지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.nickname").type(JsonFieldType.STRING)
+                        .description("닉네임")
                 )
             ));
     }

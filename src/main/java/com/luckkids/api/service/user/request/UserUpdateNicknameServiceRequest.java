@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserLuckPhraseServiceRequest {
+public class UserUpdateNicknameServiceRequest {
 
-    private String luckPhrase;
+    private String nickname;
 
     @Builder
-    private UserLuckPhraseServiceRequest(String luckPhrase) {
-        this.luckPhrase = luckPhrase;
+    private UserUpdateNicknameServiceRequest(String nickname) {
+        this.nickname = nickname;
     }
 }

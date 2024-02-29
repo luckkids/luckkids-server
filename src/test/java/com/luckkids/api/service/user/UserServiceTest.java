@@ -2,7 +2,8 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateNicknameServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.domain.alertHistory.AlertHistory;
@@ -93,7 +94,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자 비밀번호를 변경한다.")
     @Test
     void changePasswordTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, "테스트", 0);
         userRepository.save(user);
 
         UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest = UserUpdatePasswordServiceRequest.builder()
@@ -126,16 +127,16 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Test
     @Transactional
     void updatePhraseTest() {
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, "테스트", 0);
         userRepository.save(user);
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        UserLuckPhraseServiceRequest userLuckPhraseServiceRequest = UserLuckPhraseServiceRequest.builder()
+        UserUpdateLuckPhraseServiceRequest userUpdateLuckPhraseServiceRequest = UserUpdateLuckPhraseServiceRequest.builder()
             .luckPhrase("행운입니다.")
             .build();
 
-        userService.updatePhrase(userLuckPhraseServiceRequest);
+        userService.updatePhrase(userUpdateLuckPhraseServiceRequest);
 
         User savedUser = userReadService.findByOne(user.getId());
 
@@ -143,13 +144,37 @@ public class UserServiceTest extends IntegrationTestSupport {
             .contains("test@email.com", SnsType.NORMAL, "행운입니다.");
     }
 
+    @DisplayName("사용자의 닉네임을 수정한다.")
+    @Test
+    @Transactional
+    void updateNickname() {
+        // given
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, "테스트", 0);
+        userRepository.save(user);
+        given(securityService.getCurrentLoginUserInfo())
+            .willReturn(createLoginUserInfo(user.getId()));
+
+        UserUpdateNicknameServiceRequest userUpdateNicknameServiceRequest = UserUpdateNicknameServiceRequest.builder()
+            .nickname("테스트 수정")
+            .build();
+
+        // when
+        userService.updateNickname(userUpdateNicknameServiceRequest);
+
+        // then
+        User savedUser = userReadService.findByOne(user.getId());
+
+        assertThat(savedUser).extracting("email", "snsType", "nickname")
+            .contains("test@email.com", SnsType.NORMAL, "테스트 수정");
+    }
+
     @DisplayName("사용자의 모든 데이터를 삭제한다.")
     @Test
     @Transactional
     void withdrawUser() {
         //given user
-        User user = createUser("test@email.com", "1234", SnsType.NORMAL, 0);
-        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL, 0);
+        User user = createUser("test@email.com", "1234", SnsType.NORMAL, "테스트", 0);
+        User user2 = createUser("test2@email.com", "12345", SnsType.NORMAL, "테스트", 0);
         userRepository.saveAll(List.of(user, user2));
 
         given(securityService.getCurrentLoginUserInfo())
@@ -224,11 +249,12 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(findRefreshToken.isEmpty()).isTrue();
     }
 
-    private User createUser(String email, String password, SnsType snsType, int missionCount) {
+    private User createUser(String email, String password, SnsType snsType, String nickname, int missionCount) {
         return User.builder()
             .email(email)
             .password(password)
             .snsType(snsType)
+            .nickname(nickname)
             .missionCount(missionCount)
             .build();
     }

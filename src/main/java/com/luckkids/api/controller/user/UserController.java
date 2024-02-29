@@ -2,14 +2,12 @@ package com.luckkids.api.controller.user;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.user.request.UserFindEmailRequest;
-import com.luckkids.api.controller.user.request.UserLuckPhraseRequest;
+import com.luckkids.api.controller.user.request.UserUpdateLuckPhraseRequest;
+import com.luckkids.api.controller.user.request.UserUpdateNicknameRequest;
 import com.luckkids.api.controller.user.request.UserUpdatePasswordRequest;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
-import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
-import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
-import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
-import com.luckkids.api.service.user.response.UserWithdrawResponse;
+import com.luckkids.api.service.user.response.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +21,18 @@ public class UserController {
     private final UserReadService userReadService;
 
     @PatchMapping("/phrase")
-    public ApiResponse<UserLuckPhraseResponse> updatePhrase(@RequestBody @Valid UserLuckPhraseRequest userLuckPhraseRequest) {
-        return ApiResponse.ok(userService.updatePhrase(userLuckPhraseRequest.toServiceRequest()));
+    public ApiResponse<UserUpdateLuckPhraseResponse> updatePhrase(@RequestBody @Valid UserUpdateLuckPhraseRequest userUpdateLuckPhraseRequest) {
+        return ApiResponse.ok(userService.updatePhrase(userUpdateLuckPhraseRequest.toServiceRequest()));
     }
 
     @PatchMapping("/password")
     public ApiResponse<UserUpdatePasswordResponse> updatePassword(@RequestBody @Valid UserUpdatePasswordRequest userUpdatePasswordRequest) {
         return ApiResponse.ok(userService.updatePassword(userUpdatePasswordRequest.toServiceRequest()));
+    }
+
+    @PatchMapping("/nickname")
+    public ApiResponse<UserUpdateNicknameResponse> updateNickname(@RequestBody @Valid UserUpdateNicknameRequest userUpdateNicknameRequest) {
+        return ApiResponse.ok(userService.updateNickname(userUpdateNicknameRequest.toServiceRequest()));
     }
 
     @GetMapping("/findEmail")
