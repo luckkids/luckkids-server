@@ -41,7 +41,7 @@ public class LuckkidsServiceTest extends IntegrationTestSupport {
             .alertTime(LocalTime.of(10, 0))
             .build();
 
-        LuckkidsMissionSaveResponse luckkidsMissionSaveResponse = luckkidsMissionService.save(luckkidsMissionRequest);
+        LuckkidsMissionSaveResponse luckkidsMissionSaveResponse = luckkidsMissionService.createLuckkidsMission(luckkidsMissionRequest);
 
         assertThat(luckkidsMissionSaveResponse)
             .extracting("missionType", "description", "alertTime")

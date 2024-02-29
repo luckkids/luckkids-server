@@ -16,7 +16,7 @@ public class LuckkidsMissionService {
     private final LuckkidsMissionRepository luckkidsMissionRepository;
     private final PushService pushService;
 
-    public LuckkidsMissionSaveResponse save(LuckkidsMissionServiceRequest luckkidsMissionRequest){
+    public LuckkidsMissionSaveResponse createLuckkidsMission(LuckkidsMissionServiceRequest luckkidsMissionRequest){
         LuckkidsMission luckkidsMission = luckkidsMissionRepository.save(luckkidsMissionRequest.toEntity());
         pushService.sendPushAlertType(luckkidsMissionRequest.toSendPushAlertTypeRequest(AlertType.MISSION));
         return LuckkidsMissionSaveResponse.of(luckkidsMission);

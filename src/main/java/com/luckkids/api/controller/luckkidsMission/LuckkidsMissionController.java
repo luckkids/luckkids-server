@@ -18,8 +18,8 @@ public class LuckkidsMissionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ApiResponse<LuckkidsMissionSaveResponse> save(@Valid @RequestBody LuckkidsMissionRequest luckkidsMissionRequest){
-        return ApiResponse.created(luckkidsMissionService.save(luckkidsMissionRequest.toServiceRequest()));
+    public ApiResponse<LuckkidsMissionSaveResponse> createLuckkidsMission(@Valid @RequestBody LuckkidsMissionRequest luckkidsMissionRequest){
+        return ApiResponse.created(luckkidsMissionService.createLuckkidsMission(luckkidsMissionRequest.toServiceRequest()));
     }
 
 }
