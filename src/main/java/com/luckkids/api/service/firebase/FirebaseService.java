@@ -8,9 +8,11 @@ import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FirebaseService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -33,16 +35,9 @@ public class FirebaseService {
 
         try {
             firebaseMessaging.send(message);
-            alertHistoryService.createAlertHistory(createAlertHistoryServiceRequest(sendPushServiceRequest.getPush(), sendPushServiceRequest.getBody()));
+            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest.getPush(), sendPushServiceRequest.getBody()));
         } catch (FirebaseMessagingException e){
             throw new IllegalArgumentException(e.getMessage());
         }
-    }
-
-    private AlertHistoryServiceRequest createAlertHistoryServiceRequest(Push push, String alertDescription){
-        return AlertHistoryServiceRequest.builder()
-            .push(push)
-            .alertDescription(alertDescription)
-            .build();
     }
 }

@@ -27,4 +27,11 @@ public class AlertHistoryServiceRequest {
             .alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
             .build();
     }
+
+    public static AlertHistoryServiceRequest of(Push push, String alertDescription){
+        return AlertHistoryServiceRequest.builder()
+            .push(push)
+            .alertDescription(alertDescription)
+            .build();
+    }
 }
