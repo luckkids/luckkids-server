@@ -1,22 +1,27 @@
-package com.luckkids.domain.alertHistory;
+package com.luckkids.api.service.alertHistory;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.alertHistory.request.AlertHistoryDeviceIdServiceRequest;
+import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
+import com.luckkids.domain.alertHistory.AlertHistory;
+import com.luckkids.domain.alertHistory.AlertHistoryRepository;
+import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
+class AlertHistoryReadServiceTest extends IntegrationTestSupport {
+
+    @Autowired
+    private AlertHistoryReadService alertHistoryReadService;
 
     @Autowired
     private AlertHistoryRepository alertHistoryRepository;
@@ -27,9 +32,16 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private PushRepository pushRepository;
 
+    @AfterEach
+    void tearDown() {
+        alertHistoryRepository.deleteAllInBatch();
+        pushRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
+
+    @DisplayName("알림 내역을 가져온다.")
     @Test
-    @DisplayName("사용자의 알림목록을 삭제한다.")
-    void deleteByPushUserId() {
+    void getAlertHistory() {
         // given
         User user = createUser();
         userRepository.save(user);
@@ -39,36 +51,20 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 
         AlertHistory alertHistory = createAlertHistory(push);
         AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
+        AlertHistoryResponse response = AlertHistoryResponse.of(savedAlertHistory);
+
+        AlertHistoryDeviceIdServiceRequest request = AlertHistoryDeviceIdServiceRequest.builder()
+            .deviceId(push.getDeviceId())
+            .build();
 
         // when
-        alertHistoryRepository.deleteByPushUserId(user.getId());
+        AlertHistoryResponse result = alertHistoryReadService.getAlertHistory(request);
 
         // then
-        Optional<AlertHistory> findAlertHistory = alertHistoryRepository.findById(savedAlertHistory.getId());
-        assertThat(findAlertHistory.isEmpty()).isTrue();
+        assertThat(result).extracting("id", "alertDescription", "alertHistoryStatus")
+            .contains(response.getId(), response.getAlertDescription(), response.getAlertHistoryStatus());
     }
 
-    @DisplayName("deviceId를 받아서 알림 내역을 조회한다.")
-    @Test
-    void findByDeviceId() {
-        // given
-        User user = createUser();
-        userRepository.save(user);
-
-        Push push = createPush(user);
-        pushRepository.save(push);
-
-        AlertHistory alertHistory = createAlertHistory(push);
-        AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
-
-        // when
-        AlertHistory result = alertHistoryRepository.findByDeviceId(push.getDeviceId());
-
-        // then
-        assertThat(result)
-            .extracting("push", "alertDescription", "alertHistoryStatus")
-            .contains(savedAlertHistory.getPush(), savedAlertHistory.getAlertDescription(), savedAlertHistory.getAlertHistoryStatus());
-    }
 
     private User createUser() {
         return User.builder()

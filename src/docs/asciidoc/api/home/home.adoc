@@ -23,3 +23,16 @@ include::{snippets}/home-calender-detail/path-parameters.adoc[]
 
 include::{snippets}/home-calender-detail/http-response.adoc[]
 include::{snippets}/home-calender-detail/response-fields.adoc[]
+
+[[alertHistory-get]]
+=== 홈/알림 조회
+
+==== HTTP Request
+
+include::{snippets}/alertHistory-get/http-request.adoc[]
+include::{snippets}/alertHistory-get/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alertHistory-get/http-response.adoc[]
+include::{snippets}/alertHistory-get/response-fields.adoc[]
