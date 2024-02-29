@@ -11,7 +11,7 @@ include::{snippets}/home-main/http-response.adoc[]
 include::{snippets}/home-main/response-fields.adoc[]
 
 [[update-phrase]]
-=== 홈/프로필 수정_행운문구 수정
+=== 홈/프로필 행운문구 수정
 
 ==== HTTP Request
 
