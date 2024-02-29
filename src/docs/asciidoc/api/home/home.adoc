@@ -12,7 +12,7 @@ include::{snippets}/home-calender/http-response.adoc[]
 include::{snippets}/home-calender/response-fields.adoc[]
 
 [[update-nickname]]
-=== 홈/프로필 수정_닉네임 수정
+=== 홈/프로필 닉네임 수정
 
 ==== HTTP Request
 
