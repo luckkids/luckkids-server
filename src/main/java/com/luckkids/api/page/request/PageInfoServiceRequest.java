@@ -1,25 +1,21 @@
 package com.luckkids.api.page.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 @Getter
 @NoArgsConstructor
+@SuperBuilder
 public class PageInfoServiceRequest {
 
-    private int page;
-    private int size;
+	private int page;
+	private int size;
 
-    @Builder
-    private PageInfoServiceRequest(int page, int size) {
-        this.page = page;
-        this.size = size;
-    }
-
-    public Pageable toPageable() {
-        return PageRequest.of(page - 1, size);
-    }
+	public Pageable toPageable() {
+		return PageRequest.of(page - 1, size);
+	}
 }

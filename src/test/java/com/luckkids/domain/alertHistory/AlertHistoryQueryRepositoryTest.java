@@ -2,14 +2,15 @@ package com.luckkids.domain.alertHistory;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.SnsType;
@@ -17,7 +18,10 @@ import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 
 @Transactional
-public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
+class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
+
+	@Autowired
+	private AlertHistoryQueryRepository alertHistoryQueryRepository;
 
 	@Autowired
 	private AlertHistoryRepository alertHistoryRepository;
@@ -28,9 +32,9 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 	@Autowired
 	private PushRepository pushRepository;
 
+	@DisplayName("페이징 정보와 deviceId를 받아서 페이징 처리된 알림 내역을 조회한다.")
 	@Test
-	@DisplayName("사용자의 알림목록을 삭제한다.")
-	void deleteByPushUserId() {
+	void findByDeviceId() {
 		// given
 		User user = createUser();
 		userRepository.save(user);
@@ -41,12 +45,27 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 		AlertHistory alertHistory = createAlertHistory(push);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 
+		Pageable pageable = PageInfoServiceRequest.builder()
+			.page(1)
+			.size(10)
+			.build()
+			.toPageable();
+
 		// when
-		alertHistoryRepository.deleteByPushUserId(user.getId());
+		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceId(push.getDeviceId(), pageable);
 
 		// then
-		Optional<AlertHistory> findAlertHistory = alertHistoryRepository.findById(savedAlertHistory.getId());
-		assertThat(findAlertHistory.isEmpty()).isTrue();
+		assertThat(result.getContent())
+			.extracting("push", "alertDescription", "alertHistoryStatus")
+			.contains(
+				tuple(savedAlertHistory.getPush(),
+					savedAlertHistory.getAlertDescription(),
+					savedAlertHistory.getAlertHistoryStatus()
+				)
+			);
+
+		assertThat(result.getTotalElements()).isEqualTo(1);
+		assertThat(result.getTotalPages()).isEqualTo(1);
 	}
 
 	private User createUser() {
