@@ -5,6 +5,7 @@ import com.luckkids.api.controller.mission.request.MissionCreateRequest;
 import com.luckkids.api.controller.mission.request.MissionUpdateRequest;
 import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
+import com.luckkids.api.service.mission.response.MissionDeleteResponse;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.misson.MissionType;
 import jakarta.validation.Valid;
@@ -42,7 +43,7 @@ public class MissionController {
     }
 
     @DeleteMapping("/api/v1/missions/{missionId}")
-    public ApiResponse<Integer> deleteMission(@PathVariable int missionId) {
+    public ApiResponse<MissionDeleteResponse> deleteMission(@PathVariable int missionId) {
         return ApiResponse.ok(missionService.deleteMission(missionId, now()));
     }
 }

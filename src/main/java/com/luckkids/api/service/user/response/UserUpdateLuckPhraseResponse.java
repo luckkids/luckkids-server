@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserLuckPhraseResponse {
+public class UserUpdateLuckPhraseResponse {
     private String luckPhrase;
 
     @Builder
-    private UserLuckPhraseResponse(String luckPhrase) {
+    private UserUpdateLuckPhraseResponse(String luckPhrase) {
         this.luckPhrase = luckPhrase;
     }
 
-    public static UserLuckPhraseResponse of(User user) {
-        return UserLuckPhraseResponse.builder()
+    public static UserUpdateLuckPhraseResponse of(User user) {
+        return UserUpdateLuckPhraseResponse.builder()
             .luckPhrase(user.getLuckPhrase())
             .build();
     }

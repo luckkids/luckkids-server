@@ -7,6 +7,7 @@ import com.luckkids.api.service.mission.MissionReadService;
 import com.luckkids.api.service.mission.MissionService;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
+import com.luckkids.api.service.mission.response.MissionDeleteResponse;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
@@ -17,6 +18,7 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +28,6 @@ import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
 import static com.luckkids.domain.misson.MissionType.HEALTH;
 import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
-import static java.time.LocalDateTime.now;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -210,12 +211,14 @@ public class MissionControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void deleteMission() throws Exception {
         // given
-        given(missionService.deleteMission(1, now()))
-            .willReturn(1);
+        int missionId = 1;
+
+        given(missionService.deleteMission(anyInt(), any(LocalDateTime.class)))
+            .willReturn(MissionDeleteResponse.of(missionId));
 
         // when // then
         mockMvc.perform(
-                delete("/api/v1/missions/{missionId}", 1)
+                delete("/api/v1/missions/{missionId}", missionId)
             )
             .andDo(print())
             .andExpect(status().isOk())
@@ -232,8 +235,10 @@ public class MissionControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.NUMBER)
-                        .description("미션 id")
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.missionId").type(JsonFieldType.NUMBER)
+                        .description("미션 ID")
                 )
             ));
     }
