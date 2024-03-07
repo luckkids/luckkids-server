@@ -34,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AlertSettingControllerDocsTest extends RestDocsSupport {
 
     private final AlertSettingReadService alertSettingReadService = mock(AlertSettingReadService.class);
-    private final AlertSettingService alertSettingService = mock(AlertSettingService.class);;
+    private final AlertSettingService alertSettingService = mock(AlertSettingService.class);
+
     @Override
     protected Object initController() {
         return new AlertSettingController(alertSettingReadService, alertSettingService);
@@ -96,10 +97,10 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void updateAlertSetting() throws Exception {
         AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
-                .alertType(AlertType.ENTIRE)
-                .alertStatus(AlertStatus.UNCHECKED)
-                .deviceId("testDeviceId")
-                .build();
+            .alertType(AlertType.ENTIRE)
+            .alertStatus(AlertStatus.UNCHECKED)
+            .deviceId("testDeviceId")
+            .build();
         // given
         given(alertSettingService.updateAlertSetting(any(AlertSettingUpdateServiceRequest.class)))
             .willReturn(
@@ -124,7 +125,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("alertType").type(JsonFieldType.STRING)
-                        .description("알림타입 가능한 값: "+Arrays.toString(AlertType.values())),
+                        .description("알림타입 가능한 값: " + Arrays.toString(AlertType.values())),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
                         .description("알림여부"),
                     fieldWithPath("deviceId").type(JsonFieldType.STRING)
@@ -140,13 +141,13 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
                     fieldWithPath("data.entire").type(JsonFieldType.STRING)
-                        .description("전체알람설정: "+Arrays.toString(AlertStatus.values())),
+                        .description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.mission").type(JsonFieldType.STRING)
-                        .description("미션알림설정: "+Arrays.toString(AlertStatus.values())),
+                        .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.luck").type(JsonFieldType.STRING)
-                        .description("7시행운문구알림설정: "+Arrays.toString(AlertStatus.values())),
+                        .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                        .description("공지사항 알림설정: "+Arrays.toString(AlertStatus.values()))
+                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values()))
                 )
             ));
     }
