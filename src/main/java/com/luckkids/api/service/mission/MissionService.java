@@ -4,6 +4,7 @@ import com.luckkids.api.event.missionOutcome.MissionOutcomeCreateEvent;
 import com.luckkids.api.event.missionOutcome.MissionOutcomeDeleteEvent;
 import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
 import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
+import com.luckkids.api.service.mission.response.MissionDeleteResponse;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
@@ -54,12 +55,12 @@ public class MissionService {
         return MissionResponse.of(updatedMission);
     }
 
-    public int deleteMission(int missionId, LocalDateTime deletedDate) {
+    public MissionDeleteResponse deleteMission(int missionId, LocalDateTime deletedDate) {
         Mission mission = missionReadService.findByOne(missionId);
         mission.delete(deletedDate);
 
         eventPublisher.publishEvent(new MissionOutcomeDeleteEvent(this, mission.getId()));
 
-        return missionId;
+        return MissionDeleteResponse.of(missionId);
     }
 }

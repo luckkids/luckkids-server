@@ -36,6 +36,19 @@ include::{snippets}/home-calender/query-parameters.adoc[]
 include::{snippets}/home-calender/http-response.adoc[]
 include::{snippets}/home-calender/response-fields.adoc[]
 
+[[update-nickname]]
+=== 홈/프로필 닉네임 수정
+
+==== HTTP Request
+
+include::{snippets}/update-nickname/http-request.adoc[]
+include::{snippets}/update-nickname/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-nickname/http-response.adoc[]
+include::{snippets}/update-nickname/response-fields.adoc[]
+
 [[home-calender-detail]]
 === 홈/캘린더 세부
 
@@ -48,3 +61,29 @@ include::{snippets}/home-calender-detail/path-parameters.adoc[]
 
 include::{snippets}/home-calender-detail/http-response.adoc[]
 include::{snippets}/home-calender-detail/response-fields.adoc[]
+
+[[alertHistory-get]]
+=== 홈/알림 조회
+
+==== HTTP Request
+
+include::{snippets}/alertHistory-get/http-request.adoc[]
+include::{snippets}/alertHistory-get/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alertHistory-get/http-response.adoc[]
+include::{snippets}/alertHistory-get/response-fields.adoc[]
+
+[[alertHistory-update]]
+=== 홈/알림 `읽음` 수정
+
+==== HTTP Request
+
+include::{snippets}/alertHistory-update/http-request.adoc[]
+include::{snippets}/alertHistory-update/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alertHistory-update/http-response.adoc[]
+include::{snippets}/alertHistory-update/response-fields.adoc[]
