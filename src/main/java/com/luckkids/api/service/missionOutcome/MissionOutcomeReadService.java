@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -41,11 +42,14 @@ public class MissionOutcomeReadService {
             .toList();
     }
 
-    public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(LocalDate missionDate) {
+    public MissionOutcomeForCalendarResponse getMissionOutcomeForCalendar(
+        LocalDate referenceDate,
+        Function<LocalDate, LocalDate> startCalculator,
+        Function<LocalDate, LocalDate> endCalculator) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
 
-        LocalDate startDate = missionDate.withDayOfMonth(1).minusMonths(1);
-        LocalDate endDate = startDate.plusMonths(2).minusDays(1);
+        LocalDate startDate = startCalculator.apply(referenceDate);
+        LocalDate endDate = endCalculator.apply(referenceDate);
 
         List<MissionOutcomeCalenderDto> result = missionOutcomeQueryRepository.findMissionOutcomeByDateRangeAndStatus(userId, startDate, endDate);
         return MissionOutcomeForCalendarResponse.of(startDate, endDate, result);

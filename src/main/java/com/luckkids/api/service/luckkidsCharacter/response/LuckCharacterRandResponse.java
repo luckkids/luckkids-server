@@ -2,7 +2,6 @@ package com.luckkids.api.service.luckkidsCharacter.response;
 
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

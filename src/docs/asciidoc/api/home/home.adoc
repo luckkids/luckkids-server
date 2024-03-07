@@ -1,3 +1,28 @@
+[[home-main]]
+=== 홈/메인
+
+==== HTTP Request
+
+include::{snippets}/home-main/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/home-main/http-response.adoc[]
+include::{snippets}/home-main/response-fields.adoc[]
+
+[[update-phrase]]
+=== 홈/프로필 행운문구 수정
+
+==== HTTP Request
+
+include::{snippets}/update-phrase/http-request.adoc[]
+include::{snippets}/update-phrase/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-phrase/http-response.adoc[]
+include::{snippets}/update-phrase/response-fields.adoc[]
+
 [[home-calender]]
 === 홈/캘린더
 

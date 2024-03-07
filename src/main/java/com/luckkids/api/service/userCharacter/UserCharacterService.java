@@ -6,17 +6,27 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
 import com.luckkids.api.service.userCharacter.response.UserCharacterCreateResponse;
 import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
+import com.luckkids.api.service.userCharacter.response.UserCharacterSummaryResponse;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterQueryRepository;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
+import com.luckkids.domain.userCharacter.projection.UserCharacterSummaryDto;
 import com.luckkids.domain.userCharacter.projection.UserInProgressCharacterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.COMPLETED;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
 import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Service
@@ -58,6 +68,19 @@ public class UserCharacterService {
         return handleCharacterLevelUpUserCharacter(inProgressCharacters.userCharacter(), LevelUpLuckkidsCharacter, level);
     }
 
+    public UserCharacterSummaryResponse getCharacterSummary() {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        userReadService.findByOne(userId);
+
+        List<UserCharacterSummaryDto> userCharacterSummaries = userCharacterQueryRepository.findUserCharacterSummary(userId);
+
+        UserCharacterSummaryDto inProgressCharacter = findInProgressCharacter(userCharacterSummaries);
+
+        Map<CharacterType, Long> completedCharacterCount = calculateCompletedCharacterCount(userCharacterSummaries);
+
+        return UserCharacterSummaryResponse.of(inProgressCharacter, completedCharacterCount);
+    }
+
     private UserCharacterLevelUpResponse handleCharacterLevelUpUserCharacter(UserCharacter userCharacter, LuckkidsCharacter LevelUpLuckkidsCharacter, int level) {
         if (level == LEVEL_MAX.getLevel()) {
             userCharacter.updateCompleteCharacter();
@@ -65,5 +88,28 @@ public class UserCharacterService {
         }
         userCharacter.updateLuckkidsCharacter(LevelUpLuckkidsCharacter);
         return UserCharacterLevelUpResponse.of(true, LevelUpLuckkidsCharacter.getLottieFile(), LevelUpLuckkidsCharacter.getImageFile());
+    }
+
+    private UserCharacterSummaryDto findInProgressCharacter(List<UserCharacterSummaryDto> summaries) {
+        return summaries.stream()
+            .filter(dto -> dto.characterProgressStatus() == IN_PROGRESS)
+            .findAny()
+            .orElseThrow(() -> new NoSuchElementException("진행 중인 캐릭터가 없습니다."));
+    }
+
+    private Map<CharacterType, Long> calculateCompletedCharacterCount(List<UserCharacterSummaryDto> summaries) {
+        Map<CharacterType, Long> completedCharacterCount = new EnumMap<>(CharacterType.class);
+        for (CharacterType type : CharacterType.values()) {
+            completedCharacterCount.put(type, 0L);
+        }
+
+        for (UserCharacterSummaryDto summary : summaries) {
+            if (summary.characterProgressStatus() == COMPLETED) {
+                CharacterType type = summary.characterType();
+                completedCharacterCount.put(type, completedCharacterCount.get(type) + 1);
+            }
+        }
+
+        return completedCharacterCount;
     }
 }

@@ -291,6 +291,25 @@ public class UserTest extends IntegrationTestSupport {
         assertThat(findUser.getNickname()).isEqualTo("럭키즈!!!!!");
     }
 
+    @DisplayName("미션 카운트를 이용해서 레벨업까지의 달성률을 계산한다.")
+    @Test
+    void calculateAchievementRate() {
+        // given
+        User user1 = createUser("test1@email.com", "1234", SnsType.NORMAL, 15);
+        User user2 = createUser("test2@email.com", "1234", SnsType.NORMAL, 155);
+        User user3 = createUser("test3@email.com", "1234", SnsType.NORMAL, 25);
+
+        // when
+        double rate1 = user1.calculateAchievementRate();
+        double rate2 = user2.calculateAchievementRate();
+        double rate3 = user3.calculateAchievementRate();
+
+        // then
+        assertThat(rate1).isEqualTo(0.6);
+        assertThat(rate2).isEqualTo(0.2);
+        assertThat(rate3).isEqualTo(0);
+    }
+
     private User createUser(String email, String password, SnsType snsType, int missionCount) {
         return User.builder()
             .email(email)
