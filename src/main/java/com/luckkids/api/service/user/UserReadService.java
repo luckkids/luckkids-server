@@ -24,7 +24,6 @@ public class UserReadService {
 
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
-
     private final SecurityService securityService;
 
     public User findByOne(int id) {

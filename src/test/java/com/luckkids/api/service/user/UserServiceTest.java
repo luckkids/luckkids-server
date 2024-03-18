@@ -237,7 +237,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         List<Friend> friendList = friendRepository.findAll();
         Optional<Mission> findMission = missionRepository.findById(savedMission.getId());
         List<MissionOutcome> missionOutcomeList = missionOutcomeRepository.findAll();
-        Optional<Push> findPush = pushRepository.findById(savedPush.getDeviceId());
+        Optional<Push> findPush = pushRepository.findById(savedPush.getId());
         Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(savedToken.getDeviceId());
 
         assertThat(findAlertHistory.isEmpty()).isTrue();

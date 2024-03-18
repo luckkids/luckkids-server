@@ -52,7 +52,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 			.toPageable();
 
 		// when
-		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceId(push.getDeviceId(), pageable);
+		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceIdAndUserId(push.getDeviceId(), user.getId(), pageable);
 
 		// then
 		assertThat(result.getContent())

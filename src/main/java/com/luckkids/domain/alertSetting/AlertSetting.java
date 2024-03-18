@@ -19,7 +19,6 @@ public class AlertSetting extends BaseTimeEntity {
     private int id;
 
     @OneToOne
-    @JoinColumn(name = "device_id")
     private Push push;
 
     @Enumerated(EnumType.STRING)
