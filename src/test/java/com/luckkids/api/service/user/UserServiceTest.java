@@ -238,7 +238,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         Optional<Mission> findMission = missionRepository.findById(savedMission.getId());
         List<MissionOutcome> missionOutcomeList = missionOutcomeRepository.findAll();
         Optional<Push> findPush = pushRepository.findById(savedPush.getId());
-        Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(savedToken.getDeviceId());
+        Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(savedToken.getId());
 
         assertThat(findAlertHistory.isEmpty()).isTrue();
         assertThat(findAlertSetting.isEmpty()).isTrue();
