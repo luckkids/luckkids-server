@@ -24,12 +24,10 @@ public class AlertSettingService {
     private final AlertSettingRepository alertSettingRepository;
     private final AlertSettingReadService alertSettingReadService;
     private final SecurityService securityService;
-    private final UserReadService userReadService;
     private final PushReadService pushReadService;
 
     public AlertSettingUpdateResponse updateAlertSetting(AlertSettingUpdateServiceRequest request) {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceId(request.getDeviceId());
+        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId(request.getDeviceId());
         alertSetting.update(request.getAlertType(), request.getAlertStatus());
         return AlertSettingUpdateResponse.of(alertSetting);
     }

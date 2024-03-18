@@ -1,7 +1,9 @@
 package com.luckkids.api.service.alertHistory;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
+import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -84,6 +86,9 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
+		given(securityService.getCurrentLoginUserInfo())
+			.willReturn(createLoginUserInfo(user.getId()));
+
 		AlertHistory alertHistory = createAlertHistory(push);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 		AlertHistoryResponse response = AlertHistoryResponse.of(savedAlertHistory);
@@ -128,6 +133,12 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.push(push)
 			.alertDescription("test")
 			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
+			.build();
+	}
+
+	private LoginUserInfo createLoginUserInfo(int userId) {
+		return LoginUserInfo.builder()
+			.userId(userId)
 			.build();
 	}
 }

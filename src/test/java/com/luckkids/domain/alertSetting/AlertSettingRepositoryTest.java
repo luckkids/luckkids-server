@@ -28,34 +28,9 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private PushRepository pushRepository;
 
-    @DisplayName("사용자ID로 사용자의 알림설정을 조회한다.")
-    @Test
-    void findByUserIdTest() {
-        User user = createUser();
-        userRepository.save(user);
-
-        Push push = createPush(user);
-        pushRepository.save(push);
-
-        AlertSetting alertSetting = createAlertSetting(push);
-        alertSettingRepository.save(alertSetting);
-
-        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByPushDeviceId("testDeviceId");
-
-        assertThat(savedAlertSetting)
-            .isPresent()
-            .hasValueSatisfying(a -> {
-                assertThat(a.getPush().getDeviceId()).isEqualTo("testDeviceId");
-                assertThat(a.getEntire()).isEqualTo(CHECKED);
-                assertThat(a.getMission()).isEqualTo(CHECKED);
-                assertThat(a.getLuckMessage()).isEqualTo(CHECKED);
-                assertThat(a.getNotice()).isEqualTo(CHECKED);
-            });
-    }
-
     @DisplayName("사용자ID와 DeviceID로 사용자의 알림설정을 조회한다.")
     @Test
-    void findByUserIdAndDeviceId() {
+    void findByPushDeviceIdAndPushUserId() {
         User user = createUser();
         userRepository.save(user);
 
@@ -65,7 +40,7 @@ public class AlertSettingRepositoryTest extends IntegrationTestSupport {
         AlertSetting alertSetting = createAlertSetting(push);
         alertSettingRepository.save(alertSetting);
 
-        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByPushDeviceId("testDeviceId");
+        Optional<AlertSetting> savedAlertSetting = alertSettingRepository.findByPushDeviceIdAndPushUserId("testDeviceId", user.getId());
 
         assertThat(savedAlertSetting)
             .isPresent()

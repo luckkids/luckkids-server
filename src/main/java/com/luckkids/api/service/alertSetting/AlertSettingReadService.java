@@ -19,12 +19,13 @@ public class AlertSettingReadService {
     private final AlertSettingRepository alertSettingRepository;
     private final SecurityService securityService;
 
-    public AlertSetting findOneByDeviceId(String deviceId) {
-        return alertSettingRepository.findByPushDeviceId(deviceId)
+    public AlertSetting findOneByDeviceIdAndUserId(String deviceId) {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        return alertSettingRepository.findByPushDeviceIdAndPushUserId(deviceId, userId)
             .orElseThrow(() -> new LuckKidsException(ErrorCode.ALERT_SETTING_UNKNOWN));
     }
 
     public AlertSettingResponse getAlertSetting(AlertSettingServiceRequest alertSettingServiceRequest) {
-        return AlertSettingResponse.of(findOneByDeviceId(alertSettingServiceRequest.getDeviceId()));
+        return AlertSettingResponse.of(findOneByDeviceIdAndUserId(alertSettingServiceRequest.getDeviceId()));
     }
 }

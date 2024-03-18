@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AlertSettingRepository extends JpaRepository<AlertSetting, Integer> {
 
-    Optional<AlertSetting> findByPushDeviceId(String deviceId);
+    Optional<AlertSetting> findByPushDeviceIdAndPushUserId(String deviceId, int userId);
 
     void deleteByPushUserId(int userId);
 

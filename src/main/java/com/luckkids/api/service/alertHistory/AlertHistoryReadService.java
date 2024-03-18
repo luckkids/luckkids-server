@@ -2,6 +2,7 @@ package com.luckkids.api.service.alertHistory;
 
 import java.util.List;
 
+import com.luckkids.api.service.security.SecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class AlertHistoryReadService {
 
 	private final AlertHistoryRepository alertHistoryRepository;
 	private final AlertHistoryQueryRepository alertHistoryQueryRepository;
+	private final SecurityService securityService;
 
 	public AlertHistory findByOne(Long id) {
 		return alertHistoryRepository.findById(id)
@@ -30,8 +32,11 @@ public class AlertHistoryReadService {
 	}
 
 	public PageCustom<AlertHistoryResponse> getAlertHistory(AlertHistoryDeviceIdServiceRequest request) {
-		Page<AlertHistory> alertHistoryPage = alertHistoryQueryRepository.findByDeviceId(
+		int userId = securityService.getCurrentLoginUserInfo().getUserId();
+
+		Page<AlertHistory> alertHistoryPage = alertHistoryQueryRepository.findByDeviceIdAndUserId(
 			request.getDeviceId(),
+			userId,
 			request.toPageable()
 		);
 
