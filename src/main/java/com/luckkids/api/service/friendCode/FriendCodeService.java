@@ -5,6 +5,7 @@ import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.api.service.push.request.SendPushDataDto;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertType;
@@ -14,6 +15,7 @@ import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
 import com.luckkids.domain.friendCode.UseStatus;
 import com.luckkids.domain.push.PushMessage;
+import com.luckkids.domain.push.PushScreenName;
 import com.luckkids.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,7 +73,9 @@ public class FriendCodeService {
             SendPushAlertTypeServiceRequest.builder()
                 .alertType(AlertType.NOTICE)
                 .body(PushMessage.GARDEN.getText().replace("{nickName}", requestUser.getNickname()))
-                .screenName("GARDEN")
+                .sendPushDataDto(SendPushDataDto.builder()
+                        .screenName(PushScreenName.GARDEN.getText())
+                        .build())
                 .build()
         );
 

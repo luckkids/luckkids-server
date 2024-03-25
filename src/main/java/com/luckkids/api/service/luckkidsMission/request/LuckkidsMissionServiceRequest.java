@@ -1,10 +1,12 @@
 package com.luckkids.api.service.luckkidsMission.request;
 
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.api.service.push.request.SendPushDataDto;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.push.PushMessage;
+import com.luckkids.domain.push.PushScreenName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +30,11 @@ public class LuckkidsMissionServiceRequest {
 
     public SendPushAlertTypeServiceRequest toSendPushAlertTypeRequest(AlertType alertType){
         return SendPushAlertTypeServiceRequest.builder()
-            .screenName("MISSION")
+            .sendPushDataDto(
+                    SendPushDataDto.builder()
+                            .screenName(PushScreenName.MISSION_REPAIR.getText())
+                            .build()
+            )
             .body(PushMessage.MISSION.getText())
             .alertType(alertType)
             .build();
