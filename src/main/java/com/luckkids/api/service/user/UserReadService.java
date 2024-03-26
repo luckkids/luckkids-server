@@ -2,6 +2,7 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.request.UserFindEmailServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.api.service.user.response.UserLeagueResponse;
@@ -23,6 +24,7 @@ public class UserReadService {
 
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
+    private final SecurityService securityService;
 
     public User findByOne(int id) {
         return userRepository.findById(id)
@@ -43,5 +45,11 @@ public class UserReadService {
             .stream()
             .map(UserLeagueDto::toUserLeagueResponse)
             .collect(Collectors.toList());
+    }
+
+    public double getCharacterAchievementRate() {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        User user = this.findByOne(userId);
+        return user.calculateAchievementRate();
     }
 }

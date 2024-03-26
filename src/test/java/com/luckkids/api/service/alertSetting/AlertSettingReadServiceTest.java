@@ -53,7 +53,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceId("testDeviceId");
+        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId("testDeviceId");
 
         assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);
@@ -68,7 +68,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        assertThatThrownBy(() -> alertSettingReadService.findOneByDeviceId("testDeviceId"))
+        assertThatThrownBy(() -> alertSettingReadService.findOneByDeviceIdAndUserId("testDeviceId"))
             .isInstanceOf(LuckKidsException.class)
             .hasMessage("해당 사용자가 알림설정이 되어있지 않습니다.");
     }
@@ -83,7 +83,7 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
             .willReturn(createLoginUserInfo(user.getId()));
 
-        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceId("testDeviceId");
+        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId("testDeviceId");
 
         assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
             .contains(CHECKED, CHECKED, CHECKED, CHECKED);

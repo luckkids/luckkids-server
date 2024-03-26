@@ -18,7 +18,6 @@ public class AlertHistory extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id")
     private Push push;
 
     private String alertDescription;
@@ -33,4 +32,7 @@ public class AlertHistory extends BaseTimeEntity {
         this.alertHistoryStatus = alertHistoryStatus;
     }
 
+    public void updateAlertHistoryStatus(AlertHistoryStatus alertHistoryStatus) {
+        this.alertHistoryStatus = alertHistoryStatus;
+    }
 }

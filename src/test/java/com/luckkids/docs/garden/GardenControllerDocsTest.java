@@ -22,7 +22,6 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -83,8 +82,8 @@ public class GardenControllerDocsTest extends RestDocsSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/garden/list")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
+                    .param("page", String.valueOf(request.getPage()))
+                    .param("size", String.valueOf(request.getSize()))
             )
             .andDo(print())
             .andExpect(status().isOk())

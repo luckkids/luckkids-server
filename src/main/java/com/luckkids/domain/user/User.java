@@ -7,6 +7,7 @@ import com.luckkids.domain.userCharacter.Level;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.jwt.dto.JwtToken;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import static com.luckkids.domain.userCharacter.Level.LEVEL_MAX;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
@@ -109,6 +110,12 @@ public class User extends BaseTimeEntity {
         }
         int remainder = missionCount % LEVEL_MAX.getScoreThreshold();
         return remainder == 0 ? LEVEL_MAX.getScoreThreshold() : remainder;
+    }
+
+    public double calculateAchievementRate() {
+        final int LEVEL_UP_THRESHOLD = 25;
+        int missionsToNextLevel = missionCount % LEVEL_UP_THRESHOLD;
+        return (double) missionsToNextLevel / LEVEL_UP_THRESHOLD;
     }
 
     public void updateMissionCount(int count) {

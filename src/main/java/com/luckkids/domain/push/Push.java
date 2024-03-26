@@ -19,6 +19,9 @@ import java.util.List;
 public class Push extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String deviceId;
 
     private String pushToken;

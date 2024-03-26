@@ -2,9 +2,11 @@ package com.luckkids.api.service.user;
 
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.delete.UserDeleteService;
-import com.luckkids.api.service.user.request.UserLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateLuckPhraseServiceRequest;
+import com.luckkids.api.service.user.request.UserUpdateNicknameServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
-import com.luckkids.api.service.user.response.UserLuckPhraseResponse;
+import com.luckkids.api.service.user.response.UserUpdateLuckPhraseResponse;
+import com.luckkids.api.service.user.response.UserUpdateNicknameResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
 import com.luckkids.domain.user.User;
@@ -35,20 +37,32 @@ public class UserService {
         return UserUpdatePasswordResponse.of(user);
     }
 
-    public UserLuckPhraseResponse updatePhrase(UserLuckPhraseServiceRequest userLuckPhraseServiceRequest) {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        User user = userReadService.findByOne(userId);
-        user.updateLuckPhrase(userLuckPhraseServiceRequest.getLuckPhrase());
-        return UserLuckPhraseResponse.of(user);
+    public UserUpdateLuckPhraseResponse updatePhrase(UserUpdateLuckPhraseServiceRequest userUpdateLuckPhraseServiceRequest) {
+        User user = getCurrentUser();
+        user.updateLuckPhrase(userUpdateLuckPhraseServiceRequest.getLuckPhrase());
+        return UserUpdateLuckPhraseResponse.of(user);
+    }
+
+    public UserUpdateNicknameResponse updateNickname(UserUpdateNicknameServiceRequest userUpdateNicknameServiceRequest) {
+        User user = getCurrentUser();
+        String nickname = userUpdateNicknameServiceRequest.getNickname();
+        user.updateNickName(nickname);
+        return UserUpdateNicknameResponse.of(nickname);
     }
 
     public UserWithdrawResponse withdraw() {
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        User user = userReadService.findByOne(userId);
+        User user = getCurrentUser();
+        int userId = user.getId();
         for (UserDeleteService userDeleteService : userDeleteServices) {
-            userDeleteService.deleteAllByUserId(user.getId());
+            userDeleteService.deleteAllByUserId(userId);
         }
         userRepository.deleteById(userId);
         return UserWithdrawResponse.of(userId);
     }
+
+    private User getCurrentUser() {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        return userReadService.findByOne(userId);
+    }
+
 }
