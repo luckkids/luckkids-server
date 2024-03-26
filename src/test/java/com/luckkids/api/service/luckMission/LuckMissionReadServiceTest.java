@@ -1,8 +1,8 @@
 package com.luckkids.api.service.luckMission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
-import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
+import com.luckkids.api.service.luckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import org.junit.jupiter.api.AfterEach;

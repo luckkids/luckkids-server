@@ -1,0 +1,12 @@
+[[change-push]]
+=== 푸시 사운드 수정 API
+
+==== HTTP Request
+
+include::{snippets}/change-sound/http-request.adoc[]
+include::{snippets}/change-sound/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/change-sound/http-response.adoc[]
+include::{snippets}/change-sound/response-fields.adoc[]

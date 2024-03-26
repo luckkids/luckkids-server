@@ -1,6 +1,7 @@
 package com.luckkids.api.service.notice;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.firebase.FirebaseService;
 import com.luckkids.api.service.notice.request.NoticeSaveServiceRequest;
 import com.luckkids.api.service.notice.response.NoticeSaveResponse;
 import com.luckkids.domain.notice.Notice;
@@ -8,7 +9,9 @@ import com.luckkids.domain.notice.NoticeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,6 +22,9 @@ class NoticeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private NoticeRepository noticeRepository;
+
+    @MockBean
+    private FirebaseService firebaseService;
 
     @AfterEach
     void tearDown() {

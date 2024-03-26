@@ -141,6 +141,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
             .title("공지사항 제목")
             .noticeDescription("공지사항 내용")
+            .url("www.test.com")
             .build();
 
         given(noticeService.saveNotice(any(NoticeSaveServiceRequest.class)))
@@ -168,7 +169,9 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("title").type(JsonFieldType.STRING)
                         .description("공지사항 제목"),
                     fieldWithPath("noticeDescription").type(JsonFieldType.STRING)
-                        .description("공지사항 내용")
+                        .description("공지사항 내용"),
+                    fieldWithPath("url").type(JsonFieldType.STRING)
+                            .description("공지사항 URL")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)

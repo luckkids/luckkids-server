@@ -44,6 +44,7 @@ class VersionControllerTest extends ControllerTestSupport {
         // given
         VersionSaveRequest request = VersionSaveRequest.builder()
             .versionNum("1.1.3")
+            .url("www.test.com")
             .build();
 
         // when // then
@@ -66,6 +67,7 @@ class VersionControllerTest extends ControllerTestSupport {
     void saveCurrentVersionWithoutVersion() throws Exception {
         // given
         VersionSaveRequest request = VersionSaveRequest.builder()
+            .url("www.test.com")
             .build();
 
         // when // then
@@ -81,5 +83,29 @@ class VersionControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("최신버전은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("앱의 최신버전을 저장할 시 URL은 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void saveCurrentVersionWithoutUrl() throws Exception {
+        // given
+        VersionSaveRequest request = VersionSaveRequest.builder()
+                .versionNum("1.1.3")
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/versions/new")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("최신버전 저장 시 URL이 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 }

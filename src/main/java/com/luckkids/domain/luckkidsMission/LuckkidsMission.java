@@ -26,8 +26,7 @@ public class LuckkidsMission {
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMission(int id, MissionType missionType, String description, LocalTime alertTime) {
-        this.id = id;
+    private LuckkidsMission(MissionType missionType, String description, LocalTime alertTime) {
         this.missionType = missionType;
         this.description = description;
         this.alertTime = alertTime;
