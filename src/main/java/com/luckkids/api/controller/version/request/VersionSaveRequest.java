@@ -12,7 +12,7 @@ public class VersionSaveRequest {
 
     @NotBlank(message = "최신버전은 필수입니다.")
     private String versionNum;
-    @NotBlank(message = "최신버전은 URL은 필수입니다.")
+    @NotBlank(message = "최신버전 저장 시 URL이 필수입니다.")
     private String url;
 
     @Builder
