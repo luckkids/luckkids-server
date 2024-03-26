@@ -75,7 +75,8 @@ import org.springframework.test.web.servlet.MockMvc;
     ConfirmEmailController.class,
     WithdrawReasonController.class,
     LuckkidsMissionController.class,
-    PushController.class
+    PushController.class,
+    AlertHistoryController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -171,5 +172,14 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected PushService pushService;
+
+    @MockBean
+    protected UserCharacterService userCharacterService;
+
+    @MockBean
+    protected AlertHistoryService alertHistoryService;
+
+    @MockBean
+    protected AlertHistoryReadService alertHistoryReadService;
 }
 
