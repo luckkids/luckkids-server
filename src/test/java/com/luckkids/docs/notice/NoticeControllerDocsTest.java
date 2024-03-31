@@ -98,7 +98,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                 NoticeSaveResponse.builder()
                     .id(1)
                     .title("공지사항 타이틀")
-                    .url("공지사항 내용")
+                    .url("www.naver.com")
                     .createdDate(LocalDateTime.now())
                     .build()
             );
