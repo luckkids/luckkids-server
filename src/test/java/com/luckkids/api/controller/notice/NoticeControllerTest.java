@@ -35,25 +35,6 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-    @DisplayName("공지사항을 조회한다.")
-    @Test
-    @WithMockUser(roles = "USER")
-    void selectNoticeDetail() throws Exception {
-        // given
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/notices/{id}", 1)
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusCode").value("200"))
-            .andExpect(jsonPath("$.httpStatus").value("OK"))
-            .andExpect(jsonPath("$.message").value("OK"));
-    }
-
     @DisplayName("공지사항을 저장한다.")
     @Test
     @WithMockUser(roles = "USER")
@@ -61,7 +42,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
         // given
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
             .title("공지사항 타이틀")
-            .noticeDescription("공지사항입니다.")
+            .url("www.naver.com")
             .build();
 
         // when // then
@@ -78,7 +59,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("CREATED"));
     }
 
-    @DisplayName("공지사항을 저장할시 공지사항내용은 필수이다.")
+    @DisplayName("공지사항을 저장할시 공지사항 url 은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
     void saveNoticeWithoutDescription() throws Exception {
@@ -98,7 +79,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("공지사항 내용은 필수입니다."))
+            .andExpect(jsonPath("$.message").value("공지사항 url은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -108,7 +89,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
     void saveNoticeWithoutTitle() throws Exception {
         // given
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
-            .noticeDescription("공지사항 테스트")
+            .url("www.naver.com")
             .build();
 
         // when // then
