@@ -27,6 +27,7 @@ public class InitialSettingAlertRequest {
     public InitialSettingAlertServiceRequest toServiceRequest(){
         return InitialSettingAlertServiceRequest.builder()
             .alertStatus(alertStatus)
+            .deviceId(deviceId)
             .build();
     }
 }
