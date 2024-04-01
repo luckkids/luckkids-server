@@ -12,12 +12,14 @@ import java.time.LocalDateTime;
 public class NoticeResponse {
     private int id;
     private String title;
+    private String url;
     private LocalDateTime createdDate;
 
     @Builder
-    private NoticeResponse(int id, String title, LocalDateTime createdDate) {
+    private NoticeResponse(int id, String title, String url, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
+        this.url = url;
         this.createdDate = createdDate;
     }
 
@@ -25,6 +27,7 @@ public class NoticeResponse {
         return NoticeResponse.builder()
                 .id(notice.getId())
                 .title(notice.getTitle())
+                .url(notice.getUrl())
                 .createdDate(notice.getCreatedDate())
                 .build();
     }

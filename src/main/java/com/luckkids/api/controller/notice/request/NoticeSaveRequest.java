@@ -12,19 +12,19 @@ import lombok.NoArgsConstructor;
 public class NoticeSaveRequest {
     @NotBlank(message = "공지사항 제목은 필수입니다.")
     private String title;
-    @NotBlank(message = "공지사항 내용은 필수입니다.")
-    private String noticeDescription;
+    @NotBlank(message = "공지사항 url은 필수입니다.")
+    private String url;
 
     @Builder
-    private NoticeSaveRequest(String title, String noticeDescription) {
+    private NoticeSaveRequest(String title, String url) {
         this.title = title;
-        this.noticeDescription = noticeDescription;
+        this.url = url;
     }
 
     public NoticeSaveServiceRequest toServiceRequest(){
         return NoticeSaveServiceRequest.builder()
             .title(title)
-            .noticeDescription(noticeDescription)
+            .url(url)
             .build();
     }
 }

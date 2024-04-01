@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 public class NoticeSaveResponse {
     private int id;
     private String title;
-    private String noticeDescription;
+    private String url;
     private LocalDateTime createdDate;
 
     @Builder
-    private NoticeSaveResponse(int id, String title, String noticeDescription, LocalDateTime createdDate) {
+    private NoticeSaveResponse(int id, String title, String url, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
-        this.noticeDescription = noticeDescription;
+        this.url = url;
         this.createdDate = createdDate;
     }
 
@@ -30,7 +30,7 @@ public class NoticeSaveResponse {
         return NoticeSaveResponse.builder()
             .id(notice.getId())
             .title(notice.getTitle())
-            .noticeDescription(notice.getNoticeDescription())
+            .url(notice.getUrl())
             .createdDate(notice.getCreatedDate())
             .build();
     }

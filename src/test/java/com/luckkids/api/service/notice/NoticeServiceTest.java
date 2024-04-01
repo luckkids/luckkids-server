@@ -30,24 +30,15 @@ class NoticeServiceTest extends IntegrationTestSupport {
     void saveNotice() {
         NoticeSaveServiceRequest noticeSaveServiceRequest = NoticeSaveServiceRequest.builder()
             .title("공지사항 타이틀")
-            .noticeDescription("공지사항입니다.")
+            .url("www.naver.com")
             .build();
 
         NoticeSaveResponse savedNotice = noticeService.saveNotice(noticeSaveServiceRequest);
 
         Notice notice = noticeRepository.findById(savedNotice.getId()).get();
         assertThat(notice)
-            .extracting("title", "noticeDescription")
-            .contains("공지사항 타이틀", "공지사항입니다.");
-    }
-
-    Notice createNotice(int i) {
-        Notice notice = Notice.builder()
-            .title("공지사항 타이틀" + i)
-            .noticeDescription("공지사항 테스트" + i)
-            .build();
-
-        return noticeRepository.save(notice);
+            .extracting("title", "url")
+            .contains("공지사항 타이틀", "www.naver.com");
     }
 
 }

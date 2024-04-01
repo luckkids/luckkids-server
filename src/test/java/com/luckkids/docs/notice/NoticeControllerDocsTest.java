@@ -5,7 +5,6 @@ import com.luckkids.api.controller.notice.request.NoticeSaveRequest;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
 import com.luckkids.api.service.notice.request.NoticeSaveServiceRequest;
-import com.luckkids.api.service.notice.response.NoticeDetailResponse;
 import com.luckkids.api.service.notice.response.NoticeResponse;
 import com.luckkids.api.service.notice.response.NoticeSaveResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -28,7 +27,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,57 +75,9 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                         .description("공지사항 ID"),
                     fieldWithPath("data[].title").type(JsonFieldType.STRING)
                         .description("공지사항 제목"),
+                    fieldWithPath("data[].url").type(JsonFieldType.STRING)
+                            .description("공지사항 url"),
                     fieldWithPath("data[].createdDate").type(JsonFieldType.STRING)
-                        .description("공지사항 생성시간")
-                )
-            ));
-    }
-
-    @DisplayName("등록되어있는 공지사항을 조회하는 API")
-    @Test
-    @WithMockUser(roles = "USER")
-    void findOneNotice() throws Exception {
-        // given
-        given(noticeReadService.getNotice(anyInt()))
-            .willReturn(
-                NoticeDetailResponse.builder()
-                    .id(1)
-                    .title("공지사항 타이틀")
-                    .noticeDescription("공지사항 내용")
-                    .createdDate(LocalDateTime.now())
-                    .build()
-            );
-
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/notices/{id}",1)
-                    .contentType(APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("notice-get",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                pathParameters(
-                        parameterWithName("id")
-                                .description("공지사항 ID")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.id").type(JsonFieldType.NUMBER)
-                        .description("공지사항 ID"),
-                    fieldWithPath("data.title").type(JsonFieldType.STRING)
-                        .description("공지사항 제목"),
-                    fieldWithPath("data.noticeDescription").type(JsonFieldType.STRING)
-                        .description("공지사항 내용"),
-                    fieldWithPath("data.createdDate").type(JsonFieldType.STRING)
                         .description("공지사항 생성시간")
                 )
             ));
@@ -140,7 +90,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
         // given
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
             .title("공지사항 제목")
-            .noticeDescription("공지사항 내용")
+            .url("공지사항 내용")
             .build();
 
         given(noticeService.saveNotice(any(NoticeSaveServiceRequest.class)))
@@ -148,7 +98,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                 NoticeSaveResponse.builder()
                     .id(1)
                     .title("공지사항 타이틀")
-                    .noticeDescription("공지사항 내용")
+                    .url("www.naver.com")
                     .createdDate(LocalDateTime.now())
                     .build()
             );
@@ -167,8 +117,8 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                 requestFields(
                     fieldWithPath("title").type(JsonFieldType.STRING)
                         .description("공지사항 제목"),
-                    fieldWithPath("noticeDescription").type(JsonFieldType.STRING)
-                        .description("공지사항 내용")
+                    fieldWithPath("url").type(JsonFieldType.STRING)
+                        .description("공지사항 url")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -183,8 +133,8 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                         .description("공지사항 ID"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("공지사항 제목"),
-                    fieldWithPath("data.noticeDescription").type(JsonFieldType.STRING)
-                        .description("공지사항 내용"),
+                    fieldWithPath("data.url").type(JsonFieldType.STRING)
+                        .description("공지사항 url"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.STRING)
                         .description("공지사항 생성시간")
                 )
@@ -195,6 +145,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
         return NoticeResponse.builder()
             .id(id)
             .title(title)
+            .url("www.naver.com")
             .createdDate(LocalDateTime.now())
             .build();
     }

@@ -20,11 +20,11 @@ public class Notice extends BaseTimeEntity {
 
     private String title;
 
-    private String noticeDescription;
+    private String url;
 
     @Builder
-    private Notice(String title, String noticeDescription) {
+    private Notice(String title, String url) {
         this.title = title;
-        this.noticeDescription = noticeDescription;
+        this.url = url;
     }
 }
