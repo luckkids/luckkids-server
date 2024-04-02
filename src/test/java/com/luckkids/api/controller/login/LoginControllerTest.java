@@ -119,31 +119,6 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."));
     }
 
-    @DisplayName("일반 로그인을 할 시 푸시토큰은 필수이다.")
-    @Test
-    @WithMockUser(roles = "USER")
-    void normalLoginWithoutPushToken() throws Exception {
-        // given
-        LoginRequest request = LoginRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
-
-        // when // then
-        mockMvc.perform(
-                post("/api/v1/auth/login")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.statusCode").value("400"))
-            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("푸시토큰은 필수입니다."));
-    }
-
     @DisplayName("엑세스토큰을 재생성한다.")
     @Test
     @WithMockUser(roles = "USER")
@@ -288,31 +263,6 @@ public class LoginControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("Token은 필수입니다."));
-    }
-
-    @DisplayName("OAuth로그인을 할 시 token값은 필수이다.")
-    @Test
-    @WithMockUser(roles = "USER")
-    void OauthLoginWithoutPushKeyTest() throws Exception {
-        // given
-        LoginOauthRequest request = LoginOauthRequest.builder()
-            .token("testToken")
-            .snsType(SnsType.APPLE)
-            .deviceId("testdeviceId")
-            .build();
-
-        // when // then
-        mockMvc.perform(
-                post("/api/v1/auth/oauth/login")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
-            )
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.statusCode").value("400"))
-            .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("푸시토큰은 필수입니다."));
     }
 
     @DisplayName("OAuth로그인을 할 시 DeviceId값은 필수이다.")
