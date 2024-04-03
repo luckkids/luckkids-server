@@ -105,7 +105,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notices/new")
+                post("/api/v1/notices")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
             )

@@ -97,7 +97,7 @@ public class VersionControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/versions/new")
+                post("/api/v1/versions")
                     .content(objectMapper.writeValueAsString(versionSaveRequest))
                     .contentType(APPLICATION_JSON)
             )
