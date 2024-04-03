@@ -66,7 +66,6 @@ public class NoticeControllerTest extends ControllerTestSupport {
         // given
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
             .title("공지사항 타이틀")
-            .url("www.test.com")
             .build();
 
         // when // then
@@ -80,7 +79,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("공지사항 url은 필수입니다."))
+            .andExpect(jsonPath("$.message").value("공지사항 URL은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -106,30 +105,5 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("공지사항 제목은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
-    }
-
-    @DisplayName("공지사항을 저장한다.")
-    @Test
-    @WithMockUser(roles = "USER")
-    void saveNoticeWithoutUrlss() throws Exception {
-        // given
-        NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
-                .title("공지사항 타이틀")
-                .noticeDescription("공지사항입니다.")
-                .build();
-
-        // when // then
-        mockMvc.perform(
-                        post("/api/v1/notices")
-                                .content(objectMapper.writeValueAsString(noticeSaveRequest))
-                                .contentType(APPLICATION_JSON)
-                                .with(csrf())
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value("400"))
-                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-                .andExpect(jsonPath("$.message").value("공지사항 URL은 필수입니다."))
-                .andExpect(jsonPath("$.data").isEmpty());
     }
 }
