@@ -34,7 +34,7 @@ public class NoticeController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/new")
+    @PostMapping
     public ApiResponse<NoticeSaveResponse> createNotice(@Valid @RequestBody NoticeSaveRequest noticeSaveRequest){
         return ApiResponse.created(noticeService.saveNotice(noticeSaveRequest.toServiceRequest()));
     }

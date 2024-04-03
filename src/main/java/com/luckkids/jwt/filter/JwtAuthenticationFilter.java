@@ -33,7 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
         "/docs",                        //API문서는 예외
         "/api/v1/confirmEmail",
-        "/health-check"
+        "/health-check",
+        "/api/v1/luckkidsMission",      //럭키즈 대표미션 등록
+        "/api/v1/notices",              //공지사항 등록
+        "/api/v1/versions"              //버전 등록
     };
 
     @Override
