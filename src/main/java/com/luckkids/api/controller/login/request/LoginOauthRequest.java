@@ -17,7 +17,6 @@ public class LoginOauthRequest {
     private SnsType snsType;
     @NotNull(message = "디바이스ID는 필수입니다.")
     private String deviceId;
-    @NotNull(message = "푸시토큰은 필수입니다.")
     private String pushKey;
 
     @Builder

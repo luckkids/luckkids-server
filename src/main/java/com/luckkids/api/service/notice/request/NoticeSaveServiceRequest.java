@@ -14,20 +14,18 @@ import lombok.NoArgsConstructor;
 public class NoticeSaveServiceRequest {
 
     private String title;
-    private String noticeDescription;
     private String url;
-
+    
     @Builder
-    private NoticeSaveServiceRequest(String title, String noticeDescription, String url) {
+    private NoticeSaveServiceRequest(String title, String url) {
         this.title = title;
-        this.noticeDescription = noticeDescription;
         this.url = url;
     }
 
     public Notice toEntity(){
         return Notice.builder()
             .title(title)
-            .noticeDescription(noticeDescription)
+            .url(url)
             .build();
     }
 

@@ -1,5 +1,6 @@
 package com.luckkids.domain.userCharacter;
 
+import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.user.User;
 import jakarta.persistence.*;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class UserCharacter {
+public class UserCharacter extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
