@@ -1,9 +1,6 @@
 package com.luckkids.api.service.notice;
 
-import com.luckkids.api.exception.ErrorCode;
-import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.notice.response.NoticeResponse;
-import com.luckkids.domain.notice.Notice;
 import com.luckkids.domain.notice.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
