@@ -47,7 +47,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notices/new")
+                post("/api/v1/notices")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -70,7 +70,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notices/new")
+                post("/api/v1/notices")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())
@@ -79,7 +79,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.statusCode").value("400"))
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-            .andExpect(jsonPath("$.message").value("공지사항 url은 필수입니다."))
+            .andExpect(jsonPath("$.message").value("공지사항 URL은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -94,7 +94,7 @@ public class NoticeControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notices/new")
+                post("/api/v1/notices")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
                     .with(csrf())

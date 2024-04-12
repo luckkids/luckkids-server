@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final String[] excludePath = {
+    private static final String[] excludePath = {
         "/api/v1/jwt",                  //토큰발급 테스트 API
         "/api/v1/auth",                 //로그인 예정
         "/api/v1/join",                 //회원가입
@@ -33,7 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
         "/docs",                        //API문서는 예외
         "/api/v1/confirmEmail",
-        "/health-check"
+        "/health-check",
+        "/api/v1/luckkidsMission",      //럭키즈 대표미션 등록
+        "/api/v1/notices",              //공지사항 등록
+        "/api/v1/versions"              //버전 등록
     };
 
     @Override

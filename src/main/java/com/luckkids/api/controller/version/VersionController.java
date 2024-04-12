@@ -25,7 +25,7 @@ public class VersionController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/new")
+    @PostMapping
     public ApiResponse<VersionSaveResponse> createVersion(@Valid @RequestBody VersionSaveRequest versionSaveRequest){
         return ApiResponse.created(versionService.save(versionSaveRequest.toServiceRequest()));
     }

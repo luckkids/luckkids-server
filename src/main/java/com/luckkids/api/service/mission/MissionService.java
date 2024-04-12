@@ -24,11 +24,9 @@ import java.time.LocalDateTime;
 public class MissionService {
 
     private final MissionRepository missionRepository;
-
     private final MissionReadService missionReadService;
     private final UserReadService userReadService;
     private final SecurityService securityService;
-
     private final ApplicationEventPublisher eventPublisher;
 
     public MissionResponse createMission(MissionCreateServiceRequest request) {

@@ -41,3 +41,6 @@ src/main/generated/
 
 ### yml ###
 **/resources/*.yml
+
+### fcm json ###
+**/resources/*.json

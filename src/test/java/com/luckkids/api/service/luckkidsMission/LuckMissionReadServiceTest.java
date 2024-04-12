@@ -1,7 +1,7 @@
-package com.luckkids.api.service.LuckkidsMission;
+package com.luckkids.api.service.luckkidsMission;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
+import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import com.luckkids.domain.misson.MissionType;

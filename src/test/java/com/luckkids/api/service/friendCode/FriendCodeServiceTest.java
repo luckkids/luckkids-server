@@ -5,6 +5,7 @@ import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
+import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     private FriendCodeService friendCodeService;
     @Autowired
     private FriendCodeReadService friendCodeReadService;
+    @MockBean
+    private PushService pushService;
 
     @AfterEach
     void tearDown() {
@@ -146,6 +150,7 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
             .email("test" + i)
             .password("1234")
             .missionCount(i)
+            .nickname("럭키즈!!!")
             .luckPhrase("행운입니다.")
             .snsType(SnsType.NORMAL)
             .role(Role.USER)

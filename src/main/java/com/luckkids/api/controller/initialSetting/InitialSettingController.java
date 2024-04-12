@@ -2,8 +2,8 @@ package com.luckkids.api.controller.initialSetting;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
-import com.luckkids.api.service.LuckkidsMission.LuckkidsMissionReadService;
-import com.luckkids.api.service.LuckkidsMission.response.LuckkidsMissionResponse;
+import com.luckkids.api.service.luckkidsMission.LuckkidsMissionReadService;
+import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionResponse;
 import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;

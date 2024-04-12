@@ -84,6 +84,7 @@ public class VersionControllerDocsTest extends RestDocsSupport {
         // given
         VersionSaveRequest versionSaveRequest = VersionSaveRequest.builder()
             .versionNum("1.1.2")
+            .url("www.test.com")
             .build();
 
         given(versionService.save(any(VersionSaveServiceRequest.class)))
@@ -96,7 +97,7 @@ public class VersionControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/versions/new")
+                post("/api/v1/versions")
                     .content(objectMapper.writeValueAsString(versionSaveRequest))
                     .contentType(APPLICATION_JSON)
             )
@@ -107,7 +108,9 @@ public class VersionControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     fieldWithPath("versionNum").type(JsonFieldType.STRING)
-                        .description("최신버전")
+                        .description("최신버전"),
+                    fieldWithPath("url").type(JsonFieldType.STRING)
+                            .description("최신버전 소개 URL")
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)

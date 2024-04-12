@@ -90,7 +90,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
         // given
         NoticeSaveRequest noticeSaveRequest = NoticeSaveRequest.builder()
             .title("공지사항 제목")
-            .url("공지사항 내용")
+            .url("www.test.com")
             .build();
 
         given(noticeService.saveNotice(any(NoticeSaveServiceRequest.class)))
@@ -105,7 +105,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/notices/new")
+                post("/api/v1/notices")
                     .content(objectMapper.writeValueAsString(noticeSaveRequest))
                     .contentType(APPLICATION_JSON)
             )

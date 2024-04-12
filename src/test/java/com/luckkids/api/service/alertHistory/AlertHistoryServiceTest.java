@@ -1,25 +1,23 @@
 package com.luckkids.api.service.alertHistory;
 
+
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
 import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
-import com.luckkids.domain.user.SnsType;
-import com.luckkids.domain.user.User;
-import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.user.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-import static com.luckkids.domain.alertHistory.AlertHistoryStatus.CHECKED;
-import static com.luckkids.domain.alertHistory.AlertHistoryStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AlertHistoryServiceTest extends IntegrationTestSupport {
+
+public class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private AlertHistoryService alertHistoryService;
@@ -28,10 +26,10 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
     private AlertHistoryRepository alertHistoryRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private PushRepository pushRepository;
 
     @Autowired
-    private PushRepository pushRepository;
+    private UserRepository userRepository;
 
     @AfterEach
     void tearDown() {
@@ -40,50 +38,43 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("알림 내역을 `확인`으로 업데이트 한다.")
+    @DisplayName("푸시알림 발송 이력을 저장한다.")
     @Test
-    @Transactional
-    void updateAlertHistoryStatus() {
-        // given
-        User user = createUser();
+    void save(){
+        User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
         userRepository.save(user);
 
         Push push = createPush(user);
         pushRepository.save(push);
 
-        AlertHistory alertHistory = createAlertHistory(push, UNCHECKED);
-        alertHistoryRepository.save(alertHistory);
+        AlertHistoryServiceRequest alertHistoryServiceRequest = AlertHistoryServiceRequest.builder()
+                .push(push)
+                .alertDescription("알림테스트 내용")
+                .build();
 
-        // when
-        alertHistoryService.updateAlertHistoryStatus(alertHistory.getId());
-
-        // then
-        AlertHistory findedAlertHistory = alertHistoryRepository.getReferenceById(alertHistory.getId());
-
-        assertThat(findedAlertHistory.getAlertHistoryStatus()).isEqualTo(CHECKED);
+        AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
+        assertThat(alertHistory).extracting("push", "alertDescription", "alertHistoryStatus")
+                .contains(push, "알림테스트 내용", AlertHistoryStatus.UNCHECKED);
     }
 
-    private User createUser() {
-        return User.builder()
-            .email("test@email.com")
-            .password("1234")
-            .snsType(SnsType.NORMAL)
-            .build();
-    }
-
-    private Push createPush(User user) {
+    private Push createPush(User user){
         return Push.builder()
-            .user(user)
-            .deviceId("testdeviceId")
-            .pushToken("testPushToken")
-            .build();
+                .user(user)
+                .pushToken("testToken")
+                .deviceId("testDevice")
+                .build();
     }
 
-    private AlertHistory createAlertHistory(Push push, AlertHistoryStatus alertHistoryStatus) {
-        return AlertHistory.builder()
-            .push(push)
-            .alertDescription("test")
-            .alertHistoryStatus(alertHistoryStatus)
-            .build();
+    private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {
+        return User.builder()
+                .email(email)
+                .password(password)
+                .snsType(SnsType.NORMAL)
+                .nickname(nickname)
+                .luckPhrase(luckPhrase)
+                .role(Role.USER)
+                .settingStatus(SettingStatus.COMPLETE)
+                .missionCount(missionCount)
+                .build();
     }
 }

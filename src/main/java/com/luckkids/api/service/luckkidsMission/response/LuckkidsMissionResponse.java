@@ -1,4 +1,4 @@
-package com.luckkids.api.service.LuckkidsMission.response;
+package com.luckkids.api.service.luckkidsMission.response;
 
 import com.luckkids.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.domain.misson.MissionType;
