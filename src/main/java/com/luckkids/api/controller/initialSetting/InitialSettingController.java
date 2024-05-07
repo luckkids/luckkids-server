@@ -37,7 +37,6 @@ public class InitialSettingController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ApiResponse<InitialSettingResponse> createSetting(@RequestBody @Valid InitialSettingRequest initialSettingRequest) {
-        System.out.println(initialSettingRequest);
         return ApiResponse.created(initialSettingService.initialSetting(initialSettingRequest.toServiceRequest()));
     }
 }

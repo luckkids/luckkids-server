@@ -30,10 +30,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loggingInterceptor)
             .addPathPatterns("/**");
     }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedOrigins("*");
-    }
 }
