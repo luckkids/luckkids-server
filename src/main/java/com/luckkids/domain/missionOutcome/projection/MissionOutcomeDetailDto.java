@@ -1,22 +1,28 @@
 package com.luckkids.domain.missionOutcome.projection;
 
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
-import com.luckkids.domain.missionOutcome.MissionStatus;
-
 import java.time.LocalTime;
 
-public record MissionOutcomeDetailDto(
-    Long id,
-    String missionDescription,
-    LocalTime alertTime,
-    MissionStatus missionStatus) {
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
+import com.luckkids.domain.missionOutcome.MissionStatus;
+import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.domain.misson.MissionType;
 
-    public MissionOutcomeResponse toMissionOutcomeResponse() {
-        return MissionOutcomeResponse.builder()
-            .id(id)
-            .missionDescription(missionDescription)
-            .alertTime(alertTime)
-            .missionStatus(missionStatus)
-            .build();
-    }
+public record MissionOutcomeDetailDto(
+	Long id,
+	MissionType missionType,
+	String missionDescription,
+	AlertStatus alertStatus,
+	LocalTime alertTime,
+	MissionStatus missionStatus) {
+
+	public MissionOutcomeResponse toMissionOutcomeResponse() {
+		return MissionOutcomeResponse.builder()
+			.id(id)
+			.missionType(missionType)
+			.missionDescription(missionDescription)
+			.alertStatus(alertStatus)
+			.alertTime(alertTime)
+			.missionStatus(missionStatus)
+			.build();
+	}
 }
