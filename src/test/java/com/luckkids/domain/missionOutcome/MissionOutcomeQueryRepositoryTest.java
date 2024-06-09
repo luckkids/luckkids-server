@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
@@ -112,7 +112,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 		missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
 		// when
-		List<MissionOutcomeCalenderDto> missionOutcomes =
+		List<MissionOutcomeCalendarDto> missionOutcomes =
 			missionOutcomeQueryRepository.findMissionOutcomeByDateRangeAndStatus(
 				user.getId(),
 				LocalDate.of(2023, 11, 1),
@@ -146,7 +146,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 		missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
 		// when
-		List<MissionOutcomeCalenderDetailDto> result =
+		List<MissionOutcomeCalendarDetailDto> result =
 			missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 26));
 
 		// then
@@ -175,7 +175,7 @@ class MissionOutcomeQueryRepositoryTest extends IntegrationTestSupport {
 		missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
 
 		// when
-		List<MissionOutcomeCalenderDetailDto> result =
+		List<MissionOutcomeCalendarDetailDto> result =
 			missionOutcomeQueryRepository.findSuccessfulMissionsByDate(user.getId(), LocalDate.of(2023, 12, 25));
 
 		// then

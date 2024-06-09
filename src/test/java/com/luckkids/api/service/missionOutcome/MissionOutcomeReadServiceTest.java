@@ -23,7 +23,7 @@ import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -149,7 +149,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 		assertThat(missionOutcomeForCalendarResponses.getStartDate()).isEqualTo(LocalDate.of(2023, 11, 1));
 		assertThat(missionOutcomeForCalendarResponses.getEndDate()).isEqualTo(LocalDate.of(2023, 12, 31));
 
-		assertThat(missionOutcomeForCalendarResponses.getCalender()).hasSize(2)
+		assertThat(missionOutcomeForCalendarResponses.getCalendar()).hasSize(2)
 			.extracting("missionDate", "hasSucceed")
 			.containsExactlyInAnyOrder(
 				tuple(LocalDate.of(2023, 12, 25), false),
@@ -177,7 +177,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 			.willReturn(createLoginUserInfo(user.getId()));
 
 		// when
-		List<MissionOutcomeCalenderDetailDto> result =
+		List<MissionOutcomeCalendarDetailDto> result =
 			missionOutcomeReadService.getMissionOutcomeForCalendarDetail(LocalDate.of(2023, 12, 26));
 
 		// then

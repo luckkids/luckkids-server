@@ -36,31 +36,31 @@ include::{snippets}/update-nickname/request-fields.adoc[]
 include::{snippets}/update-nickname/http-response.adoc[]
 include::{snippets}/update-nickname/response-fields.adoc[]
 
-[[home-calender]]
+[[home-calendar]]
 === 홈/캘린더
 
 ==== HTTP Request
 
-include::{snippets}/home-calender/http-request.adoc[]
-include::{snippets}/home-calender/query-parameters.adoc[]
+include::{snippets}/home-calendar/http-request.adoc[]
+include::{snippets}/home-calendar/query-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/home-calender/http-response.adoc[]
-include::{snippets}/home-calender/response-fields.adoc[]
+include::{snippets}/home-calendar/http-response.adoc[]
+include::{snippets}/home-calendar/response-fields.adoc[]
 
-[[home-calender-detail]]
+[[home-calendar-detail]]
 === 홈/캘린더 세부
 
 ==== HTTP Request
 
-include::{snippets}/home-calender-detail/http-request.adoc[]
-include::{snippets}/home-calender-detail/path-parameters.adoc[]
+include::{snippets}/home-calendar-detail/http-request.adoc[]
+include::{snippets}/home-calendar-detail/path-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/home-calender-detail/http-response.adoc[]
-include::{snippets}/home-calender-detail/response-fields.adoc[]
+include::{snippets}/home-calendar-detail/http-response.adoc[]
+include::{snippets}/home-calendar-detail/response-fields.adoc[]
 
 [[alertHistory-get]]
 === 홈/알림 조회
