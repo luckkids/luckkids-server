@@ -58,7 +58,7 @@ public class UserCharacterService {
 		int level = user.calculateLevelBasedOnRemainingMissions();
 
 		if (level == 0) {
-			return UserCharacterLevelUpResponse.of(false, 0, null, null);
+			return UserCharacterLevelUpResponse.of(false, 0, null, null, null);
 		}
 
 		UserInProgressCharacterDto inProgressCharacters = userCharacterQueryRepository.findInProgressCharacterByUserId(
@@ -93,7 +93,8 @@ public class UserCharacterService {
 		}
 		userCharacter.updateLuckkidsCharacter(LevelUpLuckkidsCharacter);
 		return UserCharacterLevelUpResponse.of(true, LevelUpLuckkidsCharacter.getLevel(),
-			LevelUpLuckkidsCharacter.getLottieFile(), LevelUpLuckkidsCharacter.getImageFile());
+			LevelUpLuckkidsCharacter.getCharacterType(), LevelUpLuckkidsCharacter.getLottieFile(),
+			LevelUpLuckkidsCharacter.getImageFile());
 	}
 
 	private UserCharacterSummaryDto findInProgressCharacter(List<UserCharacterSummaryDto> summaries) {

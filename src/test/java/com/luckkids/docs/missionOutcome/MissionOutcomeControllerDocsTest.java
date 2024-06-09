@@ -1,5 +1,6 @@
 package com.luckkids.docs.missionOutcome;
 
+import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
 import static com.luckkids.domain.missionOutcome.MissionStatus.*;
 import static com.luckkids.domain.misson.AlertStatus.*;
 import static com.luckkids.domain.misson.MissionType.*;
@@ -57,7 +58,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
 			.willReturn(
-				MissionOutcomeUpdateResponse.of(true, 2, "https://test.cloudfront.net/test2.json",
+				MissionOutcomeUpdateResponse.of(true, 2, CLOVER, "https://test.cloudfront.net/test2.json",
 					"https://test.cloudfront.net/test2.png")
 			);
 
@@ -92,7 +93,9 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
 					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-						.description("레벨"),
+						.description("캐릭터 레벨"),
+					fieldWithPath("data.characterType").type(JsonFieldType.STRING)
+						.description("캐릭터 타입"),
 					fieldWithPath("data.lottieFile").type(JsonFieldType.STRING)
 						.description("레벨업한 캐릭터 로티 파일"),
 					fieldWithPath("data.imageFile").type(JsonFieldType.STRING)
@@ -112,7 +115,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
 			.willReturn(
-				MissionOutcomeUpdateResponse.of(false, 0, null, null)
+				MissionOutcomeUpdateResponse.of(false, 0, null, null, null)
 			);
 
 		// when // then
@@ -146,7 +149,9 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
 					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-						.description("레벨"),
+						.description("캐릭터 레벨"),
+					fieldWithPath("data.characterType").type(JsonFieldType.NULL)
+						.description("캐릭터 타입"),
 					fieldWithPath("data.lottieFile").type(JsonFieldType.NULL)
 						.description("레벨업한 캐릭터 로티 파일"),
 					fieldWithPath("data.imageFile").type(JsonFieldType.NULL)
