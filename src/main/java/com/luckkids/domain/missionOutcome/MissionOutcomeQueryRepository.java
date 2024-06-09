@@ -9,8 +9,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDetailDto;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeDetailDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -48,7 +48,7 @@ public class MissionOutcomeQueryRepository {
 		return query.fetch();
 	}
 
-	public List<MissionOutcomeCalenderDto> findMissionOutcomeByDateRangeAndStatus(int userId, LocalDate startDate,
+	public List<MissionOutcomeCalendarDto> findMissionOutcomeByDateRangeAndStatus(int userId, LocalDate startDate,
 		LocalDate endDate) {
 
 		NumberExpression<Integer> successCount = new CaseBuilder()
@@ -60,7 +60,7 @@ public class MissionOutcomeQueryRepository {
 		BooleanExpression isMissionSuccessful = successCount.gt(0);
 
 		return jpaQueryFactory
-			.select(Projections.constructor(MissionOutcomeCalenderDto.class,
+			.select(Projections.constructor(MissionOutcomeCalendarDto.class,
 				missionOutcome.missionDate,
 				isMissionSuccessful))
 			.from(missionOutcome)
@@ -72,10 +72,10 @@ public class MissionOutcomeQueryRepository {
 			.fetch();
 	}
 
-	public List<MissionOutcomeCalenderDetailDto> findSuccessfulMissionsByDate(int userId, LocalDate missionDate) {
+	public List<MissionOutcomeCalendarDetailDto> findSuccessfulMissionsByDate(int userId, LocalDate missionDate) {
 
 		return jpaQueryFactory
-			.select(Projections.constructor(MissionOutcomeCalenderDetailDto.class,
+			.select(Projections.constructor(MissionOutcomeCalendarDetailDto.class,
 				mission.missionType,
 				mission.missionDescription))
 			.from(missionOutcome)

@@ -1,33 +1,36 @@
 package com.luckkids.api.service.missionOutcome.response;
 
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalenderDto;
+import java.time.LocalDate;
+import java.util.List;
+
+import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDto;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class MissionOutcomeForCalendarResponse {
 
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private List<MissionOutcomeCalenderDto> calender;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private List<MissionOutcomeCalendarDto> calendar;
 
-    @Builder
-    private MissionOutcomeForCalendarResponse(LocalDate startDate, LocalDate endDate, List<MissionOutcomeCalenderDto> calender) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.calender = calender;
-    }
+	@Builder
+	private MissionOutcomeForCalendarResponse(LocalDate startDate, LocalDate endDate,
+		List<MissionOutcomeCalendarDto> calendar) {
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.calendar = calendar;
+	}
 
-    public static MissionOutcomeForCalendarResponse of(LocalDate startDate, LocalDate endDate, List<MissionOutcomeCalenderDto> calender) {
-        return MissionOutcomeForCalendarResponse.builder()
-            .startDate(startDate)
-            .endDate(endDate)
-            .calender(calender)
-            .build();
-    }
+	public static MissionOutcomeForCalendarResponse of(LocalDate startDate, LocalDate endDate,
+		List<MissionOutcomeCalendarDto> calendar) {
+		return MissionOutcomeForCalendarResponse.builder()
+			.startDate(startDate)
+			.endDate(endDate)
+			.calendar(calendar)
+			.build();
+	}
 }
