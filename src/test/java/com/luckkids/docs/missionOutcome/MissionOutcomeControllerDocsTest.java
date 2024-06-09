@@ -57,8 +57,8 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
 			.willReturn(
-				MissionOutcomeUpdateResponse.of(true, "https://test.cloudfront.net/test1.json",
-					"https://test.cloudfront.net/test1.png")
+				MissionOutcomeUpdateResponse.of(true, 2, "https://test.cloudfront.net/test2.json",
+					"https://test.cloudfront.net/test2.png")
 			);
 
 		// when // then
@@ -91,6 +91,8 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 						.description("응답 데이터"),
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
+					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+						.description("레벨"),
 					fieldWithPath("data.lottieFile").type(JsonFieldType.STRING)
 						.description("레벨업한 캐릭터 로티 파일"),
 					fieldWithPath("data.imageFile").type(JsonFieldType.STRING)
@@ -110,7 +112,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
 			.willReturn(
-				MissionOutcomeUpdateResponse.of(false, null, null)
+				MissionOutcomeUpdateResponse.of(false, 0, null, null)
 			);
 
 		// when // then
@@ -143,6 +145,8 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 						.description("응답 데이터"),
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
+					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+						.description("레벨"),
 					fieldWithPath("data.lottieFile").type(JsonFieldType.NULL)
 						.description("레벨업한 캐릭터 로티 파일"),
 					fieldWithPath("data.imageFile").type(JsonFieldType.NULL)
