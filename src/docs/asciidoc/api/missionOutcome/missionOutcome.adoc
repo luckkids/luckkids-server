@@ -11,6 +11,18 @@ include::{snippets}/missionOutcome-get/query-parameters.adoc[]
 include::{snippets}/missionOutcome-get/http-response.adoc[]
 include::{snippets}/missionOutcome-get/response-fields.adoc[]
 
+[[missionOutcome-count]]
+=== 누적된 수행 미션결과
+
+==== HTTP Request
+
+include::{snippets}/missionOutcome-count/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/missionOutcome-count/http-response.adoc[]
+include::{snippets}/missionOutcome-count/response-fields.adoc[]
+
 [[missionOutcome-update-levelUp_O]]
 === 미션결과 수정 레벨업_O
 

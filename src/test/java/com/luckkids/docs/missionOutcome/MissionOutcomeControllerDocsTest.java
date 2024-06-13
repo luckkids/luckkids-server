@@ -30,6 +30,7 @@ import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRequest;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeCountResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -207,6 +208,40 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 							.description("알림 상태"),
 						fieldWithPath("data[].missionStatus").type(JsonFieldType.STRING)
 							.description("미션 성공 여부")
+					)
+				)
+			);
+	}
+
+	@DisplayName("미션상태를 받아 미션결과를 조회하는 API")
+	@Test
+	@WithMockUser(roles = "USER")
+	void getMissionOutcomesCount() throws Exception {
+		// given
+		given(missionOutcomeReadService.getMissionOutcomesCount())
+			.willReturn(
+				MissionOutcomeCountResponse.of(2L)
+			);
+
+		// when // then
+		mockMvc.perform(
+				get("/api/v1/missionOutcomes/count")
+			)
+			.andDo(print())
+			.andDo(document("missionOutcome-count",
+					preprocessRequest(prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					responseFields(
+						fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+							.description("코드"),
+						fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+							.description("상태"),
+						fieldWithPath("message").type(JsonFieldType.STRING)
+							.description("메세지"),
+						fieldWithPath("data").type(JsonFieldType.OBJECT)
+							.description("응답 데이터"),
+						fieldWithPath("data.count").type(JsonFieldType.NUMBER)
+							.description("누적된 수행 미션")
 					)
 				)
 			);

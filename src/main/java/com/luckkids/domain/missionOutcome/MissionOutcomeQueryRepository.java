@@ -85,4 +85,17 @@ public class MissionOutcomeQueryRepository {
 			.join(missionOutcome.mission, mission)
 			.fetch();
 	}
+
+	public Long findMissionOutcomesCount(int userId) {
+
+		return jpaQueryFactory
+			.select(missionOutcome.count())
+			.from(missionOutcome)
+			.join(missionOutcome.mission, mission)
+			.where(
+				mission.user.id.eq(userId),
+				missionOutcome.missionStatus.eq(MissionStatus.SUCCEED)
+			)
+			.fetchOne();
+	}
 }

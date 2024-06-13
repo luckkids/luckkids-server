@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeCountResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
@@ -186,6 +187,32 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 			.containsExactlyInAnyOrder(
 				tuple(HEALTH, "운동하기")
 			);
+	}
+
+	@DisplayName("로그인한 유저의 성공한 미션들의 총 개수를 조회한다.")
+	@Test
+	void getMissionOutcomesCount() {
+		// given
+		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+		Mission mission1 = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+		Mission mission2 = createMission(user, SELF_DEVELOPMENT, "책읽기", UNCHECKED, LocalTime.of(20, 0));
+		MissionOutcome missionOutcome1 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 25), FAILED);
+		MissionOutcome missionOutcome2 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 25), FAILED);
+		MissionOutcome missionOutcome3 = createMissionOutcome(mission1, LocalDate.of(2023, 12, 26), SUCCEED);
+		MissionOutcome missionOutcome4 = createMissionOutcome(mission2, LocalDate.of(2023, 12, 26), FAILED);
+
+		userRepository.save(user);
+		missionRepository.saveAll(List.of(mission1, mission2));
+		missionOutcomeRepository.saveAll(List.of(missionOutcome1, missionOutcome2, missionOutcome3, missionOutcome4));
+
+		given(securityService.getCurrentLoginUserInfo())
+			.willReturn(createLoginUserInfo(user.getId()));
+
+		// when
+		MissionOutcomeCountResponse missionOutcomesCount = missionOutcomeReadService.getMissionOutcomesCount();
+
+		// then
+		assertThat(missionOutcomesCount.getCount()).isEqualTo(1);
 	}
 
 	private User createUser(String email, String password, SnsType snsType) {

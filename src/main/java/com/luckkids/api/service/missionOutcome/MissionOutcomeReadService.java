@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.luckkids.api.service.missionOutcome.response.MissionOutcomeCountResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.api.service.security.SecurityService;
@@ -62,5 +63,10 @@ public class MissionOutcomeReadService {
 	public List<MissionOutcomeCalendarDetailDto> getMissionOutcomeForCalendarDetail(LocalDate missionDate) {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 		return missionOutcomeQueryRepository.findSuccessfulMissionsByDate(userId, missionDate);
+	}
+
+	public MissionOutcomeCountResponse getMissionOutcomesCount() {
+		int userId = securityService.getCurrentLoginUserInfo().getUserId();
+		return MissionOutcomeCountResponse.of(missionOutcomeQueryRepository.findMissionOutcomesCount(userId));
 	}
 }
