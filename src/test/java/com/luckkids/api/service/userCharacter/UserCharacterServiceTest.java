@@ -1,5 +1,20 @@
 package com.luckkids.api.service.userCharacter;
 
+import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.userCharacter.request.UserCharacterCreateServiceRequest;
@@ -16,22 +31,6 @@ import com.luckkids.domain.userCharacter.CharacterProgressStatus;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.luckkids.domain.luckkidsCharacter.CharacterType.CLOUD;
-import static com.luckkids.domain.luckkidsCharacter.CharacterType.CLOVER;
-import static com.luckkids.domain.userCharacter.CharacterProgressStatus.COMPLETED;
-import static com.luckkids.domain.userCharacter.CharacterProgressStatus.IN_PROGRESS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 public class UserCharacterServiceTest extends IntegrationTestSupport {
 
@@ -76,7 +75,8 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
             .nickName("럭키즈!")
             .build();
 
-        UserCharacterCreateResponse userCharacterCreateResponse = userCharacterService.createUserCharacter(userCharacterCreateServiceRequest);
+        UserCharacterCreateResponse userCharacterCreateResponse = userCharacterService.createUserCharacter(
+            userCharacterCreateServiceRequest);
 
         // then
         assertThat(userCharacterCreateResponse.getNickName()).isEqualTo("럭키즈!");
@@ -84,8 +84,11 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
         LuckkidsCharacter findLuckkidsCharacter = luckkidsCharacterReadService.findById(luckkidsCharacter.getId());
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterCreateResponse.getId()).get();
 
-        assertThat(userCharacter.getLuckkidsCharacter()).extracting("id", "characterType", "level", "lottieFile", "imageFile")
-            .contains(findLuckkidsCharacter.getId(), findLuckkidsCharacter.getCharacterType(), findLuckkidsCharacter.getLevel(), findLuckkidsCharacter.getLottieFile(), findLuckkidsCharacter.getImageFile());
+        assertThat(userCharacter.getLuckkidsCharacter()).extracting("id", "characterType", "level", "lottieFile",
+                "imageFile")
+            .contains(findLuckkidsCharacter.getId(), findLuckkidsCharacter.getCharacterType(),
+                findLuckkidsCharacter.getLevel(), findLuckkidsCharacter.getLottieFile(),
+                findLuckkidsCharacter.getImageFile());
     }
 
     @DisplayName("레벨업여부를 결정한다. 레벨업 O")
@@ -93,8 +96,10 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpTrue() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 25);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1,
+            "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2,
+            "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
@@ -115,8 +120,10 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpFalse() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 10);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2, "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1,
+            "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 2,
+            "https://test.cloudfront.net/test2.json", "https://test.cloudfront.net/test2.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
@@ -138,12 +145,16 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void determineLevelUpMax() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 100);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 4, "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
-        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 5, "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
+        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1,
+            "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 4,
+            "https://test.cloudfront.net/test4.json", "https://test.cloudfront.net/test4.png");
+        LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 5,
+            "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
 
         userRepository.save(user);
-        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
+        luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter, luckkidsCharacter1, luckkidsCharacter2));
         userCharacterRepository.save(userCharacter);
 
         // when
@@ -156,6 +167,15 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
         UserCharacter findUserCharacter = userCharacterRepository.getReferenceById(userCharacter.getId());
         assertThat(findUserCharacter.getCharacterProgressStatus()).isEqualTo(COMPLETED);
+
+        List<UserCharacter> userCharacters = userCharacterRepository.findAll();
+        assertThat(userCharacters.size()).isEqualTo(2);
+
+        List<UserCharacter> inProgressUserCharacters = userCharacters.stream()
+            .filter(u -> u.getCharacterProgressStatus() == IN_PROGRESS)
+            .toList();
+        assertThat(inProgressUserCharacters).hasSize(1);
+        assertThat(inProgressUserCharacters.getFirst().getLuckkidsCharacter().getLevel()).isEqualTo(1);
     }
 
     @DisplayName("진행중인 캐릭터정보들과 완료한 캐릭터 개수들을 가져온다. (1)")
@@ -163,7 +183,8 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void getCharacterSummary_1() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 25);
-        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1,
+            "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
         UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter, IN_PROGRESS);
 
         userRepository.save(user);
@@ -195,8 +216,10 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
     void getCharacterSummary_2() {
         // given
         User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO, 120);
-        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1, "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
-        LuckkidsCharacter luckkidsCharacter5 = createLuckkidsCharacter(CLOUD, 5, "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
+        LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1,
+            "https://test.cloudfront.net/test1.json", "https://test.cloudfront.net/test1.png");
+        LuckkidsCharacter luckkidsCharacter5 = createLuckkidsCharacter(CLOUD, 5,
+            "https://test.cloudfront.net/test5.json", "https://test.cloudfront.net/test5.png");
         UserCharacter userCharacter1 = createUserCharacter(user, luckkidsCharacter1, IN_PROGRESS);
         UserCharacter userCharacter2 = createUserCharacter(user, luckkidsCharacter5, COMPLETED);
 
@@ -240,7 +263,8 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
             .build();
     }
 
-    private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level, String lottieFile, String imageFile) {
+    private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level, String lottieFile,
+        String imageFile) {
         return LuckkidsCharacter.builder()
             .characterType(characterType)
             .level(level)
@@ -250,7 +274,8 @@ public class UserCharacterServiceTest extends IntegrationTestSupport {
 
     }
 
-    private UserCharacter createUserCharacter(User user, LuckkidsCharacter luckkidsCharacter, CharacterProgressStatus characterProgressStatus) {
+    private UserCharacter createUserCharacter(User user, LuckkidsCharacter luckkidsCharacter,
+        CharacterProgressStatus characterProgressStatus) {
         return UserCharacter.builder()
             .user(user)
             .luckkidsCharacter(luckkidsCharacter)
