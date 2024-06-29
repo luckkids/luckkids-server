@@ -14,14 +14,14 @@ public class LuckkidsMissionSaveResponse {
 
     private int id;
     private MissionType missionType;
-    private String description;
+    private String missionDescription;
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMissionSaveResponse(int id, MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMissionSaveResponse(int id, MissionType missionType, String missionDescription, LocalTime alertTime) {
         this.id = id;
         this.missionType = missionType;
-        this.description = description;
+        this.missionDescription = missionDescription;
         this.alertTime = alertTime;
     }
 
@@ -29,7 +29,7 @@ public class LuckkidsMissionSaveResponse {
         return LuckkidsMissionSaveResponse.builder()
             .id(luckkidsMission.getId())
             .missionType(luckkidsMission.getMissionType())
-            .description(luckkidsMission.getDescription())
+            .missionDescription(luckkidsMission.getMissionDescription())
             .alertTime(luckkidsMission.getAlertTime())
             .build();
     }

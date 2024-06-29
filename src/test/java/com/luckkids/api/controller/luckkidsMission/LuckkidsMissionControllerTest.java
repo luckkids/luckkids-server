@@ -25,7 +25,7 @@ public class LuckkidsMissionControllerTest extends ControllerTestSupport {
         // given
         LuckkidsMissionRequest request = LuckkidsMissionRequest.builder()
             .missionType(MissionType.HEALTH)
-            .description("9시에 기상한다.")
+            .missionDescription("9시에 기상한다.")
             .alertTime(LocalTime.of(10, 0))
             .build();
 
@@ -49,7 +49,7 @@ public class LuckkidsMissionControllerTest extends ControllerTestSupport {
     void saveLuckkidsMissionWithoutMissionType() throws Exception {
         // given
         LuckkidsMissionRequest request = LuckkidsMissionRequest.builder()
-            .description("9시에 기상한다.")
+            .missionDescription("9시에 기상한다.")
             .alertTime(LocalTime.of(10, 0))
             .build();
 
@@ -98,7 +98,7 @@ public class LuckkidsMissionControllerTest extends ControllerTestSupport {
         // given
         LuckkidsMissionRequest request = LuckkidsMissionRequest.builder()
             .missionType(MissionType.HEALTH)
-            .description("9시에 기상한다.")
+            .missionDescription("9시에 기상한다.")
             .build();
 
         // when // then

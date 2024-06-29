@@ -13,20 +13,20 @@ import java.time.LocalTime;
 public class LuckkidsMissionResponse {
 
     private MissionType missionType;
-    private String description;
+    private String missionDescription;
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMissionResponse(MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMissionResponse(MissionType missionType, String missionDescription, LocalTime alertTime) {
         this.missionType = missionType;
-        this.description = description;
+        this.missionDescription = missionDescription;
         this.alertTime = alertTime;
     }
 
     public static LuckkidsMissionResponse of(LuckkidsMission luckMission) {
         return LuckkidsMissionResponse.builder()
             .missionType(luckMission.getMissionType())
-            .description(luckMission.getDescription())
+            .missionDescription(luckMission.getMissionDescription())
             .alertTime(luckMission.getAlertTime())
             .build();
     }

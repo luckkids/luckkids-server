@@ -40,7 +40,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
         List<LuckkidsMissionResponse> luckMissionResponses = luckkidsMissionReadService.getLuckMissions();
 
         assertThat(luckMissionResponses).hasSize(10)
-            .extracting("description", "alertTime")
+            .extracting("missionDescription", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple("테스트미션1", LocalTime.of(1, 0)),
                 tuple("테스트미션2", LocalTime.of(2, 0)),
@@ -57,7 +57,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
 
     private LuckkidsMission createLuckMission(String description, LocalTime alertTime) {
         return LuckkidsMission.builder()
-            .description(description)
+            .missionDescription(description)
             .alertTime(alertTime)
             .build();
     }

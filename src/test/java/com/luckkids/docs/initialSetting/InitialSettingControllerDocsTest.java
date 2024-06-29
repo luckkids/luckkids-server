@@ -277,7 +277,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data[].missionType").type(JsonFieldType.STRING)
                         .description("미션타입. 가능한값: "+Arrays.toString(MissionType.values())),
-                    fieldWithPath("data[].description").type(JsonFieldType.STRING)
+                    fieldWithPath("data[].missionDescription").type(JsonFieldType.STRING)
                         .description("미션내용"),
                     fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
                         .description("알림시간")
@@ -285,10 +285,10 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    private LuckkidsMissionResponse createMissionResponse(MissionType missionType, String description, LocalTime alertTime){
+    private LuckkidsMissionResponse createMissionResponse(MissionType missionType, String missionDescription, LocalTime alertTime){
         return LuckkidsMissionResponse.builder()
             .missionType(missionType)
-            .description(description)
+            .missionDescription(missionDescription)
             .alertTime(alertTime)
             .build();
     }
