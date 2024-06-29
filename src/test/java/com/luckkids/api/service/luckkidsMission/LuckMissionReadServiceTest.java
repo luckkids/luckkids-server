@@ -39,7 +39,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
         List<LuckkidsMissionResponse> luckkidsMissionResponses = luckkidsMissionReadService.getLuckMissions();
 
         assertThat(luckkidsMissionResponses).hasSize(10)
-            .extracting("missionType", "description", "alertTime")
+            .extracting("missionType", "missionDescription", "alertTime")
             .containsExactlyInAnyOrder(
                 tuple(MissionType.HEALTH, "테스트미션1", LocalTime.of(1, 0)),
                 tuple(MissionType.HEALTH, "테스트미션2", LocalTime.of(2, 0)),
@@ -54,10 +54,10 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
             );
     }
 
-    private LuckkidsMission createLuckkidsMission(String description, LocalTime alertTime) {
+    private LuckkidsMission createLuckkidsMission(String missionDescription, LocalTime alertTime) {
         return LuckkidsMission.builder()
             .missionType(MissionType.HEALTH)
-            .description(description)
+            .missionDescription(missionDescription)
             .alertTime(alertTime)
             .build();
     }

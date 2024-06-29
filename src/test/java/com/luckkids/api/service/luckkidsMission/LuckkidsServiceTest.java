@@ -37,14 +37,14 @@ public class LuckkidsServiceTest extends IntegrationTestSupport {
     void saveLuckkidsMissionTest() {
         LuckkidsMissionServiceRequest luckkidsMissionRequest = LuckkidsMissionServiceRequest.builder()
             .missionType(MissionType.HEALTH)
-            .description("9시에 기상한다.")
+            .missionDescription("9시에 기상한다.")
             .alertTime(LocalTime.of(10, 0))
             .build();
 
         LuckkidsMissionSaveResponse luckkidsMissionSaveResponse = luckkidsMissionService.createLuckkidsMission(luckkidsMissionRequest);
 
         assertThat(luckkidsMissionSaveResponse)
-            .extracting("missionType", "description", "alertTime")
+            .extracting("missionType", "missionDescription", "alertTime")
             .contains(
                 MissionType.HEALTH, "9시에 기상한다.", LocalTime.of(10, 0)
             );
