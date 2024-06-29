@@ -21,14 +21,14 @@ public class LuckkidsMission {
     @Enumerated(EnumType.STRING)
     private MissionType missionType;
 
-    private String description;
+    private String missionDescription;
 
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMission(MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMission(MissionType missionType, String missionDescription, LocalTime alertTime) {
         this.missionType = missionType;
-        this.description = description;
+        this.missionDescription = missionDescription;
         this.alertTime = alertTime;
     }
 }

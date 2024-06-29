@@ -17,21 +17,21 @@ public class LuckkidsMissionRequest {
     @NotNull(message = "미션타입은 필수입니다.")
     private MissionType missionType;
     @NotNull(message = "미션설명은 필수입니다.")
-    private String description;
+    private String missionDescription;
     @NotNull(message = "알림시간은 필수입니다.")
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMissionRequest(MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMissionRequest(MissionType missionType, String missionDescription, LocalTime alertTime) {
         this.missionType = missionType;
-        this.description = description;
+        this.missionDescription = missionDescription;
         this.alertTime = alertTime;
     }
 
     public LuckkidsMissionServiceRequest toServiceRequest(){
         return LuckkidsMissionServiceRequest.builder()
             .missionType(missionType)
-            .description(description)
+            .missionDescription(missionDescription)
             .alertTime(alertTime)
             .build();
     }

@@ -18,13 +18,13 @@ import java.time.LocalTime;
 public class LuckkidsMissionServiceRequest {
 
     private MissionType missionType;
-    private String description;
+    private String missionDescription;
     private LocalTime alertTime;
 
     @Builder
-    private LuckkidsMissionServiceRequest(MissionType missionType, String description, LocalTime alertTime) {
+    private LuckkidsMissionServiceRequest(MissionType missionType, String missionDescription, LocalTime alertTime) {
         this.missionType = missionType;
-        this.description = description;
+        this.missionDescription = missionDescription;
         this.alertTime = alertTime;
     }
 
@@ -43,7 +43,7 @@ public class LuckkidsMissionServiceRequest {
     public LuckkidsMission toEntity(){
         return LuckkidsMission.builder()
             .missionType(missionType)
-            .description(description)
+            .missionDescription(missionDescription)
             .alertTime(alertTime)
             .build();
     }
