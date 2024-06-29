@@ -28,7 +28,7 @@ class JoinControllerTest extends ControllerTestSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/join/checkEmail")
+                post("/api/v1/join/checkEmail")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)

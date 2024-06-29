@@ -20,7 +20,7 @@ public class JoinController {
     private final JoinService joinService;
     private final JoinReadService joinReadService;
 
-    @GetMapping("/checkEmail")
+    @PostMapping("/checkEmail")
     public ApiResponse<JoinCheckEmailResponse> checkEmail(@Valid  @RequestBody JoinCheckEmailRequest joinCheckEmailRequest){
         return ApiResponse.ok(joinReadService.checkEmail(joinCheckEmailRequest.toServiceRequest()));
     }
