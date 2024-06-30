@@ -89,7 +89,8 @@ public class UserCharacterService {
 		LuckkidsCharacter LevelUpLuckkidsCharacter, int level) {
 		if (level == LEVEL_MAX.getLevel()) {
 			userCharacter.updateCompleteCharacter();
-			// createRandomLevelOneCharacters(); // TODO: 추후 로직 추가 예정 create random 1_level 캐릭터들 로직 생성시 추가 ! ⭐️
+			userCharacterRepository.save(
+				withUserCharacter(userCharacter, luckkidsCharacterReadService.findRandomLuckkidsCharacterLevel1()));
 		}
 		userCharacter.updateLuckkidsCharacter(LevelUpLuckkidsCharacter);
 		return UserCharacterLevelUpResponse.of(true, LevelUpLuckkidsCharacter.getLevel(),
@@ -118,5 +119,13 @@ public class UserCharacterService {
 		}
 
 		return completedCharacterCount;
+	}
+
+	private UserCharacter withUserCharacter(UserCharacter userCharacter, LuckkidsCharacter luckkidsCharacter) {
+		return UserCharacter.builder()
+			.user(userCharacter.getUser())
+			.luckkidsCharacter(luckkidsCharacter)
+			.characterProgressStatus(IN_PROGRESS)
+			.build();
 	}
 }
