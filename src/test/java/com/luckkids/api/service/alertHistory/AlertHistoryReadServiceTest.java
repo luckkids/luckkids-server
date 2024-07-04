@@ -1,9 +1,8 @@
 package com.luckkids.api.service.alertHistory;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 
-import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,7 @@ import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.jwt.dto.LoginUserInfo;
 
 class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 
@@ -53,7 +53,7 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
-		AlertHistory alertHistory = createAlertHistory(push);
+		AlertHistory alertHistory = createAlertHistory(user);
 		alertHistoryRepository.save(alertHistory);
 
 		// when
@@ -89,7 +89,7 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		given(securityService.getCurrentLoginUserInfo())
 			.willReturn(createLoginUserInfo(user.getId()));
 
-		AlertHistory alertHistory = createAlertHistory(push);
+		AlertHistory alertHistory = createAlertHistory(user);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 		AlertHistoryResponse response = AlertHistoryResponse.of(savedAlertHistory);
 
@@ -107,7 +107,7 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.contains(
 				tuple(response.getId(), response.getAlertDescription(), response.getAlertHistoryStatus())
 			);
-		
+
 		assertThat(result.getPageInfo()).extracting("currentPage", "totalPage", "totalElement")
 			.contains(1, 1, 1);
 	}
@@ -128,9 +128,9 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createAlertHistory(Push push) {
+	private AlertHistory createAlertHistory(User user) {
 		return AlertHistory.builder()
-			.push(push)
+			.user(user)
 			.alertDescription("test")
 			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
 			.build();

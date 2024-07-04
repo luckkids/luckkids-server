@@ -42,7 +42,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
-		AlertHistory alertHistory = createAlertHistory(push);
+		AlertHistory alertHistory = createAlertHistory(user);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 
 		Pageable pageable = PageInfoServiceRequest.builder()
@@ -52,13 +52,13 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 			.toPageable();
 
 		// when
-		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceIdAndUserId(push.getDeviceId(), user.getId(), pageable);
+		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceIdAndUserId(user.getId(), pageable);
 
 		// then
 		assertThat(result.getContent())
-			.extracting("push", "alertDescription", "alertHistoryStatus")
+			.extracting("alertDescription", "alertHistoryStatus")
 			.contains(
-				tuple(savedAlertHistory.getPush(),
+				tuple(
 					savedAlertHistory.getAlertDescription(),
 					savedAlertHistory.getAlertHistoryStatus()
 				)
@@ -84,9 +84,9 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createAlertHistory(Push push) {
+	private AlertHistory createAlertHistory(User user) {
 		return AlertHistory.builder()
-			.push(push)
+			.user(user)
 			.alertDescription("test")
 			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
 			.build();

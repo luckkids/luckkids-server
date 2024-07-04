@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckkids.api.ApiResponse;
-import com.luckkids.api.controller.alertHistory.request.AlertHistoryDeviceIdRequest;
+import com.luckkids.api.page.request.PageInfoRequest;
 import com.luckkids.api.page.response.PageCustom;
 import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
 import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryStatusResponse;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -25,8 +24,7 @@ public class AlertHistoryController {
 	private final AlertHistoryReadService alertHistoryReadService;
 
 	@GetMapping("/api/v1/alertHistories")
-	public ApiResponse<PageCustom<AlertHistoryResponse>> getAlertHistory(
-		@ModelAttribute @Valid AlertHistoryDeviceIdRequest request) {
+	public ApiResponse<PageCustom<AlertHistoryResponse>> getAlertHistory(@ModelAttribute PageInfoRequest request) {
 		return ApiResponse.ok(alertHistoryReadService.getAlertHistory(request.toServiceRequest()));
 	}
 

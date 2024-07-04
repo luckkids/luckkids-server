@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlertHistoryRepository extends JpaRepository<AlertHistory, Long> {
 
-	void deleteByPushUserId(int userId);
+	void deleteByUserId(int userId);
 }

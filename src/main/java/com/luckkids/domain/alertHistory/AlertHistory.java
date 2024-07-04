@@ -1,8 +1,15 @@
 package com.luckkids.domain.alertHistory;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.push.Push;
-import jakarta.persistence.*;
+import com.luckkids.domain.user.User;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,26 +20,26 @@ import lombok.NoArgsConstructor;
 @Entity
 public class AlertHistory extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Push push;
+	@OneToOne
+	private User user;
 
-    private String alertDescription;
+	private String alertDescription;
 
-    @Enumerated(EnumType.STRING)
-    private AlertHistoryStatus alertHistoryStatus;
+	@Enumerated(EnumType.STRING)
+	private AlertHistoryStatus alertHistoryStatus;
 
-    @Builder
-    private AlertHistory(Push push, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
-        this.push = push;
-        this.alertDescription = alertDescription;
-        this.alertHistoryStatus = alertHistoryStatus;
-    }
+	@Builder
+	private AlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
+		this.user = user;
+		this.alertDescription = alertDescription;
+		this.alertHistoryStatus = alertHistoryStatus;
+	}
 
-    public void updateAlertHistoryStatus(AlertHistoryStatus alertHistoryStatus) {
-        this.alertHistoryStatus = alertHistoryStatus;
-    }
+	public void updateAlertHistoryStatus(AlertHistoryStatus alertHistoryStatus) {
+		this.alertHistoryStatus = alertHistoryStatus;
+	}
 }

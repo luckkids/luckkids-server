@@ -38,11 +38,11 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
-		AlertHistory alertHistory = createAlertHistory(push);
+		AlertHistory alertHistory = createAlertHistory(user);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 
 		// when
-		alertHistoryRepository.deleteByPushUserId(user.getId());
+		alertHistoryRepository.deleteByUserId(user.getId());
 
 		// then
 		Optional<AlertHistory> findAlertHistory = alertHistoryRepository.findById(savedAlertHistory.getId());
@@ -65,9 +65,9 @@ public class AlertHistoryRepositoryTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createAlertHistory(Push push) {
+	private AlertHistory createAlertHistory(User user) {
 		return AlertHistory.builder()
-			.push(push)
+			.user(user)
 			.alertDescription("test")
 			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
 			.build();

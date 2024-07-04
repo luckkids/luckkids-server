@@ -1,21 +1,23 @@
 package com.luckkids.api.service.user.delete;
 
-import com.luckkids.domain.alertHistory.AlertHistoryRepository;
-import com.luckkids.domain.alertSetting.AlertSettingRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.luckkids.domain.alertHistory.AlertHistoryRepository;
+import com.luckkids.domain.alertSetting.AlertSettingRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserAlertDeleteService implements UserDeleteService{
-    private final AlertHistoryRepository alertHistoryRepository;
-    private final AlertSettingRepository alertSettingRepository;
+public class UserAlertDeleteService implements UserDeleteService {
+	private final AlertHistoryRepository alertHistoryRepository;
+	private final AlertSettingRepository alertSettingRepository;
 
-    @Override
-    public void deleteAllByUserId(int userId) {
-        alertHistoryRepository.deleteByPushUserId(userId);
-        alertSettingRepository.deleteByPushUserId(userId);
-    }
+	@Override
+	public void deleteAllByUserId(int userId) {
+		alertHistoryRepository.deleteByUserId(userId);
+		alertSettingRepository.deleteByPushUserId(userId);
+	}
 }
