@@ -34,7 +34,7 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 		userRepository.deleteAllInBatch();
 	}
 
-	// ⭐️⭐️
+	// ⭐️ 테스트 수정 !
 	// @DisplayName("푸시알림 발송 이력을 저장한다.")
 	// @Test
 	// void save(){

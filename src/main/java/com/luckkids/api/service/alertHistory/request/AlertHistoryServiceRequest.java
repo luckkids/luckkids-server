@@ -23,7 +23,7 @@ public class AlertHistoryServiceRequest {
 
 	public AlertHistory toEntity() {
 		return AlertHistory.builder()
-			// .push(push)  // ⭐️⭐️ 수정해야함 !
+			// .push(push)  // ⭐️ 수정해야함 !
 			.alertDescription(alertDescription)
 			.alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
 			.build();
