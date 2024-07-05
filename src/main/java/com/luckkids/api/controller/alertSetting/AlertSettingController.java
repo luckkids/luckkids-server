@@ -21,7 +21,7 @@ public class AlertSettingController {
     private final AlertSettingService alertSettingService;
 
     @GetMapping
-    public ApiResponse<AlertSettingResponse> getAlertSetting(@RequestBody @Valid AlertSettingRequest alertSettingRequest){
+    public ApiResponse<AlertSettingResponse> getAlertSetting(@ModelAttribute @Valid AlertSettingRequest alertSettingRequest){
         return ApiResponse.ok(alertSettingReadService.getAlertSetting(alertSettingRequest.toServiceRequest()));
     }
 
