@@ -28,6 +28,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,14 +65,17 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/alertSetting")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
+                    .param("deviceId", request.getDeviceId())
             )
             .andDo(print())
             .andExpect(status().isOk())
             .andDo(document("get-alertSetting",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                queryParameters(
+                        parameterWithName("deviceId")
+                                .description("디바이스 ID")
+                ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
                         .description("코드"),

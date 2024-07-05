@@ -9,7 +9,6 @@ import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Bag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +20,7 @@ public class AlertSettingController {
     private final AlertSettingService alertSettingService;
 
     @GetMapping
-    public ApiResponse<AlertSettingResponse> getAlertSetting(@RequestBody @Valid AlertSettingRequest alertSettingRequest){
+    public ApiResponse<AlertSettingResponse> getAlertSetting(@ModelAttribute @Valid AlertSettingRequest alertSettingRequest){
         return ApiResponse.ok(alertSettingReadService.getAlertSetting(alertSettingRequest.toServiceRequest()));
     }
 
