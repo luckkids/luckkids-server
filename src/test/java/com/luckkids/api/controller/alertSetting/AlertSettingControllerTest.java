@@ -31,7 +31,7 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/alertSetting")
-                    .param(request.getDeviceId())
+                    .param("deviceId", request.getDeviceId())
             )
             .andDo(print())
             .andExpect(status().isOk())
