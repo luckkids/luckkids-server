@@ -12,6 +12,7 @@ import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.user.SnsType;
+import com.luckkids.domain.userAgreement.AgreementStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -96,6 +97,9 @@ public class JoinControllerDocsTest extends RestDocsSupport {
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
+            .termUserAgreement(AgreementStatus.AGREE)
+            .personalInfoAgreement(AgreementStatus.AGREE)
+            .marketingAgreement(AgreementStatus.AGREE)
             .build();
 
         given(joinService.joinUser(any(JoinServiceRequest.class)))
@@ -103,6 +107,9 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                 .id(1)
                 .email("tkdrl8908@naver.com")
                 .snsType(SnsType.NORMAL)
+                .termUserAgreement(AgreementStatus.AGREE)
+                .personalInfoAgreement(AgreementStatus.AGREE)
+                .marketingAgreement(AgreementStatus.AGREE)
                 .build()
             );
 
@@ -121,7 +128,13 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("email").type(JsonFieldType.STRING)
                         .description("이메일"),
                     fieldWithPath("password").type(JsonFieldType.STRING)
-                        .description("패스워드")
+                        .description("패스워드"),
+                    fieldWithPath("termUserAgreement").type(JsonFieldType.STRING)
+                            .description("이용약관 필수동의 여부"  + Arrays.toString(AgreementStatus.values())),
+                    fieldWithPath("personalInfoAgreement").type(JsonFieldType.STRING)
+                            .description("개인정보 동의여부"  + Arrays.toString(AgreementStatus.values())),
+                    fieldWithPath("marketingAgreement").type(JsonFieldType.STRING)
+                            .description("마케팅 수신여부"  + Arrays.toString(AgreementStatus.values()))
                 ),
                 responseFields(
                     fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -137,7 +150,13 @@ public class JoinControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.email").type(JsonFieldType.STRING)
                         .description("이메일"),
                     fieldWithPath("data.snsType").type(JsonFieldType.STRING)
-                        .description("로그인타입. 가능한 값: "+ Arrays.toString(SnsType.values()))
+                        .description("로그인타입. 가능한 값: "+ Arrays.toString(SnsType.values())),
+                    fieldWithPath("data.termUserAgreement").type(JsonFieldType.STRING)
+                        .description("이용약관 필수동의 여부"  + Arrays.toString(AgreementStatus.values())),
+                    fieldWithPath("data.personalInfoAgreement").type(JsonFieldType.STRING)
+                        .description("개인정보 동의여부"  + Arrays.toString(AgreementStatus.values())),
+                    fieldWithPath("data.marketingAgreement").type(JsonFieldType.STRING)
+                        .description("마케팅 수신여부"  + Arrays.toString(AgreementStatus.values()))
                 )
             ));
     }

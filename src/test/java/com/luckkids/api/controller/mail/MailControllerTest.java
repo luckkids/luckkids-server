@@ -120,9 +120,7 @@ class MailControllerTest extends ControllerTestSupport {
         // when // then
         mockMvc.perform(
                 get("/api/v1/user/findEmail")
-                    .content(objectMapper.writeValueAsString(userFindEmailRequest))
-                    .contentType(APPLICATION_JSON)
-                    .with(csrf())
+                    .param("email", userFindEmailRequest.getEmail())
             )
             .andDo(print())
             .andExpect(status().isOk())

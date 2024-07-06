@@ -3,6 +3,7 @@ package com.luckkids.api.controller.join;
 import com.luckkids.ControllerTestSupport;
 import com.luckkids.api.controller.join.request.JoinCheckEmailRequest;
 import com.luckkids.api.controller.join.request.JoinRequest;
+import com.luckkids.domain.userAgreement.AgreementStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -49,6 +50,9 @@ class JoinControllerTest extends ControllerTestSupport {
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
+            .termUserAgreement(AgreementStatus.AGREE)
+            .personalInfoAgreement(AgreementStatus.AGREE)
+            .marketingAgreement(AgreementStatus.AGREE)
             .build();
 
         // when // then
@@ -73,6 +77,9 @@ class JoinControllerTest extends ControllerTestSupport {
         // given
         JoinRequest request = JoinRequest.builder()
             .email("tkdrl8908@naver.com")
+            .termUserAgreement(AgreementStatus.AGREE)
+            .personalInfoAgreement(AgreementStatus.AGREE)
+            .marketingAgreement(AgreementStatus.AGREE)
             .build();
 
         // when // then
@@ -89,5 +96,89 @@ class JoinControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("비밀번호는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("회원가입시 이용약관 필수동의 여부는 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void joinUserWithoutTermUserAgreement() throws Exception {
+        // given
+        JoinRequest request = JoinRequest.builder()
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .personalInfoAgreement(AgreementStatus.AGREE)
+                .marketingAgreement(AgreementStatus.AGREE)
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/join/user")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("이용약관 필수동의여부는 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("회원가입시 개인정보 필수동의여부는 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void joinUserWithoutPersonalInfoAgreement() throws Exception {
+        // given
+        JoinRequest request = JoinRequest.builder()
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .termUserAgreement(AgreementStatus.AGREE)
+                .marketingAgreement(AgreementStatus.AGREE)
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/join/user")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("개인정보 필수동의여부는 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("회원가입시 마케팅 수신동의여부는 필수이다.")
+    @Test
+    @WithMockUser(roles = "USER")
+    void joinUserWithoutMarketingAgreement() throws Exception {
+        // given
+        JoinRequest request = JoinRequest.builder()
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .termUserAgreement(AgreementStatus.AGREE)
+                .personalInfoAgreement(AgreementStatus.AGREE)
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/join/user")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("마케팅 수신동의여부는 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 }
