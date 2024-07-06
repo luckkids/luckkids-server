@@ -1,6 +1,9 @@
 package com.luckkids.domain.alertHistory;
 
+import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +35,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 	@Autowired
 	private PushRepository pushRepository;
 
-	@DisplayName("페이징 정보와 deviceId를 받아서 페이징 처리된 알림 내역을 조회한다.")
+	@DisplayName("페이징 정보를 받아서 페이징 처리된 알림 내역을 조회한다.")
 	@Test
 	void findByDeviceId() {
 		// given
@@ -42,7 +45,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
-		AlertHistory alertHistory = createAlertHistory(user);
+		AlertHistory alertHistory = createAlertHistory(user, "test1", CHECKED);
 		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
 
 		Pageable pageable = PageInfoServiceRequest.builder()
@@ -68,6 +71,56 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 		assertThat(result.getTotalPages()).isEqualTo(1);
 	}
 
+	@DisplayName("유저가 읽지 않은 알림이 하나 이상인지 확인한다. (읽지 않은 알림이 있음)")
+	@Test
+	void hasUncheckedAlerts_1() {
+		// given
+		User user1 = createUser();
+		User user2 = createUser();
+		userRepository.saveAll(List.of(user1, user2));
+
+		Push push1 = createPush(user1);
+		Push push2 = createPush(user2);
+		pushRepository.saveAll(List.of(push1, push2));
+
+		AlertHistory alertHistory1 = createAlertHistory(user1, "test1", CHECKED);
+		AlertHistory alertHistory2 = createAlertHistory(user1, "test2", UNCHECKED);
+		AlertHistory alertHistory3 = createAlertHistory(user1, "test3", CHECKED);
+		AlertHistory alertHistory4 = createAlertHistory(user2, "test4", CHECKED);
+		alertHistoryRepository.saveAll(List.of(alertHistory1, alertHistory2, alertHistory3, alertHistory4));
+
+		// when
+		boolean result = alertHistoryQueryRepository.hasUncheckedAlerts(user1.getId());
+
+		// then
+		assertThat(result).isTrue();
+	}
+
+	@DisplayName("유저가 읽지 않은 알림이 하나 이상인지 확인한다. (읽지 않은 알림이 없음)")
+	@Test
+	void hasUncheckedAlerts_2() {
+		// given
+		User user1 = createUser();
+		User user2 = createUser();
+		userRepository.saveAll(List.of(user1, user2));
+
+		Push push1 = createPush(user1);
+		Push push2 = createPush(user2);
+		pushRepository.saveAll(List.of(push1, push2));
+
+		AlertHistory alertHistory1 = createAlertHistory(user1, "test1", CHECKED);
+		AlertHistory alertHistory2 = createAlertHistory(user1, "test2", CHECKED);
+		AlertHistory alertHistory3 = createAlertHistory(user1, "test3", CHECKED);
+		AlertHistory alertHistory4 = createAlertHistory(user2, "test4", UNCHECKED);
+		alertHistoryRepository.saveAll(List.of(alertHistory1, alertHistory2, alertHistory3, alertHistory4));
+
+		// when
+		boolean result = alertHistoryQueryRepository.hasUncheckedAlerts(user1.getId());
+
+		// then
+		assertThat(result).isFalse();
+	}
+
 	private User createUser() {
 		return User.builder()
 			.email("test@email.com")
@@ -84,11 +137,11 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createAlertHistory(User user) {
+	private AlertHistory createAlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
 		return AlertHistory.builder()
 			.user(user)
-			.alertDescription("test")
-			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
+			.alertDescription(alertDescription)
+			.alertHistoryStatus(alertHistoryStatus)
 			.build();
 	}
 }

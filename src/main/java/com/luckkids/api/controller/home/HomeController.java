@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.home.response.HomeMainResponse;
+import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;
@@ -29,6 +30,7 @@ public class HomeController {
 	private final MissionOutcomeReadService missionOutcomeReadService;
 	private final UserReadService userReadService;
 	private final UserCharacterService userCharacterService;
+	private final AlertHistoryReadService alertHistoryReadService;
 
 	@GetMapping("/api/v1/home/calendar")
 	public ApiResponse<MissionOutcomeForCalendarResponse> getMissionOutcomeForCalendar(
@@ -60,7 +62,8 @@ public class HomeController {
 					now(),
 					date -> date.minusDays(3),
 					date -> date.plusDays(3)
-				)
+				),
+				alertHistoryReadService.hasUncheckedAlerts()
 			)
 		);
 	}

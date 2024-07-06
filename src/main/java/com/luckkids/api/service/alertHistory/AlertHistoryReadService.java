@@ -48,4 +48,9 @@ public class AlertHistoryReadService {
 			.pageInfo(PageableCustom.of(alertHistoryPage))
 			.build();
 	}
+
+	public boolean hasUncheckedAlerts() {
+		int userId = securityService.getCurrentLoginUserInfo().getUserId();
+		return alertHistoryQueryRepository.hasUncheckedAlerts(userId);
+	}
 }

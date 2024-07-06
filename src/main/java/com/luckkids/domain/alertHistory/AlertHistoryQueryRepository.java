@@ -38,6 +38,20 @@ public class AlertHistoryQueryRepository {
 		return new PageImpl<>(content, pageable, total);
 	}
 
+	public boolean hasUncheckedAlerts(int userId) {
+		long count = ofNullable(
+			jpaQueryFactory
+				.select(alertHistory.count())
+				.from(alertHistory)
+				.where(
+					isUserIdEqualsTo(userId),
+					isStatusEqualsTo(AlertHistoryStatus.UNCHECKED)
+				)
+				.fetchOne()
+		).orElse(0L);
+		return count > 0;
+	}
+
 	private long getTotalAlertHistoriesCount(int userId) {
 		return ofNullable(
 			jpaQueryFactory
@@ -52,5 +66,9 @@ public class AlertHistoryQueryRepository {
 
 	private BooleanExpression isUserIdEqualsTo(int userId) {
 		return alertHistory.user.id.eq(userId);
+	}
+
+	private BooleanExpression isStatusEqualsTo(AlertHistoryStatus status) {
+		return alertHistory.alertHistoryStatus.eq(status);
 	}
 }
