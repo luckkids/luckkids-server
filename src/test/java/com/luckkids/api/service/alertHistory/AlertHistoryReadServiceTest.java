@@ -1,7 +1,10 @@
 package com.luckkids.api.service.alertHistory;
 
+import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +56,7 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
-		AlertHistory alertHistory = createAlertHistory(user);
+		AlertHistory alertHistory = createAlertHistory(user, "test1", CHECKED);
 		alertHistoryRepository.save(alertHistory);
 
 		// when
@@ -86,18 +89,19 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		Push push = createPush(user);
 		pushRepository.save(push);
 
+		AlertHistory alertHistory = createAlertHistory(user, "test1", CHECKED);
+		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
+
 		given(securityService.getCurrentLoginUserInfo())
 			.willReturn(createLoginUserInfo(user.getId()));
-
-		AlertHistory alertHistory = createAlertHistory(user);
-		AlertHistory savedAlertHistory = alertHistoryRepository.save(alertHistory);
-		AlertHistoryResponse response = AlertHistoryResponse.of(savedAlertHistory);
 
 		AlertHistoryDeviceIdServiceRequest request = AlertHistoryDeviceIdServiceRequest.builder()
 			.deviceId(push.getDeviceId())
 			.page(1)
 			.size(10)
 			.build();
+
+		AlertHistoryResponse response = AlertHistoryResponse.of(savedAlertHistory);
 
 		// when
 		PageCustom<AlertHistoryResponse> result = alertHistoryReadService.getAlertHistory(request);
@@ -110,6 +114,34 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 
 		assertThat(result.getPageInfo()).extracting("currentPage", "totalPage", "totalElement")
 			.contains(1, 1, 1);
+	}
+
+	@DisplayName("유저가 읽지 않은 알림이 하나 이상인지 확인한다.")
+	@Test
+	void hasUncheckedAlerts() {
+		// given
+		User user1 = createUser();
+		User user2 = createUser();
+		userRepository.saveAll(List.of(user1, user2));
+
+		Push push1 = createPush(user1);
+		Push push2 = createPush(user2);
+		pushRepository.saveAll(List.of(push1, push2));
+
+		AlertHistory alertHistory1 = createAlertHistory(user1, "test1", CHECKED);
+		AlertHistory alertHistory2 = createAlertHistory(user1, "test2", CHECKED);
+		AlertHistory alertHistory3 = createAlertHistory(user1, "test3", CHECKED);
+		AlertHistory alertHistory4 = createAlertHistory(user2, "test4", UNCHECKED);
+		alertHistoryRepository.saveAll(List.of(alertHistory1, alertHistory2, alertHistory3, alertHistory4));
+
+		given(securityService.getCurrentLoginUserInfo())
+			.willReturn(createLoginUserInfo(user1.getId()));
+
+		// when
+		boolean result = alertHistoryReadService.hasUncheckedAlerts();
+
+		// then
+		assertThat(result).isFalse();
 	}
 
 	private User createUser() {
@@ -128,11 +160,11 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createAlertHistory(User user) {
+	private AlertHistory createAlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
 		return AlertHistory.builder()
 			.user(user)
-			.alertDescription("test")
-			.alertHistoryStatus(AlertHistoryStatus.CHECKED)
+			.alertDescription(alertDescription)
+			.alertHistoryStatus(alertHistoryStatus)
 			.build();
 	}
 

@@ -25,6 +25,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.api.controller.home.HomeController;
+import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;
@@ -40,10 +41,12 @@ public class HomeControllerDocsTest extends RestDocsSupport {
 	private final MissionOutcomeReadService missionOutcomeReadService = mock(MissionOutcomeReadService.class);
 	private final UserReadService userReadService = mock(UserReadService.class);
 	private final UserCharacterService userCharacterService = mock(UserCharacterService.class);
+	private final AlertHistoryReadService alertHistoryReadService = mock(AlertHistoryReadService.class);
 
 	@Override
 	protected Object initController() {
-		return new HomeController(missionOutcomeReadService, userReadService, userCharacterService);
+		return new HomeController(missionOutcomeReadService, userReadService, userCharacterService,
+			alertHistoryReadService);
 	}
 
 	@DisplayName("홈 화면의 캘린더 정보를 조회하는 API")
@@ -178,6 +181,7 @@ public class HomeControllerDocsTest extends RestDocsSupport {
 					)
 				)
 			);
+		given(alertHistoryReadService.hasUncheckedAlerts()).willReturn(true);
 
 		// when // then
 		mockMvc.perform(
@@ -244,7 +248,9 @@ public class HomeControllerDocsTest extends RestDocsSupport {
 							.description("미션 날짜"),
 						fieldWithPath("data.missionOutcomeForWeekResponse.calendar[].hasSucceed").type(
 								JsonFieldType.BOOLEAN)
-							.description("미션 성공 여부")
+							.description("미션 성공 여부"),
+						fieldWithPath("data.hasUncheckedAlerts").type(JsonFieldType.BOOLEAN)
+							.description("읽지 않은 알림이 있는지 여부 (읽지 않은 알림이 있으면 true, 없으면 false)")
 					)
 				)
 			);
