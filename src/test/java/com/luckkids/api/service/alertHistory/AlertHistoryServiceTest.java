@@ -1,6 +1,12 @@
 package com.luckkids.api.service.alertHistory;
 
+import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
+import com.luckkids.domain.alertHistory.AlertHistory;
+import com.luckkids.domain.alertHistory.AlertHistoryStatus;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
@@ -12,6 +18,8 @@ import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AlertHistoryServiceTest extends IntegrationTestSupport {
 
@@ -34,25 +42,21 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 		userRepository.deleteAllInBatch();
 	}
 
-	// ⭐️ 테스트 수정 !
-	// @DisplayName("푸시알림 발송 이력을 저장한다.")
-	// @Test
-	// void save(){
-	//     User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
-	//     userRepository.save(user);
-	//
-	//     Push push = createPush(user);
-	//     pushRepository.save(push);
-	//
-	//     AlertHistoryServiceRequest alertHistoryServiceRequest = AlertHistoryServiceRequest.builder()
-	//             .push(push)
-	//             .alertDescription("알림테스트 내용")
-	//             .build();
-	//
-	//     AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
-	//     assertThat(alertHistory).extracting("push", "alertDescription", "alertHistoryStatus")
-	//             .contains(push, "알림테스트 내용", AlertHistoryStatus.UNCHECKED);
-	// }
+	 @DisplayName("푸시알림 발송 이력을 저장한다.")
+	 @Test
+	 void save(){
+	     User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+	     userRepository.save(user);
+
+	     AlertHistoryServiceRequest alertHistoryServiceRequest = AlertHistoryServiceRequest.builder()
+	             .user(user)
+	             .alertDescription("알림테스트 내용")
+	             .build();
+
+	     AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
+	     assertThat(alertHistory).extracting("user", "alertDescription", "alertHistoryStatus")
+	             .contains(user, "알림테스트 내용", AlertHistoryStatus.UNCHECKED);
+	 }
 
 	private Push createPush(User user) {
 		return Push.builder()

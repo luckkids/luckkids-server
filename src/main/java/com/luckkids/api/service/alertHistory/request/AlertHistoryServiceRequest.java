@@ -2,8 +2,7 @@ package com.luckkids.api.service.alertHistory.request;
 
 import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
-import com.luckkids.domain.push.Push;
-
+import com.luckkids.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,26 +11,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlertHistoryServiceRequest {
 
-	private Push push;
+	private User user;
 	private String alertDescription;
 
 	@Builder
-	private AlertHistoryServiceRequest(Push push, String alertDescription) {
-		this.push = push;
+	private AlertHistoryServiceRequest(User user, String alertDescription) {
+		this.user = user;
 		this.alertDescription = alertDescription;
 	}
 
 	public AlertHistory toEntity() {
 		return AlertHistory.builder()
-			// .push(push)  // ⭐️ 수정해야함 !
+			.user(user)
 			.alertDescription(alertDescription)
 			.alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
 			.build();
 	}
 
-	public static AlertHistoryServiceRequest of(Push push, String alertDescription) {
+	public static AlertHistoryServiceRequest of(User user, String alertDescription) {
 		return AlertHistoryServiceRequest.builder()
-			.push(push)
+			.user(user)
 			.alertDescription(alertDescription)
 			.build();
 	}

@@ -2,6 +2,9 @@ package com.luckkids.api.service.alertHistory;
 
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 
+import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.user.User;
 import org.springframework.stereotype.Service;
 
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
@@ -18,7 +21,6 @@ public class AlertHistoryService {
 	private final AlertHistoryRepository alertHistoryRepository;
 	private final AlertHistoryReadService alertHistoryReadService;
 
-	// ⭐️ request도 수정해야할 것 같습니다 !
 	public AlertHistory createAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
 		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity());
 	}
