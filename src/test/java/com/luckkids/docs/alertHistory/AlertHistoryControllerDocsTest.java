@@ -20,12 +20,12 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.api.controller.alertHistory.AlertHistoryController;
-import com.luckkids.api.controller.alertHistory.request.AlertHistoryDeviceIdRequest;
+import com.luckkids.api.page.request.PageInfoRequest;
+import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.api.page.response.PageCustom;
 import com.luckkids.api.page.response.PageableCustom;
 import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
 import com.luckkids.api.service.alertHistory.AlertHistoryService;
-import com.luckkids.api.service.alertHistory.request.AlertHistoryDeviceIdServiceRequest;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryStatusResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -41,13 +41,14 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 		return new AlertHistoryController(alertHistoryService, alertHistoryReadService);
 	}
 
-	@DisplayName("deviceId를 받고 알림 내역을 가져오는 API")
+	@DisplayName("알림 내역을 가져오는 API")
 	@Test
 	@WithMockUser("USER")
 	void getAlertHistory() throws Exception {
 		// given
-		AlertHistoryDeviceIdRequest request = AlertHistoryDeviceIdRequest.builder()
-			.deviceId("dk0WA3lCG0xNqIoFx****")
+		PageInfoRequest request = PageInfoRequest.builder()
+			.page(1)
+			.size(12)
 			.build();
 
 		AlertHistoryResponse response1 = createAlertHistoryResponse(
@@ -63,13 +64,14 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 			List.of(response1, response2), 1, 1, 2
 		);
 
-		given(alertHistoryReadService.getAlertHistory(any(AlertHistoryDeviceIdServiceRequest.class)))
+		given(alertHistoryReadService.getAlertHistory(any(PageInfoServiceRequest.class)))
 			.willReturn(pageResponse);
 
 		// when // then
 		mockMvc.perform(
 				get("/api/v1/alertHistories")
-					.param("deviceId", request.getDeviceId())
+					.param("page", String.valueOf(request.getPage()))
+					.param("size", String.valueOf(request.getSize()))
 			)
 			.andDo(print())
 			.andExpect(status().isOk())
@@ -77,8 +79,6 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				queryParameters(
-					parameterWithName("deviceId")
-						.description("디바이스 ID"),
 					parameterWithName("page")
 						.description("페이지. 기본값: 1")
 						.optional(),
