@@ -11,6 +11,9 @@ import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userAgreement.AgreementStatus;
+import com.luckkids.domain.userAgreement.UserAgreement;
+import com.luckkids.domain.userAgreement.UserAgreementRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,10 +36,14 @@ public class JoinServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
 
     @Autowired
+    private UserAgreementRepository userAgreementRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @AfterEach
     void tearDown() {
+        userAgreementRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
@@ -46,6 +53,9 @@ public class JoinServiceTest extends IntegrationTestSupport {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("test1234")
+            .termUserAgreement(AgreementStatus.AGREE)
+            .personalInfoAgreement(AgreementStatus.AGREE)
+            .marketingAgreement(AgreementStatus.AGREE)
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);
@@ -53,11 +63,17 @@ public class JoinServiceTest extends IntegrationTestSupport {
         assertThat(response)
             .extracting(
                 "email",
-                "snsType"
+                "snsType",
+                "termUserAgreement",
+                "personalInfoAgreement",
+                "marketingAgreement"
             )
             .contains(
                 joinServiceRequest.getEmail(),
-                SnsType.NORMAL
+                SnsType.NORMAL,
+                AgreementStatus.AGREE,
+                AgreementStatus.AGREE,
+                AgreementStatus.AGREE
             );
     }
 
@@ -67,6 +83,9 @@ public class JoinServiceTest extends IntegrationTestSupport {
         JoinServiceRequest joinServiceRequest = JoinServiceRequest.builder()
             .email("tkdrl8908@naver.com")
             .password("1234")
+            .termUserAgreement(AgreementStatus.AGREE)
+            .personalInfoAgreement(AgreementStatus.AGREE)
+            .marketingAgreement(AgreementStatus.AGREE)
             .build();
 
         JoinResponse response = joinService.joinUser(joinServiceRequest);

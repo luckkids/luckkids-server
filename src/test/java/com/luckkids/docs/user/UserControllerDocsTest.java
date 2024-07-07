@@ -6,6 +6,8 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -253,17 +255,16 @@ public class UserControllerDocsTest extends RestDocsSupport {
 		// when // then
 		mockMvc.perform(
 				get("/api/v1/user/findEmail")
-					.content(objectMapper.writeValueAsString(request))
-					.contentType(APPLICATION_JSON)
+					.param("email", request.getEmail())
 			)
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(document("user-findEmail",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				requestFields(
-					fieldWithPath("email").type(JsonFieldType.STRING)
-						.description("이메일")
+				queryParameters(
+						parameterWithName("email")
+								.description("이메일")
 				),
 				responseFields(
 					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)

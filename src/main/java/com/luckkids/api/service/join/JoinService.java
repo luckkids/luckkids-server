@@ -6,6 +6,8 @@ import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userAgreement.UserAgreement;
+import com.luckkids.domain.userAgreement.UserAgreementRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class JoinService {
 
     private final UserRepository userRepository;
+    private final UserAgreementRepository userAgreementRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public JoinResponse joinUser(JoinServiceRequest joinServiceRequest) {
@@ -25,7 +28,9 @@ public class JoinService {
             user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
 
-            return JoinResponse.of(savedUser);
+            UserAgreement userAgreement = userAgreementRepository.save(joinServiceRequest.toUserAgreementEntity(savedUser));
+
+            return JoinResponse.of(savedUser, userAgreement);
         } catch (Exception e) {
             throw new LuckKidsException(ErrorCode.USER_NORMAL);
         }

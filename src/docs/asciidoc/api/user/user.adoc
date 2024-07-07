@@ -42,7 +42,7 @@ include::{snippets}/update-password/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/user-findEmail/http-request.adoc[]
-include::{snippets}/user-findEmail/request-fields.adoc[]
+include::{snippets}/get-alertSetting/query-parameters.adoc[]
 
 ==== HTTP Response
 

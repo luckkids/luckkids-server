@@ -132,7 +132,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("alertType").type(JsonFieldType.STRING)
                         .description("알림타입 가능한 값: " + Arrays.toString(AlertType.values())),
                     fieldWithPath("alertStatus").type(JsonFieldType.STRING)
-                        .description("알림여부"),
+                        .description("알림여부" + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("deviceId").type(JsonFieldType.STRING)
                         .description("디바이스ID")
                 ),
