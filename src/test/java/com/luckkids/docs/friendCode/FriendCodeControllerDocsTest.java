@@ -2,6 +2,7 @@ package com.luckkids.docs.friendCode;
 
 import com.luckkids.api.controller.friendCode.FriendCodeController;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
+import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
@@ -27,10 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendCodeControllerDocsTest extends RestDocsSupport {
 
     private final FriendCodeService friendCodeService = mock(FriendCodeService.class);
+    private final FriendCodeReadService friendCodeReadService = mock(FriendCodeReadService.class);
 
     @Override
     protected Object initController() {
-        return new FriendCodeController(friendCodeService);
+        return new FriendCodeController(friendCodeService, friendCodeReadService);
     }
 
     @DisplayName("친구코드 생성 API")
