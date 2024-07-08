@@ -2,9 +2,6 @@ package com.luckkids.api.service.alertHistory;
 
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 
-import com.luckkids.api.service.security.SecurityService;
-import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.domain.user.User;
 import org.springframework.stereotype.Service;
 
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;

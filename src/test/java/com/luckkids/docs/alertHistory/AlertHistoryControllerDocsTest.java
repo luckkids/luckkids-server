@@ -1,5 +1,6 @@
 package com.luckkids.docs.alertHistory;
 
+import static com.luckkids.domain.alertHistory.AlertDestinationType.*;
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -29,6 +30,7 @@ import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryStatusResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 
 public class AlertHistoryControllerDocsTest extends RestDocsSupport {
@@ -52,16 +54,20 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 			.build();
 
 		AlertHistoryResponse response1 = createAlertHistoryResponse(
-			1L, "알림 내역1", UNCHECKED,
+			1L, "알림 내역1", UNCHECKED, MISSION, "NULL",
 			LocalDateTime.of(2024, 2, 29, 16, 0, 0)
 		);
 		AlertHistoryResponse response2 = createAlertHistoryResponse(
-			2L, "알림 내역2", CHECKED,
+			2L, "알림 내역2", CHECKED, FRIEND, "1",
+			LocalDateTime.of(2024, 3, 1, 12, 0, 0)
+		);
+		AlertHistoryResponse response3 = createAlertHistoryResponse(
+			3L, "알림 내역3", CHECKED, WEBVIEW, "https://www.naver.com/",
 			LocalDateTime.of(2024, 3, 1, 12, 0, 0)
 		);
 
 		PageCustom<AlertHistoryResponse> pageResponse = createPageResponse(
-			List.of(response1, response2), 1, 1, 2
+			List.of(response1, response2, response3), 1, 1, 2
 		);
 
 		given(alertHistoryReadService.getAlertHistory(any(PageInfoServiceRequest.class)))
@@ -103,6 +109,10 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 						.description("알림 내역 내용"),
 					fieldWithPath("data.content[].alertHistoryStatus").type(JsonFieldType.STRING)
 						.description("알림 내역 읽음 상태"),
+					fieldWithPath("data.content[].alertDestinationType").type(JsonFieldType.STRING)
+						.description("알림 이동 목적지 타입"),
+					fieldWithPath("data.content[].alertDestinationInfo").type(JsonFieldType.STRING)
+						.description("알림 이동 목적지 정보 (String 또는 null 가능)"),
 					fieldWithPath("data.content[].createdDate").type(JsonFieldType.STRING)
 						.description("알림 내역 등록일"),
 					fieldWithPath("data.pageInfo").type(JsonFieldType.OBJECT)
@@ -157,11 +167,13 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 	}
 
 	private AlertHistoryResponse createAlertHistoryResponse(Long id, String description, AlertHistoryStatus status,
-		LocalDateTime createdDate) {
+		AlertDestinationType alertDestinationType, String alertDestinationInfo, LocalDateTime createdDate) {
 		return AlertHistoryResponse.builder()
 			.id(id)
 			.alertDescription(description)
 			.alertHistoryStatus(status)
+			.alertDestinationType(alertDestinationType)
+			.alertDestinationInfo(alertDestinationInfo)
 			.createdDate(createdDate)
 			.build();
 	}

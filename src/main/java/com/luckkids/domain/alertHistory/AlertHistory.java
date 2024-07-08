@@ -32,11 +32,19 @@ public class AlertHistory extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private AlertHistoryStatus alertHistoryStatus;
 
+	@Enumerated(EnumType.STRING)
+	private AlertDestinationType alertDestinationType;
+
+	private String alertDestinationInfo;
+
 	@Builder
-	private AlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus) {
+	private AlertHistory(User user, String alertDescription, AlertHistoryStatus alertHistoryStatus,
+		AlertDestinationType alertDestinationType, String alertDestinationInfo) {
 		this.user = user;
 		this.alertDescription = alertDescription;
 		this.alertHistoryStatus = alertHistoryStatus;
+		this.alertDestinationType = alertDestinationType;
+		this.alertDestinationInfo = alertDestinationInfo;
 	}
 
 	public void updateAlertHistoryStatus(AlertHistoryStatus alertHistoryStatus) {
