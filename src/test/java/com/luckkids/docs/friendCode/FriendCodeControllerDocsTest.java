@@ -1,10 +1,13 @@
 package com.luckkids.docs.friendCode;
 
 import com.luckkids.api.controller.friendCode.FriendCodeController;
+import com.luckkids.api.controller.friendCode.request.FriendCodeNickNameRequest;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
+import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
+import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -41,32 +44,71 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
     void friendcode() throws Exception {
         // given
         given(friendCodeService.inviteCode())
-            .willReturn(FriendInviteCodeResponse.builder()
-                .code("ACSDSWEE")
-                .build()
-            );
+                .willReturn(FriendInviteCodeResponse.builder()
+                        .code("ACSDSWEE")
+                        .build()
+                );
         // when // then
         mockMvc.perform(
-                get("/api/v1/friendcode")
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("get-friendcode",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.code").type(JsonFieldType.STRING)
-                        .description("친구 코드")
+                        get("/api/v1/friendcode")
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("get-friendcode",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.code").type(JsonFieldType.STRING)
+                                        .description("친구 코드")
+                        )
+                ));
+    }
+
+    @DisplayName("친구코드 생성로 친구의 닉네임을 조회하는 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void findNickNameByCode() throws Exception {
+        // given
+        FriendCodeNickNameRequest request = FriendCodeNickNameRequest.builder()
+                .code("ASDSDWEE")
+                .build();
+
+        given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
+                .willReturn(FriendCodeNickNameResponse.builder()
+                        .nickName("테스트 닉네임")
+                        .build()
+                );
+        // when // then
+        mockMvc.perform(
+                    get("/api/v1/friendcode/nickName")
+                        .param("code", request.getCode())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("get-friendCode-nickName",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.nickName").type(JsonFieldType.STRING)
+                                        .description("요청자 닉네임")
+                        )
+                ));
     }
 
     @DisplayName("친구코드로 친구추가 API")
@@ -75,45 +117,45 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
     void createFriend() throws Exception {
         // given
         FriendCreateRequest request = FriendCreateRequest.builder()
-            .code("ASDSDWEE")
-            .build();
+                .code("ASDSDWEE")
+                .build();
 
         given(friendCodeService.create(any(FriendCreateServiceRequest.class)))
-            .willReturn(FriendCreateResponse.builder()
-                .receiver("skhan@test.com")
-                .requester("ghmin@test.com")
-                .build()
-            );
+                .willReturn(FriendCreateResponse.builder()
+                        .receiver("skhan@test.com")
+                        .requester("ghmin@test.com")
+                        .build()
+                );
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/friendcode/create")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("create-friendcode",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestFields(
-                    fieldWithPath("code").type(JsonFieldType.STRING)
-                        .description("친구코드")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.receiver").type(JsonFieldType.STRING)
-                        .description("초대 받은 친구"),
-                    fieldWithPath("data.requester").type(JsonFieldType.STRING)
-                        .description("초대한 친구")
+                        post("/api/v1/friendcode/create")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("create-friendcode",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING)
+                                        .description("친구코드")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.receiver").type(JsonFieldType.STRING)
+                                        .description("초대 받은 친구"),
+                                fieldWithPath("data.requester").type(JsonFieldType.STRING)
+                                        .description("초대한 친구")
+                        )
+                ));
     }
 }

@@ -5,7 +5,7 @@ import com.luckkids.api.controller.friendCode.request.FriendCodeNickNameRequest;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
-import com.luckkids.api.service.friendCode.response.FriendCodeResponse;
+import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import jakarta.validation.Valid;
@@ -25,8 +25,8 @@ public class FriendCodeController {
         return ApiResponse.ok(friendCodeService.inviteCode());
     }
 
-    @GetMapping
-    public ApiResponse<FriendCodeResponse> findByCode(@ModelAttribute @Valid FriendCodeNickNameRequest friendCodeNickNameRequest) {
+    @GetMapping("/nickName")
+    public ApiResponse<FriendCodeNickNameResponse> findNickNameByCode(@ModelAttribute @Valid FriendCodeNickNameRequest friendCodeNickNameRequest) {
         return ApiResponse.ok(friendCodeReadService.findNickNameByCode(friendCodeNickNameRequest.toServiceRequest()));
     }
 

@@ -10,8 +10,21 @@ include::{snippets}/get-friendcode/http-request.adoc[]
 include::{snippets}/get-friendcode/http-response.adoc[]
 include::{snippets}/get-friendcode/response-fields.adoc[]
 
+[[get-friendCode-nickName]]
+=== 친구코드로 친구 닉네임 조회
+
+==== HTTP Request
+
+include::{snippets}/get-friendCode-nickName/http-request.adoc[]
+include::{snippets}/alertHistory-get/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-friendCode-nickName/http-response.adoc[]
+include::{snippets}/get-friendCode-nickName/response-fields.adoc[]
+
 [[create-friendcode]]
-=== 친구 프로필 조회
+=== 친구코드로 친구추가
 
 ==== HTTP Request
 

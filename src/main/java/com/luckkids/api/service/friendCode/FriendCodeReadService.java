@@ -3,7 +3,7 @@ package com.luckkids.api.service.friendCode;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
-import com.luckkids.api.service.friendCode.response.FriendCodeResponse;
+import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class FriendCodeReadService {
             .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_CODE_UNKNOWN));
     }
 
-    public FriendCodeResponse findNickNameByCode(FriendCodeNickNameServiceRequest friendCreateServiceRequest){
+    public FriendCodeNickNameResponse findNickNameByCode(FriendCodeNickNameServiceRequest friendCreateServiceRequest){
         FriendCode friendCode = findByCode(friendCreateServiceRequest.getCode());
-        return FriendCodeResponse.of(friendCode.getUser());
+        return FriendCodeNickNameResponse.of(friendCode.getUser().getNickname());
     }
 }
