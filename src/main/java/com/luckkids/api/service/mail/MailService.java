@@ -54,14 +54,14 @@ public class MailService {
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
-            .subject("Luck-Kids의 이메일을 인증하세요")
+            .subject("luckkids의 이메일을 인증하세요")
             .text(
                 "안녕하세요.\n\n" +
                     "다음 링크를 통해 이메일 주소를 인증하세요.\n\n" +
                     confirmEmailUrl+"?key="+encrypt+ "\n\n" +
                     "이 주소로 인증을 요청하지 않았다면 이 이메일을 무시하셔도 됩니다.\n\n" +
                     "감사합니다.\n\n" +
-                    "LuckKids팀"
+                    "luckkids팀"
             )
             .build();
 
@@ -84,7 +84,7 @@ public class MailService {
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
-            .subject("Luck-Maker 임시 비밀번호")
+            .subject("luckkids 임시 비밀번호")
             .text("임시 비밀번호: "+tempPassword)
             .build();
 
