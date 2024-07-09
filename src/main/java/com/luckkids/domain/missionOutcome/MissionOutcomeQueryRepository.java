@@ -1,6 +1,7 @@
 package com.luckkids.domain.missionOutcome;
 
 import static com.luckkids.domain.missionOutcome.QMissionOutcome.*;
+import static com.luckkids.domain.misson.MissionActive.*;
 import static com.luckkids.domain.misson.QMission.*;
 
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ public class MissionOutcomeQueryRepository {
 				missionOutcome.missionStatus))
 			.from(missionOutcome)
 			.where(mission.user.id.eq(userId),
+				mission.missionActive.eq(TRUE),
 				missionOutcome.missionDate.eq(missionDate))
 			.join(missionOutcome.mission, mission);
 

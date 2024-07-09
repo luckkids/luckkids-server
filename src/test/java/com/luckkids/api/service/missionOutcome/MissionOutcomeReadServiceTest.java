@@ -2,6 +2,7 @@ package com.luckkids.api.service.missionOutcome;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.*;
 import static com.luckkids.domain.misson.AlertStatus.*;
+import static com.luckkids.domain.misson.MissionActive.*;
 import static com.luckkids.domain.misson.MissionType.*;
 import static java.util.Optional.*;
 import static org.assertj.core.api.Assertions.*;
@@ -229,6 +230,7 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 			.user(user)
 			.missionType(missionType)
 			.missionDescription(missionDescription)
+			.missionActive(TRUE)
 			.alertStatus(alertStatus)
 			.alertTime(alertTime)
 			.build();

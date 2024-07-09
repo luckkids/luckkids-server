@@ -34,14 +34,12 @@ public class MissionOutcomeController {
 	@PatchMapping("/api/v1/missionOutcomes/{missionOutcomeId}")
 	public ApiResponse<MissionOutcomeUpdateResponse> updateMissionOutcome(@PathVariable Long missionOutcomeId,
 		@Valid @RequestBody MissionOutcomeUpdateRequest request) {
-
 		return ApiResponse.ok(missionOutcomeService.updateMissionOutcome(missionOutcomeId, request.getMissionStatus()));
 	}
 
 	@GetMapping("/api/v1/missionOutcomes")
 	public ApiResponse<List<MissionOutcomeResponse>> getMissionDetailListForStatus(
 		@RequestParam(required = false) MissionStatus missionStatus) {
-
 		return ApiResponse.ok(
 			missionOutcomeReadService.getMissionOutcomeDetailListForStatus(ofNullable(missionStatus), now()));
 	}

@@ -1,72 +1,88 @@
 package com.luckkids.domain.misson;
 
-import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.user.User;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.luckkids.domain.BaseTimeEntity;
+import com.luckkids.domain.user.User;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "mission", indexes = @Index(name = "IDXAlertStatus", columnList = "alertStatus"))
 public class Mission extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User user;
 
-    @Enumerated(EnumType.STRING)
-    private MissionType missionType;
+	private Integer luckkidsMissionId;
 
-    private String missionDescription;
+	@Enumerated(EnumType.STRING)
+	private MissionType missionType;
 
-    @Enumerated(EnumType.STRING)
-    private AlertStatus alertStatus;
+	private String missionDescription;
 
-    private LocalTime alertTime;
+	private MissionActive missionActive;
 
-    private LocalDate push_date;
+	@Enumerated(EnumType.STRING)
+	private AlertStatus alertStatus;
 
-    private LocalDateTime deletedDate;
+	private LocalTime alertTime;
 
+	private LocalDate push_date;
 
-    @Builder
-    private Mission(User user, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime, LocalDate push_date, LocalDateTime deletedDate) {
-        this.user = user;
-        this.missionType = missionType;
-        this.missionDescription = missionDescription;
-        this.alertStatus = alertStatus;
-        this.alertTime = alertTime;
-        this.push_date = push_date;
-        this.deletedDate = deletedDate;
-    }
+	private LocalDateTime deletedDate;
 
-    public Mission update(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
-        updateIfNonNull(missionType, it -> this.missionType = it);
-        updateIfNonNull(missionDescription, it -> this.missionDescription = it);
-        updateIfNonNull(alertStatus, it -> this.alertStatus = it);
-        updateIfNonNull(alertTime, it -> this.alertTime = it);
+	@Builder
+	private Mission(User user, Integer luckkidsMissionId, MissionType missionType, String missionDescription,
+		MissionActive missionActive, AlertStatus alertStatus, LocalTime alertTime, LocalDate push_date,
+		LocalDateTime deletedDate) {
+		this.user = user;
+		this.luckkidsMissionId = luckkidsMissionId;
+		this.missionType = missionType;
+		this.missionDescription = missionDescription;
+		this.missionActive = missionActive;
+		this.alertStatus = alertStatus;
+		this.alertTime = alertTime;
+		this.push_date = push_date;
+		this.deletedDate = deletedDate;
+	}
 
-        return this;
-    }
+	public Mission update(MissionType missionType, String missionDescription, MissionActive missionActive,
+		AlertStatus alertStatus, LocalTime alertTime) {
+		updateIfNonNull(missionType, it -> this.missionType = it);
+		updateIfNonNull(missionDescription, it -> this.missionDescription = it);
+		updateIfNonNull(missionActive, it -> this.missionActive = it);
+		updateIfNonNull(alertStatus, it -> this.alertStatus = it);
+		updateIfNonNull(alertTime, it -> this.alertTime = it);
 
-    public void delete(LocalDateTime deletedDate) {
-        this.deletedDate = deletedDate;
-    }
+		return this;
+	}
 
-    private <T> void updateIfNonNull(T value, Consumer<T> consumer) {
-        Optional.ofNullable(value).ifPresent(consumer);
-    }
+	public void delete(LocalDateTime deletedDate) {
+		this.deletedDate = deletedDate;
+	}
+
+	private <T> void updateIfNonNull(T value, Consumer<T> consumer) {
+		Optional.ofNullable(value).ifPresent(consumer);
+	}
 }
