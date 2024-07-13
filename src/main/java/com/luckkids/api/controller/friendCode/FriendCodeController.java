@@ -1,10 +1,10 @@
 package com.luckkids.api.controller.friendCode;
 
 import com.luckkids.api.ApiResponse;
-import com.luckkids.api.controller.friendCode.request.FriendCodeNickNameRequest;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
+import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
@@ -25,9 +25,12 @@ public class FriendCodeController {
         return ApiResponse.ok(friendCodeService.inviteCode());
     }
 
-    @GetMapping("/nickName")
-    public ApiResponse<FriendCodeNickNameResponse> findNickNameByCode(@ModelAttribute @Valid FriendCodeNickNameRequest friendCodeNickNameRequest) {
-        return ApiResponse.ok(friendCodeReadService.findNickNameByCode(friendCodeNickNameRequest.toServiceRequest()));
+    @GetMapping("/{code}/nickname")
+    public ApiResponse<FriendCodeNickNameResponse> findNickNameByCode(@PathVariable String code) {
+        return ApiResponse.ok(friendCodeReadService.findNickNameByCode(
+                FriendCodeNickNameServiceRequest.builder()
+                        .code(code)
+                        .build()));
     }
 
     @PostMapping("/create")

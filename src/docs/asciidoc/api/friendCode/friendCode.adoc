@@ -16,7 +16,7 @@ include::{snippets}/get-friendcode/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/get-friendCode-nickName/http-request.adoc[]
-include::{snippets}/alertHistory-get/query-parameters.adoc[]
+include::{snippets}/get-friendCode-nickName/path-parameters.adoc[]
 
 ==== HTTP Response
 

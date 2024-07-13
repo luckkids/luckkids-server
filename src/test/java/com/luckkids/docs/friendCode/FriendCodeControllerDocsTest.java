@@ -1,7 +1,6 @@
 package com.luckkids.docs.friendCode;
 
 import com.luckkids.api.controller.friendCode.FriendCodeController;
-import com.luckkids.api.controller.friendCode.request.FriendCodeNickNameRequest;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
@@ -77,10 +76,6 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void findNickNameByCode() throws Exception {
         // given
-        FriendCodeNickNameRequest request = FriendCodeNickNameRequest.builder()
-                .code("ASDSDWEE")
-                .build();
-
         given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
                 .willReturn(FriendCodeNickNameResponse.builder()
                         .nickName("테스트 닉네임")
@@ -88,8 +83,7 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
                 );
         // when // then
         mockMvc.perform(
-                    get("/api/v1/friendcode/nickName")
-                        .param("code", request.getCode())
+                    get("/api/v1/friendcode/{code}/nickname", "ASDSDWEE")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

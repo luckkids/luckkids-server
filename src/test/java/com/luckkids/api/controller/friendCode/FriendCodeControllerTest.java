@@ -1,7 +1,6 @@
 package com.luckkids.api.controller.friendCode;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.friendCode.request.FriendCodeNickNameRequest;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,13 +40,9 @@ public class FriendCodeControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void findNickNameByCodeTest() throws Exception {
         // given
-        FriendCodeNickNameRequest request = FriendCodeNickNameRequest.builder()
-            .code("ASDWEDSS")
-            .build();
         // when // then
         mockMvc.perform(
-                        get("/api/v1/friendcode/nickName")
-                                .param("code", request.getCode())
+                        get("/api/v1/friendcode/{code}/nickname", "ASDWEDSS")
                                 .with(csrf())
                 )
                 .andDo(print())
@@ -55,24 +50,6 @@ public class FriendCodeControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.statusCode").value("200"))
                 .andExpect(jsonPath("$.httpStatus").value("OK"))
                 .andExpect(jsonPath("$.message").value("OK"));
-    }
-
-    @DisplayName("친구코드로 친구의 닉네임을 조회할시 친구코드는 필수이다.")
-    @Test
-    @WithMockUser("USER")
-    void findNickNameByCodeTestWithoutCode() throws Exception {
-        // given
-        // when // then
-        mockMvc.perform(
-                        get("/api/v1/friendcode/nickName")
-                                .with(csrf())
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value("400"))
-                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-                .andExpect(jsonPath("$.message").value("친구코드는 필수입니다."))
-                .andExpect(jsonPath("$.data").isEmpty());
     }
 
     @DisplayName("친구코드로 친구를 추가한다.")
