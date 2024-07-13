@@ -24,6 +24,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,8 +90,11 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-friendCode-nickName",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("code")
+                                        .description("친구 코드")
+                        ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
                                         .description("코드"),
