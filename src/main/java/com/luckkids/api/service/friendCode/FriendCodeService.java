@@ -74,7 +74,8 @@ public class FriendCodeService {
                 .alertType(AlertType.NOTICE)
                 .body(PushMessage.GARDEN.getText().replace("{nickName}", requestUser.getNickname()))
                 .sendPushDataDto(SendPushDataDto.builder()
-                        .screenName(PushScreenName.GARDEN.getText())
+                        .alert_destination_type(PushScreenName.FRIEND.getText())
+                        .alert_destination_info(String.valueOf(requestUser.getId()))
                         .build())
                 .build()
         );

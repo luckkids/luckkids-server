@@ -32,7 +32,7 @@ public class LuckkidsMissionServiceRequest {
         return SendPushAlertTypeServiceRequest.builder()
             .sendPushDataDto(
                     SendPushDataDto.builder()
-                            .screenName(PushScreenName.MISSION_REPAIR.getText())
+                            .alert_destination_type(PushScreenName.MISSION.getText())
                             .build()
             )
             .body(PushMessage.MISSION.getText())

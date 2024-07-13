@@ -41,8 +41,8 @@ public class FirebaseServiceTest extends IntegrationTestSupport {
             .push(push)
             .body("테스트Body")
             .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                    .screenName(PushScreenName.WEBVIEW.getText())
-                    .url("www.test.com")
+                    .alert_destination_type(PushScreenName.WEBVIEW.getText())
+                    .alert_destination_info("www.test.com")
                     .build())
             .sound("테스트 sound")
             .build();

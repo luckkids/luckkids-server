@@ -35,8 +35,8 @@ public class NoticeSaveServiceRequest {
             .body(title)
             .sendPushDataDto(
                     SendPushDataDto.builder()
-                            .screenName(PushScreenName.WEBVIEW.getText())
-                            .url(url)
+                            .alert_destination_type(PushScreenName.WEBVIEW.getText())
+                            .alert_destination_info(url)
                             .build()
             )
             .build();

@@ -34,8 +34,8 @@ public class VersionSaveServiceRequest {
             .body(PushMessage.APP_UPDATE.getText())
             .sendPushDataDto(
                     SendPushDataDto.builder()
-                            .screenName(PushScreenName.WEBVIEW.getText())
-                            .url(url)
+                            .alert_destination_type(PushScreenName.WEBVIEW.getText())
+                            .alert_destination_info(url)
                             .build())
             .build();
     }

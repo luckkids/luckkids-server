@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SendFirebaseDataDto {
 
-    private String screenName;
-    private String url;
+    private String alert_destination_type;
+    private String alert_destination_info;
 
     @Builder
-    private SendFirebaseDataDto(String screenName, String url) {
-        this.screenName = screenName;
-        this.url = url;
+    private SendFirebaseDataDto(String alert_destination_type, String alert_destination_info) {
+        this.alert_destination_type = alert_destination_type;
+        this.alert_destination_info = alert_destination_info;
     }
 }

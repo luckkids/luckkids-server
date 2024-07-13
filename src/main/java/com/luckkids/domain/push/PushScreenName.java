@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum PushScreenName {
 
     WEBVIEW("WebView"),
-    MISSION_REPAIR("MissionRepair"),
-    GARDEN("garden");
+    MISSION("mission"),
+    FRIEND("friend");
 
     private final String text;
 
