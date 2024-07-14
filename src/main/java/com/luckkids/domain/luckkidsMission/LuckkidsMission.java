@@ -1,34 +1,41 @@
 package com.luckkids.domain.luckkidsMission;
 
+import java.time.LocalTime;
+
+import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.misson.MissionType;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class LuckkidsMission {
+public class LuckkidsMission extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @Enumerated(EnumType.STRING)
-    private MissionType missionType;
+	@Enumerated(EnumType.STRING)
+	private MissionType missionType;
 
-    private String missionDescription;
+	private String missionDescription;
 
-    private LocalTime alertTime;
+	private LocalTime alertTime;
 
-    @Builder
-    private LuckkidsMission(MissionType missionType, String missionDescription, LocalTime alertTime) {
-        this.missionType = missionType;
-        this.missionDescription = missionDescription;
-        this.alertTime = alertTime;
-    }
+	@Builder
+	private LuckkidsMission(MissionType missionType, String missionDescription, LocalTime alertTime) {
+		this.missionType = missionType;
+		this.missionDescription = missionDescription;
+		this.alertTime = alertTime;
+	}
 }
