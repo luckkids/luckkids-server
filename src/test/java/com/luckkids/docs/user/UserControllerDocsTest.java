@@ -6,8 +6,7 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,6 +15,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import com.luckkids.api.controller.user.UserController;
@@ -52,7 +52,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
 	@DisplayName("현재 로그인한 사용자 정보 조회 API")
 	@Test
-	void getMe() throws Exception {
+	void findByMe() throws Exception {
 		// given
 		given(userReadService.findByMe())
 			.willReturn(
@@ -75,6 +75,64 @@ public class UserControllerDocsTest extends RestDocsSupport {
 			.andExpect(status().isOk())
 			.andDo(document("get-me",
 				preprocessResponse(prettyPrint()),
+				responseFields(
+					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+						.description("코드"),
+					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+						.description("상태"),
+					fieldWithPath("message").type(JsonFieldType.STRING)
+						.description("메세지"),
+					fieldWithPath("data").type(JsonFieldType.OBJECT)
+						.description("응답 데이터"),
+					fieldWithPath("data.email").type(JsonFieldType.STRING)
+						.description("이메일"),
+					fieldWithPath("data.nickname").type(JsonFieldType.STRING)
+						.description("닉네임"),
+					fieldWithPath("data.snsType").type(JsonFieldType.STRING)
+						.description("SNS 타입"),
+					fieldWithPath("data.luckPhrase").type(JsonFieldType.STRING)
+						.description("행운문구"),
+					fieldWithPath("data.role").type(JsonFieldType.STRING)
+						.description("역할"),
+					fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
+						.description("초기세팅상태"),
+					fieldWithPath("data.missionCount").type(JsonFieldType.NUMBER)
+						.description("미션성공갯수")
+				)
+			));
+	}
+
+	@DisplayName("id값을 받아 사용자 정보 조회 API")
+	@Test
+	void findById() throws Exception {
+		// given
+		int userId = 1;
+
+		given(userReadService.findById(userId))
+			.willReturn(
+				UserResponse.builder()
+					.email("test@gmail.com")
+					.nickname("test")
+					.snsType(SnsType.GOOGLE)
+					.luckPhrase("테스트 행운문구입니다.")
+					.role(Role.USER)
+					.settingStatus(SettingStatus.COMPLETE)
+					.missionCount(0)
+					.build()
+			);
+
+		// when // then
+		mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/v1/user/{id}", userId)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("get-user",
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("id")
+						.description("유저의 id 값")
+				),
 				responseFields(
 					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
 						.description("코드"),
@@ -263,8 +321,8 @@ public class UserControllerDocsTest extends RestDocsSupport {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				queryParameters(
-						parameterWithName("email")
-								.description("이메일")
+					parameterWithName("email")
+						.description("이메일")
 				),
 				responseFields(
 					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
