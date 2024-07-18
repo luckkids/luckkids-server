@@ -41,6 +41,7 @@ public class Mission extends BaseTimeEntity {
 
 	private String missionDescription;
 
+	@Enumerated(EnumType.STRING)
 	private MissionActive missionActive;
 
 	@Enumerated(EnumType.STRING)
