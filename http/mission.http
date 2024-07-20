@@ -29,6 +29,6 @@ Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
 ### 미션 삭제
-DELETE localhost:8080//api/v1/missions/99
+DELETE localhost:8080/api/v1/missions/99
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
