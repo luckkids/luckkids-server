@@ -2,9 +2,9 @@ package com.luckkids.api.service.version.request;
 
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushDataDto;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.push.PushMessage;
-import com.luckkids.domain.push.PushScreenName;
 import com.luckkids.domain.version.Version;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class VersionSaveServiceRequest {
             .body(PushMessage.APP_UPDATE.getText())
             .sendPushDataDto(
                     SendPushDataDto.builder()
-                            .alert_destination_type(PushScreenName.WEBVIEW.getText())
+                            .alert_destination_type(AlertDestinationType.WEBVIEW)
                             .alert_destination_info(url)
                             .build())
             .build();

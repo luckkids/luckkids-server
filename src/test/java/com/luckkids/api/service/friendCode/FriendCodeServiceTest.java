@@ -44,8 +44,6 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     private FriendCodeService friendCodeService;
     @Autowired
     private FriendCodeReadService friendCodeReadService;
-    @MockBean
-    private PushService pushService;
 
     @AfterEach
     void tearDown() {

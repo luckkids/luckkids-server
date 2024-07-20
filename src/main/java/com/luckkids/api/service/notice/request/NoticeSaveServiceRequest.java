@@ -2,9 +2,9 @@ package com.luckkids.api.service.notice.request;
 
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushDataDto;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.notice.Notice;
-import com.luckkids.domain.push.PushScreenName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class NoticeSaveServiceRequest {
             .body(title)
             .sendPushDataDto(
                     SendPushDataDto.builder()
-                            .alert_destination_type(PushScreenName.WEBVIEW.getText())
+                            .alert_destination_type(AlertDestinationType.WEBVIEW)
                             .alert_destination_info(url)
                             .build()
             )
