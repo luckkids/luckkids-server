@@ -189,8 +189,10 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 							createMissionResponse(2, 3, HEALTH, "물 마시기", TRUE, UNCHECKED, LocalTime.of(20, 0))
 						),
 						SELF_DEVELOPMENT, List.of(
-							createMissionResponse(3, 4, SELF_DEVELOPMENT, "공부하기", FALSE, CHECKED, LocalTime.of(21, 0)),
-							createMissionResponse(4, 6, SELF_DEVELOPMENT, "책 읽기", TRUE, UNCHECKED, LocalTime.of(22, 0))
+							createMissionResponse(3, 4, SELF_DEVELOPMENT, "공부하기", FALSE, CHECKED,
+								LocalTime.of(21, 0)),
+							createMissionResponse(4, 6, SELF_DEVELOPMENT, "책 읽기",
+								TRUE, UNCHECKED, LocalTime.of(22, 0))
 						)
 					),
 					Map.of(

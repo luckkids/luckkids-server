@@ -11,12 +11,13 @@ Authorization: Bearer JWT_TOKEN
 }
 
 ### 미션 수정
-PATCH localhost:8080/api/v1/missions/1
+PATCH localhost:8080/api/v1/missions/98
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
 {
   "missionType": "SELF_DEVELOPMENT",
+  "missionActive": "FALSE",
   "missionDescription": "책읽기",
   "alertTime": "10:30"
 }
@@ -28,6 +29,6 @@ Content-Type: application/json
 Authorization: Bearer JWT_TOKEN
 
 ### 미션 삭제
-DELETE localhost:8080//api/v1/missions/5
+DELETE localhost:8080//api/v1/missions/99
 Content-Type: application/json
 Authorization: Bearer JWT_TOKEN

@@ -2,10 +2,12 @@ package com.luckkids.api.service.mission;
 
 import static com.luckkids.domain.missionOutcome.MissionStatus.*;
 import static com.luckkids.domain.misson.AlertStatus.*;
+import static com.luckkids.domain.misson.MissionActive.*;
 import static com.luckkids.domain.misson.MissionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -22,8 +24,10 @@ import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
 import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
+import com.luckkids.domain.missionOutcome.SuccessChecked;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
+import com.luckkids.domain.misson.MissionActive;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
@@ -59,7 +63,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
 		userRepository.save(user);
 
-		Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
 		missionRepository.save(mission);
 
 		given(securityService.getCurrentLoginUserInfo())
@@ -68,7 +72,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 		MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
 			.missionType(HEALTH)
 			.missionDescription("책 읽기")
-			.alertStatus(CHECKED)
+			.alertStatus(AlertStatus.CHECKED)
 			.alertTime(LocalTime.of(23, 30))
 			.build();
 
@@ -78,14 +82,14 @@ class MissionServiceTest extends IntegrationTestSupport {
 		// then
 		assertThat(missionResponse)
 			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.contains(HEALTH, "책 읽기", CHECKED, LocalTime.of(23, 30));
+			.contains(HEALTH, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
 
 		List<Mission> missions = missionRepository.findAll();
 		assertThat(missions).hasSize(2)
 			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
 			.containsExactlyInAnyOrder(
-				tuple(HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0)),
-				tuple(HEALTH, "책 읽기", CHECKED, LocalTime.of(23, 30))
+				tuple(HEALTH, "운동하기", AlertStatus.CHECKED, LocalTime.of(0, 0)),
+				tuple(HEALTH, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
 			);
 	}
 
@@ -101,7 +105,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 		MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
 			.missionType(SELF_DEVELOPMENT)
 			.missionDescription("책 읽기")
-			.alertStatus(CHECKED)
+			.alertStatus(AlertStatus.CHECKED)
 			.alertTime(LocalTime.of(23, 30))
 			.build();
 
@@ -117,7 +121,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 	void createMissionWithEventPublication() {
 		// given
 		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
 
 		userRepository.save(user);
 		missionRepository.save(mission);
@@ -128,7 +132,7 @@ class MissionServiceTest extends IntegrationTestSupport {
 		MissionCreateServiceRequest request = MissionCreateServiceRequest.builder()
 			.missionType(SELF_DEVELOPMENT)
 			.missionDescription("책 읽기")
-			.alertStatus(CHECKED)
+			.alertStatus(AlertStatus.CHECKED)
 			.alertTime(LocalTime.of(23, 30))
 			.build();
 
@@ -150,16 +154,17 @@ class MissionServiceTest extends IntegrationTestSupport {
 	void updateMission() {
 		// given
 		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		Mission mission = createMission(user, HEALTH, "운동하기", CHECKED, LocalTime.of(0, 0));
-
 		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
 		Mission savedMission = missionRepository.save(mission);
+
 		int missionId = savedMission.getId();
 
 		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
 			.missionType(SELF_DEVELOPMENT)
 			.missionDescription("책 읽기")
-			.alertStatus(CHECKED)
+			.alertStatus(AlertStatus.CHECKED)
 			.alertTime(LocalTime.of(23, 30))
 			.build();
 
@@ -169,13 +174,13 @@ class MissionServiceTest extends IntegrationTestSupport {
 		// then
 		assertThat(missionResponse)
 			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.contains(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30));
+			.contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
 
 		List<Mission> missions = missionRepository.findAll();
 		assertThat(missions).hasSize(1)
 			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
 			.containsExactlyInAnyOrder(
-				tuple(SELF_DEVELOPMENT, "책 읽기", CHECKED, LocalTime.of(23, 30))
+				tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
 			);
 	}
 
@@ -184,10 +189,11 @@ class MissionServiceTest extends IntegrationTestSupport {
 	void updateOneMission() {
 		// given
 		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(0, 0));
-
 		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, UNCHECKED, LocalTime.of(0, 0));
 		Mission savedMission = missionRepository.save(mission);
+
 		int missionId = savedMission.getId();
 
 		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
@@ -210,14 +216,97 @@ class MissionServiceTest extends IntegrationTestSupport {
 			);
 	}
 
+	@DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (활성화 -> 비활성화 / missionOutcome 삭제 이벤트 발행)")
+	@Test
+	void updateMission_deleteEvent() {
+		// given
+		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
+		Mission savedMission = missionRepository.save(mission);
+
+		MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.now());
+		missionOutcomeRepository.save(missionOutcome);
+
+		int missionId = savedMission.getId();
+
+		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+			.missionType(SELF_DEVELOPMENT)
+			.missionDescription("책 읽기")
+			.missionActive(FALSE)
+			.alertStatus(AlertStatus.CHECKED)
+			.alertTime(LocalTime.of(23, 30))
+			.build();
+
+		// when
+		MissionResponse missionResponse = missionService.updateMission(missionId, request);
+
+		// then
+		assertThat(missionResponse)
+			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+			.contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
+
+		List<Mission> missions = missionRepository.findAll();
+		assertThat(missions).hasSize(1)
+			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+			.containsExactlyInAnyOrder(
+				tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
+			);
+
+		List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+		assertThat(missionOutcomes).hasSize(0);
+	}
+
+	@DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (비활성화 -> 활성화 / missionOutcome 생성 이벤트 발행)")
+	@Test
+	void updateMission_createEvent() {
+		// given
+		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", FALSE, AlertStatus.CHECKED, LocalTime.of(0, 0));
+		Mission savedMission = missionRepository.save(mission);
+
+		int missionId = savedMission.getId();
+
+		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+			.missionType(SELF_DEVELOPMENT)
+			.missionDescription("책 읽기")
+			.missionActive(TRUE)
+			.alertStatus(AlertStatus.CHECKED)
+			.alertTime(LocalTime.of(23, 30))
+			.build();
+
+		// when
+		MissionResponse missionResponse = missionService.updateMission(missionId, request);
+
+		// then
+		assertThat(missionResponse)
+			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+			.contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
+
+		List<Mission> missions = missionRepository.findAll();
+		assertThat(missions).hasSize(1)
+			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+			.containsExactlyInAnyOrder(
+				tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
+			);
+
+		List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+		assertThat(missionOutcomes).hasSize(1);
+	}
+
 	@DisplayName("미션 ID를 받아 미션을 삭제한다.(삭제일을 업데이트한다. Soft Delete)")
 	@Test
 	void deleteMission() {
 		// given
 		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(0, 0));
 		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, UNCHECKED, LocalTime.of(0, 0));
 		Mission savedMission = missionRepository.save(mission);
+
 		int missionId = savedMission.getId();
 
 		// when
@@ -233,6 +322,37 @@ class MissionServiceTest extends IntegrationTestSupport {
 			);
 	}
 
+	@DisplayName("미션 ID를 받아 미션을 삭제한다.(삭제일을 업데이트한다. Soft Delete) (missionOutcome 삭제 이벤트 발행)")
+	@Test
+	void deleteMission_deleteEvent() {
+		// given
+		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+		userRepository.save(user);
+
+		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, UNCHECKED, LocalTime.of(0, 0));
+		Mission savedMission = missionRepository.save(mission);
+
+		MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.now());
+		missionOutcomeRepository.save(missionOutcome);
+
+		int missionId = savedMission.getId();
+
+		// when
+		missionService.deleteMission(missionId, LocalDateTime.of(2023, 10, 31, 0, 0, 0));
+
+		// then
+		assertThat(missionRepository.findAllByDeletedDateIsNull()).isEmpty();
+
+		assertThat(missionRepository.findAll()).hasSize(1)
+			.extracting("missionDescription", "alertStatus", "alertTime", "deletedDate")
+			.containsExactlyInAnyOrder(
+				tuple("운동하기", UNCHECKED, LocalTime.of(0, 0), LocalDateTime.of(2023, 10, 31, 0, 0, 0))
+			);
+
+		List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+		assertThat(missionOutcomes).hasSize(0);
+	}
+
 	private User createUser(String email, String password, SnsType snsType) {
 		return User.builder()
 			.email(email)
@@ -242,13 +362,23 @@ class MissionServiceTest extends IntegrationTestSupport {
 	}
 
 	private Mission createMission(User user, MissionType missionType, String missionDescription,
-		AlertStatus alertStatus, LocalTime alertTime) {
+		MissionActive missionActive, AlertStatus alertStatus, LocalTime alertTime) {
 		return Mission.builder()
 			.user(user)
 			.missionType(missionType)
 			.missionDescription(missionDescription)
+			.missionActive(missionActive)
 			.alertStatus(alertStatus)
 			.alertTime(alertTime)
+			.build();
+	}
+
+	private MissionOutcome createMissionOutcome(Mission mission, LocalDate missionDate) {
+		return MissionOutcome.builder()
+			.mission(mission)
+			.missionDate(missionDate)
+			.missionStatus(FAILED)
+			.successChecked(SuccessChecked.UNCHECKED)
 			.build();
 	}
 
