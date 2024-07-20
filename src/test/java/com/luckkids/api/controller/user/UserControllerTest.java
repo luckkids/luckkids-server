@@ -20,12 +20,32 @@ public class UserControllerTest extends ControllerTestSupport {
 	@DisplayName("현재 로그인한 사용자 정보를 가져온다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void getMe() throws Exception {
+	void findByMe() throws Exception {
 		// given
 
 		// when // then
 		mockMvc.perform(
 				get("/api/v1/user/me")
+					.with(csrf())
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.statusCode").value("200"))
+			.andExpect(jsonPath("$.httpStatus").value("OK"))
+			.andExpect(jsonPath("$.message").value("OK"));
+
+	}
+
+	@DisplayName("id값을 받아 사용자 정보를 가져온다.")
+	@Test
+	@WithMockUser(roles = "USER")
+	void findById() throws Exception {
+		// given
+		int id = 1;
+
+		// when // then
+		mockMvc.perform(
+				get("/api/v1/user/{id}", id)
 					.with(csrf())
 			)
 			.andDo(print())

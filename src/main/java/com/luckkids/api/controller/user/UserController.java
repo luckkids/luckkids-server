@@ -1,6 +1,13 @@
 package com.luckkids.api.controller.user;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.user.request.UserFindEmailRequest;
@@ -28,8 +35,13 @@ public class UserController {
 	private final UserReadService userReadService;
 
 	@GetMapping("/me")
-	public ApiResponse<UserResponse> getMe() {
+	public ApiResponse<UserResponse> findByMe() {
 		return ApiResponse.ok((userReadService.findByMe()));
+	}
+
+	@GetMapping("/{id}")
+	public ApiResponse<UserResponse> findById(@PathVariable int id) {
+		return ApiResponse.ok((userReadService.findById(id)));
 	}
 
 	@PatchMapping("/phrase")

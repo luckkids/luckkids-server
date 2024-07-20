@@ -10,6 +10,19 @@ include::{snippets}/get-me/http-request.adoc[]
 include::{snippets}/get-me/http-response.adoc[]
 include::{snippets}/get-me/response-fields.adoc[]
 
+[[get-user]]
+=== 사용자 정보 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-user/http-request.adoc[]
+include::{snippets}/get-user/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-user/http-response.adoc[]
+include::{snippets}/get-user/response-fields.adoc[]
+
 [[update-phrase]]
 === 사용자 프로필 행운문구 수정 API
 

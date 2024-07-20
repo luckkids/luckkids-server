@@ -39,6 +39,10 @@ public class UserReadService {
 		return UserResponse.of(this.findByOne(userId));
 	}
 
+	public UserResponse findById(int userId) {
+		return UserResponse.of(this.findByOne(userId));
+	}
+
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email)
 			.orElseThrow(() -> new LuckKidsException(ErrorCode.USER_EMAIL));
