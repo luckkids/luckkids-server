@@ -7,9 +7,11 @@ import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
+import com.luckkids.domain.friendCode.UseStatus;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -143,6 +145,23 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
             .hasMessage("이미 사용된 친구코드입니다.");
     }
 
+    @DisplayName("친구요청을 거절시 사용한 코드로 상태를 변경한다.")
+    @Test
+     void refuseFriendTest(){
+         // given
+         User user1 = userRepository.save(createUser(1));
+
+         userRepository.saveAll(List.of(user1));
+
+         FriendCode code = createFriendCode(user1);
+         friendCodeRepository.save(code);
+
+         friendCodeService.refuseFriend("ABCDEFGH");
+
+         FriendCode friendCode = friendCodeReadService.findByCode("ABCDEFGH");
+         assertThat(friendCode.getUseStatus()).isEqualTo(UseStatus.USED);
+     }
+
     private User createUser(int i) {
         return User.builder()
             .email("test" + i)
@@ -159,5 +178,13 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
         return LoginUserInfo.builder()
             .userId(userId)
             .build();
+    }
+
+    private FriendCode createFriendCode(User user){
+        return FriendCode.builder()
+                .user(user)
+                .code("ABCDEFGH")
+                .useStatus(UseStatus.UNUSED)
+                .build();
     }
 }

@@ -9,11 +9,15 @@ import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
+import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.friendCode.FriendStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -81,6 +85,7 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
         given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
                 .willReturn(FriendCodeNickNameResponse.builder()
                         .nickName("테스트 닉네임")
+                        .friendStatus(FriendStatus.FRIEND)
                         .build()
                 );
         // when // then
@@ -105,7 +110,46 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data").type(JsonFieldType.OBJECT)
                                         .description("응답 데이터"),
                                 fieldWithPath("data.nickName").type(JsonFieldType.STRING)
-                                        .description("요청자 닉네임")
+                                        .description("요청자 닉네임"),
+                                fieldWithPath("data.status").type(JsonFieldType.STRING)
+                                        .description("친구 상태값 가능한 값:" + Arrays.toString(FriendStatus.values()))
+                        )
+                ));
+    }
+
+    @DisplayName("친구요청 거절 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void refuseFriend() throws Exception {
+        // given
+        given(friendCodeService.refuseFriend(any(String.class)))
+                .willReturn(FriendRefuseResponse.builder()
+                        .code("ASDSDWEE")
+                        .build()
+                );
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/friendcode/{code}/refuse", "ASDSDWEE")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("refuse-friendCode",
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("code")
+                                        .description("친구 코드")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.code").type(JsonFieldType.STRING)
+                                        .description("거절한 친구코드")
                         )
                 ));
     }
