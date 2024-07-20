@@ -37,7 +37,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 
 	@DisplayName("페이징 정보를 받아서 페이징 처리된 알림 내역을 조회한다.")
 	@Test
-	void findByDeviceId() {
+	void findByUserId() {
 		// given
 		User user = createUser();
 		userRepository.save(user);
@@ -55,7 +55,7 @@ class AlertHistoryQueryRepositoryTest extends IntegrationTestSupport {
 			.toPageable();
 
 		// when
-		Page<AlertHistory> result = alertHistoryQueryRepository.findByDeviceIdAndUserId(user.getId(), pageable);
+		Page<AlertHistory> result = alertHistoryQueryRepository.findByUserId(user.getId(), pageable);
 
 		// then
 		assertThat(result.getContent())

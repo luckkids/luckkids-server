@@ -39,7 +39,7 @@ public class FirebaseService {
 
         try {
             firebaseMessaging.send(message);
-            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest.getPush().getUser(), sendPushServiceRequest.getBody()));
+            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
         } catch (FirebaseMessagingException e){
             throw new IllegalArgumentException(e.getMessage());
         }

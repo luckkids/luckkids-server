@@ -1,5 +1,6 @@
 package com.luckkids.api.service.firebase.request;
 
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SendFirebaseDataDto {
 
-    private String screenName;
-    private String url;
+    private AlertDestinationType alert_destination_type;
+    private String alert_destination_info;
 
     @Builder
-    private SendFirebaseDataDto(String screenName, String url) {
-        this.screenName = screenName;
-        this.url = url;
+    private SendFirebaseDataDto(AlertDestinationType alert_destination_type, String alert_destination_info) {
+        this.alert_destination_type = alert_destination_type;
+        this.alert_destination_info = alert_destination_info;
     }
 }

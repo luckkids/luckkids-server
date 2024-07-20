@@ -33,8 +33,8 @@ public class AlertHistoryReadService {
 
 	public PageCustom<AlertHistoryResponse> getAlertHistory(PageInfoServiceRequest request) {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
-
-		Page<AlertHistory> alertHistoryPage = alertHistoryQueryRepository.findByDeviceIdAndUserId(
+						
+		Page<AlertHistory> alertHistoryPage = alertHistoryQueryRepository.findByUserId(
 			userId,
 			request.toPageable()
 		);

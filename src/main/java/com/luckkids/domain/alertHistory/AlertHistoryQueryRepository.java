@@ -21,7 +21,7 @@ public class AlertHistoryQueryRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public Page<AlertHistory> findByDeviceIdAndUserId(int userId, Pageable pageable) {
+	public Page<AlertHistory> findByUserId(int userId, Pageable pageable) {
 		List<AlertHistory> content = jpaQueryFactory
 			.select(alertHistory)
 			.from(alertHistory)

@@ -3,9 +3,9 @@ package com.luckkids.api.service.firebase;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.firebase.request.SendFirebaseDataDto;
 import com.luckkids.api.service.firebase.request.SendFirebaseServiceRequest;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
-import com.luckkids.domain.push.PushScreenName;
 import com.luckkids.domain.user.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,8 +41,8 @@ public class FirebaseServiceTest extends IntegrationTestSupport {
             .push(push)
             .body("테스트Body")
             .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                    .screenName(PushScreenName.WEBVIEW.getText())
-                    .url("www.test.com")
+                    .alert_destination_type(AlertDestinationType.WEBVIEW)
+                    .alert_destination_info("www.test.com")
                     .build())
             .sound("테스트 sound")
             .build();

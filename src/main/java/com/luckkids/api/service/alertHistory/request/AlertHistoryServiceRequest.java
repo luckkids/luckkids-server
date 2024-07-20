@@ -1,5 +1,8 @@
 package com.luckkids.api.service.alertHistory.request;
 
+import com.luckkids.api.service.firebase.request.SendFirebaseServiceRequest;
+import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.user.User;
@@ -13,11 +16,13 @@ public class AlertHistoryServiceRequest {
 
 	private User user;
 	private String alertDescription;
+	private AlertDestinationType alertDestinationType;
 
 	@Builder
-	private AlertHistoryServiceRequest(User user, String alertDescription) {
+	private AlertHistoryServiceRequest(User user, String alertDescription, AlertDestinationType alertDestinationType) {
 		this.user = user;
 		this.alertDescription = alertDescription;
+		this.alertDestinationType = alertDestinationType;
 	}
 
 	public AlertHistory toEntity() {
@@ -25,13 +30,15 @@ public class AlertHistoryServiceRequest {
 			.user(user)
 			.alertDescription(alertDescription)
 			.alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
+			.alertDestinationType(alertDestinationType)
 			.build();
 	}
 
-	public static AlertHistoryServiceRequest of(User user, String alertDescription) {
+	public static AlertHistoryServiceRequest of(SendFirebaseServiceRequest sendPushServiceRequest) {
 		return AlertHistoryServiceRequest.builder()
-			.user(user)
-			.alertDescription(alertDescription)
+			.user(sendPushServiceRequest.getPush().getUser())
+			.alertDescription(sendPushServiceRequest.getBody())
+			.alertDestinationType(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_type())
 			.build();
 	}
 }
