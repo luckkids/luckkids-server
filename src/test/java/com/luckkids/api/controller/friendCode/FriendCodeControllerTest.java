@@ -98,5 +98,22 @@ public class FriendCodeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("친구코드는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
     }
+
+    @DisplayName("친구요청을 거절한다.")
+    @Test
+    @WithMockUser("USER")
+    void refuseFriend() throws Exception {
+        // given
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/friendcode/{code}/refuse", "ASDWEDSS")
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode").value("200"))
+                .andExpect(jsonPath("$.httpStatus").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"));
+    }
 }
 

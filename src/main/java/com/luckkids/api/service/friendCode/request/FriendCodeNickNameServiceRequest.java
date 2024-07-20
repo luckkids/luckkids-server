@@ -1,5 +1,6 @@
 package com.luckkids.api.service.friendCode.request;
 
+import com.luckkids.api.service.friend.request.FriendStatusRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,5 @@ public class FriendCodeNickNameServiceRequest {
     private FriendCodeNickNameServiceRequest(String code) {
         this.code = code;
     }
+
 }
