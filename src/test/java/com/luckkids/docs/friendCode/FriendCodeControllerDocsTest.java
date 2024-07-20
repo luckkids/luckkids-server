@@ -85,7 +85,7 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
         given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
                 .willReturn(FriendCodeNickNameResponse.builder()
                         .nickName("테스트 닉네임")
-                        .friendStatus(FriendStatus.FRIEND)
+                        .status(FriendStatus.FRIEND)
                         .build()
                 );
         // when // then

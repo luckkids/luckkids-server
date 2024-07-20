@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 public class FriendCodeNickNameResponse {
 
     private String nickName;
-    private FriendStatus friendStatus;
+    private FriendStatus status;
 
     @Builder
-    private FriendCodeNickNameResponse(String nickName, FriendStatus friendStatus) {
+    private FriendCodeNickNameResponse(String nickName, FriendStatus status) {
         this.nickName = nickName;
-        this.friendStatus = friendStatus;
+        this.status = status;
     }
 
-    public static FriendCodeNickNameResponse of(String nickName, FriendStatus friendStatus){
+    public static FriendCodeNickNameResponse of(String nickName, FriendStatus status){
         return FriendCodeNickNameResponse.builder()
                 .nickName(nickName)
-                .friendStatus(friendStatus)
+                .status(status)
                 .build();
     }
 }

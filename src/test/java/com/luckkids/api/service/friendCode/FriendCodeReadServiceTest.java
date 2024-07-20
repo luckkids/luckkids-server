@@ -80,7 +80,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
 
         FriendCodeNickNameResponse friendCodeNickNameResponse = friendCodeReadService.findNickNameByCode(friendCodeNickNameServiceRequest);
 
-        assertThat(friendCodeNickNameResponse).extracting("nickName", "friendStatus")
+        assertThat(friendCodeNickNameResponse).extracting("nickName", "status")
                 .contains("테스트2", FriendStatus.ALREADY);
     }
 
