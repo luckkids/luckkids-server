@@ -2,7 +2,9 @@ package com.luckkids.api.service.alertSetting;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
+import com.luckkids.api.service.alertSetting.request.AlertSettingLuckTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.domain.alertSetting.AlertSetting;
@@ -17,6 +19,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalTime;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
@@ -89,8 +93,8 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
 
         AlertSettingResponse alertSettingResponse = alertSettingService.createAlertSetting(alertSettingCreateServiceRequest);
 
-        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck")
-            .contains(UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED);
+        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck", "luckMessageAlertTime")
+            .contains(UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED, LocalTime.of(7,0));
     }
 
     @DisplayName("사용자의 알림설정을 등록시 사용자가 없다면 예외가 발생한다.")
@@ -106,6 +110,30 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> alertSettingService.createAlertSetting(alertSettingCreateServiceRequest))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Push가 존재하지 않습니다.");
+    }
+
+    @DisplayName("사용자의 행운의 한마디 알림시간을 수정한다.")
+    @Test
+    void updateLuckMessageAlertTime() {
+        User user = createUser();
+        Push push = createPush(user);
+
+        pushRepository.save(push);
+
+        createAlertSetting(push);
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createLoginUserInfo(user.getId()));
+
+        AlertSettingLuckTimeServiceRequest alertSettingLuckTimeServiceRequest = AlertSettingLuckTimeServiceRequest.builder()
+                .deviceId("testDeviceId")
+                .luckMessageAlertTime(LocalTime.of(8,0))
+                .build();
+
+        AlertSettingLuckTimeResponse alertSettingLuckTimeResponse = alertSettingService.updateLuckMessageAlertTime(alertSettingLuckTimeServiceRequest);
+
+        assertThat(alertSettingLuckTimeResponse).extracting("entire", "mission", "notice", "luck", "luckMessageAlertTime")
+                .contains(CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(8,0));
     }
 
     private User createUser() {
@@ -132,6 +160,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
             .mission(CHECKED)
             .notice(CHECKED)
             .luckMessage(CHECKED)
+            .luckMessageAlertTime(LocalTime.of(7,0))
             .build();
 
         alertSettingRepository.save(alertSetting);

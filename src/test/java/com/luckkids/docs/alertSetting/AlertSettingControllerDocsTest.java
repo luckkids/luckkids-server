@@ -1,12 +1,15 @@
 package com.luckkids.docs.alertSetting;
 
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckTimeRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.api.service.alertSetting.request.AlertSettingLuckTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -59,6 +63,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     .mission(AlertStatus.CHECKED)
                     .notice(AlertStatus.CHECKED)
                     .entire(AlertStatus.CHECKED)
+                    .luckMessageAlertTime(LocalTime.of(7,0))
                     .build()
             );
 
@@ -92,7 +97,9 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.luck").type(JsonFieldType.STRING)
                         .description("7시행운문구알림설정"),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                        .description("공지사항 알림설정")
+                        .description("공지사항 알림설정"),
+                    fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
+                            .description("행운의 한마디 알림시간")
                 )
             ));
     }
@@ -152,8 +159,70 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.luck").type(JsonFieldType.STRING)
                         .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values()))
+                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
+                    fieldWithPath("data.notice").type(JsonFieldType.STRING)
+                            .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values()))
                 )
             ));
+    }
+
+    @DisplayName("행운의 한마디 알림시간 수정 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void updateLuckMessageAlertTime() throws Exception {
+        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+                .luckMessageAlertTime(LocalTime.of(8,0))
+                .deviceId("testDeviceId")
+                .build();
+        // given
+        given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckTimeServiceRequest.class)))
+                .willReturn(
+                        AlertSettingLuckTimeResponse.builder()
+                                .luck(AlertStatus.CHECKED)
+                                .mission(AlertStatus.CHECKED)
+                                .notice(AlertStatus.CHECKED)
+                                .entire(AlertStatus.CHECKED)
+                                .luckMessageAlertTime(LocalTime.of(8,0))
+                                .build()
+                );
+
+        // when // then
+        mockMvc.perform(
+                        patch("/api/v1/alertSetting/luckTime/update")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("update-luckTime",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("luckMessageAlertTime").type(JsonFieldType.STRING)
+                                        .description("행운의 한마디 알림시간"),
+                                fieldWithPath("deviceId").type(JsonFieldType.STRING)
+                                        .description("디바이스ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.entire").type(JsonFieldType.STRING)
+                                        .description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
+                                fieldWithPath("data.mission").type(JsonFieldType.STRING)
+                                        .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
+                                fieldWithPath("data.luck").type(JsonFieldType.STRING)
+                                        .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
+                                fieldWithPath("data.notice").type(JsonFieldType.STRING)
+                                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
+                                fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
+                                        .description("행운의 한마디 시간")
+                        )
+                ));
     }
 }

@@ -1,13 +1,17 @@
 package com.luckkids.api.controller.alertSetting;
 
 import com.luckkids.ControllerTestSupport;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckTimeRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.time.LocalTime;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -165,5 +169,80 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("알림상태는 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("행운의 한마디 알림시간 수정")
+    @Test
+    @WithMockUser("USER")
+    void updateLuckMessageAlertTime() throws Exception {
+        // given
+        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+                .luckMessageAlertTime(LocalTime.of(8,0))
+                .deviceId("testdevice")
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        patch("/api/v1/alertSetting/luckTime/update")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode").value("200"))
+                .andExpect(jsonPath("$.httpStatus").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"));
+    }
+
+    @DisplayName("행운의 한마디 알림시간 수정시 알림시간은 필수이다.")
+    @Test
+    @WithMockUser("USER")
+    void updateLuckMessageAlertTimeWithoutAlertTIme() throws Exception {
+        // given
+        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+                .deviceId("testdevice")
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        patch("/api/v1/alertSetting/luckTime/update")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("알림 시간은 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("행운의 한마디 알림시간 수정시 디바이스ID는 필수이다.")
+    @Test
+    @WithMockUser("USER")
+    void updateLuckMessageAlertTimeWithoutDeviceId() throws Exception {
+        // given
+        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+                .luckMessageAlertTime(LocalTime.of(8,0))
+                .build();
+
+        // when // then
+        mockMvc.perform(
+                        patch("/api/v1/alertSetting/luckTime/update")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                                .accept(APPLICATION_JSON)
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("디바이스ID는 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 }

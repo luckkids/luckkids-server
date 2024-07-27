@@ -23,3 +23,16 @@ include::{snippets}/update-alertSetting/request-fields.adoc[]
 
 include::{snippets}/update-alertSetting/http-response.adoc[]
 include::{snippets}/update-alertSetting/response-fields.adoc[]
+
+[[update-luckTime]]
+=== 행운의 한마디 알림시간 수정
+
+==== HTTP Request
+
+include::{snippets}/update-luckTime/http-request.adoc[]
+include::{snippets}/update-luckTime/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-luckTime/http-response.adoc[]
+include::{snippets}/update-luckTime/response-fields.adoc[]
