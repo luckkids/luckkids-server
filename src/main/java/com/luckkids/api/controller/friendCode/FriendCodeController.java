@@ -8,6 +8,7 @@ import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequ
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
+import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,10 @@ public class FriendCodeController {
     @PostMapping("/create")
     public ApiResponse<FriendCreateResponse> create(@RequestBody @Valid FriendCreateRequest friendCreateRequest) {
         return ApiResponse.ok(friendCodeService.create(friendCreateRequest.toServiceRequest()));
+    }
+
+    @PostMapping("/{code}/refuse")
+    public ApiResponse<FriendRefuseResponse> refuseFriend(@PathVariable String code) {
+        return ApiResponse.ok(friendCodeService.refuseFriend(code));
     }
 }

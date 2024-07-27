@@ -35,3 +35,16 @@ include::{snippets}/create-friendcode/request-fields.adoc[]
 
 include::{snippets}/create-friendcode/http-response.adoc[]
 include::{snippets}/create-friendcode/response-fields.adoc[]
+
+[[refuse-friendCode]]
+=== 친구코드로 친구 닉네임 조회
+
+==== HTTP Request
+
+include::{snippets}/refuse-friendCode/http-request.adoc[]
+include::{snippets}/refuse-friendCode/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/refuse-friendCode/http-response.adoc[]
+include::{snippets}/refuse-friendCode/response-fields.adoc[]

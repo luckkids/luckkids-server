@@ -1,6 +1,7 @@
 package com.luckkids.api.service.friend;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.service.friend.request.FriendStatusRequest;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
@@ -170,6 +171,30 @@ class FriendReadServiceTest extends IntegrationTestSupport {
             .containsExactlyInAnyOrder(
                 1, 0, 0L
             );
+    }
+
+    @DisplayName("친구요청자와 수신자가 이미 친구인지 체크한다.")
+    @Test
+    void checkFriendStatus(){
+        // given
+        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
+        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 0);
+
+        userRepository.saveAll(List.of(user1, user2, user3));
+
+        Friend friend1 = createFriend(user1, user2);
+        friendRepository.save(friend1);
+
+        FriendStatusRequest friendStatusRequest = FriendStatusRequest.of(user1.getId(), user2.getId());
+        boolean check = friendReadService.checkFriendStatus(friendStatusRequest);
+
+        assertThat(check).isTrue();
+
+        friendStatusRequest = FriendStatusRequest.of(user1.getId(), user3.getId());
+        check = friendReadService.checkFriendStatus(friendStatusRequest);
+
+        assertThat(check).isFalse();
     }
 
     private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {

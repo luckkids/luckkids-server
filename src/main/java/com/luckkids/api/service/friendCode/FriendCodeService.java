@@ -3,6 +3,7 @@ package com.luckkids.api.service.friendCode;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
+import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushDataDto;
@@ -81,6 +82,12 @@ public class FriendCodeService {
         );
 
         return FriendCreateResponse.of(requestUser, receiveUser);
+    }
+
+    public FriendRefuseResponse refuseFriend(String code){
+        FriendCode friendCode = friendCodeReadService.findByCode(code);
+        friendCode.updateUseStatus();
+        return FriendRefuseResponse.of(code);
     }
 
     private String generateCode() {
