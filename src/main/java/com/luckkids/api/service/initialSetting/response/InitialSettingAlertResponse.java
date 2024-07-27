@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor
 public class InitialSettingAlertResponse {
@@ -13,12 +15,14 @@ public class InitialSettingAlertResponse {
     private AlertStatus mission;
     private AlertStatus luck;
     private AlertStatus notice;
+    private LocalTime luckMessageAlertTime;
 
     @Builder
-    private InitialSettingAlertResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+    private InitialSettingAlertResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice, LocalTime luckMessageAlertTime) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
         this.notice = notice;
+        this.luckMessageAlertTime = luckMessageAlertTime;
     }
 }

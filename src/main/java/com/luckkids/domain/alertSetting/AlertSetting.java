@@ -64,12 +64,17 @@ public class AlertSetting extends BaseTimeEntity {
 		}
 	}
 
+	public void updateLuckMessageAlertTime(LocalTime luckMessageAlertTime){
+		this.luckMessageAlertTime = luckMessageAlertTime;
+	}
+
 	public static AlertSetting of(Push push, AlertStatus alertStatus) {
 		return AlertSetting.builder()
 			.push(push)
 			.entire(alertStatus)
 			.mission(alertStatus)
 			.luckMessage(alertStatus)
+			.luckMessageAlertTime(LocalTime.of(7, 0))
 			.notice(alertStatus)
 			.build();
 	}
