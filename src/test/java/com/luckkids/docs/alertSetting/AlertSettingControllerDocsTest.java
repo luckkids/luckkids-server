@@ -1,12 +1,12 @@
 package com.luckkids.docs.alertSetting;
 
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckTimeRequest;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckMessageAlertTimeRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
-import com.luckkids.api.service.alertSetting.request.AlertSettingLuckTimeServiceRequest;
+import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
@@ -170,12 +170,12 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
     @Test
     @WithMockUser(roles = "USER")
     void updateLuckMessageAlertTime() throws Exception {
-        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+        AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
                 .luckMessageAlertTime(LocalTime.of(8,0))
                 .deviceId("testDeviceId")
                 .build();
         // given
-        given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckTimeServiceRequest.class)))
+        given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckMessageAlertTimeServiceRequest.class)))
                 .willReturn(
                         AlertSettingLuckTimeResponse.builder()
                                 .luck(AlertStatus.CHECKED)
@@ -188,13 +188,13 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                        patch("/api/v1/alertSetting/luckTime/update")
+                        patch("/api/v1/alertSetting/luckMessageAlertTime/update")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("update-luckTime",
+                .andDo(document("update-luckMessageAlertTime",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(

@@ -1,8 +1,9 @@
 package com.luckkids.api.service.alertSetting;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckMessageAlertTimeRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
-import com.luckkids.api.service.alertSetting.request.AlertSettingLuckTimeServiceRequest;
+import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
@@ -125,12 +126,12 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
         given(securityService.getCurrentLoginUserInfo())
                 .willReturn(createLoginUserInfo(user.getId()));
 
-        AlertSettingLuckTimeServiceRequest alertSettingLuckTimeServiceRequest = AlertSettingLuckTimeServiceRequest.builder()
+        AlertSettingLuckMessageAlertTimeServiceRequest alertSettingLuckMessageAlertTimeRequest = AlertSettingLuckMessageAlertTimeServiceRequest.builder()
                 .deviceId("testDeviceId")
                 .luckMessageAlertTime(LocalTime.of(8,0))
                 .build();
 
-        AlertSettingLuckTimeResponse alertSettingLuckTimeResponse = alertSettingService.updateLuckMessageAlertTime(alertSettingLuckTimeServiceRequest);
+        AlertSettingLuckTimeResponse alertSettingLuckTimeResponse = alertSettingService.updateLuckMessageAlertTime(alertSettingLuckMessageAlertTimeRequest);
 
         assertThat(alertSettingLuckTimeResponse).extracting("entire", "mission", "notice", "luck", "luckMessageAlertTime")
                 .contains(CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(8,0));

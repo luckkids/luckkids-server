@@ -1,6 +1,6 @@
 package com.luckkids.api.controller.alertSetting.request;
 
-import com.luckkids.api.service.alertSetting.request.AlertSettingLuckTimeServiceRequest;
+import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class AlertSettingLuckTimeRequest {
+public class AlertSettingLuckMessageAlertTimeRequest {
 
     @NotNull(message = "알림 시간은 필수입니다.")
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
@@ -21,13 +21,13 @@ public class AlertSettingLuckTimeRequest {
     private String deviceId;
 
     @Builder
-    private AlertSettingLuckTimeRequest(LocalTime luckMessageAlertTime, String deviceId) {
+    private AlertSettingLuckMessageAlertTimeRequest(LocalTime luckMessageAlertTime, String deviceId) {
         this.luckMessageAlertTime = luckMessageAlertTime;
         this.deviceId = deviceId;
     }
 
-    public AlertSettingLuckTimeServiceRequest toServiceRequest(){
-        return AlertSettingLuckTimeServiceRequest.builder()
+    public AlertSettingLuckMessageAlertTimeServiceRequest toServiceRequest(){
+        return AlertSettingLuckMessageAlertTimeServiceRequest.builder()
                 .luckMessageAlertTime(luckMessageAlertTime)
                 .deviceId(deviceId)
                 .build();

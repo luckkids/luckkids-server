@@ -1,10 +1,9 @@
 package com.luckkids.api.controller.alertSetting;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckTimeRequest;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckMessageAlertTimeRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
-import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -176,14 +175,14 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void updateLuckMessageAlertTime() throws Exception {
         // given
-        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+        AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
                 .luckMessageAlertTime(LocalTime.of(8,0))
                 .deviceId("testdevice")
                 .build();
 
         // when // then
         mockMvc.perform(
-                        patch("/api/v1/alertSetting/luckTime/update")
+                        patch("/api/v1/alertSetting/luckMessageAlertTime/update")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                                 .accept(APPLICATION_JSON)
@@ -201,13 +200,13 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void updateLuckMessageAlertTimeWithoutAlertTIme() throws Exception {
         // given
-        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+        AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
                 .deviceId("testdevice")
                 .build();
 
         // when // then
         mockMvc.perform(
-                        patch("/api/v1/alertSetting/luckTime/update")
+                        patch("/api/v1/alertSetting/luckMessageAlertTime/update")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                                 .accept(APPLICATION_JSON)
@@ -226,13 +225,13 @@ public class AlertSettingControllerTest extends ControllerTestSupport {
     @WithMockUser("USER")
     void updateLuckMessageAlertTimeWithoutDeviceId() throws Exception {
         // given
-        AlertSettingLuckTimeRequest request = AlertSettingLuckTimeRequest.builder()
+        AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
                 .luckMessageAlertTime(LocalTime.of(8,0))
                 .build();
 
         // when // then
         mockMvc.perform(
-                        patch("/api/v1/alertSetting/luckTime/update")
+                        patch("/api/v1/alertSetting/luckMessageAlertTime/update")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                                 .accept(APPLICATION_JSON)

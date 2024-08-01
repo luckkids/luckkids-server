@@ -8,13 +8,13 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class AlertSettingLuckTimeServiceRequest {
+public class AlertSettingLuckMessageAlertTimeServiceRequest {
 
     private LocalTime luckMessageAlertTime;
     private String deviceId;
 
     @Builder
-    private AlertSettingLuckTimeServiceRequest(LocalTime luckMessageAlertTime, String deviceId) {
+    private AlertSettingLuckMessageAlertTimeServiceRequest(LocalTime luckMessageAlertTime, String deviceId) {
         this.luckMessageAlertTime = luckMessageAlertTime;
         this.deviceId = deviceId;
     }

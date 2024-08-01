@@ -29,10 +29,10 @@ include::{snippets}/update-alertSetting/response-fields.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/update-luckTime/http-request.adoc[]
-include::{snippets}/update-luckTime/request-fields.adoc[]
+include::{snippets}/update-luckMessageAlertTime/http-request.adoc[]
+include::{snippets}/update-luckMessageAlertTime/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/update-luckTime/http-response.adoc[]
-include::{snippets}/update-luckTime/response-fields.adoc[]
+include::{snippets}/update-luckMessageAlertTime/http-response.adoc[]
+include::{snippets}/update-luckMessageAlertTime/response-fields.adoc[]
