@@ -6,7 +6,7 @@ import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
-import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckMessageAlertTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class AlertSettingController {
     }
 
     @PatchMapping("/luckMessageAlertTime/update")
-    public ApiResponse<AlertSettingLuckTimeResponse> updateLuckMessageAlertTime(@RequestBody @Valid AlertSettingLuckMessageAlertTimeRequest alertSettingLuckMessageAlertTimeRequest){
+    public ApiResponse<AlertSettingLuckMessageAlertTimeResponse> updateLuckMessageAlertTime(@RequestBody @Valid AlertSettingLuckMessageAlertTimeRequest alertSettingLuckMessageAlertTimeRequest){
         return ApiResponse.ok(alertSettingService.updateLuckMessageAlertTime(alertSettingLuckMessageAlertTimeRequest.toServiceRequest()));
     }
 }

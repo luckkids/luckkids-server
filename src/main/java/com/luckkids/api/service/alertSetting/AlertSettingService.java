@@ -3,7 +3,7 @@ package com.luckkids.api.service.alertSetting;
 import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
-import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckMessageAlertTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.api.service.push.PushReadService;
@@ -38,9 +38,9 @@ public class AlertSettingService {
         return AlertSettingResponse.of(savedAlertSetting);
     }
 
-    public AlertSettingLuckTimeResponse updateLuckMessageAlertTime(AlertSettingLuckMessageAlertTimeServiceRequest request){
+    public AlertSettingLuckMessageAlertTimeResponse updateLuckMessageAlertTime(AlertSettingLuckMessageAlertTimeServiceRequest request){
         AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId(request.getDeviceId());
         alertSetting.updateLuckMessageAlertTime(request.getLuckMessageAlertTime());
-        return AlertSettingLuckTimeResponse.of(alertSetting);
+        return AlertSettingLuckMessageAlertTimeResponse.of(alertSetting);
     }
 }

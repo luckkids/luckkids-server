@@ -9,7 +9,7 @@ import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
-import com.luckkids.api.service.alertSetting.response.AlertSettingLuckTimeResponse;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckMessageAlertTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
@@ -177,7 +177,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
         // given
         given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckMessageAlertTimeServiceRequest.class)))
                 .willReturn(
-                        AlertSettingLuckTimeResponse.builder()
+                        AlertSettingLuckMessageAlertTimeResponse.builder()
                                 .luck(AlertStatus.CHECKED)
                                 .mission(AlertStatus.CHECKED)
                                 .notice(AlertStatus.CHECKED)

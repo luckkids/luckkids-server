@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class AlertSettingLuckTimeResponse {
+public class AlertSettingLuckMessageAlertTimeResponse {
 
     private AlertStatus entire;
     private AlertStatus mission;
@@ -19,7 +19,7 @@ public class AlertSettingLuckTimeResponse {
     private LocalTime luckMessageAlertTime;
 
     @Builder
-    private AlertSettingLuckTimeResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice, LocalTime luckMessageAlertTime) {
+    private AlertSettingLuckMessageAlertTimeResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice, LocalTime luckMessageAlertTime) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
@@ -27,8 +27,8 @@ public class AlertSettingLuckTimeResponse {
         this.luckMessageAlertTime = luckMessageAlertTime;
     }
 
-    public static AlertSettingLuckTimeResponse of(AlertSetting alertSetting){
-        return AlertSettingLuckTimeResponse.builder()
+    public static AlertSettingLuckMessageAlertTimeResponse of(AlertSetting alertSetting){
+        return AlertSettingLuckMessageAlertTimeResponse.builder()
                 .entire(alertSetting.getEntire())
                 .mission(alertSetting.getMission())
                 .luck(alertSetting.getLuckMessage())
