@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor
 public class AlertSettingResponse {
@@ -15,13 +17,15 @@ public class AlertSettingResponse {
     private AlertStatus mission;
     private AlertStatus luck;
     private AlertStatus notice;
+    private LocalTime luckMessageAlertTime;
 
     @Builder
-    private AlertSettingResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+    private AlertSettingResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice, LocalTime luckMessageAlertTime) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
         this.notice = notice;
+        this.luckMessageAlertTime = luckMessageAlertTime;
     }
 
     public static AlertSettingResponse of(AlertSetting alertSetting){
@@ -30,6 +34,7 @@ public class AlertSettingResponse {
             .mission(alertSetting.getMission())
             .luck(alertSetting.getLuckMessage())
             .notice(alertSetting.getNotice())
+            .luckMessageAlertTime(alertSetting.getLuckMessageAlertTime())
             .build();
     }
 
@@ -39,6 +44,7 @@ public class AlertSettingResponse {
             .mission(mission)
             .luck(luck)
             .notice(notice)
+            .luckMessageAlertTime(luckMessageAlertTime)
             .build();
     }
 }

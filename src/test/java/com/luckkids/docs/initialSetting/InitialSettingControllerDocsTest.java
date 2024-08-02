@@ -114,6 +114,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
             .mission(CHECKED)
             .luck(CHECKED)
             .notice(CHECKED)
+            .luckMessageAlertTime(LocalTime.of(7,0))
             .build();
 
         given(initialSettingService.initialSetting(any(InitialSettingServiceRequest.class)))
@@ -176,6 +177,8 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                         .description("행운알림. 가능한값: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.alertSetting.notice").type(JsonFieldType.STRING)
                         .description("공지사항알림. 가능한값: " + Arrays.toString(AlertStatus.values())),
+                    fieldWithPath("data.alertSetting.luckMessageAlertTime").type(JsonFieldType.STRING)
+                            .description("행운의 한마디 알림시간"),
                     fieldWithPath("data.character").type(JsonFieldType.OBJECT)
                         .description("캐릭터설정 응답 데이터"),
                     fieldWithPath("data.character.id").type(JsonFieldType.NUMBER)

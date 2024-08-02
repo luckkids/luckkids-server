@@ -154,8 +154,8 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
                 tuple(MissionType.HEALTH, "10시에 운동하기", CHECKED, LocalTime.of(0, 0))
             );
 
-        assertThat(initialSettingAlertResponse).extracting("entire", "mission", "luck", "notice")
-            .containsExactly(CHECKED, CHECKED, CHECKED, CHECKED);
+        assertThat(initialSettingAlertResponse).extracting("entire", "mission", "luck", "notice", "luckMessageAlertTime")
+            .containsExactly(CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(7,0));
     }
 
     private User createUser(int i) {

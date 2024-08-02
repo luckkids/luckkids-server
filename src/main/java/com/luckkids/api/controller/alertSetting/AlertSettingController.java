@@ -1,10 +1,12 @@
 package com.luckkids.api.controller.alertSetting;
 
 import com.luckkids.api.ApiResponse;
+import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckMessageAlertTimeRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
 import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.api.service.alertSetting.response.AlertSettingLuckMessageAlertTimeResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import jakarta.validation.Valid;
@@ -27,5 +29,10 @@ public class AlertSettingController {
     @PatchMapping("/update")
     public ApiResponse<AlertSettingUpdateResponse> updateAlertSetting(@RequestBody @Valid AlertSettingUpdateRequest alertSettingUpdateRequest){
         return ApiResponse.ok(alertSettingService.updateAlertSetting(alertSettingUpdateRequest.toServiceRequest()));
+    }
+
+    @PatchMapping("/luckMessageAlertTime/update")
+    public ApiResponse<AlertSettingLuckMessageAlertTimeResponse> updateLuckMessageAlertTime(@RequestBody @Valid AlertSettingLuckMessageAlertTimeRequest alertSettingLuckMessageAlertTimeRequest){
+        return ApiResponse.ok(alertSettingService.updateLuckMessageAlertTime(alertSettingLuckMessageAlertTimeRequest.toServiceRequest()));
     }
 }
