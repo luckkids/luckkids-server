@@ -7,6 +7,7 @@ import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.security.SecurityService;
+import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
@@ -46,9 +47,12 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     private FriendCodeService friendCodeService;
     @Autowired
     private FriendCodeReadService friendCodeReadService;
+    @Autowired
+    private AlertHistoryRepository alertHistoryRepository;
 
     @AfterEach
     void tearDown() {
+        alertHistoryRepository.deleteAllInBatch();
         friendCodeRepository.deleteAllInBatch();
         friendRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
