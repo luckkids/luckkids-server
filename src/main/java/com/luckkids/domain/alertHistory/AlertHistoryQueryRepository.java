@@ -64,11 +64,34 @@ public class AlertHistoryQueryRepository {
 		).orElse(0L);
 	}
 
+	public boolean hasFriendCode(int userId, String friendCode) {
+		long count = ofNullable(
+				jpaQueryFactory
+						.select(alertHistory.count())
+						.from(alertHistory)
+						.where(
+								isUserIdEqualsTo(userId),
+								isAlertDestinationTypeEqualsTo(AlertDestinationType.FRIEND_CODE),
+								isAlertDestinationInfoEqualsTo(friendCode)
+						)
+						.fetchOne()
+		).orElse(0L);
+		return count > 0;
+	}
+
 	private BooleanExpression isUserIdEqualsTo(int userId) {
 		return alertHistory.user.id.eq(userId);
 	}
 
 	private BooleanExpression isStatusEqualsTo(AlertHistoryStatus status) {
 		return alertHistory.alertHistoryStatus.eq(status);
+	}
+
+	private BooleanExpression isAlertDestinationTypeEqualsTo(AlertDestinationType type) {
+		return alertHistory.alertDestinationType.eq(type);
+	}
+
+	private BooleanExpression isAlertDestinationInfoEqualsTo(String code) {
+		return alertHistory.alertDestinationInfo.eq(code);
 	}
 }

@@ -53,4 +53,9 @@ public class AlertHistoryReadService {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 		return alertHistoryQueryRepository.hasUncheckedAlerts(userId);
 	}
+
+	public boolean hasFriendCode(int userId, String friendCode){
+		return alertHistoryQueryRepository.hasFriendCode(userId, friendCode);
+	}
+
 }
