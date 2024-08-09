@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.List;
 
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -144,6 +145,26 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		assertThat(result).isFalse();
 	}
 
+	@DisplayName("유저가 이미 요청받은 초대인지 확인한다.")
+	@Test
+	void hasFriendCodeAlert() {
+		// given
+		User user1 = createUser();
+		userRepository.save(user1);
+
+		Push push1 = createPush(user1);
+		pushRepository.save(push1);
+
+		AlertHistory alertHistory1 = createFriendCodeAlertHistory(user1, "test", CHECKED);
+		alertHistoryRepository.save(alertHistory1);
+
+		// when
+		boolean result = alertHistoryReadService.hasFriendCode(user1.getId(), "test");
+
+		// then
+		assertThat(result).isTrue();
+	}
+
 	private User createUser() {
 		return User.builder()
 			.email("test@email.com")
@@ -166,6 +187,15 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.alertDescription(alertDescription)
 			.alertHistoryStatus(alertHistoryStatus)
 			.build();
+	}
+
+	private AlertHistory createFriendCodeAlertHistory(User user, String alertDescriptionInfo,AlertHistoryStatus alertHistoryStatus) {
+		return AlertHistory.builder()
+				.user(user)
+				.alertDestinationType(AlertDestinationType.FRIEND_CODE)
+				.alertDestinationInfo(alertDescriptionInfo)
+				.alertHistoryStatus(alertHistoryStatus)
+				.build();
 	}
 
 	private LoginUserInfo createLoginUserInfo(int userId) {

@@ -2,6 +2,8 @@ package com.luckkids.api.service.friendCode;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
+import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.friend.request.FriendStatusRequest;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
@@ -23,6 +25,9 @@ public class FriendCodeReadService {
     private final FriendCodeRepository friendCodeRepository;
     private final SecurityService securityService;
     private final FriendReadService friendReadService;
+    private final AlertHistoryReadService alertHistoryReadService;
+    private final AlertHistoryService alertHistoryService;
+    private final UserReadService userReadService;
 
     public FriendCode findByCode(String code) {
         return friendCodeRepository.findByCode(code)
@@ -31,8 +36,15 @@ public class FriendCodeReadService {
 
     public FriendCodeNickNameResponse findNickNameByCode(FriendCodeNickNameServiceRequest friendCreateServiceRequest) {
         int receiverId = securityService.getCurrentLoginUserInfo().getUserId(); // 수신자 ID
-        FriendCode friendCode = findByCode(friendCreateServiceRequest.getCode());
+        String code = friendCreateServiceRequest.getCode();
+        FriendCode friendCode = findByCode(code);
         int requesterId = friendCode.getUser().getId(); // 요청자 ID
+
+        //처음으로 받은 요청이면 AlertHistory에 적재
+        if(!alertHistoryReadService.hasFriendCode(receiverId, code)){
+            User user = userReadService.findByOne(receiverId);
+            alertHistoryService.createAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, code));
+        }
 
         // 내가 보낸 초대인지 체크
         if (requesterId == receiverId) {
