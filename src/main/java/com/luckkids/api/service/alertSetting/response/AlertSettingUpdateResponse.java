@@ -12,13 +12,15 @@ public class AlertSettingUpdateResponse {
     private AlertStatus entire;
     private AlertStatus mission;
     private AlertStatus luck;
+    private AlertStatus friend;
     private AlertStatus notice;
 
     @Builder
-    private AlertSettingUpdateResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice) {
+    private AlertSettingUpdateResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus friend, AlertStatus notice) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
+        this.friend = friend;
         this.notice = notice;
     }
 
@@ -28,6 +30,7 @@ public class AlertSettingUpdateResponse {
             .mission(alertSetting.getMission())
             .luck(alertSetting.getLuckMessage())
             .notice(alertSetting.getNotice())
+            .friend(alertSetting.getFriend())
             .build();
     }
 }

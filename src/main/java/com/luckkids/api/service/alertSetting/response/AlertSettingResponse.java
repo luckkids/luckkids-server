@@ -16,14 +16,16 @@ public class AlertSettingResponse {
     private AlertStatus entire;
     private AlertStatus mission;
     private AlertStatus luck;
+    private AlertStatus friend;
     private AlertStatus notice;
     private LocalTime luckMessageAlertTime;
 
     @Builder
-    private AlertSettingResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus notice, LocalTime luckMessageAlertTime) {
+    private AlertSettingResponse(AlertStatus entire, AlertStatus mission, AlertStatus luck, AlertStatus friend, AlertStatus notice, LocalTime luckMessageAlertTime) {
         this.entire = entire;
         this.mission = mission;
         this.luck = luck;
+        this.friend = friend;
         this.notice = notice;
         this.luckMessageAlertTime = luckMessageAlertTime;
     }
@@ -33,6 +35,7 @@ public class AlertSettingResponse {
             .entire(alertSetting.getEntire())
             .mission(alertSetting.getMission())
             .luck(alertSetting.getLuckMessage())
+            .friend(alertSetting.getFriend())
             .notice(alertSetting.getNotice())
             .luckMessageAlertTime(alertSetting.getLuckMessageAlertTime())
             .build();
@@ -43,6 +46,7 @@ public class AlertSettingResponse {
             .entire(entire)
             .mission(mission)
             .luck(luck)
+
             .notice(notice)
             .luckMessageAlertTime(luckMessageAlertTime)
             .build();

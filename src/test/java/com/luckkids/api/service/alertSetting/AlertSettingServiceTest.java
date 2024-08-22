@@ -71,8 +71,8 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
 
         AlertSettingUpdateResponse alertSettingUpdateResponse = alertSettingService.updateAlertSetting(alertSettingUpdateServiceRequest);
 
-        assertThat(alertSettingUpdateResponse).extracting("entire", "mission", "notice", "luck")
-            .contains(CHECKED, CHECKED, CHECKED, UNCHECKED);
+        assertThat(alertSettingUpdateResponse).extracting("entire", "mission", "notice", "friend", "luck")
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED, UNCHECKED);
     }
 
     @DisplayName("사용자의 알림설정을 등록한다.")
@@ -93,8 +93,8 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
 
         AlertSettingResponse alertSettingResponse = alertSettingService.createAlertSetting(alertSettingCreateServiceRequest);
 
-        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck", "luckMessageAlertTime")
-            .contains(UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED, LocalTime.of(7,0));
+        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck", "friend", "luckMessageAlertTime")
+            .contains(UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED, UNCHECKED, LocalTime.of(7,0));
     }
 
     @DisplayName("사용자의 알림설정을 등록시 사용자가 없다면 예외가 발생한다.")
@@ -132,8 +132,8 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
 
         AlertSettingLuckMessageAlertTimeResponse alertSettingLuckMessageAlertTimeResponse = alertSettingService.updateLuckMessageAlertTime(alertSettingLuckMessageAlertTimeRequest);
 
-        assertThat(alertSettingLuckMessageAlertTimeResponse).extracting("entire", "mission", "notice", "luck", "luckMessageAlertTime")
-                .contains(CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(8,0));
+        assertThat(alertSettingLuckMessageAlertTimeResponse).extracting("entire", "mission", "notice", "luck", "friend", "luckMessageAlertTime")
+                .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(8,0));
     }
 
     private User createUser() {
@@ -159,6 +159,7 @@ public class AlertSettingServiceTest extends IntegrationTestSupport {
             .entire(CHECKED)
             .mission(CHECKED)
             .notice(CHECKED)
+            .friend(CHECKED)
             .luckMessage(CHECKED)
             .luckMessageAlertTime(LocalTime.of(7,0))
             .build();

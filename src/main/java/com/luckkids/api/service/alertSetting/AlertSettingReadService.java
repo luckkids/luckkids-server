@@ -7,9 +7,12 @@ import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.domain.alertSetting.AlertType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +30,9 @@ public class AlertSettingReadService {
 
     public AlertSettingResponse getAlertSetting(AlertSettingServiceRequest alertSettingServiceRequest) {
         return AlertSettingResponse.of(findOneByDeviceIdAndUserId(alertSettingServiceRequest.getDeviceId()));
+    }
+
+    public List<AlertSetting> findAllByUserId(int userId){
+        return alertSettingRepository.findByPushUserId(userId);
     }
 }
