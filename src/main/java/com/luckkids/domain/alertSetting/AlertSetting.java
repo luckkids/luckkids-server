@@ -42,16 +42,20 @@ public class AlertSetting extends BaseTimeEntity {
 	private LocalTime luckMessageAlertTime;
 
 	@Enumerated(EnumType.STRING)
+	private AlertStatus friend;
+
+	@Enumerated(EnumType.STRING)
 	private AlertStatus notice;
 
 	@Builder
 	private AlertSetting(Push push, AlertStatus entire, AlertStatus mission, AlertStatus luckMessage,
-		LocalTime luckMessageAlertTime, AlertStatus notice) {
+		LocalTime luckMessageAlertTime, AlertStatus friend, AlertStatus notice) {
 		this.push = push;
 		this.entire = entire;
 		this.mission = mission;
 		this.luckMessage = luckMessage;
 		this.luckMessageAlertTime = luckMessageAlertTime;
+		this.friend = friend;
 		this.notice = notice;
 	}
 
@@ -60,12 +64,27 @@ public class AlertSetting extends BaseTimeEntity {
 			case ENTIRE -> this.entire = alertStatus;
 			case MISSION -> this.mission = alertStatus;
 			case LUCK -> this.luckMessage = alertStatus;
+			case FRIEND -> this.friend = alertStatus;
 			case NOTICE -> this.notice = alertStatus;
 		}
 	}
 
 	public void updateLuckMessageAlertTime(LocalTime luckMessageAlertTime){
 		this.luckMessageAlertTime = luckMessageAlertTime;
+	}
+
+	public boolean alertTypeChecked(AlertType alertType) {
+		AlertStatus alertStatus;
+
+		alertStatus = switch (alertType) {
+			case ENTIRE -> this.entire;
+			case MISSION -> this.mission;
+			case LUCK -> this.luckMessage;
+			case FRIEND -> this.friend;
+			case NOTICE -> this.notice;
+		};
+
+		return AlertStatus.CHECKED.equals(alertStatus);
 	}
 
 	public static AlertSetting of(Push push, AlertStatus alertStatus) {
@@ -75,6 +94,7 @@ public class AlertSetting extends BaseTimeEntity {
 			.mission(alertStatus)
 			.luckMessage(alertStatus)
 			.luckMessageAlertTime(LocalTime.of(7, 0))
+			.friend(alertStatus)
 			.notice(alertStatus)
 			.build();
 	}

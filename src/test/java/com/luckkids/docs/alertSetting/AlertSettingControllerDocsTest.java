@@ -62,6 +62,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     .luck(AlertStatus.CHECKED)
                     .mission(AlertStatus.CHECKED)
                     .notice(AlertStatus.CHECKED)
+                    .friend(AlertStatus.CHECKED)
                     .entire(AlertStatus.CHECKED)
                     .luckMessageAlertTime(LocalTime.of(7,0))
                     .build()
@@ -96,6 +97,8 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                         .description("미션알림설정"),
                     fieldWithPath("data.luck").type(JsonFieldType.STRING)
                         .description("7시행운문구알림설정"),
+                    fieldWithPath("data.friend").type(JsonFieldType.STRING)
+                            .description("친구 알림설정"),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
                         .description("공지사항 알림설정"),
                     fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
@@ -120,6 +123,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                     .luck(AlertStatus.CHECKED)
                     .mission(AlertStatus.CHECKED)
                     .notice(AlertStatus.CHECKED)
+                    .friend(AlertStatus.CHECKED)
                     .entire(AlertStatus.CHECKED)
                     .build()
             );
@@ -158,6 +162,8 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                         .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.luck").type(JsonFieldType.STRING)
                         .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
+                    fieldWithPath("data.friend").type(JsonFieldType.STRING)
+                            .description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
                         .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
                     fieldWithPath("data.notice").type(JsonFieldType.STRING)
@@ -181,6 +187,7 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                                 .luck(AlertStatus.CHECKED)
                                 .mission(AlertStatus.CHECKED)
                                 .notice(AlertStatus.CHECKED)
+                                .friend(AlertStatus.CHECKED)
                                 .entire(AlertStatus.CHECKED)
                                 .luckMessageAlertTime(LocalTime.of(8,0))
                                 .build()
@@ -218,6 +225,8 @@ public class AlertSettingControllerDocsTest extends RestDocsSupport {
                                         .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
                                 fieldWithPath("data.luck").type(JsonFieldType.STRING)
                                         .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
+                                fieldWithPath("data.friend").type(JsonFieldType.STRING)
+                                        .description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
                                 fieldWithPath("data.notice").type(JsonFieldType.STRING)
                                         .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
                                 fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)

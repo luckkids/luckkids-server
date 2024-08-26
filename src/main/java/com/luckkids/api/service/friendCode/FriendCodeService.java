@@ -1,5 +1,6 @@
 package com.luckkids.api.service.friendCode;
 
+import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
@@ -7,9 +8,11 @@ import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushDataDto;
+import com.luckkids.api.service.push.request.SendPushServiceRequest;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertHistory.AlertDestinationType;
+import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertType;
 import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +40,7 @@ public class FriendCodeService {
     private final UserReadService userReadService;
     private final FriendCodeReadService friendCodeReadService;
     private final PushService pushService;
+    private final AlertSettingReadService alertSettingReadService;
 
     public FriendInviteCodeResponse inviteCode() {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
@@ -70,16 +75,20 @@ public class FriendCodeService {
         friendRepository.save(createFriend(requestUser, receiveUser));
         friendRepository.save(createFriend(receiveUser, requestUser));
 
-        pushService.sendPushAlertType(
-            SendPushAlertTypeServiceRequest.builder()
-                .alertType(AlertType.NOTICE)
-                .body(PushMessage.GARDEN.getText().replace("{nickName}", requestUser.getNickname()))
-                .sendPushDataDto(SendPushDataDto.builder()
-                        .alert_destination_type(AlertDestinationType.FRIEND)
-                        .alert_destination_info(String.valueOf(requestUser.getId()))
-                        .build())
-                .build()
-        );
+        List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(requestUser.getId());
+
+        alertSettingList.stream()
+            .filter(alertSetting -> alertSetting.alertTypeChecked(AlertType.FRIEND))
+            .forEach(alertSetting -> pushService.sendPushToUser(
+                    SendPushServiceRequest.builder()
+                            .push(alertSetting.getPush())
+                            .body(PushMessage.GARDEN.getText().replace("{nickName}", requestUser.getNickname()))
+                            .sendPushDataDto(SendPushDataDto.builder()
+                                    .alert_destination_type(AlertDestinationType.FRIEND)
+                                    .alert_destination_info(String.valueOf(requestUser.getId()))
+                                    .build())
+                            .build()
+            ));
 
         return FriendCreateResponse.of(requestUser, receiveUser);
     }

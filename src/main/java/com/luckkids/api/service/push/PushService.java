@@ -3,6 +3,7 @@ package com.luckkids.api.service.push;
 import com.luckkids.api.service.firebase.FirebaseService;
 import com.luckkids.api.service.push.request.PushSoundChangeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.api.service.push.request.SendPushServiceRequest;
 import com.luckkids.api.service.push.response.PushSoundChangeResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.push.Push;
@@ -23,6 +24,10 @@ public class PushService {
         for(Push push : pushReadService.findAllByAlertType(sendPushAlertTypeRequest.getAlertType())){
             firebaseService.sendPushNotification(sendPushAlertTypeRequest.toSendPushServiceRequest(push));
         }
+    }
+
+    public void sendPushToUser(SendPushServiceRequest sendPushServiceRequest){
+        firebaseService.sendPushNotification(sendPushServiceRequest.toSendPushServiceRequest());
     }
 
     public PushSoundChangeResponse updateSound(PushSoundChangeServiceRequest pushChangeServiceRequest){

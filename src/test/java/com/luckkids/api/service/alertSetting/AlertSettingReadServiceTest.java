@@ -16,10 +16,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalTime;
+import java.util.List;
+
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static com.luckkids.domain.user.SnsType.NORMAL;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 
 public class AlertSettingReadServiceTest extends IntegrationTestSupport {
@@ -55,8 +60,8 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
         AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId("testDeviceId");
 
-        assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
-            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "friend", "luckMessage")
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
@@ -85,8 +90,8 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
         AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId("testDeviceId");
 
-        assertThat(alertSetting).extracting("entire", "mission", "notice", "luckMessage")
-            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "friend", "luckMessage")
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("userId와 deviceId로 AlertSetting Entity를 조회시 존재하지 않으면 예외가 발생된다.")
@@ -116,8 +121,8 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 
         AlertSettingResponse alertSettingResponse = alertSettingReadService.getAlertSetting(request);
 
-        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "luck")
-            .contains(CHECKED, CHECKED, CHECKED, CHECKED);
+        assertThat(alertSettingResponse).extracting("entire", "mission", "notice", "friend", "luck")
+            .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     @DisplayName("사용자의 기기가 아닌 DeviceId로 알림세팅을 조회시 예외가 발생한다.")
@@ -157,6 +162,25 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .hasMessage("해당 사용자가 알림설정이 되어있지 않습니다.");
     }
 
+    @DisplayName("userId로 AlertSetting Entity를 조회한다.")
+    @Test
+    void findALlByUserId() {
+        User user = createUser(1);
+        Push push = createPushWishDeviceId(user, "test1");
+        createAlertSetting(push);
+
+        Push push2 = createPushWishDeviceId(user, "test2");
+        createAlertSetting(push2);
+
+        List<AlertSetting> alertSetting = alertSettingReadService.findAllByUserId(user.getId());
+
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "friend", "luckMessage")
+                .containsExactlyInAnyOrder(
+                        tuple(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED),
+                        tuple(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED)
+                );
+    }
+
     private User createUser(int i) {
         return userRepository.save(
             User.builder()
@@ -174,12 +198,21 @@ public class AlertSettingReadServiceTest extends IntegrationTestSupport {
             .build());
     }
 
+    private Push createPushWishDeviceId(User user, String deviceId) {
+        return pushRepository.save(Push.builder()
+                .deviceId(deviceId)
+                .pushToken("testPushToken")
+                .user(user)
+                .build());
+    }
+
     private void createAlertSetting(Push push) {
         AlertSetting alertSetting = AlertSetting.builder()
             .push(push)
             .entire(CHECKED)
             .mission(CHECKED)
             .notice(CHECKED)
+            .friend(CHECKED)
             .luckMessage(CHECKED)
             .build();
 
