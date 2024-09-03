@@ -1,5 +1,6 @@
 package com.luckkids.domain.user;
 
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -136,5 +137,9 @@ public class User extends BaseTimeEntity {
 
     public void updateNickName(String nickName){
         this.nickname = nickName;
+    }
+
+    public void checkSettingStatus() {
+        if (this.settingStatus.equals(SettingStatus.COMPLETE)) throw new LuckKidsException("이미 초기세팅이 되어있는 사용자입니다.");
     }
 }

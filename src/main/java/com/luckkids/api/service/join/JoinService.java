@@ -2,6 +2,7 @@ package com.luckkids.api.service.join;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.domain.user.User;
@@ -21,18 +22,18 @@ public class JoinService {
     private final UserRepository userRepository;
     private final UserAgreementRepository userAgreementRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JoinReadService joinReadService;
 
     public JoinResponse joinUser(JoinServiceRequest joinServiceRequest) {
-        try {
-            User user = joinServiceRequest.toEntity();
-            user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            User savedUser = userRepository.save(user);
+        joinReadService.checkEmail(JoinCheckEmailServiceRequest.builder()
+                .email(joinServiceRequest.getEmail())
+                .build());
 
-            UserAgreement userAgreement = userAgreementRepository.save(joinServiceRequest.toUserAgreementEntity(savedUser));
+        User user = joinServiceRequest.toEntity();
+        user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
 
-            return JoinResponse.of(savedUser, userAgreement);
-        } catch (Exception e) {
-            throw new LuckKidsException(ErrorCode.USER_NORMAL);
-        }
+        UserAgreement userAgreement = userAgreementRepository.save(joinServiceRequest.toUserAgreementEntity(savedUser));
+        return JoinResponse.of(savedUser, userAgreement);
     }
 }
