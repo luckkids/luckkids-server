@@ -23,19 +23,23 @@ public class FirebaseService {
     private final ObjectMapper objectMapper;
 
     public void sendPushNotification(SendFirebaseServiceRequest sendPushServiceRequest) {
+        String pushToken = sendPushServiceRequest.getPush().getPushToken();
+        // PushToken이 없으면 메소드를 종료
+        if (pushToken == null || pushToken.isEmpty()) return;
+
         Message message = Message.builder()
-            .setApnsConfig(ApnsConfig.builder()
-                .setAps(Aps.builder()
-                    .putAllCustomData(ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto()))
-                    .setSound(sendPushServiceRequest.getSound())
-                    .setAlert(ApsAlert.builder()
-                        .setTitle(PushMessage.TITLE.getText())
-                        .setBody(sendPushServiceRequest.getBody())
+                .setApnsConfig(ApnsConfig.builder()
+                        .setAps(Aps.builder()
+                                .putAllCustomData(ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto()))
+                                .setSound(sendPushServiceRequest.getSound())
+                                .setAlert(ApsAlert.builder()
+                                        .setTitle(PushMessage.TITLE.getText())
+                                        .setBody(sendPushServiceRequest.getBody())
+                                        .build())
+                                .build())
                         .build())
-                    .build())
-                .build())
-            .setToken(sendPushServiceRequest.getPush().getPushToken())
-            .build();
+                .setToken(pushToken)
+                .build();
 
         try {
             firebaseMessaging.send(message);
