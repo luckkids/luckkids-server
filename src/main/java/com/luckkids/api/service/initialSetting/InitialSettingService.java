@@ -31,6 +31,11 @@ public class InitialSettingService {
     private final SecurityService securityService;
 
     public InitialSettingResponse initialSetting(InitialSettingServiceRequest request) {
+        int userId = securityService.getCurrentLoginUserInfo().getUserId();
+        User user = userReadService.findByOne(userId);
+
+        user.checkSettingStatus();
+
         List<InitialSettingMissionResponse> initialSettingMissionResponses = request.getMissions().stream()
             .map(initialSettingMissionServiceRequest ->
                 missionService.createMission(initialSettingMissionServiceRequest.toMissionServiceRequest(request.getAlertSetting().getAlertStatus())).toInitialSettingResponse())
@@ -40,8 +45,6 @@ public class InitialSettingService {
 
         InitialSettingAlertResponse initialSettingAlertResponse = alertSettingService.createAlertSetting(request.getAlertSetting().toServiceRequest()).toInitialSettingResponse();
 
-        int userId = securityService.getCurrentLoginUserInfo().getUserId();
-        User user = userReadService.findByOne(userId);
         user.updateSettingStatus(COMPLETE);
 
         return InitialSettingResponse.of(initialSettingAlertResponse, initialSettingCharacterResponse, initialSettingMissionResponses);

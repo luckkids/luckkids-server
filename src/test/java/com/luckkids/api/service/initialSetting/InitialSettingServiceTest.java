@@ -1,6 +1,7 @@
 package com.luckkids.api.service.initialSetting;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.service.initialSetting.request.InitialSettingAlertServiceRequest;
 import com.luckkids.api.service.initialSetting.request.InitialSettingCharacterServiceRequest;
 import com.luckkids.api.service.initialSetting.request.InitialSettingMissionServiceRequest;
@@ -39,8 +40,8 @@ import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.user.SettingStatus.COMPLETE;
 import static com.luckkids.domain.user.SettingStatus.INCOMPLETE;
 import static com.luckkids.domain.user.SnsType.NORMAL;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 public class InitialSettingServiceTest extends IntegrationTestSupport {
@@ -156,6 +157,57 @@ public class InitialSettingServiceTest extends IntegrationTestSupport {
 
         assertThat(initialSettingAlertResponse).extracting("entire", "mission", "luck", "notice", "luckMessageAlertTime")
             .containsExactly(CHECKED, CHECKED, CHECKED, CHECKED, LocalTime.of(7,0));
+    }
+
+    @DisplayName("사용자의 초기세팅이 이미 저장되어 있을 시 예외를 발생시킨다.")
+    @Test
+    @Transactional
+    void createAgainTest() {
+        //given
+        User user = createUser(1);
+        Push push = createPush(user);
+        pushRepository.save(push);
+
+        LuckkidsCharacter luckkidsCharacter = luckkidsCharacterRepository.save(createCharacter(CharacterType.SUN));
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createLoginUserInfo(user.getId()));
+
+        InitialSettingCharacterServiceRequest initialSettingCharacterServiceRequest = InitialSettingCharacterServiceRequest.builder()
+                .id(luckkidsCharacter.getId())
+                .nickName("럭키즈!!")
+                .build();
+
+        List<InitialSettingMissionServiceRequest> initialSettingMissionServiceRequests = new ArrayList<>();
+
+        IntStream.rangeClosed(1, 10).forEach(i -> {
+            initialSettingMissionServiceRequests.add(
+                    InitialSettingMissionServiceRequest.builder()
+                            .missionType(MissionType.HEALTH)
+                            .missionDescription(i + "시에 운동하기")
+                            .alertStatus(CHECKED)
+                            .alertTime(LocalTime.of(0, 0))
+                            .build()
+            );
+        });
+
+        InitialSettingAlertServiceRequest initialSettingAlertServiceRequest = InitialSettingAlertServiceRequest.builder()
+                .deviceId("testDeviceId")
+                .alertStatus(CHECKED)
+                .build();
+
+        InitialSettingServiceRequest initialSettingServiceRequest = InitialSettingServiceRequest.builder()
+                .character(initialSettingCharacterServiceRequest)
+                .missions(initialSettingMissionServiceRequests)
+                .alertSetting(initialSettingAlertServiceRequest)
+                .build();
+
+        initialSettingService.initialSetting(initialSettingServiceRequest);
+
+        //when then
+        assertThatThrownBy(() -> initialSettingService.initialSetting(initialSettingServiceRequest))
+                .isInstanceOf(LuckKidsException.class)
+                .hasMessage("이미 초기세팅이 되어있는 사용자입니다.");
     }
 
     private User createUser(int i) {
