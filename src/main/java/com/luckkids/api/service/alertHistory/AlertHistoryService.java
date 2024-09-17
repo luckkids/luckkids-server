@@ -3,6 +3,7 @@ package com.luckkids.api.service.alertHistory;
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
 import com.luckkids.api.service.alertHistory.response.AlertHistoryStatusResponse;
@@ -12,6 +13,7 @@ import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AlertHistoryService {
 
