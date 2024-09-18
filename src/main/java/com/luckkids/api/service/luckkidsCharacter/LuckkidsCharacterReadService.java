@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.luckkidsCharacter.response.LuckCharacterRandResponse;
+import com.luckkids.api.service.luckkidsCharacter.response.LuckkidsCharacterRandResponse;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
 
@@ -26,8 +26,8 @@ public class LuckkidsCharacterReadService {
 			.orElseThrow(() -> new LuckKidsException(ErrorCode.LUCKKIDS_CHARACTER_UNKNOWN));
 	}
 
-	public LuckCharacterRandResponse findRandomCharacterLevel1() {
-		return LuckCharacterRandResponse.of(findRandomLuckkidsCharacterLevel1());
+	public LuckkidsCharacterRandResponse findRandomCharacterLevel1() {
+		return LuckkidsCharacterRandResponse.of(findRandomLuckkidsCharacterLevel1());
 	}
 
 }

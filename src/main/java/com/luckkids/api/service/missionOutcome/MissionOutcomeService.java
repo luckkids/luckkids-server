@@ -71,6 +71,6 @@ public class MissionOutcomeService {
 			UserCharacterLevelUpResponse userCharacterLevelUpResponse = userCharacterService.determineLevelUp(user);
 			return userCharacterLevelUpResponse.toMissionOutcomeUpdateResponse();
 		}
-		return MissionOutcomeUpdateResponse.of(false, 0, null, null, null);
+		return MissionOutcomeUpdateResponse.of(false, null, 0);
 	}
 }

@@ -11,29 +11,21 @@ import lombok.NoArgsConstructor;
 public class MissionOutcomeUpdateResponse {
 
 	private boolean levelUpResult;
-	private int level;
 	private CharacterType characterType;
-	private String lottieFile;
-	private String imageFile;
+	private int level;
 
 	@Builder
-	public MissionOutcomeUpdateResponse(boolean levelUpResult, int level, CharacterType characterType,
-		String lottieFile, String imageFile) {
+	public MissionOutcomeUpdateResponse(boolean levelUpResult, CharacterType characterType, int level) {
 		this.levelUpResult = levelUpResult;
-		this.level = level;
 		this.characterType = characterType;
-		this.lottieFile = lottieFile;
-		this.imageFile = imageFile;
+		this.level = level;
 	}
 
-	public static MissionOutcomeUpdateResponse of(boolean levelUpResult, int level, CharacterType characterType,
-		String lottieFile, String imageFile) {
+	public static MissionOutcomeUpdateResponse of(boolean levelUpResult, CharacterType characterType, int level) {
 		return MissionOutcomeUpdateResponse.builder()
 			.levelUpResult(levelUpResult)
-			.level(level)
 			.characterType(characterType)
-			.lottieFile(lottieFile)
-			.imageFile(imageFile)
+			.level(level)
 			.build();
 	}
 }

@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
 import com.luckkids.api.service.userCharacter.response.UserCharacterSummaryResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
 import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDto;
 import com.luckkids.domain.userCharacter.projection.UserCharacterSummaryDto;
@@ -209,7 +211,7 @@ public class HomeControllerDocsTest extends RestDocsSupport {
 							.description("진행 중인 캐릭터 정보"),
 						fieldWithPath("data.userCharacterSummaryResponse.inProgressCharacter.characterType").type(
 								JsonFieldType.STRING)
-							.description("캐릭터 타입"),
+							.description("캐릭터 타입, 가능한값: " + Arrays.toString(CharacterType.values())),
 						fieldWithPath("data.userCharacterSummaryResponse.inProgressCharacter.level").type(
 								JsonFieldType.NUMBER)
 							.description("캐릭터 레벨"),

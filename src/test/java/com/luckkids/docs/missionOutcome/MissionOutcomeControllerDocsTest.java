@@ -34,6 +34,7 @@ import com.luckkids.api.service.missionOutcome.response.MissionOutcomeCountRespo
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.MissionType;
@@ -58,10 +59,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 			.build();
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
-			.willReturn(
-				MissionOutcomeUpdateResponse.of(true, 2, CLOVER, "https://test.cloudfront.net/test2.json",
-					"https://test.cloudfront.net/test2.png")
-			);
+			.willReturn(MissionOutcomeUpdateResponse.of(true, CLOVER, 2));
 
 		// when // then
 		mockMvc.perform(
@@ -93,14 +91,10 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 						.description("응답 데이터"),
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
-					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-						.description("캐릭터 레벨"),
 					fieldWithPath("data.characterType").type(JsonFieldType.STRING)
-						.description("캐릭터 타입"),
-					fieldWithPath("data.lottieFile").type(JsonFieldType.STRING)
-						.description("레벨업한 캐릭터 로티 파일"),
-					fieldWithPath("data.imageFile").type(JsonFieldType.STRING)
-						.description("레벨업한 캐릭터 이미지 파일")
+						.description("럭키즈 캐릭터 타입, 가능한값: " + Arrays.toString(CharacterType.values())),
+					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+						.description("캐릭터 레벨")
 				)
 			));
 	}
@@ -116,7 +110,7 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 
 		given(missionOutcomeService.updateMissionOutcome(1L, request.getMissionStatus()))
 			.willReturn(
-				MissionOutcomeUpdateResponse.of(false, 0, null, null, null)
+				MissionOutcomeUpdateResponse.of(false, null, 0)
 			);
 
 		// when // then
@@ -149,14 +143,10 @@ public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 						.description("응답 데이터"),
 					fieldWithPath("data.levelUpResult").type(JsonFieldType.BOOLEAN)
 						.description("레벨업 여부"),
-					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
-						.description("캐릭터 레벨"),
 					fieldWithPath("data.characterType").type(JsonFieldType.NULL)
-						.description("캐릭터 타입"),
-					fieldWithPath("data.lottieFile").type(JsonFieldType.NULL)
-						.description("레벨업한 캐릭터 로티 파일"),
-					fieldWithPath("data.imageFile").type(JsonFieldType.NULL)
-						.description("레벨업한 캐릭터 이미지 파일")
+						.description("캐릭터 타입, 가능한값: " + Arrays.toString(CharacterType.values())),
+					fieldWithPath("data.level").type(JsonFieldType.NUMBER)
+						.description("캐릭터 레벨")
 				)
 			));
 	}

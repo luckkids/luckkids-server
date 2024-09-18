@@ -160,10 +160,8 @@ class UserReadServiceTest extends IntegrationTestSupport {
 		User user4 = createUser("test4@gmail.com", "test1234", NORMAL, "테스트4", "테스트4의 행운문구", 150);
 		userRepository.saveAll(List.of(user1, user2, user3, user4));
 
-		LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1,
-			"https://test.cloudfront.net/캐릭터1.json", "https://test.cloudfront.net/캐릭터1.png");
-		LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 3,
-			"https://test.cloudfront.net/캐릭터3.json", "https://test.cloudfront.net/캐릭터3.png");
+		LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1);
+		LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 3);
 		luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
 
 		UserCharacter userCharacter1 = createUserCharacter(user1, luckkidsCharacter1);
@@ -177,11 +175,11 @@ class UserReadServiceTest extends IntegrationTestSupport {
 
 		// then
 		assertThat(userLeagues)
-			.extracting("nickname", "imageFileUrl", "characterCount")
+			.extracting("nickname", "characterType", "level", "characterCount")
 			.containsExactly(
-				tuple("테스트2", "https://test.cloudfront.net/캐릭터1.png", 2),
-				tuple("테스트4", "https://test.cloudfront.net/캐릭터1.png", 1),
-				tuple("테스트3", "https://test.cloudfront.net/캐릭터3.png", 1)
+				tuple("테스트2", CLOVER, 1, 2),
+				tuple("테스트4", CLOVER, 1, 1),
+				tuple("테스트3", CLOVER, 3, 1)
 			);
 	}
 
@@ -233,15 +231,11 @@ class UserReadServiceTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level, String lottieFile,
-		String imageFile) {
+	private LuckkidsCharacter createLuckkidsCharacter(CharacterType characterType, int level) {
 		return LuckkidsCharacter.builder()
 			.characterType(characterType)
 			.level(level)
-			.lottieFile(lottieFile)
-			.imageFile(imageFile)
 			.build();
-
 	}
 
 	private UserCharacter createUserCharacter(User user, LuckkidsCharacter luckkidsCharacter) {
