@@ -8,14 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InitialSettingCharacterResponse {
 
-    private int id;
-    private String lottieFile;
-    private String nickName;
+	private int id;
+	private String nickName;
 
-    @Builder
-    private InitialSettingCharacterResponse(int id, String lottieFile, String nickName) {
-        this.id = id;
-        this.lottieFile = lottieFile;
-        this.nickName = nickName;
-    }
+	@Builder
+	private InitialSettingCharacterResponse(int id, String nickName) {
+		this.id = id;
+		this.nickName = nickName;
+	}
 }

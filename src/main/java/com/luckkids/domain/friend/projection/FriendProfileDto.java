@@ -1,23 +1,28 @@
 package com.luckkids.domain.friend.projection;
 
+import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.userCharacter.Level;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class FriendProfileDto {
-    private int friendId;
-    private String nickname;
-    private String luckPhrase;
-    private String imageFileUrl;
-    private int characterCount;
+	private int friendId;
+	private String nickname;
+	private String luckPhrase;
+	private CharacterType characterType;
+	private int level;
+	private int characterCount;
 
-    public FriendProfileDto(int friendId, String nickname, String luckPhrase, String imageFileUrl, int missionCount) {
-        this.friendId = friendId;
-        this.nickname = nickname;
-        this.luckPhrase = luckPhrase;
-        this.imageFileUrl = imageFileUrl;
-        this.characterCount = missionCount / Level.LEVEL_MAX.getScoreThreshold();
-    }
+	public FriendProfileDto(int friendId, String nickname, String luckPhrase, CharacterType characterType, int level,
+		int missionCount) {
+		this.friendId = friendId;
+		this.nickname = nickname;
+		this.luckPhrase = luckPhrase;
+		this.characterType = characterType;
+		this.level = level;
+		this.characterCount = missionCount / Level.LEVEL_MAX.getScoreThreshold();
+	}
 }
