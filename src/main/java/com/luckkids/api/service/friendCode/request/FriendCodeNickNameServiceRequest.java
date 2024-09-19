@@ -25,7 +25,7 @@ public class FriendCodeNickNameServiceRequest {
                 .user(user)
                 .alertDescription(PushMessage.GARDEN.getText().replace("{nickName}", user.getNickname()))
                 .alertDestinationType(AlertDestinationType.FRIEND_CODE)
-                .alertDescription(code)
+                .alertDestinationInfo(code)
                 .build();
     }
 

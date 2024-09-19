@@ -1,8 +1,11 @@
 package com.luckkids.api.service.alertHistory;
 
 import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,11 +54,13 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 	     AlertHistoryServiceRequest alertHistoryServiceRequest = AlertHistoryServiceRequest.builder()
 	             .user(user)
 	             .alertDescription("알림테스트 내용")
+				 .alertDestinationType(AlertDestinationType.FRIEND_CODE)
+				 .alertDestinationInfo("테스트")
 	             .build();
 
 	     AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
-	     assertThat(alertHistory).extracting("user", "alertDescription", "alertHistoryStatus")
-	             .contains(user, "알림테스트 내용", AlertHistoryStatus.UNCHECKED);
+	     assertThat(alertHistory).extracting("user", "alertDescription", "alertHistoryStatus", "alertDestinationType", "alertDestinationInfo")
+	             .contains(user, "알림테스트 내용", AlertHistoryStatus.UNCHECKED, AlertDestinationType.FRIEND_CODE, "테스트");
 	 }
 
 	private Push createPush(User user) {
