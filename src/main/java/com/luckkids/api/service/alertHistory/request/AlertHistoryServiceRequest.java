@@ -17,12 +17,14 @@ public class AlertHistoryServiceRequest {
 	private User user;
 	private String alertDescription;
 	private AlertDestinationType alertDestinationType;
+	private String alertDestinationInfo;
 
 	@Builder
-	private AlertHistoryServiceRequest(User user, String alertDescription, AlertDestinationType alertDestinationType) {
+	private AlertHistoryServiceRequest(User user, String alertDescription, AlertDestinationType alertDestinationType, String alertDestinationInfo) {
 		this.user = user;
 		this.alertDescription = alertDescription;
 		this.alertDestinationType = alertDestinationType;
+		this.alertDestinationInfo = alertDestinationInfo;
 	}
 
 	public AlertHistory toEntity() {
@@ -31,6 +33,7 @@ public class AlertHistoryServiceRequest {
 			.alertDescription(alertDescription)
 			.alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
 			.alertDestinationType(alertDestinationType)
+			.alertDestinationInfo(alertDestinationInfo)
 			.build();
 	}
 
@@ -39,6 +42,7 @@ public class AlertHistoryServiceRequest {
 			.user(sendPushServiceRequest.getPush().getUser())
 			.alertDescription(sendPushServiceRequest.getBody())
 			.alertDestinationType(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_type())
+			.alertDestinationInfo(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_info())
 			.build();
 	}
 }
