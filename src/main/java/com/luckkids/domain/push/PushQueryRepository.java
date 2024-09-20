@@ -34,6 +34,7 @@ public class PushQueryRepository {
             case LUCK -> alertSetting.luckMessage.eq(AlertStatus.CHECKED);
             case MISSION -> alertSetting.mission.eq(AlertStatus.CHECKED);
             case NOTICE -> alertSetting.notice.eq(AlertStatus.CHECKED);
+            case FRIEND -> alertSetting.friend.eq(AlertStatus.CHECKED);
             default -> throw new LuckKidsException(ErrorCode.LUCKKIDS_CHARACTER_UNKNOWN);
         };
     }
