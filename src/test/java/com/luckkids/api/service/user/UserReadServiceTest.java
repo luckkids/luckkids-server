@@ -21,6 +21,8 @@ import com.luckkids.api.service.user.request.UserFindEmailServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
 import com.luckkids.api.service.user.response.UserLeagueResponse;
 import com.luckkids.api.service.user.response.UserResponse;
+import com.luckkids.domain.friend.Friend;
+import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
@@ -45,10 +47,14 @@ class UserReadServiceTest extends IntegrationTestSupport {
 	@Autowired
 	private LuckkidsCharacterRepository luckkidsCharacterRepository;
 
+	@Autowired
+	private FriendRepository friendRepository;
+
 	@AfterEach
 	void tearDown() {
 		userCharacterRepository.deleteAllInBatch();
 		luckkidsCharacterRepository.deleteAllInBatch();
+		friendRepository.deleteAllInBatch();
 		userRepository.deleteAllInBatch();
 	}
 
@@ -160,6 +166,11 @@ class UserReadServiceTest extends IntegrationTestSupport {
 		User user4 = createUser("test4@gmail.com", "test1234", NORMAL, "테스트4", "테스트4의 행운문구", 150);
 		userRepository.saveAll(List.of(user1, user2, user3, user4));
 
+		Friend friend1 = createFriend(user1, user2);
+		Friend friend2 = createFriend(user1, user3);
+		Friend friend3 = createFriend(user3, user2);
+		friendRepository.saveAll(List.of(friend1, friend2, friend3));
+
 		LuckkidsCharacter luckkidsCharacter1 = createLuckkidsCharacter(CLOVER, 1);
 		LuckkidsCharacter luckkidsCharacter2 = createLuckkidsCharacter(CLOVER, 3);
 		luckkidsCharacterRepository.saveAll(List.of(luckkidsCharacter1, luckkidsCharacter2));
@@ -170,6 +181,9 @@ class UserReadServiceTest extends IntegrationTestSupport {
 		UserCharacter userCharacter4 = createUserCharacter(user4, luckkidsCharacter1);
 		userCharacterRepository.saveAll(List.of(userCharacter1, userCharacter2, userCharacter3, userCharacter4));
 
+		given(securityService.getCurrentLoginUserInfo())
+			.willReturn(createLoginUserInfo(user1.getId()));
+
 		// when
 		List<UserLeagueResponse> userLeagues = userReadService.getUserLeagueTop3();
 
@@ -178,7 +192,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
 			.extracting("nickname", "characterType", "level", "characterCount")
 			.containsExactly(
 				tuple("테스트2", CLOVER, 1, 2),
-				tuple("테스트4", CLOVER, 1, 1),
+				tuple(null, CLOVER, 1, 1),
 				tuple("테스트3", CLOVER, 3, 1)
 			);
 	}
@@ -228,6 +242,13 @@ class UserReadServiceTest extends IntegrationTestSupport {
 			.role(USER)
 			.settingStatus(COMPLETE)
 			.missionCount(missionCount)
+			.build();
+	}
+
+	private Friend createFriend(User requester, User receiver) {
+		return Friend.builder()
+			.requester(requester)
+			.receiver(receiver)
 			.build();
 	}
 

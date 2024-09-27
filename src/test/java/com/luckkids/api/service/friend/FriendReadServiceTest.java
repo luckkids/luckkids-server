@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -191,6 +192,28 @@ class FriendReadServiceTest extends IntegrationTestSupport {
 		check = friendReadService.checkFriendStatus(friendStatusRequest);
 
 		assertThat(check).isFalse();
+	}
+
+	@DisplayName("수신자 id을 받아 친구 id리스트를 조회한다.")
+	@Test
+	void getFriendIdList() {
+		// given
+		User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+		User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
+		User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 0);
+
+		userRepository.saveAll(List.of(user1, user2, user3));
+
+		Friend friend1 = createFriend(user1, user2);
+		Friend friend2 = createFriend(user1, user3);
+		Friend friend3 = createFriend(user3, user2);
+		friendRepository.saveAll(List.of(friend1, friend2, friend3));
+
+		// when
+		Set<Integer> friendIds = friendReadService.getFriendIds(user1.getId());
+
+		// then
+		assertThat(friendIds).hasSize(2).isEqualTo(Set.of(user2.getId(), user3.getId()));
 	}
 
 	private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {

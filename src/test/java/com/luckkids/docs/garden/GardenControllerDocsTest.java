@@ -179,7 +179,7 @@ public class GardenControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data[]").type(JsonFieldType.ARRAY)
 						.description("응답 데이터"),
 					fieldWithPath("data[].nickname").type(JsonFieldType.STRING)
-						.description("닉네임"),
+						.description("닉네임 (null 가능)"),
 					fieldWithPath("data[].characterType").type(JsonFieldType.STRING)
 						.description("캐릭터 타입, 가능한값: " + Arrays.toString(CharacterType.values())),
 					fieldWithPath("data[].level").type(JsonFieldType.NUMBER)
