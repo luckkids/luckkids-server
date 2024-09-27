@@ -15,6 +15,7 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
+import com.luckkids.domain.user.projection.InProgressCharacterDto;
 import com.luckkids.domain.user.projection.MyProfileDto;
 import com.luckkids.domain.user.projection.UserLeagueDto;
 import com.luckkids.domain.userCharacter.UserCharacter;
@@ -55,6 +56,28 @@ class UserQueryRepositoryTest extends IntegrationTestSupport {
 		assertThat(myProfile)
 			.extracting("myId", "nickname", "luckPhrase", "characterType", "level", "characterCount")
 			.contains(user.getId(), "테스트1", "테스트1의 행운문구", CLOVER, 1, 0);
+	}
+
+	@DisplayName("현재 진행중인 캐릭터 정보를 조회한다.")
+	@Test
+	void getInProgressCharacter() {
+		// given
+		User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+		userRepository.save(user);
+
+		LuckkidsCharacter luckkidsCharacter = createLuckkidsCharacter(CLOVER, 1);
+		luckkidsCharacterRepository.save(luckkidsCharacter);
+
+		UserCharacter userCharacter = createUserCharacter(user, luckkidsCharacter);
+		userCharacterRepository.save(userCharacter);
+
+		// when
+		InProgressCharacterDto inProgressCharacter = userQueryRepository.getInProgressCharacter(user.getId());
+
+		// then
+		assertThat(inProgressCharacter)
+			.extracting("characterType", "level")
+			.contains(CLOVER, 1);
 	}
 
 	@DisplayName("유저들의 1-3위까지 리그 정보를 조회한다.")

@@ -4,6 +4,7 @@ import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.projection.InProgressCharacterDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,11 @@ public class UserResponse {
 	private SettingStatus settingStatus;
 	private int missionCount;
 
+	private InProgressCharacterDto inProgressCharacter;
+
 	@Builder
 	private UserResponse(String email, String nickname, SnsType snsType, String luckPhrase, Role role,
-		SettingStatus settingStatus, int missionCount) {
+		SettingStatus settingStatus, int missionCount, InProgressCharacterDto inProgressCharacter) {
 		this.email = email;
 		this.nickname = nickname;
 		this.snsType = snsType;
@@ -31,9 +34,10 @@ public class UserResponse {
 		this.role = role;
 		this.settingStatus = settingStatus;
 		this.missionCount = missionCount;
+		this.inProgressCharacter = inProgressCharacter;
 	}
 
-	public static UserResponse of(User user) {
+	public static UserResponse of(User user, InProgressCharacterDto inProgressCharacter) {
 		return UserResponse.builder()
 			.email(user.getEmail())
 			.nickname(user.getNickname())
@@ -42,6 +46,7 @@ public class UserResponse {
 			.role(user.getRole())
 			.settingStatus(user.getSettingStatus())
 			.missionCount(user.getMissionCount())
+			.inProgressCharacter(inProgressCharacter)
 			.build();
 	}
 }

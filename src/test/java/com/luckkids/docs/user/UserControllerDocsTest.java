@@ -1,5 +1,6 @@
 package com.luckkids.docs.user;
 
+import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
@@ -39,6 +40,7 @@ import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
+import com.luckkids.domain.user.projection.InProgressCharacterDto;
 
 public class UserControllerDocsTest extends RestDocsSupport {
 
@@ -64,6 +66,9 @@ public class UserControllerDocsTest extends RestDocsSupport {
 					.role(Role.USER)
 					.settingStatus(SettingStatus.COMPLETE)
 					.missionCount(0)
+					.inProgressCharacter(
+						new InProgressCharacterDto(CLOVER, 1)
+					)
 					.build()
 			);
 
@@ -97,7 +102,11 @@ public class UserControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
 						.description("초기세팅상태"),
 					fieldWithPath("data.missionCount").type(JsonFieldType.NUMBER)
-						.description("미션성공갯수")
+						.description("미션성공갯수"),
+					fieldWithPath("data.inProgressCharacter.characterType").type(JsonFieldType.STRING)
+						.description("진행중인 캐릭터 타입"),
+					fieldWithPath("data.inProgressCharacter.level").type(JsonFieldType.NUMBER)
+						.description("진행중인 캐릭터 레벨")
 				)
 			));
 	}
@@ -118,6 +127,9 @@ public class UserControllerDocsTest extends RestDocsSupport {
 					.role(Role.USER)
 					.settingStatus(SettingStatus.COMPLETE)
 					.missionCount(0)
+					.inProgressCharacter(
+						new InProgressCharacterDto(CLOVER, 1)
+					)
 					.build()
 			);
 
@@ -155,7 +167,11 @@ public class UserControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data.settingStatus").type(JsonFieldType.STRING)
 						.description("초기세팅상태"),
 					fieldWithPath("data.missionCount").type(JsonFieldType.NUMBER)
-						.description("미션성공갯수")
+						.description("미션성공갯수"),
+					fieldWithPath("data.inProgressCharacter.characterType").type(JsonFieldType.STRING)
+						.description("진행중인 캐릭터 타입"),
+					fieldWithPath("data.inProgressCharacter.level").type(JsonFieldType.NUMBER)
+						.description("진행중인 캐릭터 레벨")
 				)
 			));
 	}

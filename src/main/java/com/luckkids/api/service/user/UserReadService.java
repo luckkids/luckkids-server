@@ -16,6 +16,7 @@ import com.luckkids.api.service.user.response.UserResponse;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserQueryRepository;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.user.projection.InProgressCharacterDto;
 import com.luckkids.domain.user.projection.UserLeagueDto;
 
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,11 @@ public class UserReadService {
 
 	public UserResponse findByMe() {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
-		return UserResponse.of(this.findByOne(userId));
+		return UserResponse.of(findByOne(userId), getInProgressCharacter(userId));
 	}
 
 	public UserResponse findById(int userId) {
-		return UserResponse.of(this.findByOne(userId));
+		return UserResponse.of(findByOne(userId), getInProgressCharacter(userId));
 	}
 
 	public User findByEmail(String email) {
@@ -63,5 +64,9 @@ public class UserReadService {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 		User user = this.findByOne(userId);
 		return user.calculateAchievementRate();
+	}
+
+	private InProgressCharacterDto getInProgressCharacter(int userId) {
+		return userQueryRepository.getInProgressCharacter(userId);
 	}
 }
