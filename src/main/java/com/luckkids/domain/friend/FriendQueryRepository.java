@@ -2,6 +2,7 @@ package com.luckkids.domain.friend;
 
 import static com.luckkids.domain.friend.QFriend.*;
 import static com.luckkids.domain.user.QUser.*;
+import static com.luckkids.domain.userCharacter.CharacterProgressStatus.*;
 import static com.luckkids.domain.userCharacter.QUserCharacter.*;
 import static java.util.Optional.*;
 
@@ -39,7 +40,8 @@ public class FriendQueryRepository {
 			.join(friend.receiver, user)
 			.join(user.userCharacter, userCharacter)
 			.where(
-				isRequesterIdEqualTo(userId)
+				isRequesterIdEqualTo(userId),
+				userCharacter.characterProgressStatus.eq(IN_PROGRESS)
 			)
 			.orderBy(user.missionCount.desc())
 			.offset(pageable.getOffset())

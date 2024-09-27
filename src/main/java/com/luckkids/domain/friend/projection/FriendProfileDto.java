@@ -4,10 +4,8 @@ import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.userCharacter.Level;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class FriendProfileDto {
 	private int friendId;
 	private String nickname;
