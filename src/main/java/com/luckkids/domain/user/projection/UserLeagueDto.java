@@ -8,12 +8,14 @@ import lombok.Getter;
 
 @Getter
 public class UserLeagueDto {
+	private int id;
 	private String nickname;
 	private CharacterType characterType;
 	private int level;
 	private int characterCount;
 
-	public UserLeagueDto(String nickname, CharacterType characterType, int level, int missionCount) {
+	public UserLeagueDto(int id, String nickname, CharacterType characterType, int level, int missionCount) {
+		this.id = id;
 		this.nickname = nickname;
 		this.characterType = characterType;
 		this.level = level;

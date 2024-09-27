@@ -1,6 +1,7 @@
 package com.luckkids.api.service.user.response;
 
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
+import com.luckkids.domain.user.projection.UserLeagueDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,5 +21,23 @@ public class UserLeagueResponse {
 		this.characterType = characterType;
 		this.level = level;
 		this.characterCount = characterCount;
+	}
+
+	public static UserLeagueResponse withoutNickname(UserLeagueDto dto) {
+		return UserLeagueResponse.builder()
+			.nickname(null)
+			.characterType(dto.getCharacterType())
+			.level(dto.getLevel())
+			.characterCount(dto.getCharacterCount())
+			.build();
+	}
+
+	public static UserLeagueResponse withNickname(UserLeagueDto dto) {
+		return UserLeagueResponse.builder()
+			.nickname(dto.getNickname())
+			.characterType(dto.getCharacterType())
+			.level(dto.getLevel())
+			.characterCount(dto.getCharacterCount())
+			.build();
 	}
 }

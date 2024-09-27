@@ -60,6 +60,7 @@ public class UserQueryRepository {
 	public List<UserLeagueDto> getUserLeagueTop3() {
 		return jpaQueryFactory
 			.select(Projections.constructor(UserLeagueDto.class,
+				user.id,
 				user.nickname,
 				luckkidsCharacter.characterType,
 				luckkidsCharacter.level,
