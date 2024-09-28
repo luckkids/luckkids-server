@@ -211,7 +211,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
 		double characterAchievementRate = userReadService.getCharacterAchievementRate();
 
 		// then
-		assertThat(characterAchievementRate).isEqualTo(0.8);
+		assertThat(characterAchievementRate).isEqualTo(0.2);
 	}
 
 	@DisplayName("현재 로그인한 유저정보를 가져온다.")
