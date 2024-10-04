@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +45,11 @@ public class MissionReadService {
 
 		Map<MissionType, List<MissionResponse>> missionMap = missions.stream()
 			.map(MissionResponse::of)
-			.collect(groupingBy(MissionResponse::getMissionType));
+			.collect(groupingBy(MissionResponse::getMissionType, TreeMap::new, toList()));
 
 		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMisisonMap = luckkidsMissions.stream()
 			.map(RemainingLuckkidsMissionResponse::of)
-			.collect(groupingBy(RemainingLuckkidsMissionResponse::getMissionType));
+			.collect(groupingBy(RemainingLuckkidsMissionResponse::getMissionType, TreeMap::new, toList()));
 
 		return MissionAggregateResponse.of(missionMap, luckkidsMisisonMap);
 	}
