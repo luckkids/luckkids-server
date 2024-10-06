@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,13 +24,19 @@ public class PushService {
     private final SecurityService securityService;
 
     public void sendPushAlertType(SendPushAlertTypeServiceRequest sendPushAlertTypeRequest){
+        Set<String> pushTokenSet = new HashSet<>();
         for(Push push : pushReadService.findAllByAlertType(sendPushAlertTypeRequest.getAlertType())){
-            firebaseService.sendPushNotification(sendPushAlertTypeRequest.toSendPushServiceRequest(push));
+            String pushToken = null;
+            if(!pushTokenSet.contains(push.getPushToken())) {
+                pushToken = push.getPushToken();
+            }
+            firebaseService.sendPushNotification(sendPushAlertTypeRequest.toSendPushServiceRequest(push), pushToken);
+            pushTokenSet.add(pushToken);
         }
     }
 
     public void sendPushToUser(SendPushServiceRequest sendPushServiceRequest){
-        firebaseService.sendPushNotification(sendPushServiceRequest.toSendPushServiceRequest());
+        firebaseService.sendPushNotification(sendPushServiceRequest.toSendPushServiceRequest(), sendPushServiceRequest.getPush().getPushToken());
     }
 
     public PushSoundChangeResponse updateSound(PushSoundChangeServiceRequest pushChangeServiceRequest){

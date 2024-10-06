@@ -47,7 +47,7 @@ public class FirebaseServiceTest extends IntegrationTestSupport {
             .sound("테스트 sound")
             .build();
 
-        firebaseService.sendPushNotification(sendPushServiceRequest);
+        firebaseService.sendPushNotification(sendPushServiceRequest, push.getPushToken());
     }
 
     private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {

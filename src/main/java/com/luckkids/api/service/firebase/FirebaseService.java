@@ -8,6 +8,7 @@ import com.luckkids.api.service.firebase.request.SendFirebaseDataDto;
 import com.luckkids.api.service.firebase.request.SendFirebaseServiceRequest;
 import com.luckkids.domain.push.PushMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,37 +17,40 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class FirebaseService {
 
     private final FirebaseMessaging firebaseMessaging;
     private final AlertHistoryService alertHistoryService;
     private final ObjectMapper objectMapper;
 
-    public void sendPushNotification(SendFirebaseServiceRequest sendPushServiceRequest) {
-        String pushToken = sendPushServiceRequest.getPush().getPushToken();
-        // PushToken이 없으면 메소드를 종료
-        if (pushToken == null || pushToken.isEmpty()) return;
-
-        Message message = Message.builder()
-                .setApnsConfig(ApnsConfig.builder()
-                        .setAps(Aps.builder()
-                                .putAllCustomData(ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto()))
-                                .setSound(sendPushServiceRequest.getSound())
-                                .setAlert(ApsAlert.builder()
-                                        .setTitle(PushMessage.TITLE.getText())
-                                        .setBody(sendPushServiceRequest.getBody())
+    public void sendPushNotification(SendFirebaseServiceRequest sendPushServiceRequest, String pushToken) {
+        try {
+            // PushToken이 있으면 푸시전송
+            if (pushToken != null) {
+                Message message = Message.builder()
+                        .setApnsConfig(ApnsConfig.builder()
+                                .setAps(Aps.builder()
+                                        .putAllCustomData(ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto()))
+                                        .setSound(sendPushServiceRequest.getSound())
+                                        .setAlert(ApsAlert.builder()
+                                                .setTitle(PushMessage.TITLE.getText())
+                                                .setBody(sendPushServiceRequest.getBody())
+                                                .build())
                                         .build())
                                 .build())
-                        .build())
-                .setToken(pushToken)
-                .build();
+                        .setToken(pushToken)
+                        .build();
 
-        try {
-            firebaseMessaging.send(message);
-            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
+                firebaseMessaging.send(message);
+            }
         } catch (FirebaseMessagingException e){
-            throw new IllegalArgumentException(e.getMessage());
+            log.error("Token: "+ pushToken + "Error: " + e.getMessage());
+        } finally {
+            //히스토리는 무조건 쌓는걸로
+            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
         }
+
     }
 
     private Map<String, Object> ObjectToMap(SendFirebaseDataDto sendFirebaseDataDto){
