@@ -8,6 +8,7 @@ import com.luckkids.api.service.firebase.request.SendFirebaseDataDto;
 import com.luckkids.api.service.firebase.request.SendFirebaseServiceRequest;
 import com.luckkids.domain.push.PushMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class FirebaseService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -45,7 +47,7 @@ public class FirebaseService {
             firebaseMessaging.send(message);
             alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
         } catch (FirebaseMessagingException e){
-            throw new IllegalArgumentException(e.getMessage());
+            log.error("Token: "+ pushToken + "Error: " + e.getMessage());
         }
     }
 
