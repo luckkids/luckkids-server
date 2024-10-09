@@ -188,6 +188,10 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 							createMissionResponse(1, 1, HEALTH, "운동하기", TRUE, CHECKED, LocalTime.of(18, 0)),
 							createMissionResponse(2, 3, HEALTH, "물 마시기", TRUE, UNCHECKED, LocalTime.of(20, 0))
 						),
+						SELF_CARE, List.of(),
+						HOUSEKEEPING, List.of(),
+						MINDSET, List.of(),
+						WORK, List.of(),
 						SELF_DEVELOPMENT, List.of(
 							createMissionResponse(3, 4, SELF_DEVELOPMENT, "공부하기", FALSE, CHECKED,
 								LocalTime.of(21, 0)),
@@ -199,9 +203,13 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 						HEALTH, List.of(
 							createLuckkidsMissionResponse(2, HEALTH, "요가하기", LocalTime.of(18, 0))
 						),
+						SELF_CARE, List.of(),
+						HOUSEKEEPING, List.of(),
+						MINDSET, List.of(),
 						WORK, List.of(
 							createLuckkidsMissionResponse(5, WORK, "일 열심히 하기", LocalTime.of(13, 0))
-						)
+						),
+						SELF_DEVELOPMENT, List.of()
 					)
 				)
 			);
@@ -221,11 +229,27 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
 					fieldWithPath("data.userMissions.HEALTH[]").type(JsonFieldType.ARRAY)
 						.description("유저의 건강 관련 미션"),
+					fieldWithPath("data.userMissions.SELF_CARE[]").type(JsonFieldType.ARRAY)
+						.description("유저의 셀프케어 관련 미션"),
+					fieldWithPath("data.userMissions.HOUSEKEEPING[]").type(JsonFieldType.ARRAY)
+						.description("유저의 집 정돈 관련 미션"),
+					fieldWithPath("data.userMissions.MINDSET[]").type(JsonFieldType.ARRAY)
+						.description("유저의 마인드셋 관련 미션"),
+					fieldWithPath("data.userMissions.WORK[]").type(JsonFieldType.ARRAY)
+						.description("유저의 일 관련 미션"),
 					fieldWithPath("data.userMissions.SELF_DEVELOPMENT[]").type(JsonFieldType.ARRAY)
 						.description("유저의 자기 계발 관련 미션"),
 					fieldWithPath("data.luckkidsMissions.HEALTH[]").type(JsonFieldType.ARRAY)
 						.description("선택하지 않은 럭키즈 대표 건강 관련 미션"),
+					fieldWithPath("data.luckkidsMissions.SELF_CARE[]").type(JsonFieldType.ARRAY)
+						.description("선택하지 않은 럭키즈 대표 셀프케어 관련 미션"),
+					fieldWithPath("data.luckkidsMissions.HOUSEKEEPING[]").type(JsonFieldType.ARRAY)
+						.description("선택하지 않은 럭키즈 대표 집 정돈 관련 미션"),
+					fieldWithPath("data.luckkidsMissions.MINDSET[]").type(JsonFieldType.ARRAY)
+						.description("선택하지 않은 럭키즈 대표 마인드셋 관련 미션"),
 					fieldWithPath("data.luckkidsMissions.WORK[]").type(JsonFieldType.ARRAY)
+						.description("선택하지 않은 럭키즈 대표 일 관련 미션"),
+					fieldWithPath("data.luckkidsMissions.SELF_DEVELOPMENT[]").type(JsonFieldType.ARRAY)
 						.description("선택하지 않은 럭키즈 대표 자기 계발 관련 미션")
 				)
 					.andWithPrefix("data.userMissions.HEALTH[].", missionResponseFields())

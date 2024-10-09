@@ -1,10 +1,10 @@
 package com.luckkids.api.service.mission;
 
-import static java.util.stream.Collectors.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,18 +39,30 @@ public class MissionReadService {
 	public MissionAggregateResponse getMission() {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 
+		Map<MissionType, List<MissionResponse>> missionMap = initializeMissionMap();
+		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMissionMap = initializeMissionMap();
+
 		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNull(userId);
 		List<LuckkidsMission> luckkidsMissions = luckkidsMissionQueryRepository.findLuckkidsMissionsWithoutUserMission(
 			userId);
 
-		Map<MissionType, List<MissionResponse>> missionMap = missions.stream()
+		missions.stream()
 			.map(MissionResponse::of)
-			.collect(groupingBy(MissionResponse::getMissionType, TreeMap::new, toList()));
+			.forEach(missionResponse ->
+				missionMap.get(missionResponse.getMissionType()).add(missionResponse)
+			);
 
-		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMisisonMap = luckkidsMissions.stream()
+		luckkidsMissions.stream()
 			.map(RemainingLuckkidsMissionResponse::of)
-			.collect(groupingBy(RemainingLuckkidsMissionResponse::getMissionType, TreeMap::new, toList()));
+			.forEach(luckkidsMissionResponse ->
+				luckkidsMissionMap.get(luckkidsMissionResponse.getMissionType()).add(luckkidsMissionResponse)
+			);
 
-		return MissionAggregateResponse.of(missionMap, luckkidsMisisonMap);
+		return MissionAggregateResponse.of(missionMap, luckkidsMissionMap);
+	}
+
+	private <T> Map<MissionType, List<T>> initializeMissionMap() {
+		return Arrays.stream(MissionType.values())
+			.collect(Collectors.toMap(missionType -> missionType, missionType -> new ArrayList<>()));
 	}
 }
