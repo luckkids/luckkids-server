@@ -28,7 +28,7 @@ public class FriendCodeController {
 
     @GetMapping("/{code}/nickname")
     public ApiResponse<FriendCodeNickNameResponse> findNickNameByCode(@PathVariable String code) {
-        return ApiResponse.ok(friendCodeReadService.findNickNameByCode(
+        return ApiResponse.ok(friendCodeService.findNickNameByCode(
                 FriendCodeNickNameServiceRequest.builder()
                         .code(code)
                         .build()));
