@@ -36,11 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendCodeControllerDocsTest extends RestDocsSupport {
 
     private final FriendCodeService friendCodeService = mock(FriendCodeService.class);
-    private final FriendCodeReadService friendCodeReadService = mock(FriendCodeReadService.class);
 
     @Override
     protected Object initController() {
-        return new FriendCodeController(friendCodeService, friendCodeReadService);
+        return new FriendCodeController(friendCodeService);
     }
 
     @DisplayName("친구코드 생성 API")
