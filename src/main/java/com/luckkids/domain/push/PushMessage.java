@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PushMessage {
 
-    TITLE("LUCK-KIDS 럭키즈\uD83C\uDF40"),
+    TITLE("luckkids 럭키즈\uD83C\uDF40"),
     DEFAULT_SOUND("noti_luckluck.wav"),
     MISSION("새로운 습관이 추가되었어요!"),
     UPDATE("럭키즈의 새로워진 기능을 소개할게요!"),
