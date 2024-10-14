@@ -52,7 +52,7 @@ public class VersionControllerDocsTest extends RestDocsSupport {
 
         // when // then
         mockMvc.perform(
-                get("/api/v1/versions/")
+                get("/api/v1/versions")
                     .contentType(APPLICATION_JSON)
             )
             .andDo(print())
