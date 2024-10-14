@@ -36,11 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendCodeControllerDocsTest extends RestDocsSupport {
 
     private final FriendCodeService friendCodeService = mock(FriendCodeService.class);
-    private final FriendCodeReadService friendCodeReadService = mock(FriendCodeReadService.class);
 
     @Override
     protected Object initController() {
-        return new FriendCodeController(friendCodeService, friendCodeReadService);
+        return new FriendCodeController(friendCodeService);
     }
 
     @DisplayName("친구코드 생성 API")
@@ -82,7 +81,7 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void findNickNameByCode() throws Exception {
         // given
-        given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
+        given(friendCodeService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
                 .willReturn(FriendCodeNickNameResponse.builder()
                         .nickName("테스트 닉네임")
                         .status(FriendStatus.FRIEND)

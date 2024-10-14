@@ -23,7 +23,7 @@ public class FriendCodeNickNameServiceRequest {
     public AlertHistoryServiceRequest toAlertHistoryServiceRequest(User user, String code) {
         return AlertHistoryServiceRequest.builder()
                 .user(user)
-                .alertDescription(PushMessage.GARDEN.getText().replace("{nickName}", user.getNickname()))
+                .alertDescription(PushMessage.FRIEND_CODE.getText().replace("{nickName}", user.getNickname()))
                 .alertDestinationType(AlertDestinationType.FRIEND_CODE)
                 .alertDestinationInfo(code)
                 .build();

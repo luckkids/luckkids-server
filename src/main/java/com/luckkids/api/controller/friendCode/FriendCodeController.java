@@ -2,7 +2,6 @@ package com.luckkids.api.controller.friendCode;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.friendCode.request.FriendCreateRequest;
-import com.luckkids.api.service.friendCode.FriendCodeReadService;
 import com.luckkids.api.service.friendCode.FriendCodeService;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class FriendCodeController {
 
     private final FriendCodeService friendCodeService;
-    private final FriendCodeReadService friendCodeReadService;
 
     @GetMapping
     public ApiResponse<FriendInviteCodeResponse> inviteCode() {
@@ -28,7 +26,7 @@ public class FriendCodeController {
 
     @GetMapping("/{code}/nickname")
     public ApiResponse<FriendCodeNickNameResponse> findNickNameByCode(@PathVariable String code) {
-        return ApiResponse.ok(friendCodeReadService.findNickNameByCode(
+        return ApiResponse.ok(friendCodeService.findNickNameByCode(
                 FriendCodeNickNameServiceRequest.builder()
                         .code(code)
                         .build()));
