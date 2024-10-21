@@ -1,7 +1,7 @@
 package com.luckkids.api.service.user;
 
 import com.luckkids.api.service.security.SecurityService;
-import com.luckkids.api.service.user.delete.UserDeleteService;
+import com.luckkids.api.service.user.delete.*;
 import com.luckkids.api.service.user.request.UserUpdateLuckPhraseServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdateNicknameServiceRequest;
 import com.luckkids.api.service.user.request.UserUpdatePasswordServiceRequest;
@@ -31,6 +31,12 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final UserCharacterDeleteService userCharacterDeleteService;
+    private final UserAlertDeleteService userAlertDeleteService;
+    private final UserTokenDeleteService userTokenDeleteService;
+    private final UserMissionDeleteService userMissionDeleteService;
+    private final UserFriendDeleteService userFriendDeleteService;
+
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
         user.updatePassword(bCryptPasswordEncoder.encode(userUpdatePasswordServiceRequest.getPassword()));
@@ -53,10 +59,14 @@ public class UserService {
     public UserWithdrawResponse withdraw() {
         User user = getCurrentUser();
         int userId = user.getId();
-        for (UserDeleteService userDeleteService : userDeleteServices) {
-            userDeleteService.deleteAllByUserId(userId);
-        }
+
+        userCharacterDeleteService.deleteAllByUserId(userId);
+        userAlertDeleteService.deleteAllByUserId(userId);
+        userTokenDeleteService.deleteAllByUserId(userId);
+        userMissionDeleteService.deleteAllByUserId(userId);
+        userFriendDeleteService.deleteAllByUserId(userId);
         userRepository.deleteById(userId);
+
         return UserWithdrawResponse.of(userId);
     }
 
