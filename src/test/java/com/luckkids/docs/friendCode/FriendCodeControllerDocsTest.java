@@ -82,7 +82,7 @@ public class FriendCodeControllerDocsTest extends RestDocsSupport {
     @WithMockUser(roles = "USER")
     void findNickNameByCode() throws Exception {
         // given
-        given(friendCodeReadService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
+        given(friendCodeService.findNickNameByCode(any(FriendCodeNickNameServiceRequest.class)))
                 .willReturn(FriendCodeNickNameResponse.builder()
                         .nickName("테스트 닉네임")
                         .status(FriendStatus.FRIEND)

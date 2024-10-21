@@ -3,7 +3,6 @@ package com.luckkids.api.service.friendCode;
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
-import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
@@ -32,12 +31,14 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
     @Autowired
     private FriendCodeReadService friendCodeReadService;
     @Autowired
+    private FriendCodeService friendCodeService;
+    @Autowired
     private FriendRepository friendRepository;
     @Autowired
     private AlertHistoryRepository alertHistoryRepository;
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         alertHistoryRepository.deleteAllInBatch();
         friendCodeRepository.deleteAllInBatch();
         friendRepository.deleteAllInBatch();
@@ -46,7 +47,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("FriendCode Entity를 조회한다.")
     @Test
-    void findByCode(){
+    void findByCode() {
         User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
         User savedUser = userRepository.save(user);
 
@@ -60,7 +61,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("FriendCode로 nickname과 상태값을 조회한다.")
     @Test
-    void findNickNameByCode(){
+    void findNickNameByCode() {
         // given
         User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
         User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
@@ -82,7 +83,7 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
                 .code("ABCDEFGH")
                 .build();
 
-        FriendCodeNickNameResponse friendCodeNickNameResponse = friendCodeReadService.findNickNameByCode(friendCodeNickNameServiceRequest);
+        FriendCodeNickNameResponse friendCodeNickNameResponse = friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
 
         assertThat(friendCodeNickNameResponse).extracting("nickName", "status")
                 .contains("테스트2", FriendStatus.ALREADY);
@@ -109,12 +110,12 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private FriendCode createFriendCode(User user){
+    private FriendCode createFriendCode(User user) {
         return FriendCode.builder()
-            .user(user)
-            .code("ABCDEFGH")
-            .useStatus(UseStatus.UNUSED)
-            .build();
+                .user(user)
+                .code("ABCDEFGH")
+                .useStatus(UseStatus.UNUSED)
+                .build();
     }
 
     private LoginUserInfo createLoginUserInfo(int userId) {
