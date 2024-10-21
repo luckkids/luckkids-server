@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserMissionDeleteService implements UserDeleteService{
+public class UserMissionDeleteService {
     private final MissionOutcomeRepository missionOutcomeRepository;
     private final MissionRepository missionRepository;
 

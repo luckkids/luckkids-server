@@ -11,11 +11,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserAlertDeleteService implements UserDeleteService {
+public class UserAlertDeleteService {
 	private final AlertHistoryRepository alertHistoryRepository;
 	private final AlertSettingRepository alertSettingRepository;
 
-	@Override
 	public void deleteAllByUserId(int userId) {
 		alertHistoryRepository.deleteByUserId(userId);
 		alertSettingRepository.deleteByPushUserId(userId);

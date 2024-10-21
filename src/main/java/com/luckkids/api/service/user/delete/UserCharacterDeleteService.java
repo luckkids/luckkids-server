@@ -8,9 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserCharacterDeleteService implements UserDeleteService {
+public class UserCharacterDeleteService {
+
     private final UserCharacterRepository userCharacterRepository;
-    @Override
+
     public void deleteAllByUserId(int userId) {
         userCharacterRepository.deleteAllByUserId(userId);
     }

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserFriendDeleteService implements UserDeleteService{
+public class UserFriendDeleteService {
     private final FriendRepository friendRepository;
 
-    public void deleteAllByUserId(int userId){
+    public void deleteAllByUserId(int userId) {
         friendRepository.deleteAllByRequesterId(userId);
         friendRepository.deleteAllByReceiverId(userId);
     }
