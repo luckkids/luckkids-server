@@ -12,7 +12,6 @@ import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
 import com.luckkids.api.service.friendCode.response.FriendRefuseResponse;
 import com.luckkids.api.service.push.PushService;
-import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
 import com.luckkids.api.service.push.request.SendPushDataDto;
 import com.luckkids.api.service.push.request.SendPushServiceRequest;
 import com.luckkids.api.service.security.SecurityService;
