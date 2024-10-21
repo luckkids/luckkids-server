@@ -8,6 +8,7 @@ import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
+import com.luckkids.domain.friendCode.FriendStatus;
 import com.luckkids.domain.friendCode.UseStatus;
 import com.luckkids.domain.user.*;
 import com.luckkids.jwt.dto.LoginUserInfo;
@@ -16,7 +17,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 public class FriendCodeReadServiceTest extends IntegrationTestSupport {
 
@@ -113,5 +117,11 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
+    private Friend createFriend(User requester, User receiver) {
+        return Friend.builder()
+                .requester(requester)
+                .receiver(receiver)
+                .build();
+    }
 
 }
