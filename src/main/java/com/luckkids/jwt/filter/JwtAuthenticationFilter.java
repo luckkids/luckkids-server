@@ -36,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		"/api/v1/confirmEmail",
 		"/docs",                        //API문서는 예외
 		"/health-check",
+			"/favicon.ico",
 	};
 
 	@Override
