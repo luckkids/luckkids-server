@@ -54,13 +54,14 @@ public class MailService {
 
         SendMailRequest sendMailRequest = SendMailRequest.builder()
             .email(email)
-            .subject("luckkids의 이메일을 인증하세요")
+            .subject("[luckkids] 이메일 인증 안내 드려요! \uD83C\uDF40")
             .text(
-                "안녕하세요.\n\n" +
-                    "다음 링크를 통해 이메일 주소를 인증하세요.\n\n" +
+                "안녕하세요, 팀 luckkids입니다.\uD83C\uDF40\n\n" +
+                    "아래 링크를 클릭하여 인증을 완료해주세요!\n" +
+                    "이 주소로 인증 요청하지 않으셨다면 이 메일을 무시하셔도 되어요.\n" +
                     confirmEmailUrl+"?key="+encrypt+ "\n\n" +
-                    "이 주소로 인증을 요청하지 않았다면 이 이메일을 무시하셔도 됩니다.\n\n" +
-                    "감사합니다.\n\n" +
+                    "우리는 행운아! 행운을 키우지!\n\n" +
+                    "감사합니다.\n" +
                     "luckkids팀"
             )
             .build();
