@@ -36,6 +36,7 @@ public class UserService {
     private final UserMissionDeleteService userMissionDeleteService;
     private final UserFriendDeleteService userFriendDeleteService;
     private final UserFriendCodeDeleteService userFriendCodeDeleteService;
+    private final UserAgreementDeleteService userAgreementDeleteService;
 
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
@@ -65,8 +66,9 @@ public class UserService {
         userTokenDeleteService.deleteAllByUserId(userId);
         userMissionDeleteService.deleteAllByUserId(userId);
         userFriendDeleteService.deleteAllByUserId(userId);
-        userRepository.deleteById(userId);
         userFriendCodeDeleteService.deleteAllByUserId(userId);
+        userAgreementDeleteService.deleteAllByUserId(userId);
+        userRepository.deleteById(userId);
 
         return UserWithdrawResponse.of(userId);
     }

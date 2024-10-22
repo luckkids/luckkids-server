@@ -1,4 +1,4 @@
-package com.luckkids.api.service.UserAgreementService;
+package com.luckkids.api.service.userAgreementService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
