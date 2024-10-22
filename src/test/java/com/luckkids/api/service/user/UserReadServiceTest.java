@@ -192,7 +192,7 @@ class UserReadServiceTest extends IntegrationTestSupport {
 			.extracting("nickname", "characterType", "level", "characterCount")
 			.containsExactly(
 				tuple("테스트2", CLOVER, 1, 2),
-				tuple(null, CLOVER, 1, 1),
+				tuple("테스트4", CLOVER, 1, 1),
 				tuple("테스트3", CLOVER, 3, 1)
 			);
 	}

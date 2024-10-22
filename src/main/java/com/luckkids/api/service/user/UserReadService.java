@@ -1,15 +1,12 @@
 package com.luckkids.api.service.user;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.request.UserFindEmailServiceRequest;
 import com.luckkids.api.service.user.response.UserFindSnsTypeResponse;
@@ -31,7 +28,6 @@ public class UserReadService {
 	private final UserRepository userRepository;
 	private final UserQueryRepository userQueryRepository;
 	private final SecurityService securityService;
-	private final FriendReadService friendReadService;
 
 	public User findByOne(int id) {
 		return userRepository.findById(id)
@@ -57,16 +53,10 @@ public class UserReadService {
 	}
 
 	public List<UserLeagueResponse> getUserLeagueTop3() {
-		int userId = securityService.getCurrentLoginUserInfo().getUserId();
-
-		List<UserLeagueDto> userLeagueTop3 = userQueryRepository.getUserLeagueTop3();
-		Set<Integer> friendIds = friendReadService.getFriendIds(userId);
-
-		return userLeagueTop3.stream()
-			.map(userLeagueDto -> friendIds.contains(userLeagueDto.getId())
-				? UserLeagueResponse.withNickname(userLeagueDto)
-				: UserLeagueResponse.withoutNickname(userLeagueDto))
-			.collect(Collectors.toList());
+		return userQueryRepository.getUserLeagueTop3()
+			.stream()
+			.map(UserLeagueDto::toUserLeagueResponse)
+			.toList();
 	}
 
 	public double getCharacterAchievementRate() {
