@@ -1,7 +1,6 @@
 package com.luckkids.api.service.friend;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,9 +46,5 @@ public class FriendReadService {
 		Optional<Friend> friend = friendRepository.findByRequesterIdAndReceiverId(friendStatusRequest.getRequestId(),
 			friendStatusRequest.getReceiverId());
 		return friend.isPresent();
-	}
-
-	public Set<Integer> getFriendIds(int userId) {
-		return friendQueryRepository.findFriendIds(userId);
 	}
 }

@@ -6,9 +6,7 @@ import static com.luckkids.domain.userCharacter.CharacterProgressStatus.*;
 import static com.luckkids.domain.userCharacter.QUserCharacter.*;
 import static java.util.Optional.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -53,25 +51,6 @@ public class FriendQueryRepository {
 		long total = getTotalFriendsCount(userId);
 
 		return new PageImpl<>(content, pageable, total);
-	}
-
-	public Set<Integer> findFriendIds(int userId) {
-		List<Integer> requesterIds = queryFactory
-			.select(friend.receiver.id)
-			.from(friend)
-			.where(friend.requester.id.eq(userId))
-			.fetch();
-
-		List<Integer> receiverIds = queryFactory
-			.select(friend.requester.id)
-			.from(friend)
-			.where(friend.receiver.id.eq(userId))
-			.fetch();
-
-		HashSet<Integer> friendIds = new HashSet<>(requesterIds);
-		friendIds.addAll(receiverIds);
-
-		return friendIds;
 	}
 
 	private long getTotalFriendsCount(int userId) {

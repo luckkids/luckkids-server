@@ -3,6 +3,7 @@ package com.luckkids.docs.mission;
 import static com.luckkids.domain.misson.AlertStatus.*;
 import static com.luckkids.domain.misson.MissionActive.*;
 import static com.luckkids.domain.misson.MissionType.*;
+import static java.time.LocalDateTime.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
@@ -306,6 +307,7 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 			.missionActive(missionActive)
 			.alertStatus(alertStatus)
 			.alertTime(alertTime)
+			.createdDate(now())
 			.build();
 	}
 
@@ -328,7 +330,8 @@ public class MissionControllerDocsTest extends RestDocsSupport {
 			fieldWithPath("missionActive").type(JsonFieldType.STRING).description("미션 활성화 여부"),
 			fieldWithPath("missionDescription").type(JsonFieldType.STRING).description("미션 내용"),
 			fieldWithPath("alertStatus").type(JsonFieldType.STRING).description("알림 여부"),
-			fieldWithPath("alertTime").type(JsonFieldType.STRING).description("알림 시간")
+			fieldWithPath("alertTime").type(JsonFieldType.STRING).description("알림 시간"),
+			fieldWithPath("createdDate").type(JsonFieldType.STRING).description("생성일")
 		};
 	}
 

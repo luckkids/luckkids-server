@@ -1,5 +1,6 @@
 package com.luckkids.api.service.mission.response;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
@@ -21,10 +22,11 @@ public class MissionResponse {
 	private MissionActive missionActive;
 	private AlertStatus alertStatus;
 	private LocalTime alertTime;
+	private LocalDateTime createdDate;
 
 	@Builder
 	private MissionResponse(int id, Integer luckkidsMissionId, MissionType missionType, String missionDescription,
-		MissionActive missionActive, AlertStatus alertStatus, LocalTime alertTime) {
+		MissionActive missionActive, AlertStatus alertStatus, LocalTime alertTime, LocalDateTime createdDate) {
 		this.id = id;
 		this.luckkidsMissionId = luckkidsMissionId;
 		this.missionType = missionType;
@@ -32,6 +34,7 @@ public class MissionResponse {
 		this.missionActive = missionActive;
 		this.alertStatus = alertStatus;
 		this.alertTime = alertTime;
+		this.createdDate = createdDate;
 	}
 
 	public static MissionResponse of(Mission mission) {
@@ -43,6 +46,7 @@ public class MissionResponse {
 			.missionActive(mission.getMissionActive())
 			.alertStatus(mission.getAlertStatus())
 			.alertTime(mission.getAlertTime())
+			.createdDate(mission.getCreatedDate())
 			.build();
 	}
 
