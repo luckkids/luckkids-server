@@ -27,7 +27,6 @@ public class UserService {
 
     private final UserReadService userReadService;
     private final SecurityService securityService;
-    private final List<UserDeleteService> userDeleteServices;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -36,6 +35,7 @@ public class UserService {
     private final UserTokenDeleteService userTokenDeleteService;
     private final UserMissionDeleteService userMissionDeleteService;
     private final UserFriendDeleteService userFriendDeleteService;
+    private final UserFriendCodeDeleteService userFriendCodeDeleteService;
 
     public UserUpdatePasswordResponse updatePassword(UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
         User user = userReadService.findByEmail(userUpdatePasswordServiceRequest.getEmail());
@@ -66,6 +66,7 @@ public class UserService {
         userMissionDeleteService.deleteAllByUserId(userId);
         userFriendDeleteService.deleteAllByUserId(userId);
         userRepository.deleteById(userId);
+        userFriendCodeDeleteService.deleteAllByUserId(userId);
 
         return UserWithdrawResponse.of(userId);
     }
