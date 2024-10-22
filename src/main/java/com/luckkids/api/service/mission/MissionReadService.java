@@ -42,7 +42,7 @@ public class MissionReadService {
 		Map<MissionType, List<MissionResponse>> missionMap = initializeMissionMap();
 		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMissionMap = initializeMissionMap();
 
-		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNull(userId);
+		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNullOrderByCreatedDateAsc(userId);
 		List<LuckkidsMission> luckkidsMissions = luckkidsMissionQueryRepository.findLuckkidsMissionsWithoutUserMission(
 			userId);
 
