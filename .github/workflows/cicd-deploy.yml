@@ -10,11 +10,11 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: 🍀 서브모듈 추가 및 업데이트
-        uses: actions/checkout@v3
+      - name: 🍀 서브모듈 추가
+        uses: actions/checkout@v4
         with:
+          submodules: true
           token: ${{ secrets.GIT_TOKEN }}
-          submodules: 'recursive'
 
       - name: 🍀 JDK 17 세팅
         uses: actions/setup-java@v3
