@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
-	List<Mission> findAllByUserIdAndDeletedDateIsNullOrderByCreatedDateAsc(int userId);
+	List<Mission> findAllByUserIdAndDeletedDateIsNullOrderByMissionActiveDescCreatedDateAsc(int userId);
 
 	Optional<Mission> findByIdAndDeletedDateIsNull(int id);
 

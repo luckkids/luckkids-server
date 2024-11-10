@@ -39,7 +39,7 @@ class MissionRepositoryTest extends IntegrationTestSupport {
 		missionRepository.saveAll(List.of(mission1, mission2));
 
 		// when
-		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNullOrderByCreatedDateAsc(
+		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNullOrderByMissionActiveDescCreatedDateAsc(
 			user.getId());
 
 		// then
