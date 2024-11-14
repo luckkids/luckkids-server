@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.client.OAuthApiClient;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.alertSetting.AlertSettingReadService;
+import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.api.service.alertSetting.request.AlertSettingCreateLoginServiceRequest;
+import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
 import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
@@ -11,10 +15,13 @@ import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.alertSetting.AlertSetting;
+import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.*;
 import com.luckkids.jwt.JwtTokenGenerator;
+import com.luckkids.jwt.JwtTokenProvider;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.LoginUserInfo;
 import jakarta.transaction.Transactional;
@@ -37,16 +44,20 @@ public class LoginService {
     private final UserReadService userReadService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Map<SnsType, OAuthApiClient> clients;
+    private final AlertSettingService alertSettingService;
+    private final AlertSettingReadService alertSettingReadService;
 
-    public LoginService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients) {
+    public LoginService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients, AlertSettingService alertSettingService, AlertSettingReadService alertSettingReadService) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.userReadService = userReadService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.clients = clients.stream().collect(
-            Collectors.toUnmodifiableMap(OAuthApiClient::oAuthSnsType, Function.identity())
+                Collectors.toUnmodifiableMap(OAuthApiClient::oAuthSnsType, Function.identity())
         );
+        this.alertSettingService = alertSettingService;
+        this.alertSettingReadService = alertSettingReadService;
     }
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
@@ -58,7 +69,10 @@ public class LoginService {
             throw new LuckKidsException(ErrorCode.USER_PASSWORD);
         } //3. 비밀번호 체크
 
-        return LoginResponse.of(user, setJwtTokenPushKey(user, loginServiceRequest.getDeviceId(), loginServiceRequest.getPushKey()));
+        JwtToken jwtToken = setJwtTokenPushKey(user, loginServiceRequest.getDeviceId(), loginServiceRequest.getPushKey());
+        confirmAlertSettingDeviceId(user.getId(), loginServiceRequest.getDeviceId());
+
+        return LoginResponse.of(user, jwtToken);
     }
 
     public OAuthLoginResponse oauthLogin(OAuthLoginServiceRequest oAuthLoginServiceRequest) throws JsonProcessingException {
@@ -70,19 +84,31 @@ public class LoginService {
         String email = client.getEmail(oAuthLoginServiceRequest.getToken());
 
         User user = userRepository.findByEmail(email)
-            .orElseGet(() -> userRepository.save(
-                User.builder()
-                    .email(email)
-                    .missionCount(0)
-                    .snsType(snsType)
-                    .role(Role.USER)
-                    .settingStatus(SettingStatus.INCOMPLETE)
-                    .build()
-            ));
+                .orElseGet(() -> userRepository.save(
+                        User.builder()
+                                .email(email)
+                                .missionCount(0)
+                                .snsType(snsType)
+                                .role(Role.USER)
+                                .settingStatus(SettingStatus.INCOMPLETE)
+                                .build()
+                ));
 
         user.checkSnsType(snsType);              //SNS가입여부확인
 
-        return OAuthLoginResponse.of(user, setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey()));
+        JwtToken jwtToken = setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey());
+        confirmAlertSettingDeviceId(user.getId(), oAuthLoginServiceRequest.getDeviceId());
+
+        return OAuthLoginResponse.of(user, jwtToken);
+    }
+
+    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest) {
+        User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
+        RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
+                .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));
+        JwtToken jwtToken = jwtTokenGenerator.generateJwtToken(refreshToken.getRefreshToken());
+        refreshToken.updateRefreshToken(jwtToken.getRefreshToken());
+        return LoginGenerateTokenResponse.of(jwtToken);
     }
 
     private JwtToken setJwtTokenPushKey(User user, String deviceId, String pushKey) throws JsonProcessingException {
@@ -93,12 +119,21 @@ public class LoginService {
         return jwtToken;
     }
 
-    public LoginGenerateTokenResponse refreshJwtToken(LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest) {
-        User user = userReadService.findByEmail(loginGenerateTokenServiceRequest.getEmail());
-        RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndDeviceIdAndRefreshToken(user.getId(), loginGenerateTokenServiceRequest.getDeviceId(), loginGenerateTokenServiceRequest.getRefreshToken())
-            .orElseThrow(() -> new LuckKidsException(ErrorCode.JWT_NOT_EXIST));
-        JwtToken jwtToken = jwtTokenGenerator.generateJwtToken(refreshToken.getRefreshToken());
-        refreshToken.updateRefreshToken(jwtToken.getRefreshToken());
-        return LoginGenerateTokenResponse.of(jwtToken);
+    private void confirmAlertSettingDeviceId(int userId, String deviceId) {
+        List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(userId);
+
+        boolean deviceFound = alertSettingList.stream()
+                .anyMatch(alertSetting -> deviceId.equals(alertSetting.getPush().getDeviceId()));
+
+        if (!deviceFound) {
+            alertSettingService.createAlertSetting(
+                    AlertSettingCreateLoginServiceRequest.builder()
+                            .userId(userId)
+                            .alertStatus(AlertStatus.CHECKED)
+                            .deviceId(deviceId)
+                            .build()
+            );
+        }
     }
+
 }
