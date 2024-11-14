@@ -20,6 +20,7 @@ import com.luckkids.api.controller.push.PushController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
 import com.luckkids.api.controller.withdrawReason.WithdrawReasonController;
+import com.luckkids.api.service.friend.FriendService;
 import com.luckkids.api.service.luckkidsMission.LuckkidsMissionReadService;
 import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
 import com.luckkids.api.service.alertHistory.AlertHistoryService;
@@ -106,6 +107,9 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected MailService mailService;
+
+    @MockBean
+    protected FriendService friendService;
 
     @MockBean
     protected FriendReadService friendReadService;
