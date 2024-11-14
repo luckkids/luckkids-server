@@ -22,3 +22,16 @@ include::{snippets}/garden-league/http-request.adoc[]
 
 include::{snippets}/garden-league/http-response.adoc[]
 include::{snippets}/garden-league/response-fields.adoc[]
+
+[[delete-friend]]
+=== 친구 삭제
+
+==== HTTP Request
+
+include::{snippets}/delete-friend/http-request.adoc[]
+include::{snippets}/delete-friend/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/delete-friend/http-response.adoc[]
+include::{snippets}/delete-friend/response-fields.adoc[]

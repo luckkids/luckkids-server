@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import com.luckkids.api.service.friend.FriendService;
+import com.luckkids.api.service.friend.response.FriendDeleteResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -35,12 +37,13 @@ import com.luckkids.domain.user.projection.MyProfileDto;
 
 public class GardenControllerDocsTest extends RestDocsSupport {
 
+	private final FriendService friendService = mock(FriendService.class);
 	private final FriendReadService friendReadService = mock(FriendReadService.class);
 	private final UserReadService userReadService = mock(UserReadService.class);
 
 	@Override
 	protected Object initController() {
-		return new GardenController(friendReadService, userReadService);
+		return new GardenController(friendService, friendReadService, userReadService);
 	}
 
 	@DisplayName("친구 목록 조회 API")
@@ -187,6 +190,36 @@ public class GardenControllerDocsTest extends RestDocsSupport {
 					fieldWithPath("data[].characterCount").type(JsonFieldType.NUMBER)
 						.description("캐릭터 수")
 				)));
+	}
+
+	@DisplayName("친구삭제 API")
+	@Test
+	@WithMockUser("USER")
+	void deleteFriend() throws Exception {
+		// given
+		given(friendService.deleteFriend(1))
+				.willReturn(FriendDeleteResponse.of(1));
+
+		// when // then
+		mockMvc.perform(
+						delete("/api/v1/garden/{friendId}", 1)
+				)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andDo(document("delete-friend",
+						preprocessResponse(prettyPrint()),
+						responseFields(
+								fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+										.description("코드"),
+								fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+										.description("상태"),
+								fieldWithPath("message").type(JsonFieldType.STRING)
+										.description("메세지"),
+								fieldWithPath("data").type(JsonFieldType.OBJECT)
+										.description("응답 데이터"),
+								fieldWithPath("data.friendId").type(JsonFieldType.NUMBER)
+										.description("삭제한 친구 ID")
+						)));
 	}
 
 	private UserLeagueResponse createUserLeagueResponse(String nickname, CharacterType characterType, int level,
