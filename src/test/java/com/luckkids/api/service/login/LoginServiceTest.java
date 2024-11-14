@@ -5,13 +5,17 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.feign.google.response.GoogleUserInfoResponse;
 import com.luckkids.api.feign.kakao.response.KakaoUserInfoResponse;
+import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
 import com.luckkids.api.service.login.response.LoginGenerateTokenResponse;
 import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
+import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.alertSetting.AlertSetting;
+import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
@@ -32,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.luckkids.domain.misson.AlertStatus.CHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,9 +66,19 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Autowired
     private JwtTokenGenerator jwtTokenGenerator;
 
+    @Autowired
+    private AlertSettingReadService alertSettingReadService;
+
+    @Autowired
+    private AlertSettingRepository alertSettingRepository;
+
+    @Autowired
+    private SecurityService securityService;
+
     @AfterEach
     void tearDown() {
         refreshTokenRepository.deleteAllInBatch();
+        alertSettingRepository.deleteAllInBatch();
         pushRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
@@ -429,6 +444,33 @@ public class LoginServiceTest extends IntegrationTestSupport {
         assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
+    @DisplayName("새로운 디바이스로 로그인을 하면 ALERTSETTING을 생성한다.")
+    @Test
+    void loginNewDeviceCreateAlertSetting() throws JsonProcessingException {
+        // given
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+
+        User savedUser = userRepository.save(user);
+
+        LoginServiceRequest request = LoginServiceRequest.builder()
+                .email(savedUser.getEmail())
+                .password("1234")
+                .deviceId("asdfasdfasdfsadfsf")
+                .pushKey("testToken")
+                .build();
+
+        loginService.normalLogin(request);
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createUserInfo(savedUser.getId()));
+
+        // when
+        // then
+        AlertSetting alertSetting =  alertSettingReadService.findOneByDeviceIdAndUserId("asdfasdfasdfsadfsf");
+        assertThat(alertSetting).extracting("entire", "mission", "notice", "friend", "luckMessage")
+                .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
+    }
+
     User createUser(String email, String password, SnsType snsType) {
         return User.builder()
             .email(email)
@@ -443,5 +485,11 @@ public class LoginServiceTest extends IntegrationTestSupport {
             .deviceId("testDeviceId")
             .refreshToken(refreshToken)
             .build();
+    }
+
+    private LoginUserInfo createUserInfo(int userId) {
+        return LoginUserInfo.builder()
+                .userId(userId)
+                .build();
     }
 }
