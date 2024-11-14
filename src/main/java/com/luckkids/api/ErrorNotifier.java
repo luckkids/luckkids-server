@@ -19,20 +19,21 @@ public class ErrorNotifier {
         this.webhookUrl = webhookUrl;
     }
 
-    public void sendErrorToSlack(Exception e) throws IOException {
+    public void sendErrorToSlack(Exception e, String nickName) throws IOException {
         Slack slack = Slack.getInstance();
-        String detailedErrorMessage = buildErrorMessage(e);
+        String detailedErrorMessage = buildErrorMessage(e, nickName);
         Payload payload = Payload.builder()
-            .text(detailedErrorMessage)
-            .build();
+                .text(detailedErrorMessage)
+                .build();
         slack.send(webhookUrl, payload);
     }
 
-    private String buildErrorMessage(Exception e) {
+    private String buildErrorMessage(Exception e, String nickName) {
         StringBuilder errorMessage = new StringBuilder();
-        errorMessage.append("*Error occurred at*: `").append(getFormattedDateTime()).append("`\n")
-            .append("*Exception*: `").append(e.getClass().getName()).append("`\n")
-            .append("*Message*: `").append(e.getMessage()).append("`\n");
+        errorMessage.append("*Error occurred nickName*: `").append(nickName).append("`\n")
+                .append("*Error occurred at*: `").append(getFormattedDateTime()).append("`\n")
+                .append("*Exception*: `").append(e.getClass().getName()).append("`\n")
+                .append("*Message*: `").append(e.getMessage()).append("`\n");
 
         if (e.getStackTrace().length > 0) {
             errorMessage.append("*At*: `").append(e.getStackTrace()[0]).append("`");

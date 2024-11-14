@@ -208,6 +208,10 @@ public class GardenControllerDocsTest extends RestDocsSupport {
 				.andExpect(status().isOk())
 				.andDo(document("delete-friend",
 						preprocessResponse(prettyPrint()),
+						requestFields(
+								fieldWithPath("friendId").type(JsonFieldType.STRING)
+										.description("친구ID")
+						),
 						responseFields(
 								fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
 										.description("코드"),
