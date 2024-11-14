@@ -11,13 +11,15 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor
 public class InitialSettingMissionResponse {
+    private int luckkidsMissionId;
     private MissionType missionType;
     private String missionDescription;
     private AlertStatus alertStatus;
     private LocalTime alertTime;
 
     @Builder
-    private InitialSettingMissionResponse(MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+    private InitialSettingMissionResponse(int luckkidsMissionId, MissionType missionType, String missionDescription, AlertStatus alertStatus, LocalTime alertTime) {
+        this.luckkidsMissionId = luckkidsMissionId;
         this.missionType = missionType;
         this.missionDescription = missionDescription;
         this.alertStatus = alertStatus;
