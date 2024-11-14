@@ -10,5 +10,7 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
 	void deleteAllByRequesterId(int receiverId);
 
+	void deleteByRequesterIdAndReceiverId(int requestId, int receiverId);
+
 	Optional<Friend> findByRequesterIdAndReceiverId(int requestId, int receiverId);
 }
