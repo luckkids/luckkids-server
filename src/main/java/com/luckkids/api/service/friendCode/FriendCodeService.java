@@ -102,8 +102,8 @@ public class FriendCodeService {
         friendCode.checkUsed();
         friendCode.updateUseStatus();
 
-        User receiveUser = friendCode.getUser();
-        User requestUser = userReadService.findByOne(userId);
+        User requestUser = friendCode.getUser();
+        User receiveUser = userReadService.findByOne(userId);
 
         friendRepository.save(createFriend(requestUser, receiveUser));
         friendRepository.save(createFriend(receiveUser, requestUser));
