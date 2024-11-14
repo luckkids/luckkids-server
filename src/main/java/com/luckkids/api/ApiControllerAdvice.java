@@ -1,6 +1,9 @@
 package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.api.service.user.UserService;
+import com.luckkids.api.service.user.response.UserResponse;
 import com.luckkids.jwt.exception.JwtTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import java.io.IOException;
 public class ApiControllerAdvice {
 
     private final ErrorNotifier errorNotifier;
+    private final UserReadService userReadService;
 
     /**
      * 예상치 못한 서버로직에러 발생시 처리
@@ -26,7 +30,8 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ApiResponse<Object> exception(Exception e) throws IOException {
-        errorNotifier.sendErrorToSlack(e);
+        UserResponse userResponse = userReadService.findByMe();
+        errorNotifier.sendErrorToSlack(e, userResponse.getNickname());
         log.error(e.getMessage());
         return ApiResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR,
