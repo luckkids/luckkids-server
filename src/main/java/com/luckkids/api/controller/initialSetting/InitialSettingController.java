@@ -42,7 +42,7 @@ public class InitialSettingController {
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping("")
+	@PostMapping
 	public ApiResponse<InitialSettingResponse> createSetting(
 		@RequestBody @Valid InitialSettingRequest initialSettingRequest) {
 		return ApiResponse.created(initialSettingService.initialSetting(initialSettingRequest.toServiceRequest()));
