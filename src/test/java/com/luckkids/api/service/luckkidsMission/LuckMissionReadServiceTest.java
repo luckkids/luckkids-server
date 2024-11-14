@@ -27,7 +27,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
     @AfterEach
     void tearDown() {
         luckkidsMissionRepository.deleteAllInBatch();
-    }
+    } 
 
     @DisplayName("럭키즈에서 저장해둔 미션들을 가져온다.")
     @Test
