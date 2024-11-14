@@ -15,6 +15,8 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor
 public class InitialSettingMissionRequest {
+
+    private int luckkidsMissionId;
     @NotNull(message = "미션 타입은 필수입니다.")
     private MissionType missionType;
     @NotBlank(message = "미션 내용은 필수입니다.")
@@ -24,7 +26,8 @@ public class InitialSettingMissionRequest {
     private LocalTime alertTime;
 
     @Builder
-    private InitialSettingMissionRequest(MissionType missionType, String missionDescription, LocalTime alertTime) {
+    private InitialSettingMissionRequest(int luckkidsMissionId, MissionType missionType, String missionDescription, LocalTime alertTime) {
+        this.luckkidsMissionId = luckkidsMissionId;
         this.missionType = missionType;
         this.missionDescription = missionDescription;
         this.alertTime = alertTime;
