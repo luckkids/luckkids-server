@@ -22,7 +22,6 @@ import java.io.IOException;
 public class ApiControllerAdvice {
 
     private final ErrorNotifier errorNotifier;
-    private final UserReadService userReadService;
 
     /**
      * 예상치 못한 서버로직에러 발생시 처리
@@ -30,8 +29,7 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ApiResponse<Object> exception(Exception e) throws IOException {
-        UserResponse userResponse = userReadService.findByMe();
-        errorNotifier.sendErrorToSlack(e, userResponse.getNickname());
+        errorNotifier.sendErrorToSlack(e);
         log.error(e.getMessage());
         return ApiResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR,
