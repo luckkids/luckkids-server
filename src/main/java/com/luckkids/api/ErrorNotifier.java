@@ -19,19 +19,18 @@ public class ErrorNotifier {
         this.webhookUrl = webhookUrl;
     }
 
-    public void sendErrorToSlack(Exception e, String nickName) throws IOException {
+    public void sendErrorToSlack(Exception e) throws IOException {
         Slack slack = Slack.getInstance();
-        String detailedErrorMessage = buildErrorMessage(e, nickName);
+        String detailedErrorMessage = buildErrorMessage(e);
         Payload payload = Payload.builder()
                 .text(detailedErrorMessage)
                 .build();
         slack.send(webhookUrl, payload);
     }
 
-    private String buildErrorMessage(Exception e, String nickName) {
+    private String buildErrorMessage(Exception e) {
         StringBuilder errorMessage = new StringBuilder();
-        errorMessage.append("*Error occurred nickName*: `").append(nickName).append("`\n")
-                .append("*Error occurred at*: `").append(getFormattedDateTime()).append("`\n")
+        errorMessage.append("*Error occurred at*: `").append(getFormattedDateTime()).append("`\n")
                 .append("*Exception*: `").append(e.getClass().getName()).append("`\n")
                 .append("*Message*: `").append(e.getMessage()).append("`\n");
 
