@@ -35,6 +35,7 @@ public class InitialSettingMissionRequest {
 
     public InitialSettingMissionServiceRequest toServiceRequest(){
         return InitialSettingMissionServiceRequest.builder()
+            .luckkidsMissionId(luckkidsMissionId)
             .missionType(missionType)
             .missionDescription(missionDescription)
             .alertTime(alertTime)

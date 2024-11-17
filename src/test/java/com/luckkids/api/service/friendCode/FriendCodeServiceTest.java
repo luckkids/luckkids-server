@@ -225,11 +225,11 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
                 .code("ABCDEFGH")
                 .build();
 
-        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
-        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
-
         given(securityService.getCurrentLoginUserInfo())
-                .willReturn(createLoginUserInfo(friend1.getId()));
+                .willReturn(createLoginUserInfo(user1.getId()));
+
+        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
+        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
 
         PageInfoServiceRequest request = PageInfoServiceRequest.builder()
                 .page(1)
