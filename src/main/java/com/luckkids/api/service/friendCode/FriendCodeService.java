@@ -75,24 +75,24 @@ public class FriendCodeService {
         int receiverId = securityService.getCurrentLoginUserInfo().getUserId(); // 수신자 ID
         String code = friendCreateServiceRequest.getCode();
         FriendCode friendCode = friendCodeReadService.findByCode(code);
-        int requesterId = friendCode.getUser().getId(); // 요청자 ID
+        User friend = friendCode.getUser(); // 요청자 ID
 
         //처음으로 받은 요청이면 AlertHistory에 적재
         if(!alertHistoryReadService.hasFriendCode(receiverId, code)){
             User user = userReadService.findByOne(receiverId);
-            alertHistoryService.createAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, code));
+            alertHistoryService.createAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, friend.getNickname(), code));
         }
 
         // 내가 보낸 초대인지 체크
-        if (requesterId == receiverId) {
+        if (friend.getId() == receiverId) {
             return FriendCodeNickNameResponse.of(friendCode.getUser().getNickname(), FriendStatus.ME);
         }
 
         // 이미 친구인지 체크
-        boolean isAlreadyFriend = friendReadService.checkFriendStatus(FriendStatusRequest.of(requesterId, receiverId));
+        boolean isAlreadyFriend = friendReadService.checkFriendStatus(FriendStatusRequest.of(friend.getId(), receiverId));
         FriendStatus friendStatus = isAlreadyFriend ? FriendStatus.ALREADY : FriendStatus.FRIEND;
 
-        return FriendCodeNickNameResponse.of(friendCode.getUser().getNickname(), friendStatus);
+        return FriendCodeNickNameResponse.of(friend.getNickname(), friendStatus);
     }
 
     public FriendCreateResponse create(FriendCreateServiceRequest friendCreateServiceRequest){

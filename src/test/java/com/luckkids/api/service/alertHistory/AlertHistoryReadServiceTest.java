@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.List;
 
+import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.domain.alertHistory.AlertDestinationType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -96,8 +97,7 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 		given(securityService.getCurrentLoginUserInfo())
 			.willReturn(createLoginUserInfo(user.getId()));
 
-		AlertHistoryDeviceIdServiceRequest request = AlertHistoryDeviceIdServiceRequest.builder()
-			.deviceId(push.getDeviceId())
+		PageInfoServiceRequest request = PageInfoServiceRequest.builder()
 			.page(1)
 			.size(10)
 			.build();
