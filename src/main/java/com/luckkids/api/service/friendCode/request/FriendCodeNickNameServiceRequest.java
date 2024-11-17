@@ -20,10 +20,10 @@ public class FriendCodeNickNameServiceRequest {
         this.code = code;
     }
 
-    public AlertHistoryServiceRequest toAlertHistoryServiceRequest(User user, String code) {
+    public AlertHistoryServiceRequest toAlertHistoryServiceRequest(User user, String friendNickName, String code) {
         return AlertHistoryServiceRequest.builder()
                 .user(user)
-                .alertDescription(PushMessage.FRIEND_CODE.getText().replace("{nickName}", user.getNickname()))
+                .alertDescription(PushMessage.FRIEND_CODE.getText().replace("{nickName}", friendNickName))
                 .alertDestinationType(AlertDestinationType.FRIEND_CODE)
                 .alertDestinationInfo(code)
                 .build();
