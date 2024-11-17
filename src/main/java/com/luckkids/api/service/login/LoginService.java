@@ -70,7 +70,7 @@ public class LoginService {
         } //3. 비밀번호 체크
 
         JwtToken jwtToken = setJwtTokenPushKey(user, loginServiceRequest.getDeviceId(), loginServiceRequest.getPushKey());
-        confirmAlertSettingDeviceId(user.getId(), loginServiceRequest.getDeviceId());
+        confirmAlertSettingDeviceId(user, loginServiceRequest.getDeviceId());
 
         return LoginResponse.of(user, jwtToken);
     }
@@ -97,7 +97,8 @@ public class LoginService {
         user.checkSnsType(snsType);              //SNS가입여부확인
 
         JwtToken jwtToken = setJwtTokenPushKey(user, oAuthLoginServiceRequest.getDeviceId(), oAuthLoginServiceRequest.getPushKey());
-        confirmAlertSettingDeviceId(user.getId(), oAuthLoginServiceRequest.getDeviceId());
+
+        confirmAlertSettingDeviceId(user, oAuthLoginServiceRequest.getDeviceId());
 
         return OAuthLoginResponse.of(user, jwtToken);
     }
@@ -119,8 +120,10 @@ public class LoginService {
         return jwtToken;
     }
 
-    private void confirmAlertSettingDeviceId(int userId, String deviceId) {
-        List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(userId);
+    private void confirmAlertSettingDeviceId(User user, String deviceId) {
+        if(user.getSettingStatus().equals(SettingStatus.INCOMPLETE)) return;
+
+        List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(user.getId());
 
         boolean deviceFound = alertSettingList.stream()
                 .anyMatch(alertSetting -> deviceId.equals(alertSetting.getPush().getDeviceId()));
@@ -128,7 +131,7 @@ public class LoginService {
         if (!deviceFound) {
             alertSettingService.createAlertSetting(
                     AlertSettingCreateLoginServiceRequest.builder()
-                            .userId(userId)
+                            .userId(user.getId())
                             .alertStatus(AlertStatus.CHECKED)
                             .deviceId(deviceId)
                             .build()
