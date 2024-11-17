@@ -2,14 +2,19 @@ package com.luckkids.api.service.friendCode;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.page.request.PageInfoServiceRequest;
+import com.luckkids.api.page.response.PageCustom;
+import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
+import com.luckkids.api.service.alertHistory.request.AlertHistoryDeviceIdServiceRequest;
+import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.request.FriendCreateServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.api.service.friendCode.response.FriendCreateResponse;
 import com.luckkids.api.service.friendCode.response.FriendInviteCodeResponse;
-import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
+import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
 import com.luckkids.domain.friendCode.FriendCode;
@@ -22,15 +27,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 public class FriendCodeServiceTest extends IntegrationTestSupport {
@@ -49,6 +52,8 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
     private FriendCodeReadService friendCodeReadService;
     @Autowired
     private AlertHistoryRepository alertHistoryRepository;
+    @Autowired
+    private AlertHistoryReadService alertHistoryReadService;
 
     @AfterEach
     void tearDown() {
@@ -194,6 +199,51 @@ public class FriendCodeServiceTest extends IntegrationTestSupport {
 
         assertThat(friendCodeNickNameResponse).extracting("nickName", "status")
                 .contains("테스트2", FriendStatus.ALREADY);
+    }
+
+    @DisplayName("FriendCode로 nickname과 상태값을 조회한다 시 처음받는 요청일 경우 AlertHistory를 생성한다.")
+    @Test
+    void findNickNameByCodeCreateAlertHistory(){
+        // given
+        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
+        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 0);
+
+        userRepository.saveAll(List.of(user1, user2, user3));
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createLoginUserInfo(user1.getId()));
+
+        Friend friend1 = createFriend(user1, user2);
+        Friend friend2 = createFriend(user2, user1);
+        friendRepository.saveAll(List.of(friend1, friend2));
+
+        FriendCode code = createFriendCode(user2);
+        friendCodeRepository.save(code);
+
+        FriendCodeNickNameServiceRequest friendCodeNickNameServiceRequest = FriendCodeNickNameServiceRequest.builder()
+                .code("ABCDEFGH")
+                .build();
+
+        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
+        friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest);
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createLoginUserInfo(friend1.getId()));
+
+        PageInfoServiceRequest request = PageInfoServiceRequest.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        // when
+        PageCustom<AlertHistoryResponse> result = alertHistoryReadService.getAlertHistory(request);
+
+        // then
+        assertThat(result.getContent()).hasSize(1).extracting("alertDescription", "alertHistoryStatus")
+                .contains(
+                        tuple("테스트2님이 친구 초대를 보냈어요!", AlertHistoryStatus.UNCHECKED)
+                );
     }
 
     private User createUser(int i) {
