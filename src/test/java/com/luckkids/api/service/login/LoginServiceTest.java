@@ -20,6 +20,7 @@ import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
+import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -87,7 +88,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIfUserExist() throws JsonProcessingException {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE);
 
         User savedUser = userRepository.save(user);
 
@@ -110,7 +111,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIfSnsUserExist() {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.KAKAO);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.KAKAO, SettingStatus.INCOMPLETE);
 
         User savedUser = userRepository.save(user);
 
@@ -148,7 +149,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void normalLoginIncorrectPassword() {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -170,7 +171,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void normalLoginOtherDevicePushToken() throws JsonProcessingException {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -209,7 +210,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void normalLoginSameDevicePushToken() throws JsonProcessingException {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -251,7 +252,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급한다.")
     void generateJwtToken() throws JsonProcessingException {
-        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
             .userId(savedUser.getId())
@@ -277,7 +278,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급할시 해당 deviceId가 존재하지않을시 예외가 발생한다.")
     void generateAccessTokenNotExistDeviceId() throws JsonProcessingException {
-        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
             .userId(savedUser.getId())
@@ -301,7 +302,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("리플래쉬토큰으로 엑세스토큰을 재발급할시 해당 이메일이 존재하지않을시 예외가 발생한다.")
     void generateAccessTokenNotExistUser() throws JsonProcessingException {
-        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL));
+        User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
             .userId(savedUser.getId())
@@ -327,7 +328,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void oauthKakaoLoginTest() throws JsonProcessingException {
         // given
-        User user = createUser("test@test.com", "1234", SnsType.KAKAO);
+        User user = createUser("test@test.com", "1234", SnsType.KAKAO, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -359,7 +360,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void oauthGoogleLoginTest() throws JsonProcessingException {
         // given
-        User user = createUser("test@test.com", "1234", SnsType.GOOGLE);
+        User user = createUser("test@test.com", "1234", SnsType.GOOGLE, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -389,7 +390,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Transactional
     void oauthKakaoLoginExistTest() {
         // given
-        User user = createUser("test@test.com", "1234", SnsType.GOOGLE);
+        User user = createUser("test@test.com", "1234", SnsType.GOOGLE, SettingStatus.INCOMPLETE);
 
         userRepository.save(user);
 
@@ -448,7 +449,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
     @Test
     void loginNewDeviceCreateAlertSetting() throws JsonProcessingException {
         // given
-        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
+        User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.COMPLETE);
 
         User savedUser = userRepository.save(user);
 
@@ -471,11 +472,12 @@ public class LoginServiceTest extends IntegrationTestSupport {
                 .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
-    User createUser(String email, String password, SnsType snsType) {
+    User createUser(String email, String password, SnsType snsType, SettingStatus settingStatus) {
         return User.builder()
             .email(email)
             .password(bCryptPasswordEncoder.encode(password))
             .snsType(snsType)
+            .settingStatus(settingStatus)
             .build();
     }
 
