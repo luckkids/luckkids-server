@@ -61,11 +61,11 @@ public class FriendCodeService {
         User user = userReadService.findByOne(userId);
 
         friendCodeRepository.save(
-            FriendCode.builder()
-                .user(user)
-                .code(code)
-                .useStatus(UseStatus.UNUSED)
-                .build()
+                FriendCode.builder()
+                        .user(user)
+                        .code(code)
+                        .useStatus(UseStatus.UNUSED)
+                        .build()
         );
 
         return FriendInviteCodeResponse.of(code);
@@ -78,7 +78,7 @@ public class FriendCodeService {
         User friend = friendCode.getUser(); // 요청자 ID
 
         //처음으로 받은 요청이면 AlertHistory에 적재
-        if(!alertHistoryReadService.hasFriendCode(receiverId, code)){
+        if (!alertHistoryReadService.hasFriendCode(receiverId, code)) {
             User user = userReadService.findByOne(receiverId);
             alertHistoryService.createAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, friend.getNickname(), code));
         }
@@ -95,7 +95,7 @@ public class FriendCodeService {
         return FriendCodeNickNameResponse.of(friend.getNickname(), friendStatus);
     }
 
-    public FriendCreateResponse create(FriendCreateServiceRequest friendCreateServiceRequest){
+    public FriendCreateResponse create(FriendCreateServiceRequest friendCreateServiceRequest) {
         int userId = securityService.getCurrentLoginUserInfo().getUserId();
         FriendCode friendCode = friendCodeReadService.findByCode(friendCreateServiceRequest.getCode());
 
@@ -111,22 +111,22 @@ public class FriendCodeService {
         List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(requestUser.getId());
 
         alertSettingList.stream()
-            .filter(alertSetting -> alertSetting.alertTypeChecked(AlertType.FRIEND))
-            .forEach(alertSetting -> pushService.sendPushToUser(
-                    SendPushServiceRequest.builder()
-                            .push(alertSetting.getPush())
-                            .body(PushMessage.GARDEN.getText().replace("{nickName}", requestUser.getNickname()))
-                            .sendPushDataDto(SendPushDataDto.builder()
-                                    .alert_destination_type(AlertDestinationType.FRIEND)
-                                    .alert_destination_info(String.valueOf(requestUser.getId()))
-                                    .build())
-                            .build()
-            ));
+                .filter(alertSetting -> alertSetting.alertTypeChecked(AlertType.FRIEND))
+                .forEach(alertSetting -> pushService.sendPushToUser(
+                        SendPushServiceRequest.builder()
+                                .push(alertSetting.getPush())
+                                .body(PushMessage.GARDEN.getText().replace("{nickName}", receiveUser.getNickname()))
+                                .sendPushDataDto(SendPushDataDto.builder()
+                                        .alert_destination_type(AlertDestinationType.FRIEND)
+                                        .alert_destination_info(String.valueOf(receiveUser.getId()))
+                                        .build())
+                                .build()
+                ));
 
         return FriendCreateResponse.of(requestUser, receiveUser);
     }
 
-    public FriendRefuseResponse refuseFriend(String code){
+    public FriendRefuseResponse refuseFriend(String code) {
         FriendCode friendCode = friendCodeReadService.findByCode(code);
         friendCode.updateUseStatus();
         return FriendRefuseResponse.of(code);
@@ -136,15 +136,15 @@ public class FriendCodeService {
         SecureRandom random = new SecureRandom();
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return random.ints(8, 0, chars.length())
-            .mapToObj(chars::charAt)
-            .map(Object::toString)
-            .collect(Collectors.joining());
+                .mapToObj(chars::charAt)
+                .map(Object::toString)
+                .collect(Collectors.joining());
     }
 
-    private Friend createFriend(User requestUser, User receiveUser){
+    private Friend createFriend(User requestUser, User receiveUser) {
         return Friend.builder()
-            .requester(requestUser)
-            .receiver(receiveUser)
-            .build();
+                .requester(requestUser)
+                .receiver(receiveUser)
+                .build();
     }
 }
