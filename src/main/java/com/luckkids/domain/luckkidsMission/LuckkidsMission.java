@@ -32,10 +32,13 @@ public class LuckkidsMission extends BaseTimeEntity {
 
 	private LocalTime alertTime;
 
+	private int sort;
+
 	@Builder
-	private LuckkidsMission(MissionType missionType, String missionDescription, LocalTime alertTime) {
+	private LuckkidsMission(MissionType missionType, String missionDescription, LocalTime alertTime, int sort) {
 		this.missionType = missionType;
 		this.missionDescription = missionDescription;
 		this.alertTime = alertTime;
+		this.sort = sort;
 	}
 }

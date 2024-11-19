@@ -43,7 +43,9 @@ public class MissionOutcomeQueryRepository {
 			.where(mission.user.id.eq(userId),
 				mission.missionActive.eq(TRUE),
 				missionOutcome.missionDate.eq(missionDate))
-			.join(missionOutcome.mission, mission);
+			.join(missionOutcome.mission, mission)
+			.orderBy(missionOutcome.missionStatus.asc(),
+				mission.alertTime.asc());
 
 		missionStatus.ifPresent(status -> query.where(missionOutcome.missionStatus.eq(status)));
 

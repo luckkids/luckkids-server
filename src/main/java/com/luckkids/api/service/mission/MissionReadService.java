@@ -1,7 +1,7 @@
 package com.luckkids.api.service.mission;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,11 +38,13 @@ public class MissionReadService {
 
 	public MissionAggregateResponse getMission() {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
+		List<MissionType> missionTypes = luckkidsMissionQueryRepository.findAllGroupByMissionType();
 
-		Map<MissionType, List<MissionResponse>> missionMap = initializeMissionMap();
-		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMissionMap = initializeMissionMap();
+		Map<MissionType, List<MissionResponse>> missionMap = initializeMissionMap(missionTypes);
+		Map<MissionType, List<RemainingLuckkidsMissionResponse>> luckkidsMissionMap = initializeMissionMap(
+			missionTypes);
 
-		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNullOrderByMissionActiveDescCreatedDateAsc(
+		List<Mission> missions = missionRepository.findAllByUserIdAndDeletedDateIsNullOrderByMissionActiveDescAlertTimeAsc(
 			userId);
 		List<LuckkidsMission> luckkidsMissions = luckkidsMissionQueryRepository.findLuckkidsMissionsWithoutUserMission(
 			userId);
@@ -62,8 +64,13 @@ public class MissionReadService {
 		return MissionAggregateResponse.of(missionMap, luckkidsMissionMap);
 	}
 
-	private <T> Map<MissionType, List<T>> initializeMissionMap() {
-		return Arrays.stream(MissionType.values())
-			.collect(Collectors.toMap(missionType -> missionType, missionType -> new ArrayList<>()));
+	private <T> Map<MissionType, List<T>> initializeMissionMap(List<MissionType> missionTypes) {
+		return missionTypes.stream()
+			.collect(Collectors.toMap(
+				missionType -> missionType,
+				missionType -> new ArrayList<>(),
+				(oldValue, newValue) -> oldValue,
+				LinkedHashMap::new
+			));
 	}
 }
