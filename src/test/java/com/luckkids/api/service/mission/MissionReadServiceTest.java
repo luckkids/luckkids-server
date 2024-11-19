@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.mission.response.MissionAggregateResponse;
+import com.luckkids.domain.luckkidsMission.LuckkidsMission;
+import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
 import com.luckkids.domain.misson.AlertStatus;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionRepository;
@@ -35,10 +38,14 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private LuckkidsMissionRepository luckkidsMissionRepository;
+
 	@AfterEach
 	void tearDown() {
 		missionRepository.deleteAllInBatch();
 		userRepository.deleteAllInBatch();
+		luckkidsMissionRepository.deleteAllInBatch();
 	}
 
 	@DisplayName("로그인 된 유저(유저1)의 미션들을 가져온다.")
@@ -53,6 +60,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 
 		userRepository.saveAll(List.of(user1, user2));
 		missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
+		luckkidsMissionRepository.saveAll(createLuckkidsMissions());
 
 		given(securityService.getCurrentLoginUserInfo())
 			.willReturn(createLoginUserInfo(user1.getId()));
@@ -80,6 +88,7 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 
 		userRepository.saveAll(List.of(user1, user2));
 		missionRepository.saveAll(List.of(mission1_1, mission2_1, mission2_2));
+		luckkidsMissionRepository.saveAll(createLuckkidsMissions());
 
 		given(securityService.getCurrentLoginUserInfo())
 			.willReturn(createLoginUserInfo(user2.getId()));
@@ -151,5 +160,13 @@ class MissionReadServiceTest extends IntegrationTestSupport {
 		return LoginUserInfo.builder()
 			.userId(userId)
 			.build();
+	}
+
+	private List<LuckkidsMission> createLuckkidsMissions() {
+		return Arrays.stream(MissionType.values())
+			.map(missionType -> LuckkidsMission.builder()
+				.missionType(missionType)
+				.build())
+			.toList();
 	}
 }
