@@ -3,6 +3,7 @@ package com.luckkids.jwt.filter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,46 +26,46 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-	private static final String[] excludePath = {
-		"/api/v1/jwt",                  //토큰발급 테스트 API
-		"/api/v1/auth",                 //로그인 예정
-		"/api/v1/join",                 //회원가입
-		"/api/v1/mail",                 //이메일발송
-		"/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
-		"/api/v1/confirmEmail",
-		"/docs",                        //API문서는 예외
-		"/health-check",
-			"/favicon.ico",
-	};
+    private static final String[] excludePath = {
+            "/api/v1/jwt",                  //토큰발급 테스트 API
+            "/api/v1/auth",                 //로그인 예정
+            "/api/v1/join",                 //회원가입
+            "/api/v1/mail",                 //이메일발송
+            "/api/v1/user/findEmail",       //비밀번호재발급 전 가입여부 체크
+            "/api/v1/confirmEmail",
+            "/docs",                        //API문서는 예외
+            "/health-check",
+            "/favicon.ico",
+    };
 
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
-		String path = request.getServletPath();
-		return Arrays.stream(excludePath).anyMatch(path::startsWith);
-	}
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+    }
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-		throws ServletException, IOException {
-		try {
-			// Header에서 토큰 받아옴
-			String token = jwtTokenProvider.resolveToken((HttpServletRequest)request);
-			// 유효한 토큰인지 확인
-			if (token != null && jwtTokenProvider.extractSubject(token)) {
-				// 토큰이 유효하면 토큰으로부터 유저 정보를 세팅
-				Authentication authentication = jwtTokenProvider.getAuthentication(token);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			} else {
-				throw new JwtTokenException(ErrorCode.JWT_UNKNOWN);
-			}
-		} catch (ExpiredJwtException e) {
-			throw new JwtTokenException(ErrorCode.JWT_EXPIRED, e);
-		} catch (JwtException | IllegalArgumentException e) {
-			throw new JwtTokenException(ErrorCode.JWT_UNKNOWN, e);
-		}
+    @Override
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            // Header에서 토큰 받아옴
+            String token = jwtTokenProvider.resolveToken(request);
+            // 유효한 토큰인지 확인
+            if (token != null && jwtTokenProvider.extractSubject(token)) {
+                // 토큰이 유효하면 토큰으로부터 유저 정보를 세팅
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new JwtTokenException(ErrorCode.JWT_UNKNOWN);
+            }
+        } catch (ExpiredJwtException e) {
+            throw new JwtTokenException(ErrorCode.JWT_EXPIRED, e);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new JwtTokenException(ErrorCode.JWT_UNKNOWN, e);
+        }
 
-		filterChain.doFilter(request, response);
-	}
+        filterChain.doFilter(request, response);
+    }
 }
