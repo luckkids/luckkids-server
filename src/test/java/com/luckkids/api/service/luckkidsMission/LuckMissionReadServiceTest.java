@@ -39,18 +39,18 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
         List<LuckkidsMissionResponse> luckkidsMissionResponses = luckkidsMissionReadService.getLuckMissions();
 
         assertThat(luckkidsMissionResponses).hasSize(10)
-                .extracting("missionType", "missionDescription", "alertTime")
+                .extracting("missionType", "missionDescription", "alertTime", "sort")
                 .containsExactlyInAnyOrder(
-                        tuple(MissionType.HEALTH, "테스트미션1", LocalTime.of(1, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션2", LocalTime.of(2, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션3", LocalTime.of(3, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션4", LocalTime.of(4, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션5", LocalTime.of(5, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션6", LocalTime.of(6, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션7", LocalTime.of(7, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션8", LocalTime.of(8, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션9", LocalTime.of(9, 0)),
-                        tuple(MissionType.HEALTH, "테스트미션10", LocalTime.of(10, 0))
+                        tuple(MissionType.HEALTH, "테스트미션1", LocalTime.of(1, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션2", LocalTime.of(2, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션3", LocalTime.of(3, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션4", LocalTime.of(4, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션5", LocalTime.of(5, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션6", LocalTime.of(6, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션7", LocalTime.of(7, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션8", LocalTime.of(8, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션9", LocalTime.of(9, 0), 1),
+                        tuple(MissionType.HEALTH, "테스트미션10", LocalTime.of(10, 0), 1)
                 );
     }
 
@@ -59,6 +59,7 @@ public class LuckMissionReadServiceTest extends IntegrationTestSupport {
                 .missionType(MissionType.HEALTH)
                 .missionDescription(missionDescription)
                 .alertTime(alertTime)
+                .sort(1)
                 .build();
     }
 }
