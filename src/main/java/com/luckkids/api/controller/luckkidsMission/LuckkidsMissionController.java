@@ -1,9 +1,9 @@
 package com.luckkids.api.controller.luckkidsMission;
 
 import com.luckkids.api.ApiResponse;
-import com.luckkids.api.controller.luckkidsMission.request.LuckkidsMissionRequest;
+import com.luckkids.api.controller.luckkidsMission.request.LuckkidsMissionListRequest;
 import com.luckkids.api.service.luckkidsMission.LuckkidsMissionService;
-import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionSaveResponse;
+import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionListSaveResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class LuckkidsMissionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ApiResponse<LuckkidsMissionSaveResponse> createLuckkidsMission(@Valid @RequestBody LuckkidsMissionRequest luckkidsMissionRequest){
-        return ApiResponse.created(luckkidsMissionService.createLuckkidsMission(luckkidsMissionRequest.toServiceRequest()));
+    public ApiResponse<LuckkidsMissionListSaveResponse> createLuckkidsMission(@Valid @RequestBody LuckkidsMissionListRequest luckkidsMissionListRequest) {
+        return ApiResponse.created(luckkidsMissionService.createLuckkidsMission(luckkidsMissionListRequest.toServiceRequest()));
     }
 
 }

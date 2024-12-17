@@ -284,7 +284,9 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].missionDescription").type(JsonFieldType.STRING)
                                         .description("미션내용"),
                                 fieldWithPath("data[].alertTime").type(JsonFieldType.STRING)
-                                        .description("알림시간")
+                                        .description("알림시간"),
+                                fieldWithPath("data[].sort").type(JsonFieldType.NUMBER)
+                                        .description("정렬값")
                         )
                 ));
     }
@@ -296,6 +298,7 @@ public class InitialSettingControllerDocsTest extends RestDocsSupport {
                 .missionType(missionType)
                 .missionDescription(missionDescription)
                 .alertTime(alertTime)
+                .sort(1)
                 .build();
     }
 }

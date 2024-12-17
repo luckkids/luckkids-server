@@ -1,0 +1,12 @@
+[[luckkidsMission-create]]
+=== 럭키즈 미션 등록 API
+
+==== HTTP Request
+
+include::{snippets}/luckkidsMission-create/http-request.adoc[]
+include::{snippets}/luckkidsMission-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/luckkidsMission-create/http-response.adoc[]
+include::{snippets}/luckkidsMission-create/response-fields.adoc[]

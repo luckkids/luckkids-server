@@ -84,3 +84,8 @@ include::api/user/user.adoc[]
 == WithdrawReason API
 
 include::api/withdrawReason/withdrawReason.adoc[]
+
+[[LuckkidsMission-API]]
+== LuckkidsMission API
+
+include::api/luckkidsMission/luckkidsMission.adoc[]

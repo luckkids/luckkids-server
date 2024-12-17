@@ -16,21 +16,24 @@ public class LuckkidsMissionResponse {
     private MissionType missionType;
     private String missionDescription;
     private LocalTime alertTime;
+    private int sort;
 
     @Builder
-    private LuckkidsMissionResponse(int id, MissionType missionType, String missionDescription, LocalTime alertTime) {
+    private LuckkidsMissionResponse(int id, MissionType missionType, String missionDescription, LocalTime alertTime, int sort) {
         this.id = id;
         this.missionType = missionType;
         this.missionDescription = missionDescription;
         this.alertTime = alertTime;
+        this.sort = sort;
     }
 
     public static LuckkidsMissionResponse of(LuckkidsMission luckMission) {
         return LuckkidsMissionResponse.builder()
-            .id(luckMission.getId())
-            .missionType(luckMission.getMissionType())
-            .missionDescription(luckMission.getMissionDescription())
-            .alertTime(luckMission.getAlertTime())
-            .build();
+                .id(luckMission.getId())
+                .missionType(luckMission.getMissionType())
+                .missionDescription(luckMission.getMissionDescription())
+                .alertTime(luckMission.getAlertTime())
+                .sort(luckMission.getSort())
+                .build();
     }
 }
