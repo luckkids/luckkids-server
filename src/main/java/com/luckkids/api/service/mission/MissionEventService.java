@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.api.event.missionOutcome.MissionOutcomeCreateEvent;
 import com.luckkids.api.event.missionOutcome.MissionOutcomeDeleteEvent;
+import com.luckkids.api.event.user.UserMissionCountUpdateEvent;
 import com.luckkids.domain.misson.Mission;
 import com.luckkids.domain.misson.MissionActive;
 
@@ -28,6 +29,10 @@ public class MissionEventService {
 		eventPublisher.publishEvent(new MissionOutcomeDeleteEvent(this, mission.getId()));
 	}
 
+	public void publishUserMissionCountUpdateEvent(Mission mission) {
+		eventPublisher.publishEvent(new UserMissionCountUpdateEvent(this, mission.getId()));
+	}
+
 	public void handleMissionStateTransition(Mission mission, MissionActive currentStatus, MissionActive newStatus) {
 		if (newStatus == null)
 			return;
@@ -40,6 +45,7 @@ public class MissionEventService {
 			}
 			case TRUE -> {
 				if (newStatus == FALSE) {
+					publishUserMissionCountUpdateEvent(mission);
 					publishMissionOutcomeDeleteEvent(mission);
 				}
 			}

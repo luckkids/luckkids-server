@@ -149,6 +149,10 @@ public class User extends BaseTimeEntity {
 		this.nickname = nickName;
 	}
 
+	public void minusMissionCount() {
+		this.missionCount -= 1;
+	}
+
 	public void checkSettingStatus() {
 		if (this.settingStatus.equals(SettingStatus.COMPLETE))
 			throw new LuckKidsException("이미 초기세팅이 되어있는 사용자입니다.");
