@@ -5,6 +5,7 @@ import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.response.UserResponse;
 import com.luckkids.jwt.exception.JwtTokenException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -63,6 +64,20 @@ public class ApiControllerAdvice {
             HttpStatus.BAD_REQUEST,
             e.getMessage(),
             null
+        );
+    }
+
+    /**
+     * FeignClient OAuth 호출 오류
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(FeignException.FeignClientException.class)
+    public ApiResponse<Object> FeignClientException(FeignException.FeignClientException e) {
+        log.error(e.getMessage());
+        return ApiResponse.of(
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                null
         );
     }
 
