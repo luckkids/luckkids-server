@@ -76,4 +76,5 @@ jobs:
           --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_GROUP }} \
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=${{ secrets.CICD_S3_BUCKET }},bundleType=zip,key=deploy.zip \
-          --region ap-northeast-2
+          --region ap-northeast-2 \
+          --ignore-application-stop-failures
