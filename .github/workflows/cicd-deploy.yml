@@ -70,6 +70,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
 
+      - name: 🔑 Add Lightsail host to known_hosts
+        run: ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
+
       - name: 🚀 LightSail 서버에 업로드
         run: |
           scp ./deploy.zip ec2-user@${{ secrets.LIGHTSAIL_HOST }}:/home/ec2-user/deploy.zip
