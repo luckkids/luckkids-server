@@ -65,16 +65,16 @@ jobs:
       - name: 🗜️ 배포 패키지 생성
         run: zip -r -qq ./deploy.zip ./before-deploy/
 
-      - name: 🚛 S3로 업로드
-        run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://${{ secrets.CICD_S3_BUCKET }}/
+      - name: 🔑 Setup SSH key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: 🚀 CodeDeploy를 이용한 배포
+      - name: 🚀 LightSail 서버에 업로드
         run: |
-          aws deploy create-deployment \
-          --application-name ${{ secrets.CODEDEPLOY_APPLICATION }} \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ secrets.CODEDEPLOY_APPLICATION_GROUP }} \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=${{ secrets.CICD_S3_BUCKET }},bundleType=zip,key=deploy.zip \
-          --region ap-northeast-2 \
-          --ignore-application-stop-failures
+          scp ./deploy.zip ec2-user@${{ secrets.LIGHTSAIL_HOST }}:/home/ec2-user/deploy.zip
+          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "unzip -o /home/ec2-user/deploy.zip -d /home/ec2-user && chmod +x /home/ec2-user/scripts/*.sh"
+
+      - name: 🎯 LightSail 서버에서 배포 실행
+        run: |
+          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "/home/ec2-user/scripts/run_new_was.sh"
