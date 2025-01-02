@@ -68,7 +68,7 @@ jobs:
       - name: 🔑 Setup SSH key
         uses: webfactory/ssh-agent@v0.7.0
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          ssh-private-key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
 
       - name: 🚀 LightSail 서버에 업로드
         run: |
