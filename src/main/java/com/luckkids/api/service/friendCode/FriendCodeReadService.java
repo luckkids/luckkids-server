@@ -2,6 +2,7 @@ package com.luckkids.api.service.friendCode;
 
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.exception.NotFoundException;
 import com.luckkids.domain.friendCode.FriendCode;
 import com.luckkids.domain.friendCode.FriendCodeRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class FriendCodeReadService {
 
     public FriendCode findByCode(String code) {
         return friendCodeRepository.findByCode(code)
-                .orElseThrow(() -> new LuckKidsException(ErrorCode.FRIEND_CODE_UNKNOWN));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.FRIEND_CODE_UNKNOWN));
     }
 
 }

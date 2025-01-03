@@ -1,6 +1,7 @@
 package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.exception.NotFoundException;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.user.response.UserResponse;
@@ -117,6 +118,17 @@ public class ApiControllerAdvice {
             HttpStatus.BAD_REQUEST,
             "데이터 제약 조건으로 인해 작업에 실패했습니다.",
             null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ApiResponse<Object> notFoundDataException(NotFoundException e) {
+        log.error(e.getMessage());
+        return ApiResponse.of(
+                HttpStatus.NOT_FOUND,
+                "데이터가 존재하지 않습니다.",
+                null
         );
     }
 }
