@@ -72,13 +72,8 @@ jobs:
           scp ./deploy.zip ec2-user@${{ secrets.LIGHTSAIL_HOST }}:/home/ec2-user/deploy.zip
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "
             unzip -o /home/ec2-user/deploy.zip -d /home/ec2-user &&
-            # 기존의 구 버전 .jar 파일 삭제
-            find /home/ec2-user/app -name 'luckkids-server-*.jar' -not -name '*.jar' -exec rm -f {} \; &&
-            if [ ! -d /home/ec2-user/app/scripts ]; then
-              mv /home/ec2-user/before-deploy/scripts /home/ec2-user/app/;
-            else
-              cp -r /home/ec2-user/before-deploy/scripts/* /home/ec2-user/app/scripts/;
-            fi &&
+            rm -rf /home/ec2-user/app/* &&
+            mv /home/ec2-user/before-deploy/* /home/ec2-user/app/ &&
             chmod +x /home/ec2-user/app/scripts/*.sh"
 
       - name: 🎯 LightSail 서버에서 배포 실행 (AfterInstall)
