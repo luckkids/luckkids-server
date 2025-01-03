@@ -1,6 +1,7 @@
 package com.luckkids.api.service.friendCode;
 
 import com.luckkids.IntegrationTestSupport;
+import com.luckkids.api.exception.NotFoundException;
 import com.luckkids.api.service.friendCode.request.FriendCodeNickNameServiceRequest;
 import com.luckkids.api.service.friendCode.response.FriendCodeNickNameResponse;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 public class FriendCodeReadServiceTest extends IntegrationTestSupport {
@@ -87,6 +89,32 @@ public class FriendCodeReadServiceTest extends IntegrationTestSupport {
 
         assertThat(friendCodeNickNameResponse).extracting("nickName", "status")
                 .contains("테스트2", FriendStatus.ALREADY);
+    }
+
+    @DisplayName("FriendCode로 nickname과 상태값을 조회시 FriendCode값이 없으면 NotFoundException이 발생한다.")
+    @Test
+    void findNickNameByCodeNotExistThrowException() {
+        // given
+        User user1 = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+        User user2 = createUser("test2@gmail.com", "test1234", "테스트2", "테스트2의 행운문구", 0);
+        User user3 = createUser("test3@gmail.com", "test1234", "테스트3", "테스트3의 행운문구", 0);
+
+        userRepository.saveAll(List.of(user1, user2, user3));
+
+        given(securityService.getCurrentLoginUserInfo())
+                .willReturn(createLoginUserInfo(user1.getId()));
+
+        Friend friend1 = createFriend(user1, user2);
+        Friend friend2 = createFriend(user2, user1);
+        friendRepository.saveAll(List.of(friend1, friend2));
+
+        FriendCodeNickNameServiceRequest friendCodeNickNameServiceRequest = FriendCodeNickNameServiceRequest.builder()
+                .code("ABCDEFGH")
+                .build();
+
+        assertThatThrownBy(() -> friendCodeService.findNickNameByCode(friendCodeNickNameServiceRequest))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("유효하지 않은 친구코드입니다.");
     }
 
     private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {
