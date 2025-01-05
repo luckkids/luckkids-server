@@ -2,6 +2,7 @@ package com.luckkids.api.service.alertHistory;
 
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 
+import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,12 @@ public class AlertHistoryService {
 	private final AlertHistoryRepository alertHistoryRepository;
 	private final AlertHistoryReadService alertHistoryReadService;
 
-	public AlertHistory createAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
-		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity());
+	public AlertHistory createUnCheckedAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
+		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity(UNCHECKED));
+	}
+
+	public AlertHistory createCheckedAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
+		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity(CHECKED));
 	}
 
 	public AlertHistoryStatusResponse updateAlertHistoryStatus(Long id) {
