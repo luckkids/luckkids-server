@@ -80,7 +80,7 @@ public class FriendCodeService {
         //처음으로 받은 요청이면 AlertHistory에 적재
         if (!alertHistoryReadService.hasFriendCode(receiverId, code)) {
             User user = userReadService.findByOne(receiverId);
-            alertHistoryService.createAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, friend.getNickname(), code));
+            alertHistoryService.createUnCheckedAlertHistory(friendCreateServiceRequest.toAlertHistoryServiceRequest(user, friend.getNickname(), code));
         }
 
         // 내가 보낸 초대인지 체크
