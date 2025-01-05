@@ -54,7 +54,7 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 			.alertDestinationInfo("테스트")
 			.build();
 
-		AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
+		AlertHistory alertHistory = alertHistoryService.createUnCheckedAlertHistory(alertHistoryServiceRequest);
 		assertThat(alertHistory).extracting("user", "alertDescription", "alertHistoryStatus", "alertDestinationType",
 				"alertDestinationInfo")
 			.contains(user, "알림테스트 내용", AlertHistoryStatus.UNCHECKED, AlertDestinationType.FRIEND_CODE, "테스트");
