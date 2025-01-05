@@ -14,7 +14,8 @@ public enum PushMessage {
     APP_UPDATE("럭키즈 새 버전 출시! 지금 구경갈래요?"),
     LUCK_CONTENTS("행운을 키우는 습관의 비하인드 스토리를 공개합니다."),
     GARDEN("{nickName}님이 나를 가든에 추가했어요!"),
-    FRIEND_CODE("{nickName}님이 친구 초대를 보냈어요!");
+    FRIEND_CODE("{nickName}님이 친구 초대를 보냈어요!"),
+    WELCOME("환영해요 :) 럭키즈와 함께 행운을 키워가요!");
 
     private final String text;
 
