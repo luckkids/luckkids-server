@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luckkids.api.client.OAuthApiClient;
 import com.luckkids.api.exception.ErrorCode;
 import com.luckkids.api.exception.LuckKidsException;
+import com.luckkids.api.service.alertHistory.AlertHistoryService;
 import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.alertSetting.request.AlertSettingCreateLoginServiceRequest;
-import com.luckkids.api.service.alertSetting.request.AlertSettingCreateServiceRequest;
 import com.luckkids.api.service.login.request.LoginGenerateTokenServiceRequest;
 import com.luckkids.api.service.login.request.LoginServiceRequest;
 import com.luckkids.api.service.login.request.OAuthLoginServiceRequest;
@@ -21,7 +21,6 @@ import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.*;
 import com.luckkids.jwt.JwtTokenGenerator;
-import com.luckkids.jwt.JwtTokenProvider;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.LoginUserInfo;
 import jakarta.transaction.Transactional;
@@ -46,8 +45,9 @@ public class LoginService {
     private final Map<SnsType, OAuthApiClient> clients;
     private final AlertSettingService alertSettingService;
     private final AlertSettingReadService alertSettingReadService;
+    private final AlertHistoryService alertHistoryService;
 
-    public LoginService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients, AlertSettingService alertSettingService, AlertSettingReadService alertSettingReadService) {
+    public LoginService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtTokenGenerator jwtTokenGenerator, UserReadService userReadService, BCryptPasswordEncoder bCryptPasswordEncoder, List<OAuthApiClient> clients, AlertSettingService alertSettingService, AlertSettingReadService alertSettingReadService, AlertHistoryService alertHistoryService) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
@@ -58,6 +58,7 @@ public class LoginService {
         );
         this.alertSettingService = alertSettingService;
         this.alertSettingReadService = alertSettingReadService;
+        this.alertHistoryService = alertHistoryService;
     }
 
     public LoginResponse normalLogin(LoginServiceRequest loginServiceRequest) throws JsonProcessingException {
@@ -84,15 +85,19 @@ public class LoginService {
         String email = client.getEmail(oAuthLoginServiceRequest.getToken());
 
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(
-                        User.builder()
-                                .email(email)
-                                .missionCount(0)
-                                .snsType(snsType)
-                                .role(Role.USER)
-                                .settingStatus(SettingStatus.INCOMPLETE)
-                                .build()
-                ));
+                .orElseGet(() -> {
+                    User savedUser = userRepository.save(
+                            User.builder()
+                                    .email(email)
+                                    .missionCount(0)
+                                    .snsType(snsType)
+                                    .role(Role.USER)
+                                    .settingStatus(SettingStatus.INCOMPLETE)
+                                    .build()
+                    );
+                    alertHistoryService.createWelcomeAlertHistory(savedUser);
+                    return savedUser;
+                });
 
         user.checkSnsType(snsType);              //SNS가입여부확인
 
@@ -121,7 +126,7 @@ public class LoginService {
     }
 
     private void confirmAlertSettingDeviceId(User user, String deviceId) {
-        if(user.getSettingStatus().equals(SettingStatus.INCOMPLETE)) return;
+        if (user.getSettingStatus().equals(SettingStatus.INCOMPLETE)) return;
 
         List<AlertSetting> alertSettingList = alertSettingReadService.findAllByUserId(user.getId());
 
@@ -138,5 +143,4 @@ public class LoginService {
             );
         }
     }
-
 }
