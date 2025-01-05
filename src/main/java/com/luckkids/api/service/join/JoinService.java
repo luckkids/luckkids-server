@@ -37,22 +37,12 @@ public class JoinService {
         User savedUser = userRepository.save(user);
 
         UserAgreement userAgreement = createUserAgreement(joinServiceRequest.toUserAgreementEntity(savedUser));
-        createWelcomeAlertHistory(savedUser);
+        alertHistoryService.createWelcomeAlertHistory(savedUser);
 
         return JoinResponse.of(savedUser, userAgreement);
     }
 
     private UserAgreement createUserAgreement(UserAgreement userAgreement) {
         return userAgreementRepository.save(userAgreement);
-    }
-
-    private void createWelcomeAlertHistory(User user) {
-        AlertHistoryServiceRequest alertHistoryServiceRequest = AlertHistoryServiceRequest.builder()
-                .user(user)
-                .alertDescription(PushMessage.WELCOME.getText())
-                .alertDestinationType(AlertDestinationType.WELCOME)
-                .build();
-
-        alertHistoryService.createCheckedAlertHistory(alertHistoryServiceRequest);
     }
 }

@@ -2,7 +2,10 @@ package com.luckkids.api.service.alertHistory;
 
 import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
 
+import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.domain.push.PushMessage;
+import com.luckkids.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,21 +21,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AlertHistoryService {
 
-	private final AlertHistoryRepository alertHistoryRepository;
-	private final AlertHistoryReadService alertHistoryReadService;
+    private final AlertHistoryRepository alertHistoryRepository;
+    private final AlertHistoryReadService alertHistoryReadService;
 
-	public AlertHistory createUnCheckedAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
-		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity(UNCHECKED));
-	}
+    public void createWelcomeAlertHistory(User user) {
+        alertHistoryRepository.save(AlertHistory.builder()
+                .user(user)
+                .alertDescription(PushMessage.WELCOME.getText())
+                .alertHistoryStatus(AlertHistoryStatus.CHECKED)
+                .alertDestinationType(AlertDestinationType.WELCOME)
+                .build());
+    }
 
-	public AlertHistory createCheckedAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
-		return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity(CHECKED));
-	}
+    public AlertHistory createAlertHistory(AlertHistoryServiceRequest alertHistoryServiceRequest) {
+        return alertHistoryRepository.save(alertHistoryServiceRequest.toEntity());
+    }
 
-	public AlertHistoryStatusResponse updateAlertHistoryStatus(Long id) {
-		AlertHistory alertHistory = alertHistoryReadService.findByOne(id);
-		alertHistory.updateAlertHistoryStatus(CHECKED);
+    public AlertHistoryStatusResponse updateAlertHistoryStatus(Long id) {
+        AlertHistory alertHistory = alertHistoryReadService.findByOne(id);
+        alertHistory.updateAlertHistoryStatus(CHECKED);
 
-		return AlertHistoryStatusResponse.of(alertHistory.getAlertHistoryStatus());
-	}
+        return AlertHistoryStatusResponse.of(alertHistory.getAlertHistoryStatus());
+    }
 }

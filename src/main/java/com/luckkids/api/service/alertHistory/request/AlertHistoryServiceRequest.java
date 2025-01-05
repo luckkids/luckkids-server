@@ -27,11 +27,11 @@ public class AlertHistoryServiceRequest {
 		this.alertDestinationInfo = alertDestinationInfo;
 	}
 
-	public AlertHistory toEntity(AlertHistoryStatus alertHistoryStatus) {
+	public AlertHistory toEntity() {
 		return AlertHistory.builder()
 			.user(user)
 			.alertDescription(alertDescription)
-			.alertHistoryStatus(alertHistoryStatus)
+			.alertHistoryStatus(AlertHistoryStatus.UNCHECKED)
 			.alertDestinationType(alertDestinationType)
 			.alertDestinationInfo(alertDestinationInfo)
 			.build();

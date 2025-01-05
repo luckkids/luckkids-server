@@ -14,6 +14,10 @@ import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.domain.alertHistory.AlertDestinationType;
+import com.luckkids.domain.alertHistory.AlertHistory;
+import com.luckkids.domain.alertHistory.AlertHistoryRepository;
+import com.luckkids.domain.alertHistory.AlertHistoryStatus;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.push.Push;
@@ -24,6 +28,7 @@ import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.domain.userAgreement.AgreementStatus;
 import com.luckkids.jwt.JwtTokenGenerator;
 import com.luckkids.jwt.dto.JwtToken;
 import com.luckkids.jwt.dto.LoginUserInfo;
@@ -38,8 +43,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -48,36 +53,30 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private LoginService loginService;
-
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PushRepository pushRepository;
-
     @Autowired
     private UserReadService userReadService;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
     private JwtTokenGenerator jwtTokenGenerator;
-
     @Autowired
     private AlertSettingReadService alertSettingReadService;
-
     @Autowired
     private AlertSettingRepository alertSettingRepository;
-
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private AlertHistoryRepository alertHistoryRepository;
 
     @AfterEach
     void tearDown() {
+        alertHistoryRepository.deleteAllInBatch();
         refreshTokenRepository.deleteAllInBatch();
         alertSettingRepository.deleteAllInBatch();
         pushRepository.deleteAllInBatch();
@@ -93,10 +92,10 @@ public class LoginServiceTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         LoginServiceRequest request = LoginServiceRequest.builder()
-            .email(savedUser.getEmail())
-            .password("1234")
-            .deviceId("asdfasdfasdfsadfsf")
-            .build();
+                .email(savedUser.getEmail())
+                .password("1234")
+                .deviceId("asdfasdfasdfsadfsf")
+                .build();
 
         // when
         LoginResponse loginResponse = loginService.normalLogin(request);
@@ -116,10 +115,10 @@ public class LoginServiceTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         LoginServiceRequest request = LoginServiceRequest.builder()
-            .email(savedUser.getEmail())
-            .password("1234")
-            .deviceId("asdfasdfasdfsadfsf")
-            .build();
+                .email(savedUser.getEmail())
+                .password("1234")
+                .deviceId("asdfasdfasdfsadfsf")
+                .build();
 
         // when
         // then
@@ -133,10 +132,10 @@ public class LoginServiceTest extends IntegrationTestSupport {
     void normalLoginIfUserNotExist() {
         // given
         LoginServiceRequest request = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .deviceId("testdeviceId")
+                .build();
 
         // when
         // then
@@ -154,10 +153,10 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         LoginServiceRequest request = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("12345678")
-            .deviceId("testdeviceId")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("12345678")
+                .deviceId("testdeviceId")
+                .build();
 
         // when
         // then
@@ -176,16 +175,16 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         LoginServiceRequest request1 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .deviceId("testdeviceId")
+                .build();
 
         LoginServiceRequest request2 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId2")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .deviceId("testdeviceId2")
+                .build();
 
         // when
         LoginResponse loginResponse1 = loginService.normalLogin(request1);
@@ -197,11 +196,11 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(refreshTokens).hasSize(2)
-            .extracting("refreshToken")
-            .containsExactlyInAnyOrder(
-                loginResponse1.getRefreshToken(),
-                loginResponse2.getRefreshToken()
-            );
+                .extracting("refreshToken")
+                .containsExactlyInAnyOrder(
+                        loginResponse1.getRefreshToken(),
+                        loginResponse2.getRefreshToken()
+                );
         assertThat(pushes.size()).isEqualTo(2);
     }
 
@@ -215,18 +214,18 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         LoginServiceRequest request1 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .pushKey("testPushKey")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .deviceId("testdeviceId")
+                .pushKey("testPushKey")
+                .build();
 
         LoginServiceRequest request2 = LoginServiceRequest.builder()
-            .email("tkdrl8908@naver.com")
-            .password("1234")
-            .deviceId("testdeviceId")
-            .pushKey("testPushKey2")
-            .build();
+                .email("tkdrl8908@naver.com")
+                .password("1234")
+                .deviceId("testdeviceId")
+                .pushKey("testPushKey2")
+                .build();
 
         // when
         loginService.normalLogin(request1);
@@ -238,15 +237,15 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(refreshTokens).hasSize(1)
-            .extracting("deviceId")
-            .containsExactlyInAnyOrder(
-                "testdeviceId"
-            );
+                .extracting("deviceId")
+                .containsExactlyInAnyOrder(
+                        "testdeviceId"
+                );
         assertThat(pushes).hasSize(1)
-            .extracting("deviceId")
-            .containsExactlyInAnyOrder(
-                "testdeviceId"
-            );
+                .extracting("deviceId")
+                .containsExactlyInAnyOrder(
+                        "testdeviceId"
+                );
     }
 
     @Test
@@ -255,18 +254,18 @@ public class LoginServiceTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
-            .userId(savedUser.getId())
-            .build();
+                .userId(savedUser.getId())
+                .build();
 
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
 
         refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
 
         LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
-            .email(savedUser.getEmail())
-            .deviceId("testDeviceId")
-            .refreshToken(jwtToken.getRefreshToken())
-            .build();
+                .email(savedUser.getEmail())
+                .deviceId("testDeviceId")
+                .refreshToken(jwtToken.getRefreshToken())
+                .build();
 
         LoginGenerateTokenResponse loginGenerateTokenResponse = loginService.refreshJwtToken(loginGenerateTokenServiceRequest);
 
@@ -281,22 +280,22 @@ public class LoginServiceTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
-            .userId(savedUser.getId())
-            .build();
+                .userId(savedUser.getId())
+                .build();
 
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
 
         refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
 
         LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
-            .email(savedUser.getEmail())
-            .deviceId("testDeviceId2")
-            .refreshToken(jwtToken.getRefreshToken())
-            .build();
+                .email(savedUser.getEmail())
+                .deviceId("testDeviceId2")
+                .refreshToken(jwtToken.getRefreshToken())
+                .build();
 
         assertThatThrownBy(() -> loginService.refreshJwtToken(loginGenerateTokenServiceRequest))
-            .isInstanceOf(LuckKidsException.class)
-            .hasMessage("리플래시 토큰이 존재하지 않습니다.");
+                .isInstanceOf(LuckKidsException.class)
+                .hasMessage("리플래시 토큰이 존재하지 않습니다.");
     }
 
     @Test
@@ -305,22 +304,22 @@ public class LoginServiceTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL, SettingStatus.INCOMPLETE));
 
         LoginUserInfo userInfo = LoginUserInfo.builder()
-            .userId(savedUser.getId())
-            .build();
+                .userId(savedUser.getId())
+                .build();
 
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
 
         refreshTokenRepository.save(createRefreshToken(savedUser, jwtToken.getRefreshToken()));
 
         LoginGenerateTokenServiceRequest loginGenerateTokenServiceRequest = LoginGenerateTokenServiceRequest.builder()
-            .email("test@test.com")
-            .deviceId("testDeviceId")
-            .refreshToken(jwtToken.getRefreshToken())
-            .build();
+                .email("test@test.com")
+                .deviceId("testDeviceId")
+                .refreshToken(jwtToken.getRefreshToken())
+                .build();
 
         assertThatThrownBy(() -> loginService.refreshJwtToken(loginGenerateTokenServiceRequest))
-            .isInstanceOf(LuckKidsException.class)
-            .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
+                .isInstanceOf(LuckKidsException.class)
+                .hasMessage("해당 이메일을 사용중인 사용자가 존재하지 않습니다.");
     }
 
     @DisplayName("카카오 로그인을 한다.")
@@ -333,26 +332,28 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         given(kakaoApiFeignCall.getUserInfo(any(String.class)))
-            .willReturn(
-                KakaoUserInfoResponse.builder()
-                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
-                        .email("test@test.com")
-                        .build())
-                    .build()
-            );
+                .willReturn(
+                        KakaoUserInfoResponse.builder()
+                                .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                                        .email("test@test.com")
+                                        .build())
+                                .build()
+                );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
-            .deviceId("testDeviceId")
-            .pushKey("testPushKey")
-            .snsType(SnsType.KAKAO)
-            .build();
+                .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+                .deviceId("testDeviceId")
+                .pushKey("testPushKey")
+                .snsType(SnsType.KAKAO)
+                .build();
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
+        assertAll(
+                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
+        );
     }
 
     @DisplayName("구글 로그인을 한다.")
@@ -365,24 +366,26 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         given(googleApiFeignCall.getUserInfo(any(String.class)))
-            .willReturn(
-                GoogleUserInfoResponse.builder()
-                    .email("test@test.com")
-                    .build()
-            );
+                .willReturn(
+                        GoogleUserInfoResponse.builder()
+                                .email("test@test.com")
+                                .build()
+                );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
-            .deviceId("testDeviceId")
-            .pushKey("testPushKey")
-            .snsType(SnsType.GOOGLE)
-            .build();
+                .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+                .deviceId("testDeviceId")
+                .pushKey("testPushKey")
+                .snsType(SnsType.GOOGLE)
+                .build();
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
+        assertAll(
+                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
+        );
     }
 
     @DisplayName("카카오 로그인을 할 시 이미 등록되어있는 이메일이라면 예외가 발생한다.")
@@ -395,24 +398,24 @@ public class LoginServiceTest extends IntegrationTestSupport {
         userRepository.save(user);
 
         given(kakaoApiFeignCall.getUserInfo(any(String.class)))
-            .willReturn(
-                KakaoUserInfoResponse.builder()
-                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
-                        .email("test@test.com")
-                        .build())
-                    .build()
-            );
+                .willReturn(
+                        KakaoUserInfoResponse.builder()
+                                .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                                        .email("test@test.com")
+                                        .build())
+                                .build()
+                );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
-            .deviceId("testDeviceId")
-            .pushKey("testPushKey")
-            .snsType(SnsType.KAKAO)
-            .build();
+                .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+                .deviceId("testDeviceId")
+                .pushKey("testPushKey")
+                .snsType(SnsType.KAKAO)
+                .build();
 
         assertThatThrownBy(() -> loginService.oauthLogin(oAuthLoginServiceRequest))
-            .isInstanceOf(LuckKidsException.class)
-            .hasMessage("GOOGLE");
+                .isInstanceOf(LuckKidsException.class)
+                .hasMessage("GOOGLE");
     }
 
     @DisplayName("카카오 로그인을 할 시 저장된 사용자가 없으면 회원가입한다.")
@@ -421,28 +424,28 @@ public class LoginServiceTest extends IntegrationTestSupport {
     void oauthKakaoJoinTest() throws JsonProcessingException {
         // given
         given(kakaoApiFeignCall.getUserInfo(any(String.class)))
-            .willReturn(
-                KakaoUserInfoResponse.builder()
-                    .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
-                        .email("test@test.com")
-                        .build())
-                    .build()
-            );
+                .willReturn(
+                        KakaoUserInfoResponse.builder()
+                                .kakaoAccount(KakaoUserInfoResponse.KakaoAccount.builder()
+                                        .email("test@test.com")
+                                        .build())
+                                .build()
+                );
 
         OAuthLoginServiceRequest oAuthLoginServiceRequest = OAuthLoginServiceRequest.builder()
-            .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
-            .deviceId("testDeviceId")
-            .pushKey("testPushKey")
-            .snsType(SnsType.KAKAO)
-            .build();
+                .token("sadhAewofneonfoweifkpowekfkajfbdsnflksndfdsmfkl")
+                .deviceId("testDeviceId")
+                .pushKey("testPushKey")
+                .snsType(SnsType.KAKAO)
+                .build();
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        User user = userReadService.findByEmail("test@test.com");
-
-        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
-        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
+        assertAll(
+                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
+                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
+        );
     }
 
     @DisplayName("새로운 디바이스로 로그인을 하면 ALERTSETTING을 생성한다.")
@@ -467,26 +470,26 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         // when
         // then
-        AlertSetting alertSetting =  alertSettingReadService.findOneByDeviceIdAndUserId("asdfasdfasdfsadfsf");
+        AlertSetting alertSetting = alertSettingReadService.findOneByDeviceIdAndUserId("asdfasdfasdfsadfsf");
         assertThat(alertSetting).extracting("entire", "mission", "notice", "friend", "luckMessage")
                 .contains(CHECKED, CHECKED, CHECKED, CHECKED, CHECKED);
     }
 
     User createUser(String email, String password, SnsType snsType, SettingStatus settingStatus) {
         return User.builder()
-            .email(email)
-            .password(bCryptPasswordEncoder.encode(password))
-            .snsType(snsType)
-            .settingStatus(settingStatus)
-            .build();
+                .email(email)
+                .password(bCryptPasswordEncoder.encode(password))
+                .snsType(snsType)
+                .settingStatus(settingStatus)
+                .build();
     }
 
     RefreshToken createRefreshToken(User user, String refreshToken) {
         return RefreshToken.builder()
-            .user(user)
-            .deviceId("testDeviceId")
-            .refreshToken(refreshToken)
-            .build();
+                .user(user)
+                .deviceId("testDeviceId")
+                .refreshToken(refreshToken)
+                .build();
     }
 
     private LoginUserInfo createUserInfo(int userId) {

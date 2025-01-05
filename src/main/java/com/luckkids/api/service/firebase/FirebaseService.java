@@ -48,7 +48,7 @@ public class FirebaseService {
             log.error("Token: "+ pushToken + "Error: " + e.getMessage());
         } finally {
             //히스토리는 무조건 쌓는걸로
-            alertHistoryService.createUnCheckedAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
+            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
         }
 
     }
