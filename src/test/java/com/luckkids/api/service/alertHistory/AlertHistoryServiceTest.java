@@ -2,6 +2,7 @@ package com.luckkids.api.service.alertHistory;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.luckkids.domain.userAgreement.AgreementStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+
+import java.util.List;
 
 public class AlertHistoryServiceTest extends IntegrationTestSupport {
 
@@ -54,10 +57,26 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 			.alertDestinationInfo("테스트")
 			.build();
 
-		AlertHistory alertHistory = alertHistoryService.createUnCheckedAlertHistory(alertHistoryServiceRequest);
+		AlertHistory alertHistory = alertHistoryService.createAlertHistory(alertHistoryServiceRequest);
 		assertThat(alertHistory).extracting("user", "alertDescription", "alertHistoryStatus", "alertDestinationType",
 				"alertDestinationInfo")
 			.contains(user, "알림테스트 내용", AlertHistoryStatus.UNCHECKED, AlertDestinationType.FRIEND_CODE, "테스트");
+	}
+
+	@DisplayName("럭키즈 환영 알림이력을 저장한다.")
+	@Test
+	void createWelcomeAlertHistoryTest() {
+		User user = createUser("test1@gmail.com", "test1234", "테스트1", "테스트1의 행운문구", 0);
+		userRepository.save(user);
+
+		alertHistoryService.createWelcomeAlertHistory(user);
+
+		List<AlertHistory> alertHistories = alertHistoryRepository.findByUserId(user.getId());
+
+		assertThat(alertHistories).extracting("alertDescription", "alertHistoryStatus", "alertDestinationType")
+				.containsExactlyInAnyOrder(
+						tuple("환영해요 :) 럭키즈와 함께 행운을 키워가요!", AlertHistoryStatus.CHECKED, AlertDestinationType.WELCOME)
+				);
 	}
 
 	private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {
