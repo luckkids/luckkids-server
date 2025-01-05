@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ApiControllerAdvice {
 
-    private final ErrorNotifier errorNotifier;
+    private final ErrorNotifier errorNotifier; 
 
     /**
      * 예상치 못한 서버로직에러 발생시 처리
