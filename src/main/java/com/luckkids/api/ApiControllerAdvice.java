@@ -2,9 +2,6 @@ package com.luckkids.api;
 
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.api.exception.NotFoundException;
-import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.api.service.user.UserService;
-import com.luckkids.api.service.user.response.UserResponse;
 import com.luckkids.jwt.exception.JwtTokenException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ApiControllerAdvice {
 
-    private final ErrorNotifier errorNotifier; 
+    private static final String devProfileName = "dev";
+
+    private final ErrorNotifier errorNotifier;
+    private final String profile = System.getProperty("spring.profiles.active");
 
     /**
      * 예상치 못한 서버로직에러 발생시 처리
@@ -31,12 +31,14 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ApiResponse<Object> exception(Exception e) throws IOException {
-        errorNotifier.sendErrorToSlack(e);
+        if (!profile.equals(devProfileName)) {
+            errorNotifier.sendErrorToSlack(e);
+        }
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "서버 로직 에러",
-            null
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "서버 로직 에러",
+                null
         );
     }
 
@@ -48,9 +50,9 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> bindException(BindException e) {
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
-            null
+                HttpStatus.BAD_REQUEST,
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
+                null
         );
     }
 
@@ -62,9 +64,9 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> LuckKidsException(LuckKidsException e) {
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            e.getMessage(),
-            null
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                null
         );
     }
 
@@ -87,9 +89,9 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> JwtTokenException(JwtTokenException e) {
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.UNAUTHORIZED,
-            e.getMessage(),
-            null
+                HttpStatus.UNAUTHORIZED,
+                e.getMessage(),
+                null
         );
     }
 
@@ -101,9 +103,9 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> NotFoundIdxException(IllegalArgumentException e) {
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            e.getMessage(),
-            null
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                null
         );
     }
 
@@ -115,9 +117,9 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> handleDataIntegrityViolation(DataIntegrityViolationException e) {
         log.error(e.getMessage());
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            "데이터 제약 조건으로 인해 작업에 실패했습니다.",
-            null
+                HttpStatus.BAD_REQUEST,
+                "데이터 제약 조건으로 인해 작업에 실패했습니다.",
+                null
         );
     }
 
