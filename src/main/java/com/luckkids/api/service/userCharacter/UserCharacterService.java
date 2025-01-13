@@ -85,7 +85,7 @@ public class UserCharacterService {
 		return UserCharacterSummaryResponse.of(inProgressCharacter, completedCharacterCount);
 	}
 
-	private UserCharacterLevelUpResponse handleCharacterLevelUpUserCharacter(UserCharacter userCharacter,
+	protected UserCharacterLevelUpResponse handleCharacterLevelUpUserCharacter(UserCharacter userCharacter,
 		LuckkidsCharacter LevelUpLuckkidsCharacter, int level) {
 		if (level == LEVEL_MAX.getLevel()) {
 			userCharacter.updateCompleteCharacter();
@@ -98,14 +98,14 @@ public class UserCharacterService {
 		);
 	}
 
-	private UserCharacterSummaryDto findInProgressCharacter(List<UserCharacterSummaryDto> summaries) {
+	protected UserCharacterSummaryDto findInProgressCharacter(List<UserCharacterSummaryDto> summaries) {
 		return summaries.stream()
 			.filter(dto -> dto.characterProgressStatus() == IN_PROGRESS)
 			.findAny()
 			.orElseThrow(() -> new NoSuchElementException("진행 중인 캐릭터가 없습니다."));
 	}
 
-	private Map<CharacterType, Long> calculateCompletedCharacterCount(List<UserCharacterSummaryDto> summaries) {
+	protected Map<CharacterType, Long> calculateCompletedCharacterCount(List<UserCharacterSummaryDto> summaries) {
 		Map<CharacterType, Long> completedCharacterCount = new EnumMap<>(CharacterType.class);
 		for (CharacterType type : CharacterType.values()) {
 			completedCharacterCount.put(type, 0L);
