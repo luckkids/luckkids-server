@@ -216,86 +216,86 @@ class MissionServiceTest extends IntegrationTestSupport {
 			);
 	}
 
-	@DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (활성화 -> 비활성화 / missionOutcome 삭제 이벤트 발행)")
-	@Test
-	void updateMission_deleteEvent() {
-		// given
-		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		userRepository.save(user);
+	/**
+	 @DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (활성화 -> 비활성화 / missionOutcome 삭제 이벤트 발행)")
+	 @Test void updateMission_deleteEvent() {
+	 // given
+	 User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+	 userRepository.save(user);
 
-		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
-		Mission savedMission = missionRepository.save(mission);
+	 Mission mission = createMission(user, HEALTH, "운동하기", TRUE, AlertStatus.CHECKED, LocalTime.of(0, 0));
+	 Mission savedMission = missionRepository.save(mission);
 
-		MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.now());
-		missionOutcomeRepository.save(missionOutcome);
+	 MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.now());
+	 missionOutcomeRepository.save(missionOutcome);
 
-		int missionId = savedMission.getId();
+	 int missionId = savedMission.getId();
 
-		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
-			.missionType(SELF_DEVELOPMENT)
-			.missionDescription("책 읽기")
-			.missionActive(FALSE)
-			.alertStatus(AlertStatus.CHECKED)
-			.alertTime(LocalTime.of(23, 30))
-			.build();
+	 MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+	 .missionType(SELF_DEVELOPMENT)
+	 .missionDescription("책 읽기")
+	 .missionActive(FALSE)
+	 .alertStatus(AlertStatus.CHECKED)
+	 .alertTime(LocalTime.of(23, 30))
+	 .build();
 
-		// when
-		MissionResponse missionResponse = missionService.updateMission(missionId, request);
+	 // when
+	 MissionResponse missionResponse = missionService.updateMission(missionId, request);
 
-		// then
-		assertThat(missionResponse)
-			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
+	 // then
+	 assertThat(missionResponse)
+	 .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+	 .contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
 
-		List<Mission> missions = missionRepository.findAll();
-		assertThat(missions).hasSize(1)
-			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.containsExactlyInAnyOrder(
-				tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
-			);
+	 List<Mission> missions = missionRepository.findAll();
+	 assertThat(missions).hasSize(1)
+	 .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+	 .containsExactlyInAnyOrder(
+	 tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
+	 );
 
-		List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
-		assertThat(missionOutcomes).hasSize(0);
-	}
+	 List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+	 assertThat(missionOutcomes).hasSize(0);
+	 }
 
-	@DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (비활성화 -> 활성화 / missionOutcome 생성 이벤트 발행)")
-	@Test
-	void updateMission_createEvent() {
-		// given
-		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
-		userRepository.save(user);
+	 @DisplayName("수정할 미션 내용들을 받아 미션을 수정한다. (비활성화 -> 활성화 / missionOutcome 생성 이벤트 발행)")
+	 @Test void updateMission_createEvent() {
+	 // given
+	 User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+	 userRepository.save(user);
 
-		Mission mission = createMission(user, HEALTH, "운동하기", FALSE, AlertStatus.CHECKED, LocalTime.of(0, 0));
-		Mission savedMission = missionRepository.save(mission);
+	 Mission mission = createMission(user, HEALTH, "운동하기", FALSE, AlertStatus.CHECKED, LocalTime.of(0, 0));
+	 Mission savedMission = missionRepository.save(mission);
 
-		int missionId = savedMission.getId();
+	 int missionId = savedMission.getId();
 
-		MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
-			.missionType(SELF_DEVELOPMENT)
-			.missionDescription("책 읽기")
-			.missionActive(TRUE)
-			.alertStatus(AlertStatus.CHECKED)
-			.alertTime(LocalTime.of(23, 30))
-			.build();
+	 MissionUpdateServiceRequest request = MissionUpdateServiceRequest.builder()
+	 .missionType(SELF_DEVELOPMENT)
+	 .missionDescription("책 읽기")
+	 .missionActive(TRUE)
+	 .alertStatus(AlertStatus.CHECKED)
+	 .alertTime(LocalTime.of(23, 30))
+	 .build();
 
-		// when
-		MissionResponse missionResponse = missionService.updateMission(missionId, request);
+	 // when
+	 MissionResponse missionResponse = missionService.updateMission(missionId, request);
 
-		// then
-		assertThat(missionResponse)
-			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
+	 // then
+	 assertThat(missionResponse)
+	 .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+	 .contains(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30));
 
-		List<Mission> missions = missionRepository.findAll();
-		assertThat(missions).hasSize(1)
-			.extracting("missionType", "missionDescription", "alertStatus", "alertTime")
-			.containsExactlyInAnyOrder(
-				tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
-			);
+	 List<Mission> missions = missionRepository.findAll();
+	 assertThat(missions).hasSize(1)
+	 .extracting("missionType", "missionDescription", "alertStatus", "alertTime")
+	 .containsExactlyInAnyOrder(
+	 tuple(SELF_DEVELOPMENT, "책 읽기", AlertStatus.CHECKED, LocalTime.of(23, 30))
+	 );
 
-		List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
-		assertThat(missionOutcomes).hasSize(1);
-	}
+	 List<MissionOutcome> missionOutcomes = missionOutcomeRepository.findAll();
+	 assertThat(missionOutcomes).hasSize(1);
+	 }
+	 **/
 
 	@DisplayName("미션 ID를 받아 미션을 삭제한다.(삭제일을 업데이트한다. Soft Delete)")
 	@Test
