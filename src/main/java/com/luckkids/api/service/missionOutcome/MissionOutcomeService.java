@@ -64,7 +64,7 @@ public class MissionOutcomeService {
 		return userReadService.findByOne(userId);
 	}
 
-	private MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome,
+	protected MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome,
 		MissionStatus missionStatus, User user) {
 		if (missionStatus == SUCCEED && missionOutcome.getSuccessChecked() == UNCHECKED) {
 			missionOutcome.updateFirstSuccessChecked();
