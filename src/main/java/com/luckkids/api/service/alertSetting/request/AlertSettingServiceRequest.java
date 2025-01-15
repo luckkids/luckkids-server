@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlertSettingServiceRequest {
 
-    private String deviceId;
+	private String deviceId;
 
-    @Builder
-    private AlertSettingServiceRequest(String deviceId) {
-        this.deviceId = deviceId;
-    }
+	@Builder
+	private AlertSettingServiceRequest(String deviceId) {
+		this.deviceId = deviceId;
+	}
 
 }
