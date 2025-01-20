@@ -2,6 +2,7 @@ package com.luckkids.api.controller.luckMessageHistory;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckkids.api.ApiResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/luckMessageHistory")
 public class LuckMessageHistoryController {
 
 	private final LuckMessageHistoryReadService luckMessageHistoryReadService;
