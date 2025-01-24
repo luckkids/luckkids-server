@@ -3,7 +3,7 @@ package com.luckkids.domain.alertSetting;
 import java.time.LocalTime;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import com.luckkids.domain.push.Push;
 
 import jakarta.persistence.Entity;

@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.home.response.HomeMainResponse;
 import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
-import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
+import com.luckkids.mission.service.MissionOutcomeReadService;
+import com.luckkids.mission.service.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
+import com.luckkids.mission.infra.projection.MissionOutcomeCalendarDetailDto;
 
 import lombok.RequiredArgsConstructor;
 

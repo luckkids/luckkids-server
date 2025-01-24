@@ -1,6 +1,6 @@
 package com.luckkids.api.service.userCharacter.response;
 
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
+import com.luckkids.mission.service.response.MissionOutcomeUpdateResponse;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 
 import lombok.Builder;

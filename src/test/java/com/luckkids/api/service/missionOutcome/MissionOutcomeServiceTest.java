@@ -1,8 +1,8 @@
 package com.luckkids.api.service.missionOutcome;
 
 import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
-import static com.luckkids.domain.missionOutcome.MissionStatus.*;
-import static com.luckkids.domain.missionOutcome.SuccessChecked.*;
+import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
+import static com.luckkids.mission.domain.missionOutcome.SuccessChecked.*;
 import static com.luckkids.domain.userCharacter.CharacterProgressStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -18,16 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
+import com.luckkids.mission.service.request.MissionOutcomeCreateServiceRequest;
+import com.luckkids.mission.service.response.MissionOutcomeUpdateResponse;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
-import com.luckkids.domain.missionOutcome.MissionOutcome;
-import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.mission.domain.missionOutcome.MissionOutcome;
+import com.luckkids.mission.infra.MissionOutcomeRepository;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.Mission;
+import com.luckkids.mission.infra.MissionRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -35,6 +35,7 @@ import com.luckkids.domain.userCharacter.CharacterProgressStatus;
 import com.luckkids.domain.userCharacter.UserCharacter;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
+import com.luckkids.mission.service.MissionOutcomeService;
 
 class MissionOutcomeServiceTest extends IntegrationTestSupport {
 

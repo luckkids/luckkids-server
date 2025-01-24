@@ -1,6 +1,6 @@
 package com.luckkids.api.controller.missionOutcome;
 
-import static com.luckkids.domain.missionOutcome.MissionStatus.*;
+import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRequest;
+import com.luckkids.mission.controller.request.MissionOutcomeUpdateRequest;
 
 class MissionOutcomeControllerTest extends ControllerTestSupport {
 

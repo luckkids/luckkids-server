@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalTime;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.mission.domain.misson.AlertStatus.UNCHECKED;
 import static com.luckkids.domain.user.SnsType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -1,8 +1,8 @@
 package com.luckkids.api.controller.initialSetting.request;
 
 import com.luckkids.api.service.initialSetting.request.InitialSettingAlertServiceRequest;
-import com.luckkids.domain.misson.AlertStatus;
-import jakarta.validation.constraints.NotBlank;
+import com.luckkids.mission.domain.misson.AlertStatus;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

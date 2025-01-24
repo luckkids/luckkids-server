@@ -1,7 +1,7 @@
 package com.luckkids.docs.home;
 
 import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
-import static com.luckkids.domain.misson.MissionType.*;
+import static com.luckkids.mission.domain.misson.MissionType.*;
 import static com.luckkids.domain.userCharacter.CharacterProgressStatus.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -27,15 +27,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
-import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
+import com.luckkids.mission.service.MissionOutcomeReadService;
+import com.luckkids.mission.service.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
 import com.luckkids.api.service.userCharacter.response.UserCharacterSummaryResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDetailDto;
-import com.luckkids.domain.missionOutcome.projection.MissionOutcomeCalendarDto;
+import com.luckkids.mission.infra.projection.MissionOutcomeCalendarDetailDto;
+import com.luckkids.mission.infra.projection.MissionOutcomeCalendarDto;
 import com.luckkids.domain.userCharacter.projection.UserCharacterSummaryDto;
 
 public class HomeControllerDocsTest extends RestDocsSupport {

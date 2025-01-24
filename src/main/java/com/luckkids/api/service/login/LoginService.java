@@ -16,7 +16,7 @@ import com.luckkids.api.service.login.response.LoginResponse;
 import com.luckkids.api.service.login.response.OAuthLoginResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertSetting.AlertSetting;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.domain.user.*;

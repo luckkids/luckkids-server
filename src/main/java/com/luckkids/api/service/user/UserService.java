@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
+import com.luckkids.mission.service.MissionOutcomeReadService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.delete.UserAgreementDeleteService;
 import com.luckkids.api.service.user.delete.UserAlertDeleteService;
@@ -22,7 +22,7 @@ import com.luckkids.api.service.user.response.UserUpdateLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdateNicknameResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
-import com.luckkids.domain.missionOutcome.MissionStatus;
+import com.luckkids.mission.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 

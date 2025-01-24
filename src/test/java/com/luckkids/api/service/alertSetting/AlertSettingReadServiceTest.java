@@ -16,12 +16,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalTime;
 import java.util.List;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
-import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
+import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.user.SnsType.NORMAL;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.tuple;

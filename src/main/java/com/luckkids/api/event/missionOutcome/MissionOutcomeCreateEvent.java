@@ -1,6 +1,6 @@
 package com.luckkids.api.event.missionOutcome;
 
-import com.luckkids.domain.misson.Mission;
+import com.luckkids.mission.domain.misson.Mission;
 import org.springframework.context.ApplicationEvent;
 
 public class MissionOutcomeCreateEvent extends ApplicationEvent {

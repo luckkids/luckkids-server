@@ -1,7 +1,7 @@
 package com.luckkids.api.service.alertSetting.response;
 
 import com.luckkids.domain.alertSetting.AlertSetting;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

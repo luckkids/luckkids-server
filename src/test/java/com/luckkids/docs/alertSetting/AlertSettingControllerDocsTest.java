@@ -14,7 +14,7 @@ import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
 import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.alertSetting.AlertType;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;

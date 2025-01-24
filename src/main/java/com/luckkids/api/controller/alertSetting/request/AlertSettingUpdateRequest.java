@@ -2,7 +2,7 @@ package com.luckkids.api.controller.alertSetting.request;
 
 import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
 import com.luckkids.domain.alertSetting.AlertType;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

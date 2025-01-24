@@ -1,7 +1,7 @@
 package com.luckkids.api.service.user;
 
-import static com.luckkids.domain.missionOutcome.MissionStatus.*;
-import static com.luckkids.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
 import static java.util.Optional.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -30,12 +30,12 @@ import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.friend.Friend;
 import com.luckkids.domain.friend.FriendRepository;
-import com.luckkids.domain.missionOutcome.MissionOutcome;
-import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
-import com.luckkids.domain.missionOutcome.MissionStatus;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.mission.domain.missionOutcome.MissionOutcome;
+import com.luckkids.mission.infra.MissionOutcomeRepository;
+import com.luckkids.mission.domain.missionOutcome.MissionStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.Mission;
+import com.luckkids.mission.infra.MissionRepository;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;

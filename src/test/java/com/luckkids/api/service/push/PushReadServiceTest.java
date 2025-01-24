@@ -4,7 +4,7 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.alertSetting.AlertSettingRepository;
 import com.luckkids.domain.alertSetting.AlertType;
-import com.luckkids.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
 import com.luckkids.domain.push.Push;
 import com.luckkids.domain.push.PushMessage;
 import com.luckkids.domain.push.PushRepository;
@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
+import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.mission.domain.misson.AlertStatus.UNCHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PushReadServiceTest extends IntegrationTestSupport {

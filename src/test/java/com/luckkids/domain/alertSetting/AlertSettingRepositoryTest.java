@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
+import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
 import static com.luckkids.domain.user.Role.USER;
 import static com.luckkids.domain.user.SettingStatus.COMPLETE;
 import static com.luckkids.domain.user.SnsType.NORMAL;

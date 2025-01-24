@@ -13,7 +13,7 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingAlertRespo
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.mission.MissionService;
+import com.luckkids.mission.service.MissionService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;

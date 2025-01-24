@@ -1,6 +1,6 @@
 package com.luckkids.domain.misson;
 
-import static com.luckkids.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +17,9 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.Mission;
+import com.luckkids.mission.infra.MissionRepository;
 
 @Transactional
 class MissionRepositoryTest extends IntegrationTestSupport {

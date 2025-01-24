@@ -1,7 +1,7 @@
 package com.luckkids.api.service.mission;
 
-import static com.luckkids.domain.misson.AlertStatus.*;
-import static com.luckkids.domain.misson.MissionType.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.MissionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -15,17 +15,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.mission.response.MissionAggregateResponse;
-import com.luckkids.domain.luckkidsMission.LuckkidsMission;
-import com.luckkids.domain.luckkidsMission.LuckkidsMissionRepository;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.misson.MissionRepository;
-import com.luckkids.domain.misson.MissionType;
+import com.luckkids.mission.service.response.MissionAggregateResponse;
+import com.luckkids.mission.domain.luckkidsMission.LuckkidsMission;
+import com.luckkids.mission.infra.LuckkidsMissionRepository;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.Mission;
+import com.luckkids.mission.infra.MissionRepository;
+import com.luckkids.mission.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
+import com.luckkids.mission.service.MissionReadService;
 
 class MissionReadServiceTest extends IntegrationTestSupport {
 

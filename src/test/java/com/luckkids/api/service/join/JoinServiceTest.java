@@ -1,38 +1,27 @@
 package com.luckkids.api.service.join;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
-import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.request.JoinServiceRequest;
-import com.luckkids.api.service.join.response.JoinCheckEmailResponse;
 import com.luckkids.api.service.join.response.JoinResponse;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.alertHistory.AlertDestinationType;
 import com.luckkids.domain.alertHistory.AlertHistory;
 import com.luckkids.domain.alertHistory.AlertHistoryRepository;
 import com.luckkids.domain.alertHistory.AlertHistoryStatus;
-import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userAgreement.AgreementStatus;
-import com.luckkids.domain.userAgreement.UserAgreement;
 import com.luckkids.domain.userAgreement.UserAgreementRepository;
-import jakarta.persistence.*;
-import org.checkerframework.checker.units.qual.A;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalTime;
 import java.util.List;
 
-import static com.luckkids.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.misson.AlertStatus.UNCHECKED;
-import static com.luckkids.domain.misson.MissionType.SELF_DEVELOPMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertThrows;
