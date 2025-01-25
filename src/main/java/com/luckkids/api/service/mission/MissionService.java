@@ -12,7 +12,6 @@ import com.luckkids.api.service.mission.response.MissionResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.domain.misson.Mission;
-import com.luckkids.domain.misson.MissionActive;
 import com.luckkids.domain.misson.MissionRepository;
 import com.luckkids.domain.user.User;
 
@@ -43,7 +42,7 @@ public class MissionService {
 
 	public MissionResponse updateMission(int missionId, MissionUpdateServiceRequest request) {
 		Mission mission = missionReadService.findByOne(missionId);
-		MissionActive currentMissionActive = mission.getMissionActive();
+		// MissionActive currentMissionActive = mission.getMissionActive();
 
 		Mission updatedMission = mission.update(
 			request.getMissionType(),
@@ -53,7 +52,7 @@ public class MissionService {
 			request.getAlertTime()
 		);
 
-		missionEventService.handleMissionStateTransition(mission, currentMissionActive, request.getMissionActive());
+		// missionEventService.handleMissionStateTransition(mission, currentMissionActive, request.getMissionActive());
 
 		return MissionResponse.of(updatedMission);
 	}
