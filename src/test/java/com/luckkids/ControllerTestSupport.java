@@ -37,6 +37,7 @@ import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.join.JoinReadService;
 import com.luckkids.api.service.join.JoinService;
 import com.luckkids.api.service.login.LoginService;
+import com.luckkids.api.service.luckMessageHistory.LuckMessageHistoryReadService;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.mail.MailService;
 import com.luckkids.api.service.notice.NoticeReadService;
@@ -57,6 +58,7 @@ import com.luckkids.mission.service.MissionOutcomeReadService;
 import com.luckkids.mission.service.MissionOutcomeService;
 import com.luckkids.mission.service.MissionReadService;
 import com.luckkids.mission.service.MissionService;
+
 
 import jakarta.persistence.EntityManager;
 

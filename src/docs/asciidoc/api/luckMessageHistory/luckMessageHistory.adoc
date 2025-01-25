@@ -1,0 +1,12 @@
+[[luckMessageHistory-findOne]]
+=== 오늘의 행운의 한마디 조회 API
+
+==== HTTP Request
+
+include::{snippets}/luckMessageHistory-findOne/http-request.adoc[]
+include::{snippets}/luckMessageHistory-findOne/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/luckMessageHistory-findOne/http-response.adoc[]
+include::{snippets}/luckMessageHistory-findOne/response-fields.adoc[]
