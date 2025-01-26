@@ -1,7 +1,7 @@
 package com.luckkids.api.service.alertSetting;
 
-import static com.luckkids.domain.misson.AlertStatus.*;
 import static com.luckkids.domain.user.SnsType.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -23,19 +23,6 @@ import com.luckkids.domain.push.PushRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.domain.user.SnsType.NORMAL;
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.BDDMockito.given;
-
 
 public class AlertSettingReadServiceTest extends IntegrationTestSupport {
 

@@ -17,6 +17,7 @@ import com.luckkids.api.controller.home.HomeController;
 import com.luckkids.api.controller.initialSetting.InitialSettingController;
 import com.luckkids.api.controller.join.JoinController;
 import com.luckkids.api.controller.login.LoginController;
+import com.luckkids.api.controller.luckMessageHistory.LuckMessageHistoryController;
 import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.notice.NoticeController;
 import com.luckkids.api.controller.push.PushController;
@@ -59,7 +60,6 @@ import com.luckkids.mission.service.MissionOutcomeService;
 import com.luckkids.mission.service.MissionReadService;
 import com.luckkids.mission.service.MissionService;
 
-
 import jakarta.persistence.EntityManager;
 
 @ActiveProfiles("test")
@@ -81,7 +81,8 @@ import jakarta.persistence.EntityManager;
 	WithdrawReasonController.class,
 	LuckkidsMissionController.class,
 	PushController.class,
-	AlertHistoryController.class
+	AlertHistoryController.class,
+	LuckMessageHistoryController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -189,5 +190,8 @@ public abstract class ControllerTestSupport {
 
 	@MockBean
 	protected AlertHistoryReadService alertHistoryReadService;
+
+	@MockBean
+	protected LuckMessageHistoryReadService luckMessageHistoryReadService;
 }
 
