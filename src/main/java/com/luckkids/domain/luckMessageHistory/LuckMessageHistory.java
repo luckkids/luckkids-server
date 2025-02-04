@@ -1,7 +1,7 @@
 package com.luckkids.domain.luckMessageHistory;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.push.Push;
+import com.luckkids.notification.domain.push.Push;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

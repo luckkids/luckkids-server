@@ -1,10 +1,10 @@
 package com.luckkids.docs.confirmEmail;
 
-import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
-import com.luckkids.api.controller.confirmEmail.request.ConfirmEmailCheckRequest;
-import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
-import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
-import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
+import com.luckkids.notification.controller.ConfirmEmailController;
+import com.luckkids.notification.controller.request.ConfirmEmailCheckRequest;
+import com.luckkids.notification.service.ConfirmEmailService;
+import com.luckkids.notification.service.request.ConfirmEmailCheckServiceRequest;
+import com.luckkids.notification.service.response.ConfirmEmailCheckResponse;
 import com.luckkids.docs.RestDocsSupport;
 
 import org.junit.jupiter.api.DisplayName;

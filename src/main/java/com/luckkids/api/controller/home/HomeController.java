@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.luckkids.api.ApiResponse;
 import com.luckkids.api.controller.home.response.HomeMainResponse;
-import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
+import com.luckkids.notification.service.AlertHistoryReadService;
 import com.luckkids.mission.service.MissionOutcomeReadService;
 import com.luckkids.mission.service.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;

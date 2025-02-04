@@ -4,6 +4,9 @@ import com.luckkids.IntegrationTestSupport;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.PushRepository;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

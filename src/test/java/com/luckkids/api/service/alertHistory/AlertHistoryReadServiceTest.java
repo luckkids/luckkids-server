@@ -1,13 +1,14 @@
 package com.luckkids.api.service.alertHistory;
 
-import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
+import static com.luckkids.notification.domain.alertHistory.AlertHistoryStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
 
 import com.luckkids.api.page.request.PageInfoServiceRequest;
-import com.luckkids.domain.alertHistory.AlertDestinationType;
+import com.luckkids.notification.domain.alertHistory.AlertDestinationType;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.page.response.PageCustom;
-import com.luckkids.api.service.alertHistory.request.AlertHistoryDeviceIdServiceRequest;
-import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
-import com.luckkids.domain.alertHistory.AlertHistory;
-import com.luckkids.domain.alertHistory.AlertHistoryRepository;
-import com.luckkids.domain.alertHistory.AlertHistoryStatus;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.service.AlertHistoryReadService;
+import com.luckkids.notification.service.response.AlertHistoryResponse;
+import com.luckkids.notification.domain.alertHistory.AlertHistory;
+import com.luckkids.notification.infra.AlertHistoryRepository;
+import com.luckkids.notification.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
@@ -189,13 +190,14 @@ class AlertHistoryReadServiceTest extends IntegrationTestSupport {
 			.build();
 	}
 
-	private AlertHistory createFriendCodeAlertHistory(User user, String alertDescriptionInfo,AlertHistoryStatus alertHistoryStatus) {
+	private AlertHistory createFriendCodeAlertHistory(User user, String alertDescriptionInfo,
+		AlertHistoryStatus alertHistoryStatus) {
 		return AlertHistory.builder()
-				.user(user)
-				.alertDestinationType(AlertDestinationType.FRIEND_CODE)
-				.alertDestinationInfo(alertDescriptionInfo)
-				.alertHistoryStatus(alertHistoryStatus)
-				.build();
+			.user(user)
+			.alertDestinationType(AlertDestinationType.FRIEND_CODE)
+			.alertDestinationInfo(alertDescriptionInfo)
+			.alertHistoryStatus(alertHistoryStatus)
+			.build();
 	}
 
 	private LoginUserInfo createLoginUserInfo(int userId) {

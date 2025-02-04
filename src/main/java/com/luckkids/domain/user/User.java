@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.luckkids.api.exception.LuckKidsException;
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.domain.push.Push;
+import com.luckkids.notification.domain.push.Push;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.userCharacter.Level;
 import com.luckkids.domain.userCharacter.UserCharacter;

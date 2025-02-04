@@ -1,13 +1,13 @@
 package com.luckkids.docs.mail;
 
-import com.luckkids.api.controller.mail.MailController;
-import com.luckkids.api.controller.mail.request.SendAuthCodeRequest;
-import com.luckkids.api.controller.mail.request.SendPasswordRequest;
-import com.luckkids.api.service.mail.MailService;
-import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
-import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
-import com.luckkids.api.service.mail.response.SendPasswordResponse;
+import com.luckkids.notification.controller.MailController;
+import com.luckkids.notification.controller.request.SendAuthCodeRequest;
+import com.luckkids.notification.controller.request.SendPasswordRequest;
+import com.luckkids.notification.service.MailService;
+import com.luckkids.notification.service.request.SendAuthCodeServiceRequest;
+import com.luckkids.notification.service.request.SendPasswordServiceRequest;
+import com.luckkids.notification.service.response.SendAuthUrlResponse;
+import com.luckkids.notification.service.response.SendPasswordResponse;
 import com.luckkids.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

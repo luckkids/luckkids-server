@@ -1,8 +1,8 @@
 package com.luckkids.api.controller.mail;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.mail.request.SendAuthCodeRequest;
-import com.luckkids.api.controller.mail.request.SendPasswordRequest;
+import com.luckkids.notification.controller.request.SendAuthCodeRequest;
+import com.luckkids.notification.controller.request.SendPasswordRequest;
 import com.luckkids.api.controller.user.request.UserFindEmailRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

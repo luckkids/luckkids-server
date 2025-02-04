@@ -26,7 +26,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.api.controller.home.HomeController;
-import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
+import com.luckkids.notification.service.AlertHistoryReadService;
 import com.luckkids.mission.service.MissionOutcomeReadService;
 import com.luckkids.mission.service.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.user.UserReadService;

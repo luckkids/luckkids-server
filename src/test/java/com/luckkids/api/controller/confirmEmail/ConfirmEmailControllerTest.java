@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.confirmEmail;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.confirmEmail.request.ConfirmEmailCheckRequest;
+import com.luckkids.notification.controller.request.ConfirmEmailCheckRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;

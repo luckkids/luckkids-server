@@ -1,7 +1,7 @@
 package com.luckkids.docs.alertHistory;
 
-import static com.luckkids.domain.alertHistory.AlertDestinationType.*;
-import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
+import static com.luckkids.notification.domain.alertHistory.AlertDestinationType.*;
+import static com.luckkids.notification.domain.alertHistory.AlertHistoryStatus.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -20,18 +20,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.luckkids.api.controller.alertHistory.AlertHistoryController;
+import com.luckkids.notification.controller.AlertHistoryController;
 import com.luckkids.api.page.request.PageInfoRequest;
 import com.luckkids.api.page.request.PageInfoServiceRequest;
 import com.luckkids.api.page.response.PageCustom;
 import com.luckkids.api.page.response.PageableCustom;
-import com.luckkids.api.service.alertHistory.AlertHistoryReadService;
-import com.luckkids.api.service.alertHistory.AlertHistoryService;
-import com.luckkids.api.service.alertHistory.response.AlertHistoryResponse;
-import com.luckkids.api.service.alertHistory.response.AlertHistoryStatusResponse;
+import com.luckkids.notification.service.AlertHistoryReadService;
+import com.luckkids.notification.service.AlertHistoryService;
+import com.luckkids.notification.service.response.AlertHistoryResponse;
+import com.luckkids.notification.service.response.AlertHistoryStatusResponse;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.domain.alertHistory.AlertDestinationType;
-import com.luckkids.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.notification.domain.alertHistory.AlertDestinationType;
+import com.luckkids.notification.domain.alertHistory.AlertHistoryStatus;
 
 public class AlertHistoryControllerDocsTest extends RestDocsSupport {
 

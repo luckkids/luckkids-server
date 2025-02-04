@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.domain.alertHistory.AlertHistory;
+import com.luckkids.notification.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.AlertHistoryRepository;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;

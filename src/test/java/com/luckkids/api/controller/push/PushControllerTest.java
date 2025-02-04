@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.push;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.api.controller.push.request.PushSoundChangeRequest;
+import com.luckkids.notification.controller.request.PushSoundChangeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;

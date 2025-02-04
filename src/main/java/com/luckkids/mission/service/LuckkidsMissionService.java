@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.luckkids.mission.service.request.LuckkidsMissionListServiceRequest;
 import com.luckkids.mission.service.response.LuckkidsMissionListSaveResponse;
-import com.luckkids.api.service.push.PushService;
-import com.luckkids.api.service.push.request.SendPushAlertTypeServiceRequest;
-import com.luckkids.api.service.push.request.SendPushDataDto;
-import com.luckkids.domain.alertHistory.AlertDestinationType;
-import com.luckkids.domain.alertSetting.AlertType;
+import com.luckkids.notification.service.PushService;
+import com.luckkids.notification.service.request.SendPushAlertTypeServiceRequest;
+import com.luckkids.notification.service.request.SendPushDataDto;
+import com.luckkids.notification.domain.alertHistory.AlertDestinationType;
+import com.luckkids.notification.domain.alertSetting.AlertType;
 import com.luckkids.mission.domain.luckkidsMission.LuckkidsMission;
 import com.luckkids.mission.infra.LuckkidsMissionRepository;
-import com.luckkids.domain.push.PushMessage;
+import com.luckkids.notification.domain.push.PushMessage;
 
 import lombok.RequiredArgsConstructor;
 

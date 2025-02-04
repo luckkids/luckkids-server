@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshToken;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import com.luckkids.jwt.dto.JwtToken;

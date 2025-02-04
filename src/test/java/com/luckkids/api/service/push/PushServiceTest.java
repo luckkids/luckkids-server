@@ -1,11 +1,12 @@
 package com.luckkids.api.service.push;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.push.request.PushSoundChangeServiceRequest;
-import com.luckkids.api.service.push.response.PushSoundChangeResponse;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushMessage;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.service.PushService;
+import com.luckkids.notification.service.request.PushSoundChangeServiceRequest;
+import com.luckkids.notification.service.response.PushSoundChangeResponse;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.domain.push.PushMessage;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.*;
 import com.luckkids.jwt.dto.LoginUserInfo;
 import org.junit.jupiter.api.AfterEach;

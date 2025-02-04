@@ -1,20 +1,21 @@
 package com.luckkids.docs.alertSetting;
 
-import com.luckkids.api.controller.alertSetting.AlertSettingController;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingLuckMessageAlertTimeRequest;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingRequest;
-import com.luckkids.api.controller.alertSetting.request.AlertSettingUpdateRequest;
-import com.luckkids.api.service.alertSetting.AlertSettingReadService;
-import com.luckkids.api.service.alertSetting.AlertSettingService;
-import com.luckkids.api.service.alertSetting.request.AlertSettingLuckMessageAlertTimeServiceRequest;
-import com.luckkids.api.service.alertSetting.request.AlertSettingServiceRequest;
-import com.luckkids.api.service.alertSetting.request.AlertSettingUpdateServiceRequest;
-import com.luckkids.api.service.alertSetting.response.AlertSettingLuckMessageAlertTimeResponse;
-import com.luckkids.api.service.alertSetting.response.AlertSettingResponse;
-import com.luckkids.api.service.alertSetting.response.AlertSettingUpdateResponse;
+import com.luckkids.notification.controller.AlertSettingController;
+import com.luckkids.notification.controller.request.AlertSettingLuckMessageAlertTimeRequest;
+import com.luckkids.notification.controller.request.AlertSettingRequest;
+import com.luckkids.notification.controller.request.AlertSettingUpdateRequest;
+import com.luckkids.notification.service.AlertSettingReadService;
+import com.luckkids.notification.service.AlertSettingService;
+import com.luckkids.notification.service.request.AlertSettingLuckMessageAlertTimeServiceRequest;
+import com.luckkids.notification.service.request.AlertSettingServiceRequest;
+import com.luckkids.notification.service.request.AlertSettingUpdateServiceRequest;
+import com.luckkids.notification.service.response.AlertSettingLuckMessageAlertTimeResponse;
+import com.luckkids.notification.service.response.AlertSettingResponse;
+import com.luckkids.notification.service.response.AlertSettingUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.domain.alertSetting.AlertType;
+import com.luckkids.notification.domain.alertSetting.AlertType;
 import com.luckkids.mission.domain.misson.AlertStatus;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -39,199 +40,199 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AlertSettingControllerDocsTest extends RestDocsSupport {
 
-    private final AlertSettingReadService alertSettingReadService = mock(AlertSettingReadService.class);
-    private final AlertSettingService alertSettingService = mock(AlertSettingService.class);
+	private final AlertSettingReadService alertSettingReadService = mock(AlertSettingReadService.class);
+	private final AlertSettingService alertSettingService = mock(AlertSettingService.class);
 
-    @Override
-    protected Object initController() {
-        return new AlertSettingController(alertSettingReadService, alertSettingService);
-    }
+	@Override
+	protected Object initController() {
+		return new AlertSettingController(alertSettingReadService, alertSettingService);
+	}
 
-    @DisplayName("알림설정조회 API")
-    @Test
-    @WithMockUser(roles = "USER")
-    void getAlertSetting() throws Exception {
-        // given
-        AlertSettingRequest request = AlertSettingRequest.builder()
-            .deviceId("testdeviceId")
-            .build();
+	@DisplayName("알림설정조회 API")
+	@Test
+	@WithMockUser(roles = "USER")
+	void getAlertSetting() throws Exception {
+		// given
+		AlertSettingRequest request = AlertSettingRequest.builder()
+			.deviceId("testdeviceId")
+			.build();
 
-        given(alertSettingReadService.getAlertSetting(any(AlertSettingServiceRequest.class)))
-            .willReturn(
-                AlertSettingResponse.builder()
-                    .luck(AlertStatus.CHECKED)
-                    .mission(AlertStatus.CHECKED)
-                    .notice(AlertStatus.CHECKED)
-                    .friend(AlertStatus.CHECKED)
-                    .entire(AlertStatus.CHECKED)
-                    .luckMessageAlertTime(LocalTime.of(7,0))
-                    .build()
-            );
+		given(alertSettingReadService.getAlertSetting(any(AlertSettingServiceRequest.class)))
+			.willReturn(
+				AlertSettingResponse.builder()
+					.luck(AlertStatus.CHECKED)
+					.mission(AlertStatus.CHECKED)
+					.notice(AlertStatus.CHECKED)
+					.friend(AlertStatus.CHECKED)
+					.entire(AlertStatus.CHECKED)
+					.luckMessageAlertTime(LocalTime.of(7, 0))
+					.build()
+			);
 
-        // when // then
-        mockMvc.perform(
-                get("/api/v1/alertSetting")
-                    .param("deviceId", request.getDeviceId())
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("get-alertSetting",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                queryParameters(
-                        parameterWithName("deviceId")
-                                .description("디바이스 ID")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.entire").type(JsonFieldType.STRING)
-                        .description("전체알람설정"),
-                    fieldWithPath("data.mission").type(JsonFieldType.STRING)
-                        .description("미션알림설정"),
-                    fieldWithPath("data.luck").type(JsonFieldType.STRING)
-                        .description("7시행운문구알림설정"),
-                    fieldWithPath("data.friend").type(JsonFieldType.STRING)
-                            .description("친구 알림설정"),
-                    fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                        .description("공지사항 알림설정"),
-                    fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
-                            .description("행운의 한마디 알림시간")
-                )
-            ));
-    }
+		// when // then
+		mockMvc.perform(
+				get("/api/v1/alertSetting")
+					.param("deviceId", request.getDeviceId())
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("get-alertSetting",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				queryParameters(
+					parameterWithName("deviceId")
+						.description("디바이스 ID")
+				),
+				responseFields(
+					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+						.description("코드"),
+					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+						.description("상태"),
+					fieldWithPath("message").type(JsonFieldType.STRING)
+						.description("메세지"),
+					fieldWithPath("data").type(JsonFieldType.OBJECT)
+						.description("응답 데이터"),
+					fieldWithPath("data.entire").type(JsonFieldType.STRING)
+						.description("전체알람설정"),
+					fieldWithPath("data.mission").type(JsonFieldType.STRING)
+						.description("미션알림설정"),
+					fieldWithPath("data.luck").type(JsonFieldType.STRING)
+						.description("7시행운문구알림설정"),
+					fieldWithPath("data.friend").type(JsonFieldType.STRING)
+						.description("친구 알림설정"),
+					fieldWithPath("data.notice").type(JsonFieldType.STRING)
+						.description("공지사항 알림설정"),
+					fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
+						.description("행운의 한마디 알림시간")
+				)
+			));
+	}
 
-    @DisplayName("알림 수정 API")
-    @Test
-    @WithMockUser(roles = "USER")
-    void updateAlertSetting() throws Exception {
-        AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
-            .alertType(AlertType.ENTIRE)
-            .alertStatus(AlertStatus.UNCHECKED)
-            .deviceId("testDeviceId")
-            .build();
-        // given
-        given(alertSettingService.updateAlertSetting(any(AlertSettingUpdateServiceRequest.class)))
-            .willReturn(
-                AlertSettingUpdateResponse.builder()
-                    .luck(AlertStatus.CHECKED)
-                    .mission(AlertStatus.CHECKED)
-                    .notice(AlertStatus.CHECKED)
-                    .friend(AlertStatus.CHECKED)
-                    .entire(AlertStatus.CHECKED)
-                    .build()
-            );
+	@DisplayName("알림 수정 API")
+	@Test
+	@WithMockUser(roles = "USER")
+	void updateAlertSetting() throws Exception {
+		AlertSettingUpdateRequest request = AlertSettingUpdateRequest.builder()
+			.alertType(AlertType.ENTIRE)
+			.alertStatus(AlertStatus.UNCHECKED)
+			.deviceId("testDeviceId")
+			.build();
+		// given
+		given(alertSettingService.updateAlertSetting(any(AlertSettingUpdateServiceRequest.class)))
+			.willReturn(
+				AlertSettingUpdateResponse.builder()
+					.luck(AlertStatus.CHECKED)
+					.mission(AlertStatus.CHECKED)
+					.notice(AlertStatus.CHECKED)
+					.friend(AlertStatus.CHECKED)
+					.entire(AlertStatus.CHECKED)
+					.build()
+			);
 
-        // when // then
-        mockMvc.perform(
-                patch("/api/v1/alertSetting/update")
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("update-alertSetting",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestFields(
-                    fieldWithPath("alertType").type(JsonFieldType.STRING)
-                        .description("알림타입 가능한 값: " + Arrays.toString(AlertType.values())),
-                    fieldWithPath("alertStatus").type(JsonFieldType.STRING)
-                        .description("알림여부" + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("deviceId").type(JsonFieldType.STRING)
-                        .description("디바이스ID")
-                ),
-                responseFields(
-                    fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메세지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.entire").type(JsonFieldType.STRING)
-                        .description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("data.mission").type(JsonFieldType.STRING)
-                        .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("data.luck").type(JsonFieldType.STRING)
-                        .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("data.friend").type(JsonFieldType.STRING)
-                            .description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
-                    fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                            .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values()))
-                )
-            ));
-    }
+		// when // then
+		mockMvc.perform(
+				patch("/api/v1/alertSetting/update")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("update-alertSetting",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("alertType").type(JsonFieldType.STRING)
+						.description("알림타입 가능한 값: " + Arrays.toString(AlertType.values())),
+					fieldWithPath("alertStatus").type(JsonFieldType.STRING)
+						.description("알림여부" + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("deviceId").type(JsonFieldType.STRING)
+						.description("디바이스ID")
+				),
+				responseFields(
+					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+						.description("코드"),
+					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+						.description("상태"),
+					fieldWithPath("message").type(JsonFieldType.STRING)
+						.description("메세지"),
+					fieldWithPath("data").type(JsonFieldType.OBJECT)
+						.description("응답 데이터"),
+					fieldWithPath("data.entire").type(JsonFieldType.STRING)
+						.description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.mission").type(JsonFieldType.STRING)
+						.description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.luck").type(JsonFieldType.STRING)
+						.description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.friend").type(JsonFieldType.STRING)
+						.description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.notice").type(JsonFieldType.STRING)
+						.description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.notice").type(JsonFieldType.STRING)
+						.description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values()))
+				)
+			));
+	}
 
-    @DisplayName("행운의 한마디 알림시간 수정 API")
-    @Test
-    @WithMockUser(roles = "USER")
-    void updateLuckMessageAlertTime() throws Exception {
-        AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
-                .luckMessageAlertTime(LocalTime.of(8,0))
-                .deviceId("testDeviceId")
-                .build();
-        // given
-        given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckMessageAlertTimeServiceRequest.class)))
-                .willReturn(
-                        AlertSettingLuckMessageAlertTimeResponse.builder()
-                                .luck(AlertStatus.CHECKED)
-                                .mission(AlertStatus.CHECKED)
-                                .notice(AlertStatus.CHECKED)
-                                .friend(AlertStatus.CHECKED)
-                                .entire(AlertStatus.CHECKED)
-                                .luckMessageAlertTime(LocalTime.of(8,0))
-                                .build()
-                );
+	@DisplayName("행운의 한마디 알림시간 수정 API")
+	@Test
+	@WithMockUser(roles = "USER")
+	void updateLuckMessageAlertTime() throws Exception {
+		AlertSettingLuckMessageAlertTimeRequest request = AlertSettingLuckMessageAlertTimeRequest.builder()
+			.luckMessageAlertTime(LocalTime.of(8, 0))
+			.deviceId("testDeviceId")
+			.build();
+		// given
+		given(alertSettingService.updateLuckMessageAlertTime(any(AlertSettingLuckMessageAlertTimeServiceRequest.class)))
+			.willReturn(
+				AlertSettingLuckMessageAlertTimeResponse.builder()
+					.luck(AlertStatus.CHECKED)
+					.mission(AlertStatus.CHECKED)
+					.notice(AlertStatus.CHECKED)
+					.friend(AlertStatus.CHECKED)
+					.entire(AlertStatus.CHECKED)
+					.luckMessageAlertTime(LocalTime.of(8, 0))
+					.build()
+			);
 
-        // when // then
-        mockMvc.perform(
-                        patch("/api/v1/alertSetting/luckMessageAlertTime/update")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(APPLICATION_JSON)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("update-luckMessageAlertTime",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("luckMessageAlertTime").type(JsonFieldType.STRING)
-                                        .description("행운의 한마디 알림시간"),
-                                fieldWithPath("deviceId").type(JsonFieldType.STRING)
-                                        .description("디바이스ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메세지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.entire").type(JsonFieldType.STRING)
-                                        .description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
-                                fieldWithPath("data.mission").type(JsonFieldType.STRING)
-                                        .description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
-                                fieldWithPath("data.luck").type(JsonFieldType.STRING)
-                                        .description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
-                                fieldWithPath("data.friend").type(JsonFieldType.STRING)
-                                        .description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
-                                fieldWithPath("data.notice").type(JsonFieldType.STRING)
-                                        .description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
-                                fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
-                                        .description("행운의 한마디 시간")
-                        )
-                ));
-    }
+		// when // then
+		mockMvc.perform(
+				patch("/api/v1/alertSetting/luckMessageAlertTime/update")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("update-luckMessageAlertTime",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("luckMessageAlertTime").type(JsonFieldType.STRING)
+						.description("행운의 한마디 알림시간"),
+					fieldWithPath("deviceId").type(JsonFieldType.STRING)
+						.description("디바이스ID")
+				),
+				responseFields(
+					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+						.description("코드"),
+					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+						.description("상태"),
+					fieldWithPath("message").type(JsonFieldType.STRING)
+						.description("메세지"),
+					fieldWithPath("data").type(JsonFieldType.OBJECT)
+						.description("응답 데이터"),
+					fieldWithPath("data.entire").type(JsonFieldType.STRING)
+						.description("전체알람설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.mission").type(JsonFieldType.STRING)
+						.description("미션알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.luck").type(JsonFieldType.STRING)
+						.description("7시행운문구알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.friend").type(JsonFieldType.STRING)
+						.description("친구 알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.notice").type(JsonFieldType.STRING)
+						.description("공지사항 알림설정: " + Arrays.toString(AlertStatus.values())),
+					fieldWithPath("data.luckMessageAlertTime").type(JsonFieldType.STRING)
+						.description("행운의 한마디 시간")
+				)
+			));
+	}
 }

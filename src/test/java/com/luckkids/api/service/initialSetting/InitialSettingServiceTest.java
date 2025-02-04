@@ -28,12 +28,12 @@ import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterR
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.user.UserReadService;
-import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.notification.infra.AlertSettingRepository;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacter;
 import com.luckkids.domain.luckkidsCharacter.LuckkidsCharacterRepository;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userCharacter.UserCharacterRepository;

@@ -1,6 +1,6 @@
 package com.luckkids.domain.alertHistory;
 
-import static com.luckkids.domain.alertHistory.AlertHistoryStatus.*;
+import static com.luckkids.notification.domain.alertHistory.AlertHistoryStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -14,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.page.request.PageInfoServiceRequest;
-import com.luckkids.domain.push.Push;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.domain.alertHistory.AlertHistory;
+import com.luckkids.notification.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.notification.domain.push.Push;
+import com.luckkids.notification.infra.AlertHistoryQueryRepository;
+import com.luckkids.notification.infra.AlertHistoryRepository;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;

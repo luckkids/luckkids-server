@@ -1,6 +1,6 @@
 package com.luckkids.api.service.user.delete;
 
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.refreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

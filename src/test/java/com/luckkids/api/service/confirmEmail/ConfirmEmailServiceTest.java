@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
 import com.luckkids.api.exception.LuckKidsException;
-import com.luckkids.api.service.confirmEmail.request.ConfirmEmailCheckServiceRequest;
-import com.luckkids.api.service.confirmEmail.request.CreateConfrimEmailServiceRequest;
-import com.luckkids.api.service.confirmEmail.response.ConfirmEmailCheckResponse;
-import com.luckkids.domain.confirmEmail.ConfirmEmail;
-import com.luckkids.domain.confirmEmail.ConfirmEmailRepository;
-import com.luckkids.domain.confirmEmail.ConfirmStatus;
+import com.luckkids.notification.service.ConfirmEmailReadService;
+import com.luckkids.notification.service.ConfirmEmailService;
+import com.luckkids.notification.service.request.ConfirmEmailCheckServiceRequest;
+import com.luckkids.notification.service.request.CreateConfrimEmailServiceRequest;
+import com.luckkids.notification.service.response.ConfirmEmailCheckResponse;
+import com.luckkids.notification.domain.confirmEmail.ConfirmEmail;
+import com.luckkids.notification.infra.ConfirmEmailRepository;
+import com.luckkids.notification.domain.confirmEmail.ConfirmStatus;
 
 public class ConfirmEmailServiceTest extends IntegrationTestSupport {
 

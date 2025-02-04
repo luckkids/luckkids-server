@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.notification.service.AlertSettingService;
 import com.luckkids.api.service.initialSetting.request.InitialSettingServiceRequest;
 import com.luckkids.api.service.initialSetting.response.InitialSettingAlertResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;

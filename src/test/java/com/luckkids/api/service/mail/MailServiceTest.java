@@ -1,10 +1,10 @@
 package com.luckkids.api.service.mail;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.mail.request.SendAuthCodeServiceRequest;
-import com.luckkids.api.service.mail.request.SendPasswordServiceRequest;
-import com.luckkids.api.service.mail.response.SendAuthUrlResponse;
-import com.luckkids.api.service.mail.response.SendPasswordResponse;
+import com.luckkids.notification.service.request.SendAuthCodeServiceRequest;
+import com.luckkids.notification.service.request.SendPasswordServiceRequest;
+import com.luckkids.notification.service.response.SendAuthUrlResponse;
+import com.luckkids.notification.service.response.SendPasswordResponse;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;

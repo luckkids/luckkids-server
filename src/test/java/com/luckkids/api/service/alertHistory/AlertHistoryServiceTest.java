@@ -2,19 +2,19 @@ package com.luckkids.api.service.alertHistory;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.luckkids.domain.userAgreement.AgreementStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
-import com.luckkids.domain.alertHistory.AlertDestinationType;
-import com.luckkids.domain.alertHistory.AlertHistory;
-import com.luckkids.domain.alertHistory.AlertHistoryRepository;
-import com.luckkids.domain.alertHistory.AlertHistoryStatus;
-import com.luckkids.domain.push.PushRepository;
+import com.luckkids.notification.service.AlertHistoryService;
+import com.luckkids.notification.service.request.AlertHistoryServiceRequest;
+import com.luckkids.notification.domain.alertHistory.AlertDestinationType;
+import com.luckkids.notification.domain.alertHistory.AlertHistory;
+import com.luckkids.notification.infra.AlertHistoryRepository;
+import com.luckkids.notification.domain.alertHistory.AlertHistoryStatus;
+import com.luckkids.notification.infra.PushRepository;
 import com.luckkids.domain.user.Role;
 import com.luckkids.domain.user.SettingStatus;
 import com.luckkids.domain.user.SnsType;
@@ -74,9 +74,9 @@ public class AlertHistoryServiceTest extends IntegrationTestSupport {
 		List<AlertHistory> alertHistories = alertHistoryRepository.findByUserId(user.getId());
 
 		assertThat(alertHistories).extracting("alertDescription", "alertHistoryStatus", "alertDestinationType")
-				.containsExactlyInAnyOrder(
-						tuple("환영해요 :) 럭키즈와 함께 행운을 키워가요!", AlertHistoryStatus.CHECKED, AlertDestinationType.WELCOME)
-				);
+			.containsExactlyInAnyOrder(
+				tuple("환영해요 :) 럭키즈와 함께 행운을 키워가요!", AlertHistoryStatus.CHECKED, AlertDestinationType.WELCOME)
+			);
 	}
 
 	private User createUser(String email, String password, String nickname, String luckPhrase, int missionCount) {
