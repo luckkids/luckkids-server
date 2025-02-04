@@ -1,4 +1,4 @@
-package com.luckkids.api.service.luckkidsMission;
+package com.luckkids.mission.service.luckkidsMission;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.mission.service.response.LuckkidsMissionResponse;
 import com.luckkids.mission.domain.luckkidsMission.LuckkidsMission;
-import com.luckkids.mission.infra.LuckkidsMissionRepository;
 import com.luckkids.mission.domain.misson.MissionType;
+import com.luckkids.mission.infra.LuckkidsMissionRepository;
 import com.luckkids.mission.service.LuckkidsMissionReadService;
+import com.luckkids.mission.service.response.LuckkidsMissionResponse;
 
 public class LuckMissionReadServiceTest extends IntegrationTestSupport {
 

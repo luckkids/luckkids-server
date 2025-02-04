@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.missionOutcome;
+package com.luckkids.mission.controller.missionOutcome;
 
 import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
 import static org.springframework.http.MediaType.*;

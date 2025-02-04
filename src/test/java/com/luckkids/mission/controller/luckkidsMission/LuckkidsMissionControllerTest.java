@@ -1,4 +1,4 @@
-package com.luckkids.api.controller.luckkidsMission;
+package com.luckkids.mission.controller.luckkidsMission;
 
 import static org.springframework.http.MediaType.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import com.luckkids.ControllerTestSupport;
-import com.luckkids.mission.domain.misson.MissionType;
 import com.luckkids.mission.controller.request.LuckkidsMissionListRequest;
 import com.luckkids.mission.controller.request.LuckkidsMissionRequest;
+import com.luckkids.mission.domain.misson.MissionType;
 
 public class LuckkidsMissionControllerTest extends ControllerTestSupport {
 

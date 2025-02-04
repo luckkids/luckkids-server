@@ -1,4 +1,4 @@
-package com.luckkids.api.service.mission;
+package com.luckkids.mission.service.mission;
 
 import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
 import static com.luckkids.mission.domain.misson.AlertStatus.*;
@@ -19,22 +19,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckkids.IntegrationTestSupport;
-import com.luckkids.mission.service.request.MissionCreateServiceRequest;
-import com.luckkids.mission.service.MissionService;
-import com.luckkids.mission.service.request.MissionUpdateServiceRequest;
-import com.luckkids.mission.service.MissionResponse;
-import com.luckkids.mission.domain.missionOutcome.MissionOutcome;
-import com.luckkids.mission.infra.MissionOutcomeRepository;
-import com.luckkids.mission.domain.missionOutcome.SuccessChecked;
-import com.luckkids.mission.domain.misson.AlertStatus;
-import com.luckkids.mission.domain.misson.Mission;
-import com.luckkids.mission.domain.misson.MissionActive;
-import com.luckkids.mission.infra.MissionRepository;
-import com.luckkids.mission.domain.misson.MissionType;
 import com.luckkids.domain.user.SnsType;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.jwt.dto.LoginUserInfo;
+import com.luckkids.mission.domain.missionOutcome.MissionOutcome;
+import com.luckkids.mission.domain.missionOutcome.SuccessChecked;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.Mission;
+import com.luckkids.mission.domain.misson.MissionActive;
+import com.luckkids.mission.domain.misson.MissionType;
+import com.luckkids.mission.infra.MissionOutcomeRepository;
+import com.luckkids.mission.infra.MissionRepository;
+import com.luckkids.mission.service.MissionResponse;
+import com.luckkids.mission.service.MissionService;
+import com.luckkids.mission.service.request.MissionCreateServiceRequest;
+import com.luckkids.mission.service.request.MissionUpdateServiceRequest;
 
 class MissionServiceTest extends IntegrationTestSupport {
 

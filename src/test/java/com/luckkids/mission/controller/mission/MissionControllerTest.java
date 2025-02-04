@@ -1,23 +1,22 @@
-package com.luckkids.api.controller.mission;
+package com.luckkids.mission.controller.mission;
 
-import com.luckkids.ControllerTestSupport;
-import com.luckkids.mission.controller.request.MissionCreateRequest;
-import com.luckkids.mission.controller.request.MissionUpdateRequest;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.MissionType.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalTime;
-
-import static com.luckkids.mission.domain.misson.AlertStatus.CHECKED;
-import static com.luckkids.mission.domain.misson.MissionType.HEALTH;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.luckkids.ControllerTestSupport;
+import com.luckkids.mission.controller.request.MissionCreateRequest;
+import com.luckkids.mission.controller.request.MissionUpdateRequest;
 
 class MissionControllerTest extends ControllerTestSupport {
 
