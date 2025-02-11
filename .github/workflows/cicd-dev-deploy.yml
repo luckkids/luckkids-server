@@ -1,0 +1,90 @@
+name: 🚀 배포
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ "dev" ]
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🍀 서브모듈 추가
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - name: 🍀 JDK 17 세팅
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: 🍀 gradlew 실행 권한 설정
+        run: chmod +x gradlew
+
+      - name: 🍀 Gradle 캐시 설정
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: 🍀 비밀 설정 파일 복사
+        run: ./gradlew copySecret
+
+      - name: 🍀 Gradle 빌드
+        env:
+          DEPLOY_CHECK: ok
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          AES_KEY: ${{ secrets.AES_KEY }}
+        run: ./gradlew build --parallel
+
+      - name: 📦 jar, appspec, 배포 스크립트 복사
+        run: |
+          mkdir -p before-deploy
+          cp ./build/libs/*.jar ./before-deploy/
+          cp ./appspec-dev.yml ./before-deploy/
+          cp -r ./scripts/dev/ ./before-deploy/scripts/
+
+      - name: 🗜️ 배포 패키지 생성
+        run: zip -r -qq ./deploy.zip ./before-deploy/
+
+      - name: 🔑 개인 호스트 추가
+        run: |
+          ssh-keyscan -H ${{ secrets.DEV_SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 개인 서버에 파일 업로드
+        run: |
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh-copy-id tkdrl8908@${{ secrets.DEV_SERVER_HOST }} -o StrictHostKeyChecking=no
+          sshpass scp ./deploy.zip tkdrl8908@${{ secrets.DEV_SERVER_HOST }}:/home/tkdrl8908/luckkids/deploy.zip
+          sshpass ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
+            unzip -o /home/tkdrl8908/luckkids/deploy.zip -d /home/tkdrl8908/luckkids &&
+            rm -rf /home/tkdrl8908/luckkids/app/* &&
+            mv /home/tkdrl8908/luckkids/before-deploy/* /home/tkdrl8908/luckkids/app/ &&
+            chmod +x /home/tkdrl8908/luckkids/app/scripts/*.sh"
+
+      - name: 🎯 개인 서버에서 배포 실행 (AfterInstall)
+        run: |
+          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/run_new_was.sh"
+
+      - name: 🎯 개인 서버에서 배포 실행 (ApplicationStart)
+        run: |
+          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/health.sh"
+
+      - name: 🎯 개인 서버에서 배포 실행 (ValidateService)
+        run: |
+          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/switch.sh"
+
+      - name: 🧹 임시 파일 정리
+        run: |
+          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
+            rm -rf /home/tkdrl8908/luckkids/deploy.zip /home/tkdrl8908/luckkids/before-deploy"
