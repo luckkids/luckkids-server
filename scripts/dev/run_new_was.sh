@@ -40,6 +40,7 @@ nohup java -javaagent:$SCOUTER/agent.java/scouter.agent.jar \
           -Dscouter.config=$SCOUTER/agent.java/conf/scouter.conf \
           -jar \
           -Dserver.port=${TARGET_PORT} \
+          -Dserver.servlet.context-path=/luckkids \
           -Dspring.profiles.active=dev \
           $JAR_NAME > $LOG_FILE 2>&1 &
 
