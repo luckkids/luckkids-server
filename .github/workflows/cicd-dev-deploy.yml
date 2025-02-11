@@ -1,8 +1,12 @@
 name: 🚀 개발 배포
 
+#on:
+#  pull_request:
+#    types: [ closed ]
+#    branches: [ "dev" ]
 on:
   pull_request:
-    types: [ closed ]
+    types: [ opened, reopened, synchronize ]
     branches: [ "dev" ]
 
 jobs:
