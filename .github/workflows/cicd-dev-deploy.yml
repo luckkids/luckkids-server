@@ -68,18 +68,38 @@ jobs:
             chmod +x /home/tkdrl8908/luckkids/app/scripts/*.sh"
 
       - name: 🎯 개인 서버에서 배포 실행 (AfterInstall)
-        run: |
-          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/run_new_was.sh"
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: tkdrl8908
+          password: ${{ secrets.DEV_SERVER_PASSWORD }}
+          script: |
+            ./home/tkdrl8908/luckkids/app/scripts/run_new_was.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ApplicationStart)
-        run: |
-          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/health.sh"
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: tkdrl8908
+          password: ${{ secrets.DEV_SERVER_PASSWORD }}
+          script: |
+            ./home/tkdrl8908/luckkids/app/scripts/health.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ValidateService)
-        run: |
-          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/switch.sh"
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: tkdrl8908
+          password: ${{ secrets.DEV_SERVER_PASSWORD }}
+          script: |
+            echo "${{ secrets.PERSONAL_SERVER_PASSWORD }}" | sudo -S su
+            ./home/tkdrl8908/luckkids/app/scripts/switch.sh
 
       - name: 🧹 임시 파일 정리
-        run: |
-          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
-            rm -rf /home/tkdrl8908/luckkids/deploy.zip /home/tkdrl8908/luckkids/before-deploy"
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: tkdrl8908
+          password: ${{ secrets.DEV_SERVER_PASSWORD }}
+          script: |
+            rm -rf /home/tkdrl8908/luckkids/deploy.zip /home/tkdrl8908/luckkids/before-deploy
