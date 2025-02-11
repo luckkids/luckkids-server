@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOSITORY=/home/tkdrl8908/luckkids/app
+REPOSITORY=/home/tkdrl8908/luckkids/before-deploy
 SCOUTER=/home/tkdrl8908/luckkids/scouter
 # PINPOINT=/home/ec2-user/pinpoint
 
