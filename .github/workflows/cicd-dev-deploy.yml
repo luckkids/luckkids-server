@@ -2,7 +2,7 @@ name: 🚀 개발 배포
 
 on:
   pull_request:
-    types: [ opened ]
+    types: [ closed ]
     branches: [ "dev" ]
 
 jobs:
