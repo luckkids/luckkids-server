@@ -6,7 +6,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: luckkids.official@gmail.com
-    password: ${MAIL_PASSWORD}
+    password: kzmearkdbqtjjbxt
     properties:
       mail:
         smtp:
@@ -32,13 +32,13 @@ decorator:
       enable-logging: true
 
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
+  secret-key: a964233191a19f309ad49de2825616e6faa2b1e147d7e4246d289a49fe9c970fcd974b2d06dfbd657e3faa03f66986c41456f6986140be7d8a547ab8298211c7
 
 slack:
   webhook-url: https://hooks.slack.com/services/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
 
 aes:
-  key-value: ${AES_KEY}
+  key-value: a964233191a19f309ad49de2825616e6faa2b1e147d7e4246d289a49fe9c970fcd974b2d06dfbd657e3faa03f66986c41456f6986140be7d8a547ab8298211c7
 
 cloudfront:
   s3-url: https://d1i0as5mndfs61.cloudfront.net/
@@ -66,7 +66,7 @@ spring:
   datasource:
     url: jdbc:mariadb://182.231.175.151:47852/luckkids_dev
     username: luckkidsDevServer
-    password: ${DEV_DB_PASSWORD}
+    password: uBaqQ4j+6(~y&pN
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
@@ -107,7 +107,7 @@ spring:
   datasource:
     url: jdbc:mariadb://182.231.175.151:47852/luckkids
     username: luckkidsServer
-    password: ${PROD_DB_PASSWORD}
+    password: LR8M2ZI#sFw1r70
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:

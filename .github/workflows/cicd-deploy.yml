@@ -39,13 +39,6 @@ jobs:
         run: ./gradlew copySecret
 
       - name: 🍀 Gradle 빌드
-        env:
-          DEPLOY_CHECK: ok
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
-          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-          AES_KEY: ${{ secrets.AES_KEY }}
         run: ./gradlew build --parallel
 
       - name: 📦 jar, appspec, 배포 스크립트 복사
