@@ -1,4 +1,4 @@
-name: 🚀 배포
+name: 🚀 개발 배포
 
 on:
   pull_request:
@@ -57,10 +57,6 @@ jobs:
 
       - name: 🗜️ 배포 패키지 생성
         run: zip -r -qq ./deploy.zip ./before-deploy/
-
-      - name: 🔑 개인 호스트 추가
-        run: |
-          ssh-keyscan -H ${{ secrets.DEV_SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: 🚀 개인 서버에 파일 업로드
         run: |
