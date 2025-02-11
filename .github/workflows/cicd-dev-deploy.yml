@@ -64,9 +64,8 @@ jobs:
 
       - name: 🚀 개인 서버에 파일 업로드
         run: |
-          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh-copy-id tkdrl8908@${{ secrets.DEV_SERVER_HOST }} -o StrictHostKeyChecking=no
-          sshpass scp ./deploy.zip tkdrl8908@${{ secrets.DEV_SERVER_HOST }}:/home/tkdrl8908/luckkids/deploy.zip
-          sshpass ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass scp -o StrictHostKeyChecking=no ./deploy.zip tkdrl8908@${{ secrets.DEV_SERVER_HOST }}:/home/tkdrl8908/luckkids/deploy.zip
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
             unzip -o /home/tkdrl8908/luckkids/deploy.zip -d /home/tkdrl8908/luckkids &&
             rm -rf /home/tkdrl8908/luckkids/app/* &&
             mv /home/tkdrl8908/luckkids/before-deploy/* /home/tkdrl8908/luckkids/app/ &&
@@ -74,17 +73,17 @@ jobs:
 
       - name: 🎯 개인 서버에서 배포 실행 (AfterInstall)
         run: |
-          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/run_new_was.sh"
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/run_new_was.sh"
 
       - name: 🎯 개인 서버에서 배포 실행 (ApplicationStart)
         run: |
-          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/health.sh"
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/health.sh"
 
       - name: 🎯 개인 서버에서 배포 실행 (ValidateService)
         run: |
-          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/switch.sh"
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "/home/tkdrl8908/luckkids/app/scripts/switch.sh"
 
       - name: 🧹 임시 파일 정리
         run: |
-          ssh tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
+          echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
             rm -rf /home/tkdrl8908/luckkids/deploy.zip /home/tkdrl8908/luckkids/before-deploy"
