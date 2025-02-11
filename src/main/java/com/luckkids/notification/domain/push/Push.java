@@ -1,8 +1,8 @@
 package com.luckkids.notification.domain.push;
 
 import com.luckkids.domain.BaseTimeEntity;
-import com.luckkids.notification.domain.alertSetting.AlertSetting;
 import com.luckkids.domain.user.User;
+import com.luckkids.notification.domain.alertSetting.AlertSetting;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
