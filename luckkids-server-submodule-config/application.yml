@@ -54,6 +54,10 @@ oauth:
       name: googleApi
 
 ---
+server:
+  servlet:
+    context-path: /luckkids
+
 spring:
   config:
     activate:
