@@ -1,0 +1,117 @@
+spring:
+  profiles:
+    default: dev
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: luckkids.official@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        jdbc:
+          exception-handling: ignore
+
+logging:
+  level:
+    p6spy: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+
+slack:
+  webhook-url: https://hooks.slack.com/services/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
+
+aes:
+  key-value: ${AES_KEY}
+
+cloudfront:
+  s3-url: https://d1i0as5mndfs61.cloudfront.net/
+
+oauth:
+  kakao:
+    api:
+      url: https://kapi.kakao.com
+      name: kakaoApi
+  google:
+    api:
+      url: https://www.googleapis.com
+      name: googleApi
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:mariadb://182.231.175.151:47852/luckkids_dev
+    username: luckkidsDevServer
+    password: ${DEV_DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+domain:
+  url:
+    confirmEmail: https://sangkihan.co.kr/luckkids/api/v1/confirmEmail
+
+logging:
+  config: classpath:logback/logback-config.xml
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:~/luck-kids;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+domain:
+  url:
+    confirmEmail: http://localhost:8080/api/v1/confirmEmail
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mariadb://182.231.175.151:47852/luckkids
+    username: luckkidsServer
+    password: ${PROD_DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+domain:
+  url:
+    confirmEmail: https://api-luckkids.kro.kr/api/v1/confirmEmail
+
+logging:
+  config: classpath:logback/logback-config.xml
