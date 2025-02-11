@@ -74,7 +74,7 @@ jobs:
           username: tkdrl8908
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
-            /home/tkdrl8908/luckkids/app/scripts/run_new_was.sh
+            /home/tkdrl8908/luckkids/before-deploy/run_new_was.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ApplicationStart)
         uses: appleboy/ssh-action@v0.1.10
@@ -83,7 +83,7 @@ jobs:
           username: tkdrl8908
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
-            /home/tkdrl8908/luckkids/app/scripts/health.sh
+            /home/tkdrl8908/luckkids/before-deploy/health.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ValidateService)
         uses: appleboy/ssh-action@v0.1.10
@@ -93,7 +93,7 @@ jobs:
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
             echo "${{ secrets.PERSONAL_SERVER_PASSWORD }}" | sudo -S su
-            /home/tkdrl8908/luckkids/app/scripts/switch.sh
+            /home/tkdrl8908/luckkids/app/before-deploy/switch.sh
 
       - name: 🧹 임시 파일 정리
         uses: appleboy/ssh-action@v0.1.10
