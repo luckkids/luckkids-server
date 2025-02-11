@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /home/tkdrl8908/luckkids/app
+    destination: /home/tkdrl8908/luckkids/deploy
     overwrite: yes
 
 permissions:
