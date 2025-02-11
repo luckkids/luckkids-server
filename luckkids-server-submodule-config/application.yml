@@ -76,6 +76,9 @@ domain:
   url:
     confirmEmail: https://sangkihan.co.kr/luckkids/api/v1/confirmEmail
 
+logging:
+  config: classpath:logback/logback-config.xml
+
 ---
 spring:
   config:
