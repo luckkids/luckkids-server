@@ -50,13 +50,13 @@ jobs:
 
       - name: 📦 jar, appspec, 배포 스크립트 복사
         run: |
-          mkdir -p before-deploy
-          cp ./build/libs/*.jar ./before-deploy/
-          cp ./appspec-dev.yml ./before-deploy/
-          cp -r ./scripts/dev/ ./before-deploy/scripts/
+          mkdir -p deploy
+          cp ./build/libs/*.jar ./deploy/
+          cp ./appspec-dev.yml ./deploy/
+          cp -r ./scripts/dev/ ./deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq ./deploy.zip ./before-deploy/
+        run: zip -r -qq ./deploy.zip ./deploy/
 
       - name: 🚀 개인 서버에 파일 업로드
         run: |
@@ -64,8 +64,7 @@ jobs:
           echo "${{ secrets.DEV_SERVER_PASSWORD }}" | sshpass ssh -o StrictHostKeyChecking=no tkdrl8908@${{ secrets.DEV_SERVER_HOST }} "
             unzip -o /home/tkdrl8908/luckkids/deploy.zip -d /home/tkdrl8908/luckkids &&
             rm -rf /home/tkdrl8908/luckkids/app/* &&
-            mv /home/tkdrl8908/luckkids/before-deploy/* /home/tkdrl8908/luckkids/app/ &&
-            chmod +x /home/tkdrl8908/luckkids/app/scripts/*.sh"
+            chmod +x /home/tkdrl8908/luckkids/deploy/scripts/*.sh"
 
       - name: 🎯 개인 서버에서 배포 실행 (AfterInstall)
         uses: appleboy/ssh-action@v0.1.10
@@ -74,7 +73,7 @@ jobs:
           username: tkdrl8908
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
-            /home/tkdrl8908/luckkids/before-deploy/scripts/run_new_was.sh
+            /home/tkdrl8908/luckkids/deploy/scripts/run_new_was.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ApplicationStart)
         uses: appleboy/ssh-action@v0.1.10
@@ -83,7 +82,7 @@ jobs:
           username: tkdrl8908
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
-            /home/tkdrl8908/luckkids/before-deploy/scripts/health.sh
+            /home/tkdrl8908/luckkids/deploy/scripts/health.sh
 
       - name: 🎯 개인 서버에서 배포 실행 (ValidateService)
         uses: appleboy/ssh-action@v0.1.10
@@ -93,7 +92,7 @@ jobs:
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
             echo "${{ secrets.PERSONAL_SERVER_PASSWORD }}" | sudo -S su
-            /home/tkdrl8908/luckkids/app/before-deploy/scripts/switch.sh
+            /home/tkdrl8908/luckkids/app/deploy/scripts/switch.sh
 
       - name: 🧹 임시 파일 정리
         uses: appleboy/ssh-action@v0.1.10
@@ -102,4 +101,4 @@ jobs:
           username: tkdrl8908
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           script: |
-            rm -rf /home/tkdrl8908/luckkids/deploy.zip /home/tkdrl8908/luckkids/before-deploy
+            rm -rf /home/tkdrl8908/luckkids/deploy.zip
