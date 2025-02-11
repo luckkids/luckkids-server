@@ -40,7 +40,7 @@ nohup java -javaagent:$SCOUTER/agent.java/scouter.agent.jar \
           -Dscouter.config=$SCOUTER/agent.java/conf/scouter.conf \
           -jar \
           -Dserver.port=${TARGET_PORT} \
-          -Dspring.profiles.active=prod \
+          -Dspring.profiles.active=dev \
           $JAR_NAME > $LOG_FILE 2>&1 &
 
 echo "> Now new WAS runs at ${TARGET_PORT}."
