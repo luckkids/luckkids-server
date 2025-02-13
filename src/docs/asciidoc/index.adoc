@@ -89,3 +89,8 @@ include::api/withdrawReason/withdrawReason.adoc[]
 == LuckkidsMission API
 
 include::api/luckkidsMission/luckkidsMission.adoc[]
+
+[[LuckMessageHistory-API]]
+== LuckMessageHistory API
+
+include::api/luckMessageHistory/luckMessageHistory.adoc[]

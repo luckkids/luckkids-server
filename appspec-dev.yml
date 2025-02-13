@@ -1,0 +1,29 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/tkdrl8908/luckkids/deploy
+    overwrite: yes
+
+permissions:
+  - object: /home/tkdrl8908/luckkids
+    pattern: "**"
+    owner: tkdrl8908
+    group: tkdrl8908
+
+hooks:
+  AfterInstall:
+    - location: scripts/run_new_was.sh
+      timeout: 60
+      runas: tkdrl8908
+
+  ApplicationStart:
+    - location: scripts/health.sh
+      timeout: 60
+      runas: tkdrl8908
+
+  ValidateService:
+    - location: scripts/switch.sh
+      timeout: 60
+      runas: tkdrl8908

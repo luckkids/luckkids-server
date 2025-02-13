@@ -34,7 +34,7 @@ public class ApiControllerAdvice {
         if (!profile.equals(devProfileName)) {
             errorNotifier.sendErrorToSlack(e);
         }
-        log.error(e.getMessage());
+        log.error(e.getMessage(), e);
         return ApiResponse.of(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "서버 로직 에러",
