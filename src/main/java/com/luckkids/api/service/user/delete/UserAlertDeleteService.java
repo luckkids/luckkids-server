@@ -3,8 +3,8 @@ package com.luckkids.api.service.user.delete;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckkids.domain.alertHistory.AlertHistoryRepository;
-import com.luckkids.domain.alertSetting.AlertSettingRepository;
+import com.luckkids.notification.infra.AlertHistoryRepository;
+import com.luckkids.notification.infra.AlertSettingRepository;
 
 import lombok.RequiredArgsConstructor;
 

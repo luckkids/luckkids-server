@@ -1,8 +1,8 @@
 package com.luckkids.docs.mission;
 
-import static com.luckkids.domain.misson.AlertStatus.*;
-import static com.luckkids.domain.misson.MissionActive.*;
-import static com.luckkids.domain.misson.MissionType.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.MissionActive.*;
+import static com.luckkids.mission.domain.misson.MissionType.*;
 import static java.time.LocalDateTime.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -30,21 +30,21 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.luckkids.api.controller.mission.MissionController;
-import com.luckkids.api.controller.mission.request.MissionCreateRequest;
-import com.luckkids.api.controller.mission.request.MissionUpdateRequest;
-import com.luckkids.api.service.mission.MissionReadService;
-import com.luckkids.api.service.mission.MissionService;
-import com.luckkids.api.service.mission.request.MissionCreateServiceRequest;
-import com.luckkids.api.service.mission.request.MissionUpdateServiceRequest;
-import com.luckkids.api.service.mission.response.MissionAggregateResponse;
-import com.luckkids.api.service.mission.response.MissionDeleteResponse;
-import com.luckkids.api.service.mission.response.MissionResponse;
-import com.luckkids.api.service.mission.response.RemainingLuckkidsMissionResponse;
+import com.luckkids.mission.controller.MissionController;
+import com.luckkids.mission.controller.request.MissionCreateRequest;
+import com.luckkids.mission.controller.request.MissionUpdateRequest;
+import com.luckkids.mission.service.MissionReadService;
+import com.luckkids.mission.service.MissionService;
+import com.luckkids.mission.service.request.MissionCreateServiceRequest;
+import com.luckkids.mission.service.request.MissionUpdateServiceRequest;
+import com.luckkids.mission.service.response.MissionAggregateResponse;
+import com.luckkids.mission.service.MissionDeleteResponse;
+import com.luckkids.mission.service.MissionResponse;
+import com.luckkids.mission.service.response.RemainingLuckkidsMissionResponse;
 import com.luckkids.docs.RestDocsSupport;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.MissionActive;
-import com.luckkids.domain.misson.MissionType;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.MissionActive;
+import com.luckkids.mission.domain.misson.MissionType;
 
 public class MissionControllerDocsTest extends RestDocsSupport {
 

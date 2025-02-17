@@ -1,21 +1,15 @@
 package com.luckkids.docs.push;
 
-import com.luckkids.api.controller.notice.NoticeController;
-import com.luckkids.api.controller.push.PushController;
-import com.luckkids.api.controller.push.request.PushSoundChangeRequest;
-import com.luckkids.api.service.notice.NoticeReadService;
-import com.luckkids.api.service.notice.NoticeService;
-import com.luckkids.api.service.notice.request.NoticeSaveServiceRequest;
-import com.luckkids.api.service.push.PushService;
-import com.luckkids.api.service.push.request.PushSoundChangeServiceRequest;
-import com.luckkids.api.service.push.response.PushSoundChangeResponse;
+import com.luckkids.notification.controller.PushController;
+import com.luckkids.notification.controller.request.PushSoundChangeRequest;
+import com.luckkids.notification.service.PushService;
+import com.luckkids.notification.service.request.PushSoundChangeServiceRequest;
+import com.luckkids.notification.service.response.PushSoundChangeResponse;
 import com.luckkids.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

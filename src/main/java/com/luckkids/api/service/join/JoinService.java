@@ -1,12 +1,9 @@
 package com.luckkids.api.service.join;
 
-import com.luckkids.api.service.alertHistory.AlertHistoryService;
-import com.luckkids.api.service.alertHistory.request.AlertHistoryServiceRequest;
+import com.luckkids.notification.service.AlertHistoryService;
 import com.luckkids.api.service.join.request.JoinCheckEmailServiceRequest;
 import com.luckkids.api.service.join.request.JoinServiceRequest;
 import com.luckkids.api.service.join.response.JoinResponse;
-import com.luckkids.domain.alertHistory.AlertDestinationType;
-import com.luckkids.domain.push.PushMessage;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 import com.luckkids.domain.userAgreement.UserAgreement;

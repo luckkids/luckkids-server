@@ -16,8 +16,8 @@ import com.luckkids.api.service.initialSetting.InitialSettingService;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
 import com.luckkids.api.service.luckkidsCharacter.LuckkidsCharacterReadService;
 import com.luckkids.api.service.luckkidsCharacter.response.LuckkidsCharacterRandResponse;
-import com.luckkids.api.service.luckkidsMission.LuckkidsMissionReadService;
-import com.luckkids.api.service.luckkidsMission.response.LuckkidsMissionResponse;
+import com.luckkids.mission.service.response.LuckkidsMissionResponse;
+import com.luckkids.mission.service.LuckkidsMissionReadService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

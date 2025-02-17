@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.luckkids.api.feign.google.GoogleApiFeignCall;
 import com.luckkids.api.feign.kakao.KakaoApiFeignCall;
-import com.luckkids.api.service.mail.MailService;
+import com.luckkids.notification.service.MailService;
 import com.luckkids.api.service.security.SecurityService;
 
 @ActiveProfiles("test")

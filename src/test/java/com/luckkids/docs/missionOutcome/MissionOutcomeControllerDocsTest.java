@@ -1,9 +1,9 @@
 package com.luckkids.docs.missionOutcome;
 
 import static com.luckkids.domain.luckkidsCharacter.CharacterType.*;
-import static com.luckkids.domain.missionOutcome.MissionStatus.*;
-import static com.luckkids.domain.misson.AlertStatus.*;
-import static com.luckkids.domain.misson.MissionType.*;
+import static com.luckkids.mission.domain.missionOutcome.MissionStatus.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.MissionType.*;
 import static java.time.LocalDate.*;
 import static java.util.Optional.*;
 import static org.mockito.BDDMockito.*;
@@ -26,18 +26,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
-import com.luckkids.api.controller.missionOutcome.request.MissionOutcomeUpdateRequest;
-import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
-import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeCountResponse;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeResponse;
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
+import com.luckkids.mission.controller.MissionOutcomeController;
+import com.luckkids.mission.controller.request.MissionOutcomeUpdateRequest;
+import com.luckkids.mission.service.MissionOutcomeReadService;
+import com.luckkids.mission.service.MissionOutcomeService;
+import com.luckkids.mission.service.response.MissionOutcomeCountResponse;
+import com.luckkids.mission.service.response.MissionOutcomeResponse;
+import com.luckkids.mission.service.response.MissionOutcomeUpdateResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
-import com.luckkids.domain.missionOutcome.MissionStatus;
-import com.luckkids.domain.misson.AlertStatus;
-import com.luckkids.domain.misson.MissionType;
+import com.luckkids.mission.domain.missionOutcome.MissionStatus;
+import com.luckkids.mission.domain.misson.AlertStatus;
+import com.luckkids.mission.domain.misson.MissionType;
 
 public class MissionOutcomeControllerDocsTest extends RestDocsSupport {
 

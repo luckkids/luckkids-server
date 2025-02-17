@@ -1,8 +1,10 @@
 package com.luckkids.api.service.user.delete;
 
-import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
-import com.luckkids.domain.misson.MissionRepository;
+import com.luckkids.mission.infra.MissionOutcomeRepository;
+import com.luckkids.mission.infra.MissionRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class UserMissionDeleteService {
-    private final MissionOutcomeRepository missionOutcomeRepository;
-    private final MissionRepository missionRepository;
+	private final MissionOutcomeRepository missionOutcomeRepository;
+	private final MissionRepository missionRepository;
 
-    public void deleteAllByUserId(int userId){
-        missionOutcomeRepository.deleteAllByMissionUserId(userId);
-        missionRepository.deleteAllByUserId(userId);
-    }
+	public void deleteAllByUserId(int userId) {
+		missionOutcomeRepository.deleteAllByMissionUserId(userId);
+		missionRepository.deleteAllByUserId(userId);
+	}
 }

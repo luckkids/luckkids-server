@@ -1,6 +1,6 @@
 package com.luckkids.api.controller.home.response;
 
-import com.luckkids.api.service.missionOutcome.response.MissionOutcomeForCalendarResponse;
+import com.luckkids.mission.service.response.MissionOutcomeForCalendarResponse;
 import com.luckkids.api.service.userCharacter.response.UserCharacterSummaryResponse;
 
 import lombok.Builder;

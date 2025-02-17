@@ -1,6 +1,6 @@
 package com.luckkids.api.controller.initialSetting;
 
-import static com.luckkids.domain.misson.AlertStatus.*;
+import static com.luckkids.mission.domain.misson.AlertStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -23,7 +23,7 @@ import com.luckkids.api.controller.initialSetting.request.InitialSettingMissionR
 import com.luckkids.api.controller.initialSetting.request.InitialSettingRequest;
 import com.luckkids.api.service.luckkidsCharacter.response.LuckkidsCharacterRandResponse;
 import com.luckkids.domain.luckkidsCharacter.CharacterType;
-import com.luckkids.domain.misson.MissionType;
+import com.luckkids.mission.domain.misson.MissionType;
 
 public class initialSettingControllerTest extends ControllerTestSupport {
 

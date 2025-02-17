@@ -7,13 +7,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckkids.api.service.alertSetting.AlertSettingService;
+import com.luckkids.notification.service.AlertSettingService;
 import com.luckkids.api.service.initialSetting.request.InitialSettingServiceRequest;
 import com.luckkids.api.service.initialSetting.response.InitialSettingAlertResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingCharacterResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingMissionResponse;
 import com.luckkids.api.service.initialSetting.response.InitialSettingResponse;
-import com.luckkids.api.service.mission.MissionService;
+import com.luckkids.mission.service.MissionService;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
