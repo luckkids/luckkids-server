@@ -6,7 +6,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: luckkids.official@gmail.com
-    password: kzmearkdbqtjjbxt
+    password: nvqazatasnamhrym
     properties:
       mail:
         smtp:
