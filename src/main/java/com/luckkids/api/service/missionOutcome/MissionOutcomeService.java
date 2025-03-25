@@ -53,18 +53,18 @@ public class MissionOutcomeService {
 		missionOutcomeRepository.deleteAllByMissionIdAndMissionDate(missionId, missionDate);
 	}
 
-	private void validateMissionStatus(MissionOutcome missionOutcome, MissionStatus missionStatus) {
+	public void validateMissionStatus(MissionOutcome missionOutcome, MissionStatus missionStatus) {
 		if (missionOutcome.getMissionStatus().equals(missionStatus)) {
 			throw new IllegalArgumentException("미션 상태가 기존과 같습니다.");
 		}
 	}
 
-	private User getCurrentUser() {
+	public User getCurrentUser() {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 		return userReadService.findByOne(userId);
 	}
 
-	protected MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome,
+	public MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome,
 		MissionStatus missionStatus, User user) {
 		if (missionStatus == SUCCEED && missionOutcome.getSuccessChecked() == UNCHECKED) {
 			missionOutcome.updateFirstSuccessChecked();
