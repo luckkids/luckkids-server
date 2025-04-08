@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "luck-kids",
+  "private_key_id": "5063f5491195189d37075349c3ce1dd0c606959f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCstkWJlLTktzb9\na4PEfTg3eI4C4TikGLxkH+ix2YL2q2Wpu2b19ADCT2cCa9yUI2iGosb6uNBcIhtp\nGIDJn4Sol3Ij3tgvCS4zSWTRgOowvjC82LoeT/flcLBVXrE2TIBxSt2wanXp3okJ\nGd23A9InEo+4nwn7GnWMWcmJP7YsNk7mja6L8O3xaESRtb9vD4I0wQMfHTu4M9Hn\nDnjBAcAuRrooKZ4NuhteoKaSCwGkBDv/rpH6luQME0UvLgiFy8nCjOOjSmW/r4Mm\nUjGvBBTifq/7adwb7nqG6xLyMwaVz8dPfeWTDo9MBuxul1+Oj4B0iOLQ/A76TN+i\nPrS0fEXvAgMBAAECggEABddaTbdmUM/zf6mpuLUFeDbPEsDcQgyGHprHq3AwUjhk\nxVNNvabFeczmrnnIaYgzCk6qDSPABEWxCKJoBKms+mi41wa76AdW9SwXyVAjW4er\nLU/lJ45L04o2pISB2NTIiUxfaA6Js2Gv38tsqLpr2p9xlexnEYOJEzicLNSnTCJx\nxV3qoHc9noMNcc1hiSJMUAefTq+Utvkb+brs9G2B9beoGD9YxtNSQCTlIeVIilSY\nQIhEROEpj465zD2pJGaMc288EmZlhXwawD30muql2pnYKE2/kVPKIVPgkfEE9wsN\n95FiCUC62XyaQLlDSilXRD2sYNO8G/eqMrKUbNTdJQKBgQC8ySw9vbCjDm7+UirL\n5xWI9jh3xkNdM8k2lLqjLDjjOkcGsq+jGA1Sc/CBwWwaM16NLX5XYwX0m7h1/PKO\nL0TDAv97962cGz4rLcV7clI0dr9qE3Nn6FR/T1kFp8MCge6EZR7u1tH07lp6V1JR\nuRo4GCNEI8pzCdWQ3VaKd4ZWZQKBgQDqNA3hBmXvU2P/wPpPO/+U1tMAT3NvOrEQ\n6p9KXbJapWOviwYEpDzqtCgOUS3W6Sc0Jev+K4a4fpXnKnDosE384AsfhtSGNKBw\neVz4qbH1/XtjdNKbWLFRE2tBsJWtyzrUFOQtlLS1XgaQUEQSHa/KWAPWZ2uYn9E0\nDCL/KverwwKBgEnAgeMg7xfUdLIwYX3FKlmWb1sDfp+zsoD7O6qxhQvoYYURW6Jo\nrBOxLZ1TdisKNH8M7dWv3sy/5SFbD1tSxhc1XaANk6pvzirKN+NRNyI93evP638F\nebU+x3V5I6sgHZFle98s11tLntc6s/MvUDnn3CcroFSu29s7TSrNJRMtAoGBAOiR\n+JZU/DTE4rC+udKlChCLo8zTGRaDegIKe1Ql508MnglcTQWe8r8/V+efxZ18ummW\nntsv7gCX89Qy2Ry4tzk+Ys1T3wfGiuwmGKT2HrrglP8Wq22IjcytM/1vlbOX9TtV\n46E/4pOYY3w7uN0kjcSp0mW/HaHaUq0UwEwUJw5xAoGBAIJeM7GbtnQK5UqhZ/+k\n/WcN9OHmhVj806rtp5EnctcI4sE9T7w+h7QGdRARWZvHGlI5egOdPSIAgJ5S8X6S\nhqqSHc0b+mNj2xmUUHNj/oMbKLWps3jFIeqkvA2Sc4k3QzPHE2D0KPeXLSjp82az\na4o24FU+JP9R0mz+BIrReRYf\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-g485g@luck-kids.iam.gserviceaccount.com",
+  "client_id": "112786810532041034469",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-g485g%40luck-kids.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
