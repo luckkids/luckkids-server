@@ -27,9 +27,7 @@ public class LuckMessageHistoryControllerTest extends ControllerTestSupport {
 		// when // then
 		mockMvc.perform(
 				get("/api/v1/luckMessageHistory")
-					.content(objectMapper.writeValueAsString(request))
-					.contentType(APPLICATION_JSON)
-					.with(csrf())
+					.param("deviceId", request.getDeviceId())
 			)
 			.andDo(print())
 			.andExpect(status().isOk())
