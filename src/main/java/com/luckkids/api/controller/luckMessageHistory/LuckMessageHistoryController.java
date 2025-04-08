@@ -1,7 +1,7 @@
 package com.luckkids.api.controller.luckMessageHistory;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +22,7 @@ public class LuckMessageHistoryController {
 
 	@GetMapping
 	public ApiResponse<LuckMessageHistoryResponse> findOne(
-		@RequestBody @Valid LuckMessageHistoryRequest luckMessageHistoryRequest) {
+		@ModelAttribute @Valid LuckMessageHistoryRequest luckMessageHistoryRequest) {
 		return ApiResponse.ok(luckMessageHistoryReadService.findOne(luckMessageHistoryRequest.toServiceRequest()));
 	}
 }

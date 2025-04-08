@@ -1,10 +1,10 @@
 package com.luckkids.docs.luckMessageHistory;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,17 +47,16 @@ public class LuckMessageHistoryDocsTest extends RestDocsSupport {
 		// when // then
 		mockMvc.perform(
 				get("/api/v1/luckMessageHistory")
-					.content(objectMapper.writeValueAsString(request))
-					.contentType(APPLICATION_JSON)
+					.param("deviceId", request.getDeviceId())
 			)
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(document("luckMessageHistory-findOne",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				requestFields(
-					fieldWithPath("deviceId").type(JsonFieldType.STRING)
-						.description("디바이스ID")
+				queryParameters(
+					parameterWithName("deviceId")
+						.description("디바이스 ID")
 				),
 				responseFields(
 					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
