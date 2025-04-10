@@ -4,6 +4,7 @@ import static com.luckkids.domain.user.SettingStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -316,9 +317,11 @@ public class UserTest extends IntegrationTestSupport {
 	@Test
 	void updateLastLoginDateTest() {
 		User user = createUser("test1@email.com", "1234", SnsType.NORMAL, 15);
-		user.updateLastLoginDate();
 
-		assertThat(user.getLastLoginDate()).isNotNull();
+		LocalDateTime currentTime = LocalDateTime.now();
+		user.updateLastLoginDate(currentTime);
+
+		assertThat(user.getLastLoginDate()).isEqualTo(currentTime);
 	}
 
 	private User createUser(String email, String password, SnsType snsType, int missionCount) {
