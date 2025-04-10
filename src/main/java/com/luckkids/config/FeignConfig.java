@@ -1,12 +1,13 @@
 package com.luckkids.config;
 
-import feign.Logger;
 import org.springframework.context.annotation.Bean;
+
+import feign.Logger;
 
 public class FeignConfig {
 
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.FULL;
-    }
+	@Bean
+	Logger.Level feignLoggerLevel() {
+		return Logger.Level.FULL;
+	}
 }
