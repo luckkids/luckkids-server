@@ -308,7 +308,7 @@ public class UserTest extends IntegrationTestSupport {
 		assertAll(
 			() -> assertThat(rate1).isEqualTo(0.15),
 			() -> assertThat(rate2).isEqualTo(0.55),
-			() -> assertThat(rate3).isEqualTo(0.55)
+			() -> assertThat(rate3).isEqualTo(0.25)
 		);
 	}
 
