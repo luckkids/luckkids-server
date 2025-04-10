@@ -38,7 +38,7 @@ public class FCMConfig {
 	}
 
 	private FirebaseApp initializeFirebaseApp() throws IOException {
-		ClassPathResource resource = new ClassPathResource("luck-kids-5063f5491195.json");
+		ClassPathResource resource = new ClassPathResource("luck-kids-firebase-adminsdk-g485g-155406a8d7.json");
 
 		try (InputStream inputStream = resource.getInputStream()) {
 			FirebaseOptions options = FirebaseOptions.builder()
