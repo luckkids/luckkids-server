@@ -161,7 +161,7 @@ public class User extends BaseTimeEntity {
 			throw new LuckKidsException("이미 초기세팅이 되어있는 사용자입니다.");
 	}
 
-	public void updateLastLoginDate() {
-		this.lastLoginDate = LocalDateTime.now();
+	public void updateLastLoginDate(LocalDateTime currentTime) {
+		this.lastLoginDate = currentTime;
 	}
 }

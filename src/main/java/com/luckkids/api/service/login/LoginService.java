@@ -1,5 +1,6 @@
 package com.luckkids.api.service.login;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,7 +85,7 @@ public class LoginService {
 			loginServiceRequest.getPushKey());
 		confirmAlertSettingDeviceId(user, loginServiceRequest.getDeviceId());
 
-		user.updateLastLoginDate();
+		user.updateLastLoginDate(LocalDateTime.now());
 
 		return LoginResponse.of(user, jwtToken);
 	}
@@ -120,7 +121,7 @@ public class LoginService {
 
 		confirmAlertSettingDeviceId(user, oAuthLoginServiceRequest.getDeviceId());
 
-		user.updateLastLoginDate();
+		user.updateLastLoginDate(LocalDateTime.now());
 
 		return OAuthLoginResponse.of(user, jwtToken);
 	}
