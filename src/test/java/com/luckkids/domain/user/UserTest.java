@@ -2,7 +2,9 @@ package com.luckkids.domain.user;
 
 import static com.luckkids.domain.user.SettingStatus.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -304,9 +306,22 @@ public class UserTest extends IntegrationTestSupport {
 		double rate3 = user3.calculateAchievementRate();
 
 		// then
-		assertThat(rate1).isEqualTo(0.15);
-		assertThat(rate2).isEqualTo(0.55);
-		assertThat(rate3).isEqualTo(0.25);
+		assertAll(
+			() -> assertThat(rate1).isEqualTo(0.15),
+			() -> assertThat(rate2).isEqualTo(0.55),
+			() -> assertThat(rate3).isEqualTo(0.25)
+		);
+	}
+
+	@DisplayName("마지막 로그인 날짜를 저장한다.")
+	@Test
+	void updateLastLoginDateTest() {
+		User user = createUser("test1@email.com", "1234", SnsType.NORMAL, 15);
+
+		LocalDateTime currentTime = LocalDateTime.now();
+		user.updateLastLoginDate(currentTime);
+
+		assertThat(user.getLastLoginDate()).isEqualTo(currentTime);
 	}
 
 	private User createUser(String email, String password, SnsType snsType, int missionCount) {
