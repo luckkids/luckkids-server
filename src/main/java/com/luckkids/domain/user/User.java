@@ -2,6 +2,7 @@ package com.luckkids.domain.user;
 
 import static com.luckkids.domain.userCharacter.Level.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class User extends BaseTimeEntity {
 	private SettingStatus settingStatus;
 
 	private int missionCount;
+
+	private LocalDateTime lastLoginDate;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RefreshToken> refreshTokens = new ArrayList<>();
@@ -156,5 +159,9 @@ public class User extends BaseTimeEntity {
 	public void checkSettingStatus() {
 		if (this.settingStatus.equals(SettingStatus.COMPLETE))
 			throw new LuckKidsException("이미 초기세팅이 되어있는 사용자입니다.");
+	}
+
+	public void updateLastLoginDate() {
+		this.lastLoginDate = LocalDateTime.now();
 	}
 }
