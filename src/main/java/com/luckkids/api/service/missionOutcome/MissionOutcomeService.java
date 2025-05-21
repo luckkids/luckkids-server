@@ -18,6 +18,7 @@ import com.luckkids.domain.missionOutcome.MissionOutcome;
 import com.luckkids.domain.missionOutcome.MissionOutcomeRepository;
 import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.user.User;
+import com.luckkids.domain.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class MissionOutcomeService {
 
 	private final MissionOutcomeRepository missionOutcomeRepository;
+	private final UserRepository userRepository;
 
 	private final MissionOutcomeReadService missionOutcomeReadService;
 	private final UserCharacterService userCharacterService;
@@ -43,8 +45,11 @@ public class MissionOutcomeService {
 		validateMissionStatus(missionOutcome, missionStatus);
 
 		missionOutcome.updateMissionStatus(missionStatus);
-		User user = getCurrentUser();
-		user.updateMissionCount(missionStatus.getValue());
+
+		int userId = securityService.getCurrentLoginUserInfo().getUserId();
+		userRepository.updateMissionCount(userId, missionStatus.getValue());
+
+		User user = userReadService.findByOne(userId);
 
 		return updateMissionStatusAndCheckLevelUp(missionOutcome, missionStatus, user);
 	}
@@ -57,11 +62,6 @@ public class MissionOutcomeService {
 		if (missionOutcome.getMissionStatus().equals(missionStatus)) {
 			throw new IllegalArgumentException("미션 상태가 기존과 같습니다.");
 		}
-	}
-
-	public User getCurrentUser() {
-		int userId = securityService.getCurrentLoginUserInfo().getUserId();
-		return userReadService.findByOne(userId);
 	}
 
 	public MissionOutcomeUpdateResponse updateMissionStatusAndCheckLevelUp(MissionOutcome missionOutcome,

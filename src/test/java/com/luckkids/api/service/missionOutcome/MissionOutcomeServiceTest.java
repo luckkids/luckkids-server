@@ -194,7 +194,7 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 
 	@DisplayName("동시성 테스트: 10개의 서로 다른 MissionOutcome 을 동시에 SUCCEED 업데이트 시 missionCount가 10이 되어야 한다.")
 	@Test
-	void updateMissionOutcome_concurrentTenMissionsShouldAccumulateMissionCount() throws InterruptedException {
+	void updateMissionOutcome_concurrentUpdateTenOutcomes() throws InterruptedException {
 		// given
 		User user = createUser("user@daum.net", "passwd!", SnsType.KAKAO, 0);
 		userRepository.save(user);
