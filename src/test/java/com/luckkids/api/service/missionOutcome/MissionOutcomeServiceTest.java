@@ -10,6 +10,11 @@ import static org.mockito.BDDMockito.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -185,6 +190,62 @@ class MissionOutcomeServiceTest extends IntegrationTestSupport {
 		assertThat(response)
 			.extracting("levelUpResult", "characterType", "level")
 			.contains(false, null, 0);
+	}
+
+	@DisplayName("동시성 테스트: 10개의 서로 다른 MissionOutcome 을 동시에 SUCCEED 업데이트 시 missionCount가 10이 되어야 한다.")
+	@Test
+	void updateMissionOutcome_concurrentUpdateTenOutcomes() throws InterruptedException {
+		// given
+		User user = createUser("user@daum.net", "passwd!", SnsType.KAKAO, 0);
+		userRepository.save(user);
+
+		List<Mission> missions = IntStream.rangeClosed(1, 10)
+			.mapToObj(i -> createMission(user, "운동하기 " + i, AlertStatus.UNCHECKED, LocalTime.of(19, 0)))
+			.toList();
+		missionRepository.saveAll(missions);
+
+		List<MissionOutcome> outcomes = missions.stream()
+			.map(m -> createMissionOutcome(m, LocalDate.of(2023, 10, 26)))
+			.toList();
+		missionOutcomeRepository.saveAll(outcomes);
+
+		given(securityService.getCurrentLoginUserInfo())
+			.willReturn(createLoginUserInfo(user.getId()));
+
+		int threadCount = outcomes.size();
+		ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+		CountDownLatch readyLatch = new CountDownLatch(threadCount);
+		CountDownLatch startLatch = new CountDownLatch(1);
+
+		// when: 각 쓰레드가 준비 → 동시에 startLatch 오픈 → update 호출
+		for (MissionOutcome mo : outcomes) {
+			executor.submit(() -> {
+				try {
+					readyLatch.countDown();
+					startLatch.await();
+					missionOutcomeService.updateMissionOutcome(mo.getId(), SUCCEED);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		}
+
+		readyLatch.await();
+		startLatch.countDown();
+
+		executor.shutdown();
+		executor.awaitTermination(5, TimeUnit.SECONDS);
+
+		// then: User 의 missionCount 가 10이 되어야 한다
+		User updated = userRepository.findById(user.getId())
+			.orElseThrow(() -> new IllegalStateException("유저를 찾을 수 없습니다."));
+		assertThat(updated.getMissionCount()).isEqualTo(10);
+
+		List<MissionOutcome> updatedOutcomes = missionOutcomeRepository.findAll();
+		assertThat(updatedOutcomes)
+			.hasSize(10)
+			.extracting(MissionOutcome::getMissionStatus)
+			.containsOnly(SUCCEED);
 	}
 
 	@DisplayName("업데이트할 id를 받아서 미션결과 상태를 업데이트 할 때 id가 없으면 예외가 발생한다.")
