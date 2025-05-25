@@ -13,6 +13,7 @@ import com.luckkids.api.service.user.delete.UserAlertDeleteService;
 import com.luckkids.api.service.user.delete.UserCharacterDeleteService;
 import com.luckkids.api.service.user.delete.UserFriendCodeDeleteService;
 import com.luckkids.api.service.user.delete.UserFriendDeleteService;
+import com.luckkids.api.service.user.delete.UserLuckMessageHistoryDeleteService;
 import com.luckkids.api.service.user.delete.UserMissionDeleteService;
 import com.luckkids.api.service.user.delete.UserTokenDeleteService;
 import com.luckkids.api.service.user.request.UserUpdateLuckPhraseServiceRequest;
@@ -48,6 +49,7 @@ public class UserService {
 	private final UserFriendDeleteService userFriendDeleteService;
 	private final UserFriendCodeDeleteService userFriendCodeDeleteService;
 	private final UserAgreementDeleteService userAgreementDeleteService;
+	private final UserLuckMessageHistoryDeleteService userLuckMessageHistoryDeleteService;
 
 	public UserUpdatePasswordResponse updatePassword(
 		UserUpdatePasswordServiceRequest userUpdatePasswordServiceRequest) {
@@ -85,6 +87,7 @@ public class UserService {
 
 		userCharacterDeleteService.deleteAllByUserId(userId);
 		userAlertDeleteService.deleteAllByUserId(userId);
+		userLuckMessageHistoryDeleteService.deleteAllByUserId(userId);
 		userTokenDeleteService.deleteAllByUserId(userId);
 		userMissionDeleteService.deleteAllByUserId(userId);
 		userFriendDeleteService.deleteAllByUserId(userId);
