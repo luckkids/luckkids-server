@@ -14,6 +14,6 @@ public class UserLuckMessageHistoryDeleteService {
 	private final LuckMessageHistoryRepository luckMessageHistoryRepository;
 
 	public void deleteAllByUserId(int userId) {
-		luckMessageHistoryRepository.deleteAllByUserId(userId);
+		luckMessageHistoryRepository.deleteAllByPushUserId(userId);
 	}
 }

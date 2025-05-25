@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LuckMessageHistoryRepository extends JpaRepository<LuckMessageHistory, Integer> {
 	Optional<LuckMessageHistory> findByPushDeviceIdAndPushUserId(String deviceId, int userId);
 
-	void deleteAllByUserId(int userId);
+	void deleteAllByPushUserId(int userId);
 }
