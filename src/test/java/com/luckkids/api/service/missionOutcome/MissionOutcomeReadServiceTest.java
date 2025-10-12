@@ -216,6 +216,28 @@ class MissionOutcomeReadServiceTest extends IntegrationTestSupport {
 		assertThat(missionOutcomesCount.getCount()).isEqualTo(1);
 	}
 
+	@DisplayName("미션 ID와 미션 날짜로 미션결과의 상태를 조회한다.")
+	@Test
+	void getMissionOutcomeStatus() {
+		// given
+		User user = createUser("user@daum.net", "user1234!", SnsType.KAKAO);
+		Mission mission = createMission(user, HEALTH, "운동하기", UNCHECKED, LocalTime.of(19, 0));
+		MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.of(2023, 12, 25), SUCCEED);
+
+		userRepository.save(user);
+		missionRepository.save(mission);
+		missionOutcomeRepository.save(missionOutcome);
+
+		// when
+		MissionStatus status = missionOutcomeReadService.getMissionOutcomeStatus(
+			mission.getId(),
+			LocalDate.of(2023, 12, 25)
+		);
+
+		// then
+		assertThat(status).isEqualTo(SUCCEED);
+	}
+
 	private User createUser(String email, String password, SnsType snsType) {
 		return User.builder()
 			.email(email)

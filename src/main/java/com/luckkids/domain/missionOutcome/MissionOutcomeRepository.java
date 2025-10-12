@@ -9,4 +9,6 @@ public interface MissionOutcomeRepository extends JpaRepository<MissionOutcome, 
 	void deleteAllByMissionIdAndMissionDate(int missionId, LocalDate missionDate);
 
 	void deleteAllByMissionUserId(int userId);
+
+	MissionOutcome findByMissionIdAndMissionDate(int missionId, LocalDate missionDate);
 }
