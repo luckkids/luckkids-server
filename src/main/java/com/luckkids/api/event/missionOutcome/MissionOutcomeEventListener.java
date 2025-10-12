@@ -1,43 +1,35 @@
 package com.luckkids.api.event.missionOutcome;
 
-import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
-import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
+import static java.time.LocalDate.*;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import static java.time.LocalDate.now;
+import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
+import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServiceRequest;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class MissionOutcomeEventListener implements ApplicationListener<ApplicationEvent> {
+public class MissionOutcomeEventListener {
 
-    private final MissionOutcomeService missionOutcomeService;
+	private final MissionOutcomeService missionOutcomeService;
 
-    @Override
-    @TransactionalEventListener
-    public void onApplicationEvent(ApplicationEvent event) {
-        if (event instanceof MissionOutcomeCreateEvent createEvent) {
-            handleCreateEvent(createEvent);
-        } else if (event instanceof MissionOutcomeDeleteEvent deleteEvent) {
-            handleDeleteEvent(deleteEvent);
-        }
-    }
+	@TransactionalEventListener
+	public void handleCreateEvent(MissionOutcomeCreateEvent event) {
+		MissionOutcomeCreateServiceRequest request = MissionOutcomeCreateServiceRequest.builder()
+			.mission(event.getMission())
+			.missionDate(now())
+			.build();
 
-    private void handleCreateEvent(MissionOutcomeCreateEvent event) {
-        MissionOutcomeCreateServiceRequest request = MissionOutcomeCreateServiceRequest.builder()
-            .mission(event.getMission())
-            .missionDate(now())
-            .build();
+		missionOutcomeService.createMissionOutcome(request);
+	}
 
-        missionOutcomeService.createMissionOutcome(request);
-    }
-
-    private void handleDeleteEvent(MissionOutcomeDeleteEvent event) {
-        missionOutcomeService.deleteMissionOutcome(event.getMissionId(), now());
-    }
+	@TransactionalEventListener
+	public void handleDeleteEvent(MissionOutcomeDeleteEvent event) {
+		missionOutcomeService.deleteMissionOutcome(event.getMissionId(), now());
+	}
 }
 
 
