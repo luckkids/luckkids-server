@@ -60,9 +60,9 @@ public class MissionService {
 
 	public MissionDeleteResponse deleteMission(int missionId, LocalDateTime deletedDate) {
 		Mission mission = missionReadService.findByOne(missionId);
-		mission.delete(deletedDate);
 
 		missionEventService.publishMissionOutcomeDeleteEvent(mission);
+		mission.delete(deletedDate);
 
 		return MissionDeleteResponse.of(missionId);
 	}

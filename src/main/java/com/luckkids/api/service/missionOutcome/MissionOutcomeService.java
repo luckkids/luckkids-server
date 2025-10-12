@@ -12,6 +12,7 @@ import com.luckkids.api.service.missionOutcome.request.MissionOutcomeCreateServi
 import com.luckkids.api.service.missionOutcome.response.MissionOutcomeUpdateResponse;
 import com.luckkids.api.service.security.SecurityService;
 import com.luckkids.api.service.user.UserReadService;
+import com.luckkids.api.service.user.UserService;
 import com.luckkids.api.service.userCharacter.UserCharacterService;
 import com.luckkids.api.service.userCharacter.response.UserCharacterLevelUpResponse;
 import com.luckkids.domain.missionOutcome.MissionOutcome;
@@ -33,6 +34,7 @@ public class MissionOutcomeService {
 	private final MissionOutcomeReadService missionOutcomeReadService;
 	private final UserCharacterService userCharacterService;
 	private final UserReadService userReadService;
+	private final UserService userService;
 	private final SecurityService securityService;
 
 	public void createMissionOutcome(MissionOutcomeCreateServiceRequest request) {
@@ -55,6 +57,7 @@ public class MissionOutcomeService {
 	}
 
 	public void deleteMissionOutcome(int missionId, LocalDate missionDate) {
+		userService.minusMissionCount(missionId, missionDate);
 		missionOutcomeRepository.deleteAllByMissionIdAndMissionDate(missionId, missionDate);
 	}
 
