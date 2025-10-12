@@ -307,6 +307,9 @@ class MissionServiceTest extends IntegrationTestSupport {
 		Mission mission = createMission(user, HEALTH, "운동하기", TRUE, UNCHECKED, LocalTime.of(0, 0));
 		Mission savedMission = missionRepository.save(mission);
 
+		MissionOutcome missionOutcome = createMissionOutcome(mission, LocalDate.now());
+		missionOutcomeRepository.save(missionOutcome);
+
 		int missionId = savedMission.getId();
 
 		// when
