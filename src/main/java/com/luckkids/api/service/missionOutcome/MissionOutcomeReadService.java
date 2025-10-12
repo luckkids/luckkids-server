@@ -69,8 +69,4 @@ public class MissionOutcomeReadService {
 		int userId = securityService.getCurrentLoginUserInfo().getUserId();
 		return MissionOutcomeCountResponse.of(missionOutcomeQueryRepository.findMissionOutcomesCount(userId));
 	}
-
-	public MissionStatus getMissionOutcomeStatus(int missionId, LocalDate missionDate) {
-		return missionOutcomeRepository.findByMissionIdAndMissionDate(missionId, missionDate).getMissionStatus();
-	}
 }

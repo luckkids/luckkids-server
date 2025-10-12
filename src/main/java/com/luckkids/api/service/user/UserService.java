@@ -1,7 +1,5 @@
 package com.luckkids.api.service.user;
 
-import java.time.LocalDate;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,6 @@ import com.luckkids.api.service.user.response.UserUpdateLuckPhraseResponse;
 import com.luckkids.api.service.user.response.UserUpdateNicknameResponse;
 import com.luckkids.api.service.user.response.UserUpdatePasswordResponse;
 import com.luckkids.api.service.user.response.UserWithdrawResponse;
-import com.luckkids.domain.missionOutcome.MissionStatus;
 import com.luckkids.domain.user.User;
 import com.luckkids.domain.user.UserRepository;
 
@@ -71,14 +68,6 @@ public class UserService {
 		String nickname = userUpdateNicknameServiceRequest.getNickname();
 		user.updateNickName(nickname);
 		return UserUpdateNicknameResponse.of(nickname);
-	}
-
-	public void minusMissionCount(int missionId, LocalDate missionDate) {
-		MissionStatus missionOutcomeStatus = missionOutcomeReadService.getMissionOutcomeStatus(missionId, missionDate);
-		if (missionOutcomeStatus.equals(MissionStatus.SUCCEED)) {
-			User user = getCurrentUser();
-			user.minusMissionCount();
-		}
 	}
 
 	public UserWithdrawResponse withdraw() {
