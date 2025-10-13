@@ -8,7 +8,7 @@
 </br> 
 
 <p>
-  <a href="https://info-luckkids.netlify.app/" target="_blank" rel="noopener">🔗 프로젝트 웹사이트</a>
+  <a href="https://info-luckkids.netlify.app" target="_blank" rel="noopener">🔗 프로젝트 INFO</a>
   &nbsp;·&nbsp;
-  <a href="https://info-luckkids.netlify.app/" target="_blank" rel="noopener">📘 API 문서</a>
+  <a href="https://api-luckkids.kro.kr/docs/index.html" target="_blank" rel="noopener">📘 API 문서</a>
 </p>
