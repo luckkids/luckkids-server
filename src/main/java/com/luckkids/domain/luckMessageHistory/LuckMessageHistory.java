@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class LuckMessageHistory extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	@OneToOne
 	private Push push;
@@ -26,7 +26,7 @@ public class LuckMessageHistory extends BaseTimeEntity {
 	private String messageDescription;
 
 	@Builder
-	public LuckMessageHistory(int id, Push push, String messageDescription) {
+	public LuckMessageHistory(Long id, Push push, String messageDescription) {
 		this.id = id;
 		this.push = push;
 		this.messageDescription = messageDescription;
