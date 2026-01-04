@@ -11,6 +11,7 @@ import com.luckkids.api.ErrorNotifier;
 import com.luckkids.api.controller.alertHistory.AlertHistoryController;
 import com.luckkids.api.controller.alertSetting.AlertSettingController;
 import com.luckkids.api.controller.confirmEmail.ConfirmEmailController;
+import com.luckkids.api.controller.fortunTestHistory.FortuneTestHistoryController;
 import com.luckkids.api.controller.friendCode.FriendCodeController;
 import com.luckkids.api.controller.garden.GardenController;
 import com.luckkids.api.controller.home.HomeController;
@@ -33,6 +34,8 @@ import com.luckkids.api.service.alertSetting.AlertSettingReadService;
 import com.luckkids.api.service.alertSetting.AlertSettingService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailReadService;
 import com.luckkids.api.service.confirmEmail.ConfirmEmailService;
+import com.luckkids.api.service.fortuneTestHistory.FortuneTestHistoryReadService;
+import com.luckkids.api.service.fortuneTestHistory.FortuneTestHistoryService;
 import com.luckkids.api.service.friend.FriendReadService;
 import com.luckkids.api.service.friend.FriendService;
 import com.luckkids.api.service.friendCode.FriendCodeReadService;
@@ -82,7 +85,8 @@ import jakarta.persistence.EntityManager;
 	LuckkidsMissionController.class,
 	PushController.class,
 	AlertHistoryController.class,
-	LuckMessageHistoryController.class
+	LuckMessageHistoryController.class,
+	FortuneTestHistoryController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -193,5 +197,11 @@ public abstract class ControllerTestSupport {
 
 	@MockBean
 	protected LuckMessageHistoryReadService luckMessageHistoryReadService;
+
+	@MockBean
+	protected FortuneTestHistoryService fortuneTestHistoryService;
+
+	@MockBean
+	protected FortuneTestHistoryReadService fortuneTestHistoryReadService;
 }
 

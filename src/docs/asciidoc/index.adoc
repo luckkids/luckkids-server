@@ -94,3 +94,8 @@ include::api/luckkidsMission/luckkidsMission.adoc[]
 == LuckMessageHistory API
 
 include::api/luckMessageHistory/luckMessageHistory.adoc[]
+
+[[FortuneTestHistory-API]]
+== FortuneTestHistory API
+
+include::api/FortuneTestHistory/FortuneTestHistory.adoc[]

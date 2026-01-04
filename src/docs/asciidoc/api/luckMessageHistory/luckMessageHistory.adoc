@@ -4,7 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/luckMessageHistory-findOne/http-request.adoc[]
-include::{snippets}/luckMessageHistory-findOne/request-fields.adoc[]
+include::{snippets}/luckMessageHistory-findOne/query-parameters.adoc[]
 
 ==== HTTP Response
 
