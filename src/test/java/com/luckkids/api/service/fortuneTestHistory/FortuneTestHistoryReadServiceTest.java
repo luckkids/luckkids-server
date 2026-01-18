@@ -34,11 +34,11 @@ class FortuneTestHistoryReadServiceTest extends IntegrationTestSupport {
 		// given
 		FortuneTestHistory history1 = FortuneTestHistory.builder()
 			.nickname("유저1")
-			.resultType(FortuneTestResultType.A)
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 		FortuneTestHistory history2 = FortuneTestHistory.builder()
 			.nickname("유저2")
-			.resultType(FortuneTestResultType.B)
+			.resultType(FortuneTestResultType.TAEYANGI)
 			.build();
 
 		fortuneTestHistoryRepository.saveAll(List.of(history1, history2));
@@ -50,8 +50,8 @@ class FortuneTestHistoryReadServiceTest extends IntegrationTestSupport {
 		assertThat(responses).hasSize(2)
 			.extracting("nickname", "resultType")
 			.containsExactlyInAnyOrder(
-				tuple("유저1", FortuneTestResultType.A),
-				tuple("유저2", FortuneTestResultType.B)
+				tuple("유저1", FortuneTestResultType.TOKKINGI),
+				tuple("유저2", FortuneTestResultType.TAEYANGI)
 			);
 	}
 }

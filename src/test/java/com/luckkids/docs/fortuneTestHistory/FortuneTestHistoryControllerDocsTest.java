@@ -45,14 +45,14 @@ public class FortuneTestHistoryControllerDocsTest extends RestDocsSupport {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
 			.nickname("럭키즈")
-			.resultType(FortuneTestResultType.A)
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		given(fortuneTestHistoryService.createFortuneTestHistory(any(FortuneTestHistoryCreateServiceRequest.class)))
 			.willReturn(FortuneTestHistoryResponse.builder()
 				.id(1)
 				.nickname("럭키즈")
-				.resultType(FortuneTestResultType.A)
+				.resultType(FortuneTestResultType.TOKKINGI)
 				.build());
 
 		// when // then
@@ -96,12 +96,12 @@ public class FortuneTestHistoryControllerDocsTest extends RestDocsSupport {
 				FortuneTestHistoryResponse.builder()
 					.id(1)
 					.nickname("럭키즈")
-					.resultType(FortuneTestResultType.A)
+					.resultType(FortuneTestResultType.TOKKINGI)
 					.build(),
 				FortuneTestHistoryResponse.builder()
 					.id(2)
 					.nickname("행운의유저")
-					.resultType(FortuneTestResultType.B)
+					.resultType(FortuneTestResultType.TAEYANGI)
 					.build()
 			));
 
