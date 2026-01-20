@@ -1,0 +1,11 @@
+[[popup-latest]]
+=== 팝업/최신 팝업 조회
+
+==== HTTP Request
+
+include::{snippets}/popup-latest/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/popup-latest/http-response.adoc[]
+include::{snippets}/popup-latest/response-fields.adoc[]
