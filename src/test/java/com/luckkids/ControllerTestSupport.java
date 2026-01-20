@@ -24,6 +24,7 @@ import com.luckkids.api.controller.mail.MailController;
 import com.luckkids.api.controller.mission.MissionController;
 import com.luckkids.api.controller.missionOutcome.MissionOutcomeController;
 import com.luckkids.api.controller.notice.NoticeController;
+import com.luckkids.api.controller.popup.PopupController;
 import com.luckkids.api.controller.push.PushController;
 import com.luckkids.api.controller.user.UserController;
 import com.luckkids.api.controller.version.VersionController;
@@ -55,6 +56,7 @@ import com.luckkids.api.service.missionOutcome.MissionOutcomeReadService;
 import com.luckkids.api.service.missionOutcome.MissionOutcomeService;
 import com.luckkids.api.service.notice.NoticeReadService;
 import com.luckkids.api.service.notice.NoticeService;
+import com.luckkids.api.service.popup.PopupReadService;
 import com.luckkids.api.service.push.PushService;
 import com.luckkids.api.service.user.UserReadService;
 import com.luckkids.api.service.user.UserService;
@@ -67,141 +69,145 @@ import jakarta.persistence.EntityManager;
 
 @ActiveProfiles("test")
 @WebMvcTest(controllers = {
-	MissionController.class,
-	LoginController.class,
-	JoinController.class,
-	MailController.class,
-	MissionOutcomeController.class,
-	VersionController.class,
-	NoticeController.class,
-	GardenController.class,
-	FriendCodeController.class,
-	AlertSettingController.class,
-	InitialSettingController.class,
-	HomeController.class,
-	UserController.class,
-	ConfirmEmailController.class,
-	WithdrawReasonController.class,
-	LuckkidsMissionController.class,
-	PushController.class,
-	AlertHistoryController.class,
-	LuckMessageHistoryController.class,
-	FortuneTestHistoryController.class
+        MissionController.class,
+        LoginController.class,
+        JoinController.class,
+        MailController.class,
+        MissionOutcomeController.class,
+        VersionController.class,
+        NoticeController.class,
+        GardenController.class,
+        FriendCodeController.class,
+        AlertSettingController.class,
+        InitialSettingController.class,
+        HomeController.class,
+        UserController.class,
+        ConfirmEmailController.class,
+        WithdrawReasonController.class,
+        LuckkidsMissionController.class,
+        PushController.class,
+        PopupController.class,
+        AlertHistoryController.class,
+        LuckMessageHistoryController.class,
+        FortuneTestHistoryController.class
 })
 public abstract class ControllerTestSupport {
 
-	@Autowired
-	protected MockMvc mockMvc;
+    @Autowired
+    protected MockMvc mockMvc;
 
-	@Autowired
-	protected ObjectMapper objectMapper;
+    @Autowired
+    protected ObjectMapper objectMapper;
 
-	@MockBean
-	protected EntityManager entityManager;
+    @MockBean
+    protected EntityManager entityManager;
 
-	@MockBean
-	protected MissionService missionService;
+    @MockBean
+    protected MissionService missionService;
 
-	@MockBean
-	protected LoginService loginService;
+    @MockBean
+    protected LoginService loginService;
 
-	@MockBean
-	protected MissionReadService missionReadService;
+    @MockBean
+    protected MissionReadService missionReadService;
 
-	@MockBean
-	protected JoinService joinService;
+    @MockBean
+    protected JoinService joinService;
 
-	@MockBean
-	protected JoinReadService joinReadService;
+    @MockBean
+    protected JoinReadService joinReadService;
 
-	@MockBean
-	protected MailService mailService;
+    @MockBean
+    protected MailService mailService;
 
-	@MockBean
-	protected FriendService friendService;
+    @MockBean
+    protected FriendService friendService;
 
-	@MockBean
-	protected FriendReadService friendReadService;
+    @MockBean
+    protected FriendReadService friendReadService;
 
-	@MockBean
-	protected MissionOutcomeService missionOutcomeService;
+    @MockBean
+    protected MissionOutcomeService missionOutcomeService;
 
-	@MockBean
-	protected VersionReadService versionReadService;
+    @MockBean
+    protected VersionReadService versionReadService;
 
-	@MockBean
-	protected VersionService versionService;
+    @MockBean
+    protected VersionService versionService;
 
-	@MockBean
-	protected NoticeReadService noticeReadService;
+    @MockBean
+    protected NoticeReadService noticeReadService;
 
-	@MockBean
-	protected NoticeService noticeService;
+    @MockBean
+    protected NoticeService noticeService;
 
-	@MockBean
-	protected MissionOutcomeReadService missionOutcomeReadService;
+    @MockBean
+    protected MissionOutcomeReadService missionOutcomeReadService;
 
-	@MockBean
-	protected AlertSettingReadService alertSettingReadService;
+    @MockBean
+    protected AlertSettingReadService alertSettingReadService;
 
-	@MockBean
-	protected AlertSettingService alertSettingService;
+    @MockBean
+    protected AlertSettingService alertSettingService;
 
-	@MockBean
-	protected UserService userService;
+    @MockBean
+    protected UserService userService;
 
-	@MockBean
-	protected UserReadService userReadService;
+    @MockBean
+    protected UserReadService userReadService;
 
-	@MockBean
-	protected ConfirmEmailReadService confirmEmailReadService;
+    @MockBean
+    protected ConfirmEmailReadService confirmEmailReadService;
 
-	@MockBean
-	protected ConfirmEmailService confirmEmailService;
+    @MockBean
+    protected ConfirmEmailService confirmEmailService;
 
-	@MockBean
-	protected WithdrawReasonService withdrawReasonService;
+    @MockBean
+    protected WithdrawReasonService withdrawReasonService;
 
-	@MockBean
-	protected ErrorNotifier errorNotifier;
+    @MockBean
+    protected ErrorNotifier errorNotifier;
 
-	@MockBean
-	protected InitialSettingService initialSettingService;
+    @MockBean
+    protected InitialSettingService initialSettingService;
 
-	@MockBean
-	protected LuckkidsMissionReadService luckkidsMissionReadService;
+    @MockBean
+    protected LuckkidsMissionReadService luckkidsMissionReadService;
 
-	@MockBean
-	protected LuckkidsCharacterReadService luckkidsCharacterReadService;
+    @MockBean
+    protected LuckkidsCharacterReadService luckkidsCharacterReadService;
 
-	@MockBean
-	protected FriendCodeService friendCodeService;
+    @MockBean
+    protected FriendCodeService friendCodeService;
 
-	@MockBean
-	protected FriendCodeReadService friendCodeReadService;
+    @MockBean
+    protected FriendCodeReadService friendCodeReadService;
 
-	@MockBean
-	protected LuckkidsMissionService luckkidsMissionService;
+    @MockBean
+    protected LuckkidsMissionService luckkidsMissionService;
 
-	@MockBean
-	protected PushService pushService;
+    @MockBean
+    protected PushService pushService;
 
-	@MockBean
-	protected UserCharacterService userCharacterService;
+    @MockBean
+    protected UserCharacterService userCharacterService;
 
-	@MockBean
-	protected AlertHistoryService alertHistoryService;
+    @MockBean
+    protected AlertHistoryService alertHistoryService;
 
-	@MockBean
-	protected AlertHistoryReadService alertHistoryReadService;
+    @MockBean
+    protected AlertHistoryReadService alertHistoryReadService;
 
-	@MockBean
-	protected LuckMessageHistoryReadService luckMessageHistoryReadService;
+    @MockBean
+    protected LuckMessageHistoryReadService luckMessageHistoryReadService;
 
-	@MockBean
-	protected FortuneTestHistoryService fortuneTestHistoryService;
+    @MockBean
+    protected FortuneTestHistoryService fortuneTestHistoryService;
 
-	@MockBean
-	protected FortuneTestHistoryReadService fortuneTestHistoryReadService;
+    @MockBean
+    protected FortuneTestHistoryReadService fortuneTestHistoryReadService;
+
+    @MockBean
+    protected PopupReadService popupReadService;
 }
 
