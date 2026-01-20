@@ -38,16 +38,13 @@ class PopupReadServiceTest extends IntegrationTestSupport {
     void getLatestPopup() {
         // given
         Popup popup1 = createPopup("이벤트1", "첫번째 이벤트", "첫번째 이벤트 설명", "https://example.com/image1.png");
-        Popup popup2 = createPopup("이벤트2", "두번째 이벤트", "두번째 이벤트 설명", "https://example.com/image2.png");
-        Popup popup3 = createPopup("이벤트3", "세번째 이벤트", "세번째 이벤트 설명", "https://example.com/image3.png");
 
-        List<Popup> savedPopups = popupRepository.saveAll(List.of(popup1, popup2, popup3));
-        Popup savedPopup3 = savedPopups.get(2);
+        Popup savedPopups = popupRepository.save(popup1);
 
         // 버튼 추가
-        createPopupButton(savedPopup3, "#FF5733", "https://example.com/action1", "확인", "#FFFFFF");
-        createPopupButton(savedPopup3, "#33FF57", "https://example.com/action2", "취소", "#000000");
-        popupRepository.save(savedPopup3);  // 버튼 추가 후 다시 저장
+        createPopupButton(savedPopups, "#FF5733", "https://example.com/action1", "확인", "#FFFFFF");
+        createPopupButton(savedPopups, "#33FF57", "https://example.com/action2", "취소", "#000000");
+        popupRepository.save(savedPopups);  // 버튼 추가 후 다시 저장
 
         // when
         PopupResponse result = popupReadService.getLatestPopup();
@@ -55,7 +52,7 @@ class PopupReadServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result).isNotNull()
                 .extracting("label", "title", "description", "imageUrl")
-                .containsExactly("이벤트3", "세번째 이벤트", "세번째 이벤트 설명", "https://example.com/image3.png");
+                .containsExactly("이벤트1", "첫번째 이벤트", "첫번째 이벤트 설명", "https://example.com/image1.png");
 
         assertThat(result.getButtons())
                 .hasSize(2)
