@@ -12,20 +12,20 @@ import lombok.NoArgsConstructor;
 public class FortuneTestHistoryResponse {
 
 	private int id;
-	private String nickname;
+	private String uuid;
 	private FortuneTestResultType resultType;
 
 	@Builder
-	private FortuneTestHistoryResponse(int id, String nickname, FortuneTestResultType resultType) {
+	private FortuneTestHistoryResponse(int id, String uuid, FortuneTestResultType resultType) {
 		this.id = id;
-		this.nickname = nickname;
+		this.uuid = uuid;
 		this.resultType = resultType;
 	}
 
 	public static FortuneTestHistoryResponse of(FortuneTestHistory history) {
 		return FortuneTestHistoryResponse.builder()
 			.id(history.getId())
-			.nickname(history.getNickname())
+			.uuid(history.getUuid())
 			.resultType(history.getResultType())
 			.build();
 	}
