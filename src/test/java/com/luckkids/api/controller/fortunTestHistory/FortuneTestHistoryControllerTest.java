@@ -23,7 +23,7 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
 			.nickname("럭키즈")
-			.resultType(FortuneTestResultType.A)
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		// when // then
@@ -47,7 +47,7 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
 			.nickname(null)
-			.resultType(FortuneTestResultType.A)
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		// when // then
