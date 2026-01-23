@@ -22,8 +22,8 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 	void createFortuneTestHistory() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.nickname("럭키즈")
-			.resultType(FortuneTestResultType.A)
+			.uuid("럭키즈")
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		// when // then
@@ -46,8 +46,8 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 	void createFortuneTestHistoryWithoutNickname() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.nickname(null)
-			.resultType(FortuneTestResultType.A)
+			.uuid(null)
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		// when // then
@@ -61,7 +61,7 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.statusCode").value("400"))
 			.andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
-			.andExpect(jsonPath("$.message").value("닉네임은 필수입니다."))
+			.andExpect(jsonPath("$.message").value("사용자 UUID는 필수입니다."))
 			.andExpect(jsonPath("$.data").isEmpty());
 	}
 
@@ -71,7 +71,7 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 	void createFortuneTestHistoryWithoutResultType() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.nickname("럭키즈")
+			.uuid("럭키즈")
 			.resultType(null)
 			.build();
 

@@ -38,6 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/docs",                        //API문서는 예외
             "/health-check",
             "/favicon.ico",
+            "/api/v1/fortuneTest",
+            "/api/v1/popup"
     };
 
     @Override

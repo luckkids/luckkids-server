@@ -24,50 +24,52 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-	@Bean
-	public BCryptPasswordEncoder encoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf(AbstractHttpConfigurer::disable)
+    @Bean
+    protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
 
-			.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
-			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(getPublicMatchers()).permitAll()
-				.anyRequest().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-			)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(getPublicMatchers()).permitAll()
+                        .anyRequest().hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                )
 
-			.logout((logout) -> logout
-				.logoutSuccessUrl("/"))
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/"))
 
-			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(new JwtExceptionHandlerFilter(),
-				JwtAuthenticationFilter.class); //JwtAuthenticationFilter에서 뱉은 에러를 처리하기 위한 Filter
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionHandlerFilter(),
+                        JwtAuthenticationFilter.class); //JwtAuthenticationFilter에서 뱉은 에러를 처리하기 위한 Filter
 
-		return http.build();
-	}
+        return http.build();
+    }
 
-	private RequestMatcher[] getPublicMatchers() {
-		return new RequestMatcher[] {
-			new AntPathRequestMatcher("/api/v1/jwt/**"),
-			new AntPathRequestMatcher("/api/v1/auth/**"),
-			new AntPathRequestMatcher("/api/v1/join/**"),
-			new AntPathRequestMatcher("/api/v1/mail/**"),
-			new AntPathRequestMatcher("/api/v1/user/findEmail"),
-			new AntPathRequestMatcher("/api/v1/confirmEmail/**"),
-			new AntPathRequestMatcher("/docs/**"),
-			new AntPathRequestMatcher("/css/**"),
-			new AntPathRequestMatcher("/images/**"),
-			new AntPathRequestMatcher("/js/**"),
-			new AntPathRequestMatcher("/health-check"),
-			new AntPathRequestMatcher("/favicon.ico"),
-		};
-	}
+    private RequestMatcher[] getPublicMatchers() {
+        return new RequestMatcher[]{
+                new AntPathRequestMatcher("/api/v1/jwt/**"),
+                new AntPathRequestMatcher("/api/v1/auth/**"),
+                new AntPathRequestMatcher("/api/v1/join/**"),
+                new AntPathRequestMatcher("/api/v1/mail/**"),
+                new AntPathRequestMatcher("/api/v1/user/findEmail"),
+                new AntPathRequestMatcher("/api/v1/confirmEmail/**"),
+                new AntPathRequestMatcher("/docs/**"),
+                new AntPathRequestMatcher("/css/**"),
+                new AntPathRequestMatcher("/images/**"),
+                new AntPathRequestMatcher("/js/**"),
+                new AntPathRequestMatcher("/health-check"),
+                new AntPathRequestMatcher("/favicon.ico"),
+                new AntPathRequestMatcher("/api/v1/fortuneTest/**"),
+                new AntPathRequestMatcher("/api/v1/popup/**")
+        };
+    }
 }
 

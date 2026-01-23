@@ -1,23 +1,5 @@
 package com.luckkids.docs.fortuneTestHistory;
 
-import static org.mockito.BDDMockito.*;
-import static org.springframework.http.MediaType.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
-
 import com.luckkids.api.controller.fortunTestHistory.FortuneTestHistoryController;
 import com.luckkids.api.controller.fortunTestHistory.request.FortuneTestHistoryCreateRequest;
 import com.luckkids.api.service.fortuneTestHistory.FortuneTestHistoryReadService;
@@ -26,115 +8,133 @@ import com.luckkids.api.service.fortuneTestHistory.request.FortuneTestHistoryCre
 import com.luckkids.api.service.fortuneTestHistory.response.FortuneTestHistoryResponse;
 import com.luckkids.docs.RestDocsSupport;
 import com.luckkids.domain.fortuneTestHistory.FortuneTestResultType;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.Arrays;
+
+import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class FortuneTestHistoryControllerDocsTest extends RestDocsSupport {
 
-	private final FortuneTestHistoryService fortuneTestHistoryService = mock(FortuneTestHistoryService.class);
-	private final FortuneTestHistoryReadService fortuneTestHistoryReadService = mock(
-		FortuneTestHistoryReadService.class);
+    private final FortuneTestHistoryService fortuneTestHistoryService = mock(FortuneTestHistoryService.class);
+    private final FortuneTestHistoryReadService fortuneTestHistoryReadService = mock(
+            FortuneTestHistoryReadService.class);
 
-	@Override
-	protected Object initController() {
-		return new FortuneTestHistoryController(fortuneTestHistoryService, fortuneTestHistoryReadService);
-	}
+    @Override
+    protected Object initController() {
+        return new FortuneTestHistoryController(fortuneTestHistoryService, fortuneTestHistoryReadService);
+    }
 
-	@DisplayName("운세 테스트 결과를 저장하는 API")
-	@Test
-	@WithMockUser(roles = "USER")
-	void createFortuneTestHistory() throws Exception {
-		// given
-		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.nickname("럭키즈")
-			.resultType(FortuneTestResultType.A)
-			.build();
+    @DisplayName("운세 테스트 결과를 저장하는 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void createFortuneTestHistory() throws Exception {
+        // given
+        FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
+                .uuid("럭키즈")
+                .resultType(FortuneTestResultType.TOKKINGI)
+                .build();
 
-		given(fortuneTestHistoryService.createFortuneTestHistory(any(FortuneTestHistoryCreateServiceRequest.class)))
-			.willReturn(FortuneTestHistoryResponse.builder()
-				.id(1)
-				.nickname("럭키즈")
-				.resultType(FortuneTestResultType.A)
-				.build());
+        given(fortuneTestHistoryService.createFortuneTestHistory(any(FortuneTestHistoryCreateServiceRequest.class)))
+                .willReturn(FortuneTestHistoryResponse.builder()
+                        .id(1)
+                        .uuid("럭키즈")
+                        .resultType(FortuneTestResultType.TOKKINGI)
+                        .build());
 
-		// when // then
-		mockMvc.perform(
-				post("/api/v1/fortuneTest")
-					.content(objectMapper.writeValueAsString(request))
-					.contentType(APPLICATION_JSON)
-			)
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(document("fortune-test-history-create",
-				preprocessRequest(prettyPrint()),
-				preprocessResponse(prettyPrint()),
-				requestFields(
-					fieldWithPath("nickname").type(JsonFieldType.STRING)
-						.description("닉네임"),
-					fieldWithPath("resultType").type(JsonFieldType.STRING)
-						.description("운세 결과 타입. 가능한 값: " + Arrays.toString(FortuneTestResultType.values()))
-				),
-				responseFields(
-					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-						.description("코드"),
-					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-						.description("상태"),
-					fieldWithPath("message").type(JsonFieldType.STRING)
-						.description("메세지"),
-					fieldWithPath("data").type(JsonFieldType.OBJECT)
-						.description("응답 데이터")
-				)
-					.andWithPrefix("data.", fortuneTestHistoryResponseFields())
-			));
-	}
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/fortuneTest")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("fortune-test-history-create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("uuid").type(JsonFieldType.STRING)
+                                        .description("닉네임"),
+                                fieldWithPath("resultType").type(JsonFieldType.STRING)
+                                        .description("운세 결과 타입. 가능한 값: " + Arrays.toString(FortuneTestResultType.values()))
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터")
+                        )
+                                .andWithPrefix("data.", fortuneTestHistoryResponseFields())
+                ));
+    }
 
-	@DisplayName("운세 테스트 목록을 조회하는 API")
-	@Test
-	@WithMockUser(roles = "USER")
-	void getFortuneTestHistories() throws Exception {
-		// given
-		given(fortuneTestHistoryService.findAll())
-			.willReturn(List.of(
-				FortuneTestHistoryResponse.builder()
-					.id(1)
-					.nickname("럭키즈")
-					.resultType(FortuneTestResultType.A)
-					.build(),
-				FortuneTestHistoryResponse.builder()
-					.id(2)
-					.nickname("행운의유저")
-					.resultType(FortuneTestResultType.B)
-					.build()
-			));
+    @DisplayName("운세 테스트를 조회하는 API")
+    @Test
+    @WithMockUser(roles = "USER")
+    void getFortuneTestHistories() throws Exception {
+        // given
+        String testUuid = "행운의유저";
+        given(fortuneTestHistoryReadService.findByUuid(testUuid))
+                .willReturn(FortuneTestHistoryResponse.builder()
+                        .id(2)
+                        .uuid("행운의유저")
+                        .resultType(FortuneTestResultType.TAEYANGI)
+                        .build()
+                );
 
-		// when // then
-		mockMvc.perform(
-				get("/api/v1/fortuneTest")
-			)
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(document("fortune-test-history-list",
-				preprocessResponse(prettyPrint()),
-				responseFields(
-					fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
-						.description("코드"),
-					fieldWithPath("httpStatus").type(JsonFieldType.STRING)
-						.description("상태"),
-					fieldWithPath("message").type(JsonFieldType.STRING)
-						.description("메세지"),
-					fieldWithPath("data[]").type(JsonFieldType.ARRAY)
-						.description("응답 데이터 (리스트)")
-				)
-					.andWithPrefix("data[].", fortuneTestHistoryResponseFields())
-			));
-	}
+        // when // then
+        mockMvc.perform(
+                        get("/api/v1/fortuneTest")
+                                .param("uuid", testUuid)  // ← 이게 핵심!
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("fortune-test-history-list",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+                                        .description("운세 테스트 히스토리 ID"),
+                                fieldWithPath("data.uuid").type(JsonFieldType.STRING)
+                                        .description("uuid"),
+                                fieldWithPath("data.resultType").type(JsonFieldType.STRING)
+                                        .description("운세 결과 타입")
+                        )
+                ));
+    }
 
-	private FieldDescriptor[] fortuneTestHistoryResponseFields() {
-		return new FieldDescriptor[] {
-			fieldWithPath("id").type(JsonFieldType.NUMBER)
-				.description("운세 테스트 히스토리 ID"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING)
-				.description("닉네임"),
-			fieldWithPath("resultType").type(JsonFieldType.STRING)
-				.description("운세 결과 타입")
-		};
-	}
+    private FieldDescriptor[] fortuneTestHistoryResponseFields() {
+        return new FieldDescriptor[]{
+                fieldWithPath("id").type(JsonFieldType.NUMBER)
+                        .description("운세 테스트 히스토리 ID"),
+                fieldWithPath("uuid").type(JsonFieldType.STRING)
+                        .description("uuid"),
+                fieldWithPath("resultType").type(JsonFieldType.STRING)
+                        .description("운세 결과 타입")
+        };
+    }
 }

@@ -34,8 +34,8 @@ class FortuneTestHistoryServiceTest extends IntegrationTestSupport {
 	void createFortuneTestHistory() {
 		// given
 		FortuneTestHistoryCreateServiceRequest request = FortuneTestHistoryCreateServiceRequest.builder()
-			.nickname("럭키즈")
-			.resultType(FortuneTestResultType.A)
+			.uuid("럭키즈")
+			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
 		// when
@@ -43,12 +43,12 @@ class FortuneTestHistoryServiceTest extends IntegrationTestSupport {
 
 		// then
 		assertThat(response)
-			.extracting("nickname", "resultType")
-			.contains("럭키즈", FortuneTestResultType.A);
+			.extracting("uuid", "resultType")
+			.contains("럭키즈", FortuneTestResultType.TOKKINGI);
 
 		List<FortuneTestHistory> histories = fortuneTestHistoryRepository.findAll();
 		assertThat(histories).hasSize(1)
-			.extracting("nickname", "resultType")
-			.containsExactly(tuple("럭키즈", FortuneTestResultType.A));
+			.extracting("uuid", "resultType")
+			.containsExactly(tuple("럭키즈", FortuneTestResultType.TOKKINGI));
 	}
 }
