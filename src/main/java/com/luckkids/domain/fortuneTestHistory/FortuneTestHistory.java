@@ -22,14 +22,17 @@ public class FortuneTestHistory extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	private String nickname;
+
 	private String uuid;
 
 	@Enumerated(EnumType.STRING)
 	private FortuneTestResultType resultType;
 
 	@Builder
-	private FortuneTestHistory(String uuid, FortuneTestResultType resultType) {
+	private FortuneTestHistory(String uuid, String nickname, FortuneTestResultType resultType) {
 		this.uuid = uuid;
+		this.nickname = nickname;
 		this.resultType = resultType;
 	}
 }

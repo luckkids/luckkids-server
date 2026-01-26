@@ -22,7 +22,8 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 	void createFortuneTestHistory() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.uuid("럭키즈")
+			.uuid("3a9ff30a-6222-4738-b215-5089d77f475e")
+			.nickname("행운이")
 			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
@@ -40,13 +41,14 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 			.andExpect(jsonPath("$.message").value("OK"));
 	}
 
-	@DisplayName("운세 테스트 결과를 저장할 때 닉네임은 필수다.")
+	@DisplayName("운세 테스트 결과를 저장할 때 uuid은 필수다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void createFortuneTestHistoryWithoutNickname() throws Exception {
+	void createFortuneTestHistoryWithoutUuid() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
 			.uuid(null)
+			.nickname("행운이")
 			.resultType(FortuneTestResultType.TOKKINGI)
 			.build();
 
@@ -65,13 +67,40 @@ class FortuneTestHistoryControllerTest extends ControllerTestSupport {
 			.andExpect(jsonPath("$.data").isEmpty());
 	}
 
+	@DisplayName("운세 테스트 결과를 저장할 때 닉네임은 필수다.")
+	@Test
+	@WithMockUser(roles = "USER")
+	void createFortuneTestHistoryWithoutNickname() throws Exception {
+		// given
+		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
+			.uuid("3a9ff30a-6222-4738-b215-5089d77f475e")
+			.nickname(null)
+			.resultType(FortuneTestResultType.TOKKINGI)
+			.build();
+
+		// when // then
+		mockMvc.perform(
+				post("/api/v1/fortuneTest")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(APPLICATION_JSON)
+					.with(csrf())
+			)
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.statusCode").value("400"))
+			.andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+			.andExpect(jsonPath("$.message").value("사용자 닉네임은 필수입니다."))
+			.andExpect(jsonPath("$.data").isEmpty());
+	}
+
 	@DisplayName("운세 테스트 결과를 저장할 때 운세 결과는 필수다.")
 	@Test
 	@WithMockUser(roles = "USER")
 	void createFortuneTestHistoryWithoutResultType() throws Exception {
 		// given
 		FortuneTestHistoryCreateRequest request = FortuneTestHistoryCreateRequest.builder()
-			.uuid("럭키즈")
+			.uuid("3a9ff30a-6222-4738-b215-5089d77f475e")
+			.nickname("행운이")
 			.resultType(null)
 			.build();
 
