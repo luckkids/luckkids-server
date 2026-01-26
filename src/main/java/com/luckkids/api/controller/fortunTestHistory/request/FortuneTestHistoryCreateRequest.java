@@ -32,6 +32,7 @@ public class FortuneTestHistoryCreateRequest {
 	public FortuneTestHistoryCreateServiceRequest toServiceRequest() {
 		return FortuneTestHistoryCreateServiceRequest.builder()
 			.uuid(uuid)
+			.nickname(nickname)
 			.resultType(resultType)
 			.build();
 	}
