@@ -16,12 +16,16 @@ public class FortuneTestHistoryCreateRequest {
 	@NotBlank(message = "사용자 UUID는 필수입니다.")
 	private String uuid;
 
+	@NotBlank(message = "사용자 닉네임은 필수입니다.")
+	private String nickname;
+
 	@NotNull(message = "운세 결과는 필수입니다.")
 	private FortuneTestResultType resultType;
 
 	@Builder
-	private FortuneTestHistoryCreateRequest(String uuid, FortuneTestResultType resultType) {
+	private FortuneTestHistoryCreateRequest(String uuid, String nickname, FortuneTestResultType resultType) {
 		this.uuid = uuid;
+		this.nickname = nickname;
 		this.resultType = resultType;
 	}
 
