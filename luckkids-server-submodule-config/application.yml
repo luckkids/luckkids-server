@@ -64,8 +64,8 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mariadb://182.231.175.151:47852/luckkids_dev
-    username: luckkidsDevServer
+    url: jdbc:mariadb://3.34.131.135:3306/luckkids_dev
+    username: luckkids_admin
     password: uBaqQ4j+6(~y&pN
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
@@ -105,9 +105,9 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mariadb://182.231.175.151:47852/luckkids
-    username: luckkidsServer
-    password: LR8M2ZI#sFw1r70
+    url: jdbc:mariadb://3.34.131.135:3306/luckkids
+    username: luckkids_admin
+    password: uBaqQ4j+6(~y&pN
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
