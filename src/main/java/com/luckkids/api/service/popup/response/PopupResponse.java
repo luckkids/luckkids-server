@@ -29,11 +29,18 @@ public class PopupResponse {
         return PopupResponse.builder()
                 .label(popup.getLabel())
                 .title(popup.getTitle())
-                .description(popup.getDescription())
+                .description(convertNewLine(popup.getDescription()))
                 .imageUrl(popup.getImageUrl())
                 .buttons(popup.getButtons().stream()
                         .map(PopupButtonResponse::createResponse)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    private static String convertNewLine(String text) {
+        if (text == null) {
+            return null;
+        }
+        return text.replace("\\n", "\n");
     }
 }
