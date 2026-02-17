@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOrigins("https://luckkids-quiz.netlify.app", "https://quiz.luckkids.co.kr")
+			.allowedOriginPatterns("https://*.luckkids.co.kr")
 			.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.allowCredentials(true)
